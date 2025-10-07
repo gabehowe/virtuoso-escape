@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.account.Account;
@@ -58,7 +60,8 @@ public class DataWriter {
 	}
 
 	private static String[] getItemIds(ArrayList<Item> currentItems) {
-		return Arrays.stream(currentItems).map(item -> item.getId()).toArray();
+        String[] strs = currentItems.stream().map(Item::getId).toArray(String[]::new);
+		return strs;
 	}
 
 	private static JSONObject loadAccountInfo(Account account) {
