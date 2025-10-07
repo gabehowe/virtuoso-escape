@@ -32,15 +32,15 @@ public class Account {
         this.highScore = score;
     }
 
-    public String getUsername() {
+    public String username() {
         return this.username;
     }
 
-	public UUID getId(){
+	public UUID id(){
 		return this.id;
 	}
 
-    public Score getHighScore() {
+    public Score highScore() {
         return this.highScore;
     }
 
@@ -59,7 +59,7 @@ public class Account {
 		}
 	}
 
-	public String getHashedPassword(){
+	public String hashedPassword(){
 		return this.hashedPassword;
 	}
 }

@@ -12,11 +12,11 @@ public enum Item {
         this.id = id;
     }
 
-    public String getName() {
+    public String name() {
         return this.name;
     }
 
-    public String getId() {
+    public String id() {
         return this.id;
     }
 }

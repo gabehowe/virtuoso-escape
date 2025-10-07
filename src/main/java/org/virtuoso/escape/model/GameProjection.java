@@ -13,8 +13,8 @@ public class GameProjection {
 	private AccountManager accountManager;
 
 	public GameProjection() {
-		this.accountManager = AccountManager.getInstance();
-		this.gameState = GameState.getInstance();
+		this.accountManager = AccountManager.instance();
+		this.gameState = GameState.instance();
 	}
 
 	public boolean login(String username, String password) {
@@ -31,24 +31,24 @@ public class GameProjection {
 		this.accountManager.logout();
 	}
 
-	public Room getCurrentRoom() {
-		return this.gameState.getCurrentRoom();
+	public Room currentRoom() {
+		return this.gameState.currentRoom();
 	}
 
-	public ArrayList<Entity> getRoomEntities() {
-		return getCurrentRoom().getEntities();
+	public ArrayList<Entity> roomEntities() {
+		return currentRoom().entities();
 	}
 
-	public Entity getCurrentEntity() {
-		return this.gameState.getCurrentEntity();
+	public Optional<Entity> currentEntity() {
+		return this.gameState.currentEntity();
 	}
 
-	public Floor getCurrentFloor() {
-		return this.gameState.getCurrentFloor();
+	public Floor currentFloor() {
+		return this.gameState.currentFloor();
 	}
 
-	public String getCurrentMessage() {
-		return this.gameState.getCurrentMessage();
+	public String currentMessage() {
+		return this.gameState.currentMessage();
 	}
 
 	public void setDifficulty(Difficulty difficulty) {
@@ -64,15 +64,15 @@ public class GameProjection {
 	}
 
 	public void interact() {
-		getCurrentEntity().interact();
+		currentEntity().interact();
 	}
 
 	public void attack() {
-		getCurrentEntity().attack();
+		currentEntity().attack();
 	}
 
 	public void inspect() {
-		getCurrentEntity().inspect();
+		currentEntity().inspect();
 	}
 
 	public void input(String input) {

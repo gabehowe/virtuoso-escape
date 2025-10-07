@@ -11,7 +11,7 @@ public class GameInfo {
     private HashMap<String,HashMap<String,String>> language = new HashMap<String,HashMap<String,String>>();
     public ArrayList<Floor> building = new ArrayList<Floor>();
 
-    public static GameInfo getInstance() {
+    public static GameInfo instance() {
         if (instance == null) 
             instance = new GameInfo();
         return instance;
@@ -19,7 +19,7 @@ public class GameInfo {
 
     private GameInfo() {};
 
-    public String getString(String id, String stringId) {
+    public String string(String id, String stringId) {
         return language.get(id).get(stringId);
     }
 

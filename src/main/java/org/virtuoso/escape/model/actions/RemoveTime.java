@@ -7,6 +7,6 @@ import java.time.Duration;
 public record RemoveTime(Duration time) implements Action{
     @Override
     public void execute() {
-        GameState.getInstance().addTime(time.negated());
+        GameState.instance().addTime(time.negated());
     }
 }

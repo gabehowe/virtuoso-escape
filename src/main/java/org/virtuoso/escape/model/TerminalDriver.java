@@ -57,18 +57,18 @@ public class TerminalDriver {
     }
 
     void roomActions(Scanner scanner, GameProjection projection) {
-        display(projection.getCurrentRoom().getIntroMessage());
+        display(projection.currentRoom().introMessage());
         StringBuilder prompt = new StringBuilder("""
                                                          (1) Change room
                                                          Pick Entity:
                                                          """);
-        ArrayList<Entity> entities = projection.getCurrentRoom().getEntities();
+        ArrayList<Entity> entities = projection.currentRoom().entities();
         for (int i = 0; i < entities.size(); i++) {
-            prompt.append(String.format("(%d) %s", i, entities.get(i).getName()));
+            prompt.append(String.format("(%d) %s", i, entities.get(i).name()));
         }
         int response = validateInt(scanner,
                                    prompt.toString(),
-                                   i -> 1 <= i && i <= projection.getCurrentRoom().getEntities().size());
+                                   i -> 1 <= i && i <= projection.currentRoom().entities().size());
         if (response == 1) changeRoom(scanner, projection);
         else {
             projection.pickEntity(entities.get(response));
@@ -76,7 +76,7 @@ public class TerminalDriver {
     }
 
     void pickEntityAction(Scanner scanner, GameProjection projection) {
-        display("You're speaking with %s", projection.getCurrentEntity().getName());
+        display("You're speaking with %s", projection.currentEntity().name());
         String prompt = """
                 (1) Interact
                 (2) Inspect
@@ -97,7 +97,7 @@ public class TerminalDriver {
 
     void gameLoop(Scanner scanner, GameProjection projection) {
         while (true) { // TODO(gabri) come up with an end condition
-            if (projection.getCurrentEntity().isPresent()) pickEntityAction(scanner, projection);
+            if (projection.currentEntity().isPresent()) pickEntityAction(scanner, projection);
             else roomActions(scanner, projection);
         }
     }

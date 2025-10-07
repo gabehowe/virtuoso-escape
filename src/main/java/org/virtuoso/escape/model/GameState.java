@@ -25,7 +25,7 @@ public class GameState {
 	private Difficulty difficulty;
 	private String currentMessage;
 
-	public static GameState getInstance() {
+	public static GameState instance() {
 		if (instance == null)
 			instance = new GameState();
 		return instance;
@@ -36,10 +36,10 @@ public class GameState {
 
 	public void begin(Account account) {
 		JSONObject gameStateInfo = DataLoader.loadGameState(account);
-		this.currentFloor = GameInfo.getInstance().building.get((int) gameStateInfo.get("currentFloor"));
-		this.currentRoom = currentFloor.getRooms().get((int) gameStateInfo.get("currentRoom"));
-		this.currentEntity = currentRoom.getEntities().get((int) gameStateInfo.get("currentEntity"));
-		this.currentItems = new ArrayList<Item>(Arrays.steam(gameStateInfo.getcurrentItems).map(itemString -> Item.valueOf(itemString)).toArray());
+		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.("currentFloor"));
+		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.("currentRoom"));
+		this.currentEntity = currentRoom.entities().get((int) gameStateInfo.("currentEntity"));
+		this.currentItems = new ArrayList<Item>(Arrays.steam(gameStateInfo.currentItems).map(itemString -> Item.valueOf(itemString)).toArray());
 		this.time = Duration.ofSeconds((int) gameStateInfo.get("time"));
 		this.account = account;
 	}
@@ -48,7 +48,7 @@ public class GameState {
 		return currentItems.contains(item);
 	}
 
-	public Floor getCurrentFloor() {
+	public Floor currentFloor() {
 		return currentFloor;
 	}
 
@@ -56,7 +56,7 @@ public class GameState {
 		this.currentFloor = currentFloor;
 	}
 
-	public Optional<Entity> getCurrentEntity() {
+	public Optional<Entity> currentEntity() {
 		return Optional.ofNullable(currentEntity);
 	}
 
@@ -64,11 +64,11 @@ public class GameState {
 		this.currentEntity = currentEntity;
 	}
 
-	public ArrayList<Item> getCurrentItems() {
+	public ArrayList<Item> currentItems() {
 		return currentItems;
 	}
 
-	public Duration getTime() {
+	public Duration time() {
 		return time;
 	}
 
@@ -76,15 +76,15 @@ public class GameState {
 		this.time = time;
 	}
 
-	public Account getAccount() {
+	public Account account() {
 		return account;
 	}
 
-	public Difficulty getDifficulty() {
+	public Difficulty difficulty() {
 		return difficulty;
 	}
 
-	public String getCurrentMessage() {
+	public String currentMessage() {
 		return currentMessage;
 	}
 
@@ -92,7 +92,7 @@ public class GameState {
 		this.currentMessage = currentMessage;
 	}
 
-	public Room getCurrentRoom() {
+	public Room currentRoom() {
 		return currentRoom;
 	}
 

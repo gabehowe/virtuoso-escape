@@ -26,7 +26,7 @@ public class AccountManager {
 		}
 	}
 
-	public static AccountManager getInstance() {
+	public static AccountManager instance() {
 		if (accountManager == null) {
 			accountManager = new AccountManager();
 		}
@@ -34,10 +34,10 @@ public class AccountManager {
 	}
 
 	public Optional<Account> login(String username, String password) {
-		GameState gameState = GameState.getInstance();
+		GameState gameState = GameState.instance();
 		Account account = this.accounts.get(username);
 		String hashedPassword = Account.hashPassword(password);
-		if (account != null && account.getHashedPassword().equals(hashedPassword)) {
+		if (account != null && account.hashedPassword().equals(hashedPassword)) {
 			gameState.begin(account);
 			return Optional.of(account);
 		}
@@ -45,7 +45,7 @@ public class AccountManager {
 	}
 
 	public Optional<Account> newAccount(String username, String password) {
-		GameState gameState = GameState.getInstance();
+		GameState gameState = GameState.instance();
 		Account account = new Account(username, password);
 		gameState.begin(account);
 		return Optional.of(account);

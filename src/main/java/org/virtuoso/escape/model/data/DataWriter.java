@@ -20,18 +20,18 @@ public class DataWriter {
 	private static final String ACCOUNTS_PATH = "json/accounts.json";
 
 	public static void writeGameState() {
-		GameState currentGameState = GameState.getInstance();
+		GameState currentGameState = GameState.instance();
 		JSONObject currentGameStateMap = loadGameStateInfo(currentGameState);
 		JSONObject allGameStatesMap = DataLoader.loadAllStates();
-		allGameStatesMap.put(currentGameState.getAccount().getId().toString(), currentGameStateMap);
+		allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
 		writeToFile(ACCOUNTS_PATH, allGameStatesMap);
 	}
 
 	public static void writeAccount() {
-		Account currentAccount = GameState.getInstance().getAccount();
+		Account currentAccount = GameState.instance().account();
 		JSONObject currentAccountMap = loadAccountInfo(currentAccount);
 		JSONObject allAccountsMap = DataLoader.loadAllAccounts();
-		allAccountsMap.put(currentAccount.getId().toString(), currentAccountMap);
+		allAccountsMap.put(currentAccount.id().toString(), currentAccountMap);
 		writeToFile(GAME_STATES_PATH, allAccountsMap);
 	}
 
@@ -48,24 +48,24 @@ public class DataWriter {
 
 	private static JSONObject loadGameStateInfo(GameState gameState) {
 		JSONObject gameStateMap = new JSONObject();
-		gameStateMap.put("currentFloor", gameState.getCurrentFloor().getId());
-		gameStateMap.put("currentRoom", gameState.getCurrentRoom().getId());
-		gameStateMap.put("currentEntity", gameState.getCurrentEntity().getId());
-		gameStateMap.put("currentItems", new JSONArray(getItemIds(gameState.getCurrentItems())));
-		gameStateMap.put("time", gameState.getTime());
-		gameStateMap.put("difficulty", gameState.getDifficulty().toString());
+		gameStateMap.put("currentFloor", gameState.currentFloor().id());
+		gameStateMap.put("currentRoom", gameState.currentRoom().id());
+		gameStateMap.put("currentEntity", gameState.currentEntity().id());
+		gameStateMap.put("currentItems", new JSONArray(itemIds(gameState.currentItems())));
+		gameStateMap.put("time", gameState.time());
+		gameStateMap.put("difficulty", gameState.difficulty().toString());
 		return gameStateMap;
 	}
 
-	private static String[] getItemIds(ArrayList<Item> currentItems) {
-		return Arrays.stream(currentItems).map(item -> item.getId()).toArray();
+	private static String[] itemIds(ArrayList<Item> currentItems) {
+		return Arrays.stream(currentItems).map(item -> item.id()).toArray();
 	}
 
 	private static JSONObject loadAccountInfo(Account account) {
 		JSONObject accountMap = new JSONObject();
-		accountMap.put("username", account.getUsername());
-		accountMap.put("hashedPassword", account.getHashedPassword());
-		accountMap.put("highScore", account.getHighScore());
+		accountMap.put("username", account.username());
+		accountMap.put("hashedPassword", account.hashedPassword());
+		accountMap.put("highScore", account.highScore());
 		return accountMap;
 	}
 }
