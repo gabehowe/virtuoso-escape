@@ -1,14 +1,16 @@
 {
-	"JOE_HARDY": {
+	"joe_hardy": {
+		"introduce": "Hi, I'm Joe Hardy",
 		"interact": "Hey, what's up?",
 		"attack": "Woah dude, quit that!",
 		"inspect": "Oh, Hi!",
-		"SQUIRRELS": "**You show Joe the squirrels.** Oh, those are cute babies..."
+		"squirrels": "**You show Joe the squirrels.** Oh, those are cute babies..."
 	},
-	"CHIP_THE_SQUIRREL": {
+	"chip_the_squirrel": {
+		"introduce": "Squeak Squeak",
 		"interact": "...Squirrel noises...",
 		"attack": "**Chip the Squirrel lunges at your face.**",
 		"inspect": "**You stare a chip the squirrel, chip the squirrel stares back.**",
-		"SQUIRREL_FOOD": "**Chip the Squirrel eats your food.**"
+		"squirrel_food": "**Chip the Squirrel eats your food.**"
 	}
 }
