@@ -3,6 +3,9 @@ package org.virtuoso.escape.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author Andrew
+ */
 public class GameInfo {
     private static GameInfo instance;
     private HashMap<String,HashMap<String,String>> language = new HashMap<String,HashMap<String,String>>();

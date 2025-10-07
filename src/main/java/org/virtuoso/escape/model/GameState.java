@@ -9,6 +9,9 @@ import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.data.*;
 
+/**
+ * @author Andrew
+ */
 public class GameState {
 	private static GameState instance;
 	private Floor currentFloor;

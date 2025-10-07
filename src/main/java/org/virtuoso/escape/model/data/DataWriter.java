@@ -12,6 +12,9 @@ import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.*;
 
+/**
+ * @author Andrew
+ */
 public class DataWriter {
 	private static final String GAME_STATES_PATH = "json/gamestates.json";
 	private static final String ACCOUNTS_PATH = "json/accounts.json";
