@@ -3,6 +3,7 @@ package org.virtuoso.escape.model;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.json.simple.JSONObject;
@@ -16,7 +17,7 @@ public class GameState {
 	private static GameState instance;
 	private Floor currentFloor;
 	private Room currentRoom;
-	private Entity currentEntity;
+	private Optional<Entity> currentEntity;
 	private ArrayList<Item> currentItems;
 	private Duration time;
 	private Account account;
