@@ -17,7 +17,7 @@ public class GameState {
 	private static GameState instance;
 	private Floor currentFloor;
 	private Room currentRoom;
-	private Optional<Entity> currentEntity;
+	private Entity currentEntity;
 	private ArrayList<Item> currentItems;
 	private Duration time;
 	private Account account;
@@ -56,8 +56,8 @@ public class GameState {
 		this.currentFloor = currentFloor;
 	}
 
-	public Entity getCurrentEntity() {
-		return currentEntity;
+	public Optional<Entity> getCurrentEntity() {
+		return Optional.ofNullable(currentEntity);
 	}
 
 	public void setCurrentEntity(Entity currentEntity) {
