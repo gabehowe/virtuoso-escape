@@ -76,6 +76,6 @@ public class GameProjection {
 	}
 
 	public void input(String input) {
-
+		currentEntity().takeInput(input);
 	}
 }
