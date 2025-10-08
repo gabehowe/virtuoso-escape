@@ -64,18 +64,18 @@ public class GameProjection {
 	}
 
 	public void interact() {
-		currentEntity().interact();
+		currentEntity().orElseThrow().interact();
 	}
 
 	public void attack() {
-		currentEntity().attack();
+		currentEntity().orElseThrow().attack();
 	}
 
 	public void inspect() {
-		currentEntity().inspect();
+		currentEntity().orElseThrow().inspect();
 	}
 
 	public void input(String input) {
-		currentEntity().takeInput(input);
+		currentEntity().orElseThrow().takeInput(input);
 	}
 }

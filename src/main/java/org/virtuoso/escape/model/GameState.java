@@ -64,6 +64,7 @@ public class GameState {
 		this.currentEntity = currentEntity;
 	}
 
+
 	public ArrayList<Item> currentItems() {
 		return currentItems;
 	}
