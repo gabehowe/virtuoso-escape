@@ -18,35 +18,30 @@ public class Entity{
 		this.interactAction = interactAction;
 	}
 
-//TODO: add getLanguage method
 
 	public void attack() {
-		return GameInfo.getInstance().getLanguage(this.id).get("attack");
+        GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id,"attack"));
 	}
 
 	public void inspect() {
-		return GameInfo.getInstance().getLanguage(this.id).get("inspect");
+	 GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id,"inspect"));
 	}
 
 	public void introduce() {
-		return GameInfo.getInstance().getLanguage(this.id).get("introduce");
+		GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id,"introduce"));
 	}
 
-	public boolean equals() {
-		if (this.id.equals(id)) {
-			return true;
-		} else {
-			return false;
-		}
+	public boolean equals(Entity other) {
+        return this.id.equals(other.id);
 	}
 
-	public String getId(){
+	public String id(){
 		return this.id;
 	}
 	
 
-	public String getName() {
-		return GameInfo.getInstance().getLanguage(this.id).get("name");
+	public String name() {
+		return GameInfo.instance().string(this.id, "name");
 	}
 
 	public void takeInput(String input) {
