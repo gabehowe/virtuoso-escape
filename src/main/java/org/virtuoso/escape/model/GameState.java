@@ -36,12 +36,20 @@ public class GameState {
 
 	public void begin(Account account) {
 		JSONObject gameStateInfo = DataLoader.loadGameState(account);
-		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.("currentFloor"));
-		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.("currentRoom"));
-		this.currentEntity = currentRoom.entities().get((int) gameStateInfo.("currentEntity"));
+		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.("currentFloor"))
+		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.("currentRoom"))
+		this.currentEntity = currentRoom.entities().get((int) gameStateInfo.("currentEntity"))
 		this.currentItems = new ArrayList<Item>(Arrays.steam(gameStateInfo.currentItems).map(itemString -> Item.valueOf(itemString)).toArray());
 		this.time = Duration.ofSeconds((int) gameStateInfo.get("time"));
 		this.account = account;
+	}
+
+	public void pickEntity(Entity entity) {
+
+	}
+
+	public void leaveEntity() {
+
 	}
 
 	public boolean hasItem(Item item) {
@@ -83,6 +91,10 @@ public class GameState {
 
 	public Difficulty difficulty() {
 		return difficulty;
+	}
+
+	public void setDifficulty(Difficulty diff) {
+		this.difficulty = diff;
 	}
 
 	public String currentMessage() {

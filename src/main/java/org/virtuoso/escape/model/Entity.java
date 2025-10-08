@@ -1,10 +1,11 @@
 package org.virtuoso.escape.model;
 
 import java.util.function.BooleanSupplier;
+
 import org.virtuoso.escape.model.actions.Action;
 import org.virtuoso.escape.model.actions.TakeInput;
 
-public class Entity{
+public class Entity {
 	private String id;
 	private Action attackAction;
 	private Action inspectAction;
@@ -18,27 +19,30 @@ public class Entity{
 		this.interactAction = interactAction;
 	}
 
+	public void interact(Item item) {
 
+	}
+	
 	public void attack() {
-        GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id,"attack"));
+		GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id, "attack"));
 	}
 
 	public void inspect() {
-	 GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id,"inspect"));
+		GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id, "inspect"));
 	}
 
 	public void introduce() {
-		GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id,"introduce"));
+		GameState.instance().setCurrentMessage(GameInfo.instance().string(this.id, "introduce"));
 	}
 
 	public boolean equals(Entity other) {
-        return this.id.equals(other.id);
+		return this.id.equals(other.id);
 	}
 
-	public String id(){
+	public String id() {
 		return this.id;
 	}
-	
+
 
 	public String name() {
 		return GameInfo.instance().string(this.id, "name");

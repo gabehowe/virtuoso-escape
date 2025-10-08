@@ -63,8 +63,8 @@ public class GameProjection {
 		this.gameState.leaveEntity();
 	}
 
-	public void interact() {
-		currentEntity().orElseThrow().interact();
+	public void interact(Item item) {
+		currentEntity().orElseThrow().interact(item);
 	}
 
 	public void attack() {
