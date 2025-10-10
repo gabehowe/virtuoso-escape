@@ -6,38 +6,47 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.virtuoso.escape.model.Difficulty;
+import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.Score;
 
 public class DataLoader {
-	public static HashMap<String, String> loadAccounts() {
-		HashMap<String, String> result = new HashMap<>();
+	public static JSONObject loadAccounts() {
+		JSONObject result = new JSONObject();
 		JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
 		if (root == null) return result;
 		for (Object key : root.keySet()) {
-			String username = String.valueOf(key);
-			Object value = root.get(username);
+			String id = String.valueOf(key);
+			Object value = root.get(id);
 			if (value instanceof JSONObject acct) {
+				Object username = acct.get("username");
 				Object hashed = acct.get("hashedPassword");
-				if (hashed != null) result.put(username, String.valueOf(hashed));
+				Object highScore = acct.get("highScore");
+				if (username != null && hashed != null && highScore != null)
+					result.put(id, new JSONObject(Map.of(
+							"username", username,
+							"hashedPassword", hashed,
+							"highScore", highScore
+					)));
 			}
 		}
 		return result;
 	}
 
-	public static HashMap<String, HashMap<String, String>> loadGameLanguage(String path) {
-		HashMap<String, HashMap<String, String>> result = new HashMap<>();
+	public static JSONObject loadGameLanguage(String path) {
+		JSONObject result = new JSONObject();
 		JSONObject root = parseJsonFile(Path.of(path));
 		if (root == null) return result;
 		for (Object key : root.keySet()) {
 			String id = String.valueOf(key);
 			Object inner = root.get(id);
 			if (inner instanceof JSONObject innerObj) {
-				HashMap<String, String> map = new HashMap<>();
+				JSONObject map = new JSONObject();
 				for (Object sKey : innerObj.keySet()) {
 					String sk = String.valueOf(sKey);
 					Object sval = innerObj.get(sk);
@@ -49,29 +58,43 @@ public class DataLoader {
 		return result;
 	}
 
-	public static HashMap<String, Score> loadScores() {
+	public static HashMap<String, Score> loadHighScores() {
 		HashMap<String, Score> result = new HashMap<>();
 		JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
 		if (root == null) return result;
 
 		for (Object key : root.keySet()) {
-			String username = String.valueOf(key);
-			Object value = root.get(username);
+			String id = String.valueOf(key);
+			Object value = root.get(id);
 			if (value instanceof JSONObject acct) {
 				Object high = acct.get("highScore");
 				if (high instanceof Number) {
 					long seconds = ((Number) high).longValue();
 					// No difficulty stored in accounts.json; default to TRIVIAL
 					Score score = new Score(Duration.ofSeconds(seconds), Difficulty.TRIVIAL);
-					result.put(username, score);
+					result.put(id, score);
 				}
 			}
 		}
 		return result;
 	}
 
-	public static HashMap<String, JSONObject> loadGameState() {
-		HashMap<String, JSONObject> result = new HashMap<>();
+	public static JSONObject loadGameState(Account account) {
+		JSONObject result = new JSONObject();
+		JSONObject root = parseJsonFile(Path.of("json", "gamestates.json"));
+		if (root == null) return result;
+
+		if (account != null) {
+			Object value = root.get(account.id());
+			if (value instanceof JSONObject obj) {
+				result = obj;
+			}
+		}
+		return result;
+	}
+
+	public static JSONObject loadGameStates() {
+		JSONObject result = new JSONObject();
 		JSONObject root = parseJsonFile(Path.of("json", "gamestates.json"));
 		if (root == null) return result;
 
@@ -100,5 +123,4 @@ public class DataLoader {
 		}
 		return null;
 	}
-
 }
