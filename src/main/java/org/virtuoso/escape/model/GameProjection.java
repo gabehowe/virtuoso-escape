@@ -5,6 +5,9 @@ import org.virtuoso.escape.model.account.*;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * @author Treasure
+ */
 public class GameProjection {
 	private GameState gameState;
 	private AccountManager accountManager;

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.data.*;
 
@@ -17,12 +18,14 @@ public class AccountManager {
 
 	private AccountManager() {
 		this.accounts = new HashMap<>();
-		HashMap<String, String> accts = DataLoader.loadAccounts();
-
-		for (Map.Entry<String, String> account : accts.entrySet()) {
-			String username = account.getKey();
-			String password = account.getValue();
-			this.accounts.put(username, new Account(username, password));
+		JSONObject accts = DataLoader.loadAccounts();
+		for (Object id : accts.keySet()) {
+			Object value = accts.get(id);
+			if (value instanceof JSONObject acct) {
+				String username = acct.get("username").toString();
+				String password = acct.get("hashedPassword").toString();
+				this.accounts.put(username, new Account(username, password));
+			}
 		}
 	}
 
