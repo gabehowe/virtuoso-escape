@@ -21,7 +21,7 @@ public class DataWriter {
 	public static void writeGameState() {
 		GameState currentGameState = GameState.instance();
 		JSONObject currentGameStateMap = loadGameStateInfo(currentGameState);
-		JSONObject allGameStatesMap = new JSONObject(DataLoader.loadGameStates());
+		JSONObject allGameStatesMap = DataLoader.loadGameStates();
 		allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
 		writeToFile(ACCOUNTS_PATH, allGameStatesMap);
 	}
@@ -30,7 +30,7 @@ public class DataWriter {
 	public static void writeAccount() {
 		Account currentAccount = GameState.instance().account();
 		JSONObject currentAccountMap = loadAccountInfo(currentAccount);
-		JSONObject allAccountsMap = new JSONObject(DataLoader.loadAccounts());
+		JSONObject allAccountsMap = DataLoader.loadAccounts();
 		allAccountsMap.put(currentAccount.id().toString(), currentAccountMap);
 		writeToFile(GAME_STATES_PATH, allAccountsMap);
 	}
@@ -51,7 +51,7 @@ public class DataWriter {
 		JSONObject gameStateMap = new JSONObject();
 		gameStateMap.put("currentFloor", gameState.currentFloor().id());
 		gameStateMap.put("currentRoom", gameState.currentRoom().id());
-		gameStateMap.put("currentEntity", gameState.currentEntity().isPresent() ? gameState.currentEntity().get().id(): null);
+		gameStateMap.put("currentEntity", gameState.currentEntity().isPresent() ? gameState.currentEntity().get().id() : null);
 		gameStateMap.put("currentItems", itemIds(gameState.currentItems()));
 		gameStateMap.put("time", gameState.time());
 		gameStateMap.put("difficulty", gameState.difficulty().toString());

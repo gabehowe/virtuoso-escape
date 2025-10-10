@@ -36,10 +36,10 @@ public class GameState {
 
 	public void begin(Account account) {
 		JSONObject gameStateInfo = DataLoader.loadGameState(account);
-		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.("currentFloor"))
-		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.("currentRoom"))
-		this.currentEntity = currentRoom.entities().get((int) gameStateInfo.("currentEntity"))
-		this.currentItems = new ArrayList<Item>(Arrays.steam(gameStateInfo.currentItems).map(itemString -> Item.valueOf(itemString)).toArray());
+		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.get("currentFloor"));
+		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.get("currentRoom"));
+		this.currentEntity = currentRoom.entities().get((int) gameStateInfo.get("currentEntity"));
+		this.currentItems = new ArrayList<Item>(Arrays.stream(gameStateInfo.get("currentItems").map(itemString -> Item.valueOf(itemString)).toArray());
 		this.time = Duration.ofSeconds((int) gameStateInfo.get("time"));
 		this.account = account;
 	}
