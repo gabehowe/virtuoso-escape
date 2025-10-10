@@ -39,13 +39,13 @@ public class Entity {
 		return this.id.equals(other.id);
 	}
 
-	public String id() {
+	public String id(){
 		return this.id;
 	}
 
 
 	public String name() {
-		return GameInfo.instance().string(this.id, "name");
+		return GameInfo.getInstance().getLanguage(this.id).get("name");
 	}
 
 	public void takeInput(String input) {
