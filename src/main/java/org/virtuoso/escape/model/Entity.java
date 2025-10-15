@@ -45,7 +45,7 @@ public class Entity {
 
 
 	public String name() {
-		return GameInfo.getInstance().getLanguage(this.id).get("name");
+		return GameInfo.instance().language().get(this.id).get("name");
 	}
 
 	public void takeInput(String input) {
