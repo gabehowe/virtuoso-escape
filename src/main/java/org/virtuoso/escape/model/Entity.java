@@ -19,7 +19,7 @@ public class Entity {
 
     private String getText(String key) {
         try {
-            return GameInfo.instance().language().get(this.id).get(key);
+            return GameInfo.instance().string(this.id,key);
         } catch (Exception e) {
             return "[Missing text: " + key + "]";
         }
@@ -41,7 +41,7 @@ public class Entity {
     }
 
     public String name() {
-        return GameInfo.instance().language().get(this.id).get("name");
+        return GameInfo.instance().string(this.id, "name");
     }
 
     public void introduce() {
@@ -57,7 +57,7 @@ public class Entity {
     }
 
     public void takeInput(String input) {
-        String message = GameInfo.instance().language().get(this.id).get("input_" + input);
+        String message = GameInfo.instance().string(this.id, "input_" + input);
         if (message != null) GameState.instance().setCurrentMessage(message);
 
         if (inputAction != null) inputAction.withInput(input).execute();
