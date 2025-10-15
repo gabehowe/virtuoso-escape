@@ -68,6 +68,14 @@ public class Entity {
     }
 
     public void takeInput(String input) {
-		??
+    String message = GameInfo.getInstance().getLanguage(this.id).get(input);
+    if (message != null) {
+        GameState.instance().setCurrentMessage(message);
     }
+
+    if (inputAction != null) {
+        inputAction.withInput(input).execute();
+    }
+	}
+
 }
