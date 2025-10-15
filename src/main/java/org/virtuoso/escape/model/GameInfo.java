@@ -22,7 +22,9 @@ public class GameInfo {
     }
 
     private Floor acornGrove(){
-        Room acornGrove_0 = new Room(List.of(), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
+        Entity intro_squirrel = new Entity("intro_squirrel", null, null, null);
+        Entity portal_squirrel = new Entity("portal_squirrel", null, null, null);
+        Room acornGrove_0 = new Room(List.of(intro_squirrel, portal_squirrel), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
         Floor acornGrove = new Floor("acorn_grove", List.of(acornGrove_0));
         return acornGrove;
     }
@@ -35,7 +37,7 @@ public class GameInfo {
     };
 
     public String string(String id, String stringId) {
-        // Will throw exception if string not found
+        if (!language.containsKey(id)) return "[Missing language: " + id + "/" + stringId + "]";
         return language.get(id).get(stringId);
     }
 

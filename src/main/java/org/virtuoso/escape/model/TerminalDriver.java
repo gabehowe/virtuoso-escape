@@ -67,14 +67,14 @@ public class TerminalDriver {
                 """);
         List<Entity> entities = projection.currentRoom().entities();
         for (int i = 0; i < entities.size(); i++) {
-            prompt.append(String.format("(%d) %s", i, entities.get(i).name()));
+            prompt.append(String.format("(%d) %s\n", i+2, entities.get(i).name()));
         }
         int response = validateInt(scanner,
                 prompt.toString(),
-                i -> 1 <= i && i <= projection.currentRoom().entities().size());
+                i -> 1 <= i && i <= projection.currentRoom().entities().size() + 1);
         if (response == 1) changeRoom(scanner, projection);
         else {
-            projection.pickEntity(entities.get(response));
+            projection.pickEntity(entities.get(response -2));
         }
     }
 

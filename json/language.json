@@ -2,6 +2,13 @@
 	"acorn_grove_0": {
 		"intro": "You wake up in an acorn grove, seemingly smaller than usual."
 	},
+	"intro_squirrel": {
+		"name": "Eckard",
+		"introduce": "You see the well-mannered Eckard.",
+		"attack": "You try to throw a punch, but you realize you're a squirrel",
+		"interact" : "\"Hello fellow squirrel ... Wait! You're not supposed to be a squirrel! You need to get to the demetamorphinator! I think Gottfried knows where it is. Ask him!\"",
+		"inspect": "Eckard's large bushy tail sways in the ever so acorn grove wind, catching colorless squirrel weather intuitions."
+	},
 	"joe_hardy": {
 		"introduce": "Hi, I'm Joe Hardy",
 		"interact": "Hey, what's up?",
