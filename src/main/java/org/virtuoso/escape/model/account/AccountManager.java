@@ -1,10 +1,13 @@
 package org.virtuoso.escape.model.account;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.json.simple.JSONObject;
+import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.data.*;
 
@@ -18,19 +21,10 @@ public class AccountManager {
 	public JSONObject accounts;
 	public JSONObject gameStates;
 
-	// private AccountManager() {
-	// 	this.accounts = new HashMap<>();
-	// 	JSONObject accts = DataLoader.loadAccounts();
-	// 	for (Object id : accts.keySet()) {
-	// 		Object value = accts.get(id);
-	// 		if (value instanceof JSONObject acct) {
-	// 			String username = acct.get("username").toString();
-	// 			String password = acct.get("hashedPassword").toString();
-	// 			this.accounts.put(username, new Account(username, password));
-	// 		}
-	// 	}
-	// 	this.gameStates = DataLoader.loadGameStates();
-	// }
+	private AccountManager() {
+		this.accounts = DataLoader.loadAccounts();
+		this.gameStates = DataLoader.loadGameStates();
+	}
 
 	public static AccountManager instance() {
 		if (accountManager == null) {
@@ -39,16 +33,18 @@ public class AccountManager {
 		return accountManager;
 	}
 
-	// public Optional<Account> login(String username, String password) {
-	// 	GameState gameState = GameState.instance();
-	// 	Account account = this.accounts.get(username);
-	// 	String hashedPassword = Account.hashPassword(password);
-	// 	if (account != null && account.hashedPassword().equals(hashedPassword)) {
-	// 		gameState.begin(account);
-	// 		return Optional.of(account);
-	// 	}
-	// 	return Optional.empty();
-	// }
+	public Optional<Account> login(String username, String password) {
+		GameState gameState = GameState.instance();
+		Account account = accountExists(username, password);
+		System.out.println(account);
+		if (account != null) {
+			gameState.begin(account);
+			System.out.println("Signed in");
+			return Optional.of(account);
+		}
+		System.out.println("Not logged in");
+		return Optional.empty();
+	}
 
 	public Optional<Account> newAccount(String username, String password) {
 		GameState gameState = GameState.instance();
@@ -59,5 +55,26 @@ public class AccountManager {
 
 	public void logout() {
 		DataWriter.writeAccount();
+	}
+
+	private Account accountExists(String username, String password) {
+		String hashedPassword = Account.hashPassword(password);
+		//System.out.println(hashedPassword);
+		for (Object id : this.accounts.keySet()) {
+			Object value = this.accounts.get(id);
+			if (value instanceof JSONObject acct) {
+//				Object highScore = acct.get("highScore");
+//				if (highScore instanceof JSONObject score) {
+//					long timeRemaining = (long) score.get("timeRemaining");
+//					Difficulty difficulty = (Difficulty) score.get("difficulty");
+//                }
+				String uName = acct.get("username").toString();
+				String pWord = acct.get("hashedPassword").toString();
+				if (uName.equals(username) && pWord.equals(hashedPassword)) {
+					return new Account(username, password, (UUID) id, null);
+				}
+			}
+		}
+		return null;
 	}
 }
