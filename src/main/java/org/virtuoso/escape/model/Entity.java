@@ -19,7 +19,7 @@ public class Entity {
 
     private String getText(String key) {
         try {
-            return GameInfo.instance().language(this.id).get(key);
+            return GameInfo.instance().language().get(this.id).get(key);
         } catch (Exception e) {
             return "[Missing text: " + key + "]";
         }
@@ -29,7 +29,7 @@ public class Entity {
         String message = null;
         if (item != null) {
             try {
-                message = GameInfo.instance().language(this.id).get(item.id());
+                message = GameInfo.instance().language().get(this.id).get(item.id());
             } catch (Exception ignored) {}
         }
         if (message == null) message = getText("interact");
@@ -67,7 +67,7 @@ public class Entity {
     }
 
     public void takeInput(String input) {
-    String message = GameInfo.instance().language(this.id).get(input);
+    String message = GameInfo.instance().language().get(this.id).get(input);
     if (message != null) {
         GameState.instance().setCurrentMessage(message);
     }
