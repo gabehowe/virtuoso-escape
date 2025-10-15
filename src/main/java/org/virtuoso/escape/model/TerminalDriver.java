@@ -82,11 +82,7 @@ public class TerminalDriver {
         projection.currentEntity().ifPresent(Entity::introduce);
         display(projection.currentMessage());
         String prompt = """
-                (1) Interact
-                (2) Inspect
-                (3) Attack
-                (4) Speak
-                (5) Leave (rudely).
+                (1) Interact (2) Inspect (3) Attack (4) Speak (5) Leave (rudely).
                 """;
         int response = validateInt(scanner, prompt, i -> 1 <= i && i <= 5);
         switch (response) {
@@ -96,6 +92,7 @@ public class TerminalDriver {
             case 4 -> projection.input(validateInput(scanner, "What would you like to say?", _ -> true));
             case 5 -> projection.leaveEntity();
         }
+        display(projection.currentMessage());
     }
 
 

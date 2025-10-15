@@ -58,7 +58,7 @@ public class Entity {
 
     public void takeInput(String input) {
         String message = GameInfo.instance().string(this.id, "input_" + input);
-        if (message != null) GameState.instance().setCurrentMessage(message);
+        if (message != null) GameState.instance().setCurrentMessage(this.name() + " doesn't respond.");
 
         if (inputAction != null) inputAction.withInput(input).execute();
     }

@@ -37,7 +37,7 @@ public class GameInfo {
     };
 
     public String string(String id, String stringId) {
-        if (!language.containsKey(id)) return "[Missing language: " + id + "/" + stringId + "]";
+        if (!language.containsKey(id)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
         return language.get(id).get(stringId);
     }
 
