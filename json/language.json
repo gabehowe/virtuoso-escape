@@ -13,4 +13,10 @@
 		"inspect": "**You stare a chip the squirrel, chip the squirrel stares back.**",
 		"squirrel_food": "**Chip the Squirrel eats your food.**"
 	}
+	"elephant_in_the_room": {
+		"introduce": "Are you addressing me?",
+		"interact": "Take this sealed, food-safe jar of peanut butter",
+		"attack": "**The elephant will no longer give you peanut butter**",
+		"inspect": "It seems like nobody else in the room can see the elephant..."
+	}
 }
