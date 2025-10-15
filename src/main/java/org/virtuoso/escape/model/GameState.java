@@ -1,15 +1,15 @@
 package org.virtuoso.escape.model;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.account.Account;
-import org.virtuoso.escape.model.data.*;
+import org.virtuoso.escape.model.data.DataLoader;
+import org.virtuoso.escape.model.data.DataWriter;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Andrew
@@ -19,7 +19,7 @@ public class GameState {
 	private Floor currentFloor;
 	private Room currentRoom;
 	private Entity currentEntity;
-	private ArrayList<Item> currentItems;
+	private List<Item> currentItems;
 	private Duration time;
 	private Account account;
 
@@ -37,15 +37,17 @@ public class GameState {
 
 	public void begin(Account account) {
 		JSONObject gameStateInfo = DataLoader.loadGameState(account);
-		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.get("currentFloor"));
-		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.get("currentRoom"));
-		this.currentEntity = currentRoom.entities().get((int) gameStateInfo.get("currentEntity"));
+		if (gameStateInfo == null) throw new RuntimeException("Couldn't find game state for " + account.id());
+		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.getOrDefault("currentFloor", 0));
+		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.getOrDefault("currentRoom", 0));
+		var getEntity = gameStateInfo.getOrDefault("currentEntity", null);
+		this.currentEntity = (getEntity != null) ? currentRoom.entities().get((int) gameStateInfo.getOrDefault("currentEntity", null)) : null;
 		this.currentItems = new ArrayList<Item>();
-		JSONArray items = (JSONArray) gameStateInfo.get("currentItems");
+		JSONArray items = (JSONArray) gameStateInfo.getOrDefault("currentItems", new JSONArray());
 		for (int i = 0; i < items.size(); i++) {
 			currentItems.add(Item.valueOf((String) items.get(i)));
 		}
-		this.time = Duration.ofSeconds((int) gameStateInfo.get("time"));
+		this.time = Duration.ofSeconds((int) gameStateInfo.getOrDefault("time", 0));
 		this.account = account;
 	}
 
@@ -82,7 +84,7 @@ public class GameState {
 	}
 
 
-	public ArrayList<Item> currentItems() {
+	public List<Item> currentItems() {
 		return currentItems;
 	}
 

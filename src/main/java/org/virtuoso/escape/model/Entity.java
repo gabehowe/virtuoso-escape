@@ -25,20 +25,9 @@ public class Entity {
         }
     }
 
-    public void interact(Item item) {
-        String message = null;
-        if (item != null) {
-            try {
-                message = GameInfo.instance().language().get(this.id).get(item.id());
-            } catch (Exception ignored) {}
-        }
-        if (message == null) message = getText("interact");
-
-        GameState.instance().setCurrentMessage(message);
-
-        if (interactAction != null) {
-            interactAction.execute();
-        }
+    public void interact() {
+        GameState.instance().setCurrentMessage(getText("interact"));
+        if (interactAction != null) interactAction.execute();
     }
 
     public void attack() {
@@ -51,9 +40,10 @@ public class Entity {
         if (inspectAction != null) inspectAction.execute();
     }
 
-	public String name() {
-		return GameInfo.instance().language().get(this.id).get("name");
-	}
+    public String name() {
+        return GameInfo.instance().language().get(this.id).get("name");
+    }
+
     public void introduce() {
         GameState.instance().setCurrentMessage(getText("introduce"));
     }
@@ -67,14 +57,10 @@ public class Entity {
     }
 
     public void takeInput(String input) {
-    String message = GameInfo.instance().language().get(this.id).get(input);
-    if (message != null) {
-        GameState.instance().setCurrentMessage(message);
-    }
+        String message = GameInfo.instance().language().get(this.id).get("input_" + input);
+        if (message != null) GameState.instance().setCurrentMessage(message);
 
-    if (inputAction != null) {
-        inputAction.withInput(input).execute();
+        if (inputAction != null) inputAction.withInput(input).execute();
     }
-	}
 
 }

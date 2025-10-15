@@ -1,4 +1,7 @@
 {
+	"acorn_grove_0": {
+		"intro": "You wake up in an acorn grove, seemingly smaller than usual."
+	},
 	"joe_hardy": {
 		"introduce": "Hi, I'm Joe Hardy",
 		"interact": "Hey, what's up?",

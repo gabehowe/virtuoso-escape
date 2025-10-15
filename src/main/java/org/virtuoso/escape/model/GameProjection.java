@@ -2,7 +2,7 @@ package org.virtuoso.escape.model;
 
 import org.virtuoso.escape.model.account.*;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,10 +17,10 @@ public class GameProjection {
 		this.gameState = GameState.instance();
 	}
 
-	// public boolean login(String username, String password) {
-	// 	Optional<Account> currentAccount = this.accountManager.login(username, password);
-	// 	return currentAccount.isPresent();
-	// }
+	public boolean login(String username, String password) {
+		Optional<Account> currentAccount = this.accountManager.login(username, password);
+		return currentAccount.isPresent();
+	}
 
 	public boolean createAccount(String username, String password) {
 		Optional<Account> currentAccount = this.accountManager.newAccount(username, password);
@@ -35,7 +35,7 @@ public class GameProjection {
 		return this.gameState.currentRoom();
 	}
 
-	public ArrayList<Entity> roomEntities() {
+	public List<Entity> roomEntities() {
 		return currentRoom().entities();
 	}
 
@@ -63,8 +63,8 @@ public class GameProjection {
 		this.gameState.leaveEntity();
 	}
 
-	public void interact(Item item) {
-		currentEntity().orElseThrow().interact(item);
+	public void interact() {
+		currentEntity().orElseThrow().interact();
 	}
 
 	public void attack() {

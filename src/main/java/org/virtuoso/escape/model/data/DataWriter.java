@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
@@ -60,7 +60,7 @@ public class DataWriter {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static JSONArray itemIds(ArrayList<Item> currentItems) {
+	private static JSONArray itemIds(List<Item> currentItems) {
 		JSONArray itemJSON = new JSONArray();
 		currentItems.stream().map(Item::id).forEach(itemJSON::add);
 		return itemJSON;

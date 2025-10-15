@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -42,9 +41,9 @@ public class DataLoader {
 		return result;
 	}
 
-	public static JSONObject loadGameLanguage(String path) {
+	public static JSONObject loadGameLanguage() {
 		JSONObject result = new JSONObject();
-		JSONObject root = parseJsonFile(Path.of(path));
+		JSONObject root = parseJsonFile(Path.of("json", "language.json"));
 		if (root == null) return result;
 		for (Object key : root.keySet()) {
 			String id = String.valueOf(key);
@@ -62,8 +61,8 @@ public class DataLoader {
 		return result;
 	}
 
-	public static HashMap<String, Score> loadHighScores() {
-		HashMap<String, Score> result = new HashMap<>();
+	public static Map<String, Score> loadHighScores() {
+		Map<String, Score> result = Map.of();
 		JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
 		if (root == null) return result;
 
@@ -88,11 +87,10 @@ public class DataLoader {
 		JSONObject root = parseJsonFile(Path.of("json", "gamestates.json"));
 		if (root == null) return result;
 
-		if (account != null) {
-			Object value = root.get(account.id());
-			if (value instanceof JSONObject obj) {
-				result = obj;
-			}
+		if (account == null) return null;
+		Object value = root.get(account.id());
+		if (value instanceof JSONObject obj) {
+			result = obj;
 		}
 		return result;
 	}

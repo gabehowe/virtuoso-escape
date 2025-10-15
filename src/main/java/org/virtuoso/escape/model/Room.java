@@ -1,6 +1,6 @@
 package org.virtuoso.escape.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public record Room(ArrayList<Entity> entities, String id, String introMessage){
+public record Room(List<Entity> entities, String id, String introMessage){
 }

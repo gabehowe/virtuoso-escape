@@ -1,6 +1,5 @@
 package org.virtuoso.escape.model.data;
 
-import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.GameState;
