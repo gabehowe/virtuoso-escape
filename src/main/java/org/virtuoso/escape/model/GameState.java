@@ -52,11 +52,11 @@ public class GameState {
 	}
 
 	public void pickEntity(Entity entity) {
-
+		this.currentEntity = entity;
 	}
 
 	public void leaveEntity() {
-
+		this.currentEntity = null;
 	}
 
 	public boolean hasItem(Item item) {
