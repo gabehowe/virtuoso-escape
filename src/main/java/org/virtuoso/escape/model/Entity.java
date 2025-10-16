@@ -10,11 +10,12 @@ public class Entity {
 	private Action interactAction;
 	private TakeInput inputAction;
 
-	public Entity(String id, Action attackAction, Action inspectAction, Action interactAction) {
+	public Entity(String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
 		this.id = id;
 		this.attackAction = attackAction;
 		this.inspectAction = inspectAction;
 		this.interactAction = interactAction;
+		this.inputAction = inputAction;
 	}
 
 	private String getText(String key) {
