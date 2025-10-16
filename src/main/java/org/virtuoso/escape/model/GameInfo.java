@@ -23,7 +23,11 @@ public class GameInfo {
 
     private Floor acornGrove(){
         Entity intro_squirrel = new Entity("intro_squirrel", null, null, null);
-        Entity portal_squirrel = new Entity("portal_squirrel", null, null, null);
+        Entity portal_squirrel = new Entity("portal_squirrel",
+                null,
+                null,
+                () -> GameState.instance().setCurrentFloor(this.building.get(1)
+        ));
         Room acornGrove_0 = new Room(List.of(intro_squirrel, portal_squirrel), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
         Floor acornGrove = new Floor("acorn_grove", List.of(acornGrove_0));
         return acornGrove;
@@ -37,7 +41,7 @@ public class GameInfo {
     };
 
     public String string(String id, String stringId) {
-        if (!language.containsKey(id)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
+        if (!language.containsKey(id) || !language.get(id).containsKey(stringId)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
         return language.get(id).get(stringId);
     }
 

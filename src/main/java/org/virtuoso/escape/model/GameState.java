@@ -112,8 +112,10 @@ public class GameState {
 		this.difficulty = diff;
 	}
 
-	public String currentMessage() {
-		return currentMessage;
+	public Optional<String> currentMessage() {
+		String currentMessage = this.currentMessage;
+		this.currentMessage = null;
+		return currentMessage.describeConstable();
 	}
 
 	public void setCurrentMessage(String currentMessage) {

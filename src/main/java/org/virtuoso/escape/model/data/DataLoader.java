@@ -125,9 +125,9 @@ public class DataLoader {
 		try (FileReader reader = new FileReader(file.toFile())) {
 			Object obj = parser.parse(reader);
 			if (obj instanceof JSONObject) return (JSONObject) obj;
-			System.err.print("Not viable");
+			System.err.println("Not viable");
 		} catch (IOException | ParseException e) {
-			System.err.print("Could not parse file");
+			System.err.println("Could not parse file");
 		}
 		return null;
 	}

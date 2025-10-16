@@ -25,21 +25,10 @@ public class Entity {
 		}
 	}
 
-	public void interact(Item item) {
-		String message = null;
-		if (item != null) {
-			try {
-				message = GameInfo.instance().string(this.id, item.id());
-			} catch (Exception ignored) {
-			}
-		}
-		if (message == null) message = getText("interact");
+	public void interact() {
+		GameState.instance().setCurrentMessage(getText("interact"));
 
-		GameState.instance().setCurrentMessage(message);
-
-		if (interactAction != null) {
-			interactAction.execute();
-		}
+		if (interactAction != null) interactAction.execute();
 	}
 
 	public void attack() {
@@ -53,7 +42,7 @@ public class Entity {
 	}
 
 	public String name() {
-		return GameInfo.instance().language().get(this.id).get("name");
+		return GameInfo.instance().string(this.id, "name");
 	}
 
 	public void introduce() {

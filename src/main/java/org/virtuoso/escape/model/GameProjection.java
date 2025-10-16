@@ -34,6 +34,9 @@ public class GameProjection {
 	public Room currentRoom() {
 		return this.gameState.currentRoom();
 	}
+	public void pickRoom(Room room) {
+			this.gameState.setCurrentRoom(room);
+	};
 
 	public List<Entity> roomEntities() {
 		return currentRoom().entities();
@@ -47,7 +50,7 @@ public class GameProjection {
 		return this.gameState.currentFloor();
 	}
 
-	public String currentMessage() {
+	public Optional<String> currentMessage() {
 		return this.gameState.currentMessage();
 	}
 
