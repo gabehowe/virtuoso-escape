@@ -69,8 +69,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account{" + "username='" + username + '\'' +
-				", hashedPassword='" + hashedPassword + '\'' +
-				'}';
+		return "Account{" + "username='" + this.username + "', " +
+				"hashedPassword='" + this.hashedPassword + "', ";
 	}
 }

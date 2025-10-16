@@ -1,8 +1,6 @@
 package org.virtuoso.escape.model.account;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,10 +34,10 @@ public class AccountManager {
 	public Optional<Account> login(String username, String password) {
 		GameState gameState = GameState.instance();
 		Account account = accountExists(username, password);
-		System.out.println(account);
 		if (account != null) {
 			gameState.begin(account);
-			System.out.println("Signed in");
+			System.out.println(account + "highScore='" + account.highScore() + "'");
+			System.out.println("Signed in!");
 			return Optional.of(account);
 		}
 		System.out.println("Not logged in");
@@ -48,7 +46,8 @@ public class AccountManager {
 
 	public Optional<Account> newAccount(String username, String password) {
 		GameState gameState = GameState.instance();
-		Account account = new Account(username, password);
+		Account account = login(username, password).orElse(new Account(username, password));
+		System.out.println(account + "\nCreated new account!");
 		gameState.begin(account);
 		return Optional.of(account);
 	}
@@ -63,15 +62,16 @@ public class AccountManager {
 		for (Object id : this.accounts.keySet()) {
 			Object value = this.accounts.get(id);
 			if (value instanceof JSONObject acct) {
-//				Object highScore = acct.get("highScore");
-//				if (highScore instanceof JSONObject score) {
-//					long timeRemaining = (long) score.get("timeRemaining");
-//					Difficulty difficulty = (Difficulty) score.get("difficulty");
-//                }
+				Object highScore = acct.get("highScore");
 				String uName = acct.get("username").toString();
 				String pWord = acct.get("hashedPassword").toString();
-				if (uName.equals(username) && pWord.equals(hashedPassword)) {
-					return new Account(username, password, (UUID) id, null);
+				if (highScore instanceof JSONObject score) {
+					long timeRemaining = (long) score.get("timeRemaining");
+					Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
+					if (uName.equals(username) && pWord.equals(hashedPassword)) {
+						return new Account(username, password, UUID.fromString(id.toString()),
+								new Score(Duration.ofSeconds(timeRemaining), difficulty));
+					}
 				}
 			}
 		}

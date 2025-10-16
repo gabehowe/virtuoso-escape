@@ -1,8 +1,5 @@
 package org.virtuoso.escape.model.data;
 
-import java.util.HashMap;
-import java.util.Optional;
-
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
@@ -18,8 +15,13 @@ public class dataTester {
 //		GameState gs = GameState.instance();
 //		gs.setCurrentMessage("Hello");
 //		DataWriter.writeGameState();
+
 		am = AccountManager.instance();
-		GameProjection gP = new GameProjection();
-		//System.out.println(gP.login("JsonLaquermelonie", "dog"));
+		am.login("JsonLaquermelonie", "dog");
+		//am.login("Jay'sSon", "cat");
+
+
+		//am.newAccount("JsonLaquermelonie", "dog");
+		am.newAccount("JSONJR.", "cat");
 	}
 }

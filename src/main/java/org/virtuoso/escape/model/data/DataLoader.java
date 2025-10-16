@@ -15,6 +15,7 @@ import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.Score;
 
 /**
+ * @author Bose
  * @author Treasure
  * @author Andrew
  */
@@ -71,11 +72,11 @@ public class DataLoader {
 			Object value = root.get(id);
 			if (value instanceof JSONObject acct) {
 				Object high = acct.get("highScore");
-				if (high instanceof Number) {
-					long seconds = ((Number) high).longValue();
-					// No difficulty stored in accounts.json; default to TRIVIAL
-					Score score = new Score(Duration.ofSeconds(seconds), Difficulty.TRIVIAL);
-					result.put(id, score);
+				if (high instanceof JSONObject score) {
+					long seconds = (long) score.get("timeRemaining");
+					Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
+					Score highScore = new Score(Duration.ofSeconds(seconds), difficulty);
+					result.put(id, highScore);
 				}
 			}
 		}

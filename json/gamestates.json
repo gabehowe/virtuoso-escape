@@ -1,27 +1,27 @@
 {
-    "c81d4e2e-bcf2-11e6-869b-7df92533d2db" : {
-        "currentFloor" : "3",
-        "currentRoom" : "2",
-        "currentEntity" : "4",
-        "currentItems" : [
-            "KEY_CARD",
-            "SQUIRREL_FOOD",
-            "LAPTOP",
-            "SQUIRRELS"
-        ],
-        "time" : 1083921,
-        "difficulty" : "SUBSTANTIAL"
-    },
-    "c81d4e2e-bcf2-11e6-869b-7df92533d2al" : {
-        "currentFloor" : "6",
-        "currentRoom" : "4",
-        "currentEntity" : "6",
-        "currentItems" : [
-            "DESIGN_PATTERNS_BOOK",
-            "GOLD_CLUB",
-            "USC_ID"
-        ],
-        "time" : 1372,
-        "difficulty" : "TRIVIAL"
-    }
+  "c81d4e2e-bcf2-11e6-869b-7df92533d2db": {
+    "currentFloor": "3",
+    "currentRoom": "2",
+    "currentEntity": "4",
+    "currentItems": [
+      "KEY_CARD",
+      "SQUIRREL_FOOD",
+      "LAPTOP",
+      "SQUIRRELS"
+    ],
+    "time": 1083,
+    "difficulty": "SUBSTANTIAL"
+  },
+  "c81d4e2e-bcf2-11e6-869b-7df92533d2al": {
+    "currentFloor": "6",
+    "currentRoom": "4",
+    "currentEntity": "6",
+    "currentItems": [
+      "DESIGN_PATTERNS_BOOK",
+      "GOLF_CLUB",
+      "USC_ID"
+    ],
+    "time": 1372,
+    "difficulty": "TRIVIAL"
+  }
 }
