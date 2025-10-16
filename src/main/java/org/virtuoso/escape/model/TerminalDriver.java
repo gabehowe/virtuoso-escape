@@ -151,9 +151,8 @@ public class TerminalDriver {
                 fs_r("Leave", projection::leaveEntity)
         );
 
-        createActionInterface(scanner, actions, projection.currentMessage());
-        String msg = projection.currentMessage();
-        if (msg != null) pauseDisplay(msg);
+        createActionInterface(scanner, actions, projection.currentMessage().orElse(""));
+        projection.currentMessage().ifPresent(this::pauseDisplay);
     }
 
     void gameLoop(Scanner scanner, GameProjection projection) {

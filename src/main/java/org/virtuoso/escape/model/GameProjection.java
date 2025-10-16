@@ -50,7 +50,7 @@ public class GameProjection {
 		return this.gameState.currentFloor();
 	}
 
-	public String currentMessage() {
+	public Optional<String> currentMessage() {
 		return this.gameState.currentMessage();
 	}
 
