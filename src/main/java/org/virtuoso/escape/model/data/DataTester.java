@@ -2,11 +2,9 @@ package org.virtuoso.escape.model.data;
 
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.GameProjection;
-import org.virtuoso.escape.model.GameState;
-import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
 
-public class dataTester {
+public class DataTester {
 	private static DataLoader dl;
 	private static JSONObject states;
 	private static AccountManager am;
@@ -16,12 +14,13 @@ public class dataTester {
 //		gs.setCurrentMessage("Hello");
 //		DataWriter.writeGameState();
 
-		am = AccountManager.instance();
-		am.login("JsonLaquermelonie", "dog");
-		//am.login("Jay'sSon", "cat");
+		GameProjection gP = new GameProjection();
+		gP.login("JsonLaquermelonie", "dog");
+		//gP.login("Jay'sSon", "cat");
 
 
-		//am.newAccount("JsonLaquermelonie", "dog");
-		am.newAccount("JSONJR.", "cat");
+		//gP.newAccount("JsonLaquermelonie", "dog");
+		gP.createAccount("JSONJR.", "cat");
+		gP.login("JSONJR.", "cat"); //accounts.json never updates. results in null
 	}
 }
