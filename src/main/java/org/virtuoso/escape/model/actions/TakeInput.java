@@ -27,7 +27,7 @@ public class TakeInput implements Action {
             tuple.getValue().execute();
             return;
         }
-        this.default_.execute();
+        if (this.default_ != null) this.default_.execute();
     }
 
     public Action withInput(String input) {
