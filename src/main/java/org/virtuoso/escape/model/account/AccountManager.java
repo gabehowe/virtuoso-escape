@@ -45,11 +45,14 @@ public class AccountManager {
 	}
 
 	public Optional<Account> newAccount(String username, String password) {
-		GameState gameState = GameState.instance();
-		Account account = login(username, password).orElse(new Account(username, password));
-		System.out.println(account + "\nCreated new account!");
-		gameState.begin(account);
-		return Optional.of(account);
+		if (username.length() <= 32 && password.length() <= 32) {
+			GameState gameState = GameState.instance();
+			Account account = login(username, password).orElse(new Account(username, password));
+			System.out.println(account + "\nCreated new account!");
+			gameState.begin(account);
+			return Optional.of(account);
+		}
+		return Optional.empty();
 	}
 
 	public void logout() {
