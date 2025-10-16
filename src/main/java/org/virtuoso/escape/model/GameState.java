@@ -40,8 +40,8 @@ public class GameState {
 		if (gameStateInfo == null) throw new RuntimeException("Couldn't find game state for " + account.id());
 		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.getOrDefault("currentFloor", 0));
 		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.getOrDefault("currentRoom", 0));
-		var getEntity = gameStateInfo.getOrDefault("currentEntity", null);
-		this.currentEntity = (getEntity != null) ? currentRoom.entities().get((int) gameStateInfo.getOrDefault("currentEntity", null)) : null;
+		Object getEntity = gameStateInfo.getOrDefault("currentEntity", null);
+		this.currentEntity = (getEntity != null) ? currentRoom.entities().get((int) getEntity) : null;
 		this.currentItems = new ArrayList<Item>();
 		JSONArray items = (JSONArray) gameStateInfo.getOrDefault("currentItems", new JSONArray());
 		for (int i = 0; i < items.size(); i++) {
