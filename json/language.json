@@ -1,32 +1,32 @@
 {
-	"acorn_grove_0": {
-		"intro": "You wake up in an acorn grove, seemingly smaller than usual."
-	},
-	"intro_squirrel": {
-		"name": "Eckard",
-		"introduce": "You see the well-mannered Eckard.",
-		"attack": "You try to throw a punch, but you realize you're a squirrel",
-		"interact" : "\"Hello fellow squirrel ... Wait! You're not supposed to be a squirrel! You need to get to the demetamorphinator! I think Gottfried knows where it is. Ask him!\"",
-		"inspect": "Eckard's large bushy tail sways in the ever so acorn grove wind, catching colorless squirrel weather intuitions."
-	},
-	"joe_hardy": {
-		"introduce": "Hi, I'm Joe Hardy",
-		"interact": "Hey, what's up?",
-		"attack": "Woah dude, quit that!",
-		"inspect": "Oh, Hi!",
-		"squirrels": "**You show Joe the squirrels.** Oh, those are cute babies..."
-	},
-	"chip_the_squirrel": {
-		"introduce": "Squeak Squeak",
-		"interact": "...Squirrel noises...",
-		"attack": "**Chip the Squirrel lunges at your face.**",
-		"inspect": "**You stare a chip the squirrel, chip the squirrel stares back.**",
-		"squirrel_food": "**Chip the Squirrel eats your food.**"
-	}
-	"elephant_in_the_room": {
-		"introduce": "Are you addressing me?",
-		"interact": "Take this sealed, food-safe jar of peanut butter",
-		"attack": "**The elephant will no longer give you peanut butter**",
-		"inspect": "It seems like nobody else in the room can see the elephant..."
-	}
+  "acorn_grove_0": {
+    "intro": "You wake up in an acorn grove, seemingly smaller than usual."
+  },
+  "intro_squirrel": {
+    "name": "Eckard",
+    "introduce": "You see the well-mannered Eckard.",
+    "attack": "You try to throw a punch, but you realize you're a squirrel",
+    "interact": "\"Hello fellow squirrel ... Wait! You're not supposed to be a squirrel! You need to get to the demetamorphinator! I think Gottfried knows where it is. Ask him!\"",
+    "inspect": "Eckard's large bushy tail sways in the ever so acorn grove wind, catching colorless squirrel weather intuitions."
+  },
+  "joe_hardy": {
+    "introduce": "Hi, I'm Joe Hardy",
+    "interact": "Hey, what's up?",
+    "attack": "Woah dude, quit that!",
+    "inspect": "Oh, Hi!",
+    "squirrels": "**You show Joe the squirrels.** Oh, those are cute babies..."
+  },
+  "chip_the_squirrel": {
+    "introduce": "Squeak Squeak",
+    "interact": "...Squirrel noises...",
+    "attack": "**Chip the Squirrel lunges at your face.**",
+    "inspect": "**You stare a chip the squirrel, chip the squirrel stares back.**",
+    "squirrel_food": "**Chip the Squirrel eats your food.**"
+  },
+  "elephant_in_the_room": {
+    "introduce": "Are you addressing me?",
+    "interact": "Take this sealed, food-safe jar of peanut butter",
+    "attack": "**The elephant will no longer give you peanut butter**",
+    "inspect": "It seems like nobody else in the room can see the elephant..."
+  }
 }
