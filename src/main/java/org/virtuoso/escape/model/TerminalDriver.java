@@ -267,7 +267,7 @@ public class TerminalDriver {
             return s.chars().mapToObj(c -> (char) c).toList();
         }
 
-        private static String RED_FG = escape("34");
+        private static String RED_FG = escape("31");
         private static String DEFAULT_FG = escape("39");
         private static String BOLD = escape("1"); // for controls
         private static String BOLD_OFF = escape("22");
