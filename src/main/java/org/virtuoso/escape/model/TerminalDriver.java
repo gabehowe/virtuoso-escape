@@ -6,6 +6,9 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 
+/**
+ * @author gabri
+ */
 public class TerminalDriver {
     // Tree
 
@@ -187,7 +190,6 @@ public class TerminalDriver {
         display("Logged out.\nThanks for playing!");
         System.exit(1);
     }
-
 
     // See JEP 495
     void main() {
