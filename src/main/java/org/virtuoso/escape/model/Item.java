@@ -2,6 +2,8 @@ package org.virtuoso.escape.model;
 
 public enum Item {
     //TODO: add items
+
+    // Floor 3 items
     ;
 
     private String name;

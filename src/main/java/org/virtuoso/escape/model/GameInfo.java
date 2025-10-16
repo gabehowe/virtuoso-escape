@@ -1,9 +1,6 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.actions.Action;
-import org.virtuoso.escape.model.actions.GiveItem;
-import org.virtuoso.escape.model.actions.SwapEntities;
-import org.virtuoso.escape.model.actions.TakeInput;
+import org.virtuoso.escape.model.actions.*;
 import org.virtuoso.escape.model.data.DataLoader;
 
 import java.nio.file.Path;
@@ -36,26 +33,36 @@ public class GameInfo {
     private Entity makeComputtyChain() {
         // Whoops! JEP 126!
         Entity microwaveUnblocked = new Entity("microwave_unblocked", this::gameEnding_moral, null, this::gameEnding_immoral, null);
-        var computtyTarLogic = new TakeInput("", Map.of(
-                "rotx 16 code", new SwapEntities(microwaveUnblocked, "microwave_blocked")));
+        var computtyTarLogic = new TakeInput("", TakeInput.makeCases(
+                "rotx 16 code", new SwapEntities(microwaveUnblocked, "microwave_blocked"),
+                "rotx 16 .*", new SetMessage(this,"computty", "no_file"),
+                "rotx \\d+", new SetMessage(this,"computty", "failed_rotx"),
+                "rotx.*", new SetMessage(this,"computty", "man_rotx")
+                // ls
+        ));
         var computtyTar = new Entity("computty_tar", null, null, null, computtyTarLogic);
-        var computtyCdLogic = new TakeInput("", Map.of(
-                "tar -xvf code.tar", new SwapEntities(computtyTar, "computty_cd")
+        var computtyCdLogic = new TakeInput("", TakeInput.makeCases(
+                "tar xvf code.tar$", new SwapEntities(computtyTar, "computty_cd"),
+                "tar xvf c.*", new SetMessage(this,"computty", "no_file"),
+                "tar.*", new SetMessage(this,"computty", "man_tar")
+                // ls, cat
         ));
         Entity computtyCd = new Entity("computty_cd", null, null, null, computtyCdLogic);
-        var computtyDefault = new TakeInput("", Map.of(
-                "cd", new SwapEntities(computtyCd, "computty")
+        var computtyDefault = new TakeInput("", TakeInput.makeCases(
+                "cd code", new SwapEntities(computtyCd, "computty"),
+                "cd.*", new SetMessage(this,"computty", "no_file")
+                // ls
         ));
         return new Entity("computty", null, null, null, computtyDefault);
     }
 
     private Floor floor3() {
-        // Basic info entity -- provide logic by adding dialogue
+        // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = new Entity("man", null, null, null, null);
-        Entity sock_squirrel = new Entity("sock_squirrel", new GiveItem(Item.TTY_PASSWORD), null, null, null);
-        Entity computty = makeComputtyChain();
+        var computtyBlocked = new Entity("computty_blocked", null, null, null, null);
+        Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities(makeComputtyChain(), "computty_blocked"), null, null, null);
         Entity microwave = new Entity("microwave_blocked", null, null, null, null);
-        Room floor3_0 = new Room(List.of(man, sock_squirrel, computty, microwave), "floor3_0", this.string("floor3_0", "intro"));
+        Room floor3_0 = new Room(List.of(man, sock_squirrel, computtyBlocked, microwave), "floor3_0", this.string("floor3_0", "intro"));
         return new Floor("floor3", List.of(floor3_0));
     }
 

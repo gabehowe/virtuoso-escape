@@ -18,6 +18,14 @@ public class Entity {
 		this.inputAction = inputAction;
 	}
 
+	public void absorb(Entity other){
+		this.id = other.id;
+		this.attackAction = other.attackAction;
+		this.inspectAction = other.inspectAction;
+		this.interactAction = other.interactAction;
+		this.inputAction = other.inputAction;
+	}
+
 	private String getText(String key) {
 		try {
 			return GameInfo.instance().string(this.id, key);

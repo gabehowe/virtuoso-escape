@@ -5,6 +5,7 @@ import org.virtuoso.escape.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public record SwapEntities(Entity toPlace, String toReplace) implements Action {
 	@Override
@@ -12,8 +13,8 @@ public record SwapEntities(Entity toPlace, String toReplace) implements Action {
 		List<Room> rooms = GameState.instance().currentFloor().rooms();
 		for (var room : rooms) {
 			List<Entity> ents = room.entities();
-			if (ents.stream().noneMatch((ent) -> Objects.equals(ent.id(), toPlace.id()))) continue;
-			ents.set(ents.indexOf(toReplace), toPlace); // TODO(gabri) test this and see if toReplace has somehow been copied.
+			Optional<Entity> replace = ents.stream().filter(entity -> Objects.equals(entity.id(), toReplace)).findFirst();
+			replace.ifPresent(e->e.absorb(toPlace));
 		}
 	}
 }

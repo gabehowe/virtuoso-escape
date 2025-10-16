@@ -22,13 +22,10 @@ public class TerminalDriver {
     }
 
     @SafeVarargs
-    final SequencedMap<FunString, Runnable> makeTuiActionMap(Map.Entry<FunString, Runnable>... input) {
-        SequencedMap<FunString, Runnable> map = new LinkedHashMap<>();
+    final SequencedMap<FunString, Runnable> makeTuiActionMap(Map.Entry<FunString, Runnable>... input) {SequencedMap<FunString, Runnable> map = new LinkedHashMap<>();
         Arrays.stream(input).forEachOrdered(i -> map.put(i.getKey(), i.getValue()));
         return map;
-    }
-
-    ;
+    };
 
     // Sequenced retains order.
     void createActionInterface(Scanner scanner, SequencedMap<FunString, Runnable> tuiAction, String status) {
@@ -58,7 +55,7 @@ public class TerminalDriver {
         }
         Set<String> validResponses = keyMap.keySet();
         var prompts = keyMap.values().stream().map(Map.Entry::getKey).toList();
-        String delim = " ░ ";
+        String delim = " ■ ";
         FunString prompt = FunString.join(delim, prompts);
         // If long, cut into two lines for readability -- We can only assume terminal width because of java's cross-platform nature.
         if (prompt.length() > 75) {
@@ -92,6 +89,7 @@ public class TerminalDriver {
             username = validateInput(scanner, "Enter your username:", i -> !i.isBlank());
             password = validateInput(scanner, "Enter your password:", i -> !i.isBlank());
             flag = type.test(username.strip(), password.strip());
+            // Move to the second console line
             System.out.print(escape("2;1H") + escape(CLEAR_BELOW));
             if (!flag) display(new FunString("Failed to process login.").red().toString());
         } while (!flag);
@@ -154,13 +152,6 @@ public class TerminalDriver {
         projection.currentMessage().ifPresent(i -> pauseDisplay(scanner, i));
     }
 
-    void gameLoop(Scanner scanner, GameProjection projection) {
-        while (true) {
-            if (projection.currentEntity().isPresent()) menu_entityAction(scanner, projection);
-            else menu_roomActions(scanner, projection);
-        }
-    }
-
     void menu_difficulty(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap();
 
@@ -185,6 +176,13 @@ public class TerminalDriver {
         projection.logout();
         display("Logged out.\nThanks for playing!");
         System.exit(1);
+    }
+
+    void gameLoop(Scanner scanner, GameProjection projection) {
+        while (true) {
+            if (projection.currentEntity().isPresent()) menu_entityAction(scanner, projection);
+            else menu_roomActions(scanner, projection);
+        }
     }
 
     // See JEP 495
