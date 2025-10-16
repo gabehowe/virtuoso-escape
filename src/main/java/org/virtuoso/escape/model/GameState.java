@@ -115,7 +115,7 @@ public class GameState {
 	public Optional<String> currentMessage() {
 		String currentMessage = this.currentMessage;
 		this.currentMessage = null;
-		return currentMessage.describeConstable();
+		return Optional.ofNullable(currentMessage);
 	}
 
 	public void setCurrentMessage(String currentMessage) {
