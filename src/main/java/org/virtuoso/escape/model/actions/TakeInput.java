@@ -23,7 +23,7 @@ public class TakeInput implements Action {
     @Override
     public void execute() {
         for (Map.Entry<String, Action> tuple : cases.entrySet()) {
-            if (!input.strip().toLowerCase().equals(tuple.getKey())) continue;
+            if (!input.strip().toLowerCase().matches(tuple.getKey())) continue;
             tuple.getValue().execute();
             return;
         }
