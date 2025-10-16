@@ -3,7 +3,9 @@ package org.virtuoso.escape.model;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 
 /**
@@ -22,10 +24,13 @@ public class TerminalDriver {
     }
 
     @SafeVarargs
-    final SequencedMap<FunString, Runnable> makeTuiActionMap(Map.Entry<FunString, Runnable>... input) {SequencedMap<FunString, Runnable> map = new LinkedHashMap<>();
+    final SequencedMap<FunString, Runnable> makeTuiActionMap(Map.Entry<FunString, Runnable>... input) {
+        SequencedMap<FunString, Runnable> map = new LinkedHashMap<>();
         Arrays.stream(input).forEachOrdered(i -> map.put(i.getKey(), i.getValue()));
         return map;
-    };
+    }
+
+    ;
 
     // Sequenced retains order.
     void createActionInterface(Scanner scanner, SequencedMap<FunString, Runnable> tuiAction, String status) {
@@ -138,6 +143,23 @@ public class TerminalDriver {
 
     }
 
+    void displayItems(Scanner scanner, GameProjection projection) {
+        List<String> names = projection.currentItems().stream().map(Item::itemName).toList();
+        if (names.isEmpty()) {
+            pauseDisplay(scanner, "You have no items.");
+            return;
+        }
+        List<String> lines = new ArrayList<>();
+        int padwidth = (names.stream().map(String::length)).max(Integer::compare).get();
+        for (int i = 0; i < names.size(); i += 2) {
+            Function<String, String> j = (str) -> String.format("1✖ %-" + padwidth + "s", str);
+            String left = j.apply(names.get(i)+ ",") ;
+            String right = (i + 1 == names.size()) ? "" : j.apply(names.get(i + 1));
+            lines.add(left + " " + right);
+        }
+        pauseDisplay(scanner, "You have: \n"+String.join("\n", lines));
+    }
+
     void menu_entityAction(Scanner scanner, GameProjection projection) {
         projection.currentEntity().ifPresent(Entity::introduce);
         var actions = makeTuiActionMap(
@@ -145,6 +167,7 @@ public class TerminalDriver {
                 fs_r("Inspect", projection::inspect),
                 fs_r("Attack", projection::attack),
                 fs_r("Speak", () -> projection.input(validateInput(scanner, "What would you like to say? ", _ -> true))),
+                fs_r("Items", () -> this.displayItems(scanner, projection)),
                 fs_r("Leave", projection::leaveEntity)
         );
 
@@ -189,6 +212,7 @@ public class TerminalDriver {
     void main() {
         Scanner scanner = new Scanner(System.in);
         GameProjection projection = new GameProjection();
+        // Ensure these are initialized
         var actions = makeTuiActionMap(
                 fs_r("Login", () -> tryLogin(scanner, projection, projection::login)),
                 fs_r("Create Account", () -> tryLogin(scanner, projection, projection::createAccount))

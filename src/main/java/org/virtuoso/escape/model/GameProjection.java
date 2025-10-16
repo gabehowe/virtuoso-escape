@@ -54,6 +54,9 @@ public class GameProjection {
 	public Optional<String> currentMessage() {
 		return this.gameState.currentMessage();
 	}
+	public List<Item> currentItems() {
+		return this.gameState.currentItems();
+	}
 
 	public void setDifficulty(Difficulty difficulty) {
 		this.gameState.setDifficulty(difficulty);
