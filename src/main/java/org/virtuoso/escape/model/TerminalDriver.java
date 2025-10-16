@@ -1,5 +1,6 @@
 package org.virtuoso.escape.model;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -27,7 +28,7 @@ public class TerminalDriver {
     ;
 
     // Sequenced retains order.
-    void createActionInterface(Scanner scanner, SequencedMap<FunString, Runnable> tuiAction) {
+    void createActionInterface(Scanner scanner, SequencedMap<FunString, Runnable> tuiAction, String status) {
         assert !tuiAction.isEmpty();
         Map<String, Map.Entry<FunString, Runnable>> keyMap = new LinkedHashMap<>();
         // Create a unique key (or group of keys) to press for each action.
@@ -64,6 +65,7 @@ public class TerminalDriver {
         }
 
         clearScreen();
+        display(status);
         String response = validateInput(scanner, prompt.toString(), validResponses::contains);
         keyMap.get(response).getValue().run();
     }
@@ -99,6 +101,16 @@ public class TerminalDriver {
         // wrapper function allows for flair
         System.out.printf(display + "\n", args);
     }
+
+    void pauseDisplay(String str, Object... args) {
+        display(str, args);
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     void clearScreen() {
         System.out.print(escape(CLEAR_RESET) + escape(CLEAR));
     }
@@ -110,11 +122,10 @@ public class TerminalDriver {
         }
         actions.put(new FunString("Nevermind"), () -> {
         });
-        createActionInterface(scanner, actions);
+        createActionInterface(scanner, actions, "Change room");
     }
 
     void menu_roomActions(Scanner scanner, GameProjection projection) {
-        display(projection.currentRoom().introMessage());
         SequencedMap<FunString, Runnable> actions = makeTuiActionMap(
         );
         // It makes no sense to change rooms if there are no rooms to change to!
@@ -126,13 +137,12 @@ public class TerminalDriver {
         }
         actions.put(new FunString("Exit game"), () -> menu_exit(scanner, projection));
         actions.put(new FunString("Options"), () -> menu_options(scanner, projection));
-        createActionInterface(scanner, actions);
+        createActionInterface(scanner, actions, projection.currentRoom().introMessage());
 
     }
 
     void menu_entityAction(Scanner scanner, GameProjection projection) {
         projection.currentEntity().ifPresent(Entity::introduce);
-        display(projection.currentMessage());
         var actions = makeTuiActionMap(
                 fs_r("Interact", projection::interact),
                 fs_r("Inspect", projection::inspect),
@@ -141,8 +151,9 @@ public class TerminalDriver {
                 fs_r("Leave", projection::leaveEntity)
         );
 
-        createActionInterface(scanner, actions);
-        display(projection.currentMessage());
+        createActionInterface(scanner, actions, projection.currentMessage());
+        String msg = projection.currentMessage();
+        if (msg != null) pauseDisplay(msg);
     }
 
     void gameLoop(Scanner scanner, GameProjection projection) {
@@ -158,15 +169,18 @@ public class TerminalDriver {
         for (var diff : Difficulty.values()) {
             actions.put(new FunString(diff.name()), () -> projection.setDifficulty(diff));
         }
-        createActionInterface(scanner, actions);
+        actions.put(new FunString("Nevermind"), () -> {
+        });
+        createActionInterface(scanner, actions, "Choose difficulty");
     }
 
     void menu_options(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap(
                 fs_r("Set difficulty", () -> menu_difficulty(scanner, projection)),
-                fs_r("Nevermind", () -> {})
+                fs_r("Nevermind", () -> {
+                })
         );
-        createActionInterface(scanner, actions);
+        createActionInterface(scanner, actions, "Options");
     }
 
     void menu_exit(Scanner scanner, GameProjection projection) {
@@ -180,14 +194,13 @@ public class TerminalDriver {
     void main() {
         Scanner scanner = new Scanner(System.in);
         GameProjection projection = new GameProjection();
-        // TODO(gabri) add modus for difficulty selection.
         var actions = makeTuiActionMap(
                 fs_r("Login", () -> tryLogin(scanner, projection, projection::login)),
                 fs_r("Create Account", () -> tryLogin(scanner, projection, projection::createAccount))
         );
 
 
-        createActionInterface(scanner, actions);
+        createActionInterface(scanner, actions, "Welcome to Virtuoso Escape!");
         gameLoop(scanner, projection);
     }
 
@@ -196,9 +209,11 @@ public class TerminalDriver {
     private static String CLEAR_RESET = "H";
     private static String MOVE_LINE = "1A";
     private static String CLEAR_BELOW = "0J";
+
     private static String escape(String innerCode) {
         return String.format("\033[%s", innerCode);
     }
+
     // Holder for decorated strings for terminal output.
     private record FunString(List<Object /*FunString, char*/> content, List<String> styleCodes, List<String> resetCodes) {
 

@@ -113,6 +113,8 @@ public class GameState {
 	}
 
 	public String currentMessage() {
+		String currentMessage = this.currentMessage;
+		this.currentMessage = null;
 		return currentMessage;
 	}
 
