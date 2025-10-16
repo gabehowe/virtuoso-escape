@@ -63,20 +63,22 @@ public class TerminalDriver {
             prompt.add(FunString.join(delim, prompts.subList(prompts.size() / 2, prompts.size())));
         }
 
+        clearScreen();
         String response = validateInput(scanner, prompt.toString(), validResponses::contains);
         keyMap.get(response).getValue().run();
     }
 
     String validateInput(Scanner scanner, String prompt, Predicate<String> predicate) {
         String scanAttempt;
-        do {
+        while (true) {
             display(prompt);
             scanAttempt = scanner.nextLine().strip().toLowerCase();
+            System.out.print(escape(MOVE_LINE));
+            if (predicate.test(scanAttempt)) break;
+            System.out.print(escape(MOVE_LINE) + escape("2K"));
         }
-        while (!predicate.test(scanAttempt));
         return scanAttempt;
     }
-
 
     void tryLogin(Scanner scanner, GameProjection projection, BiPredicate<String, String> type) {
         String username, password;
@@ -85,6 +87,7 @@ public class TerminalDriver {
             username = validateInput(scanner, "Enter your username:", i -> !i.isBlank());
             password = validateInput(scanner, "Enter your password:", i -> !i.isBlank());
             flag = type.test(username.strip(), password.strip());
+            System.out.print(escape("2;1H") + escape(CLEAR_BELOW));
             if (!flag) display(new FunString("Failed to process login.").red().toString());
         } while (!flag);
         // logical negation:
@@ -96,17 +99,21 @@ public class TerminalDriver {
         // wrapper function allows for flair
         System.out.printf(display + "\n", args);
     }
+    void clearScreen() {
+        System.out.print(escape(CLEAR_RESET) + escape(CLEAR));
+    }
 
     void changeRoom(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap();
         for (Room room : projection.currentFloor().rooms()) {
             actions.put(new FunString(room.name()).bold(), () -> projection.pickRoom(room));
         }
-        actions.put(new FunString("Nevermind"), () -> {});
+        actions.put(new FunString("Nevermind"), () -> {
+        });
         createActionInterface(scanner, actions);
     }
 
-    void roomActions(Scanner scanner, GameProjection projection) {
+    void menu_roomActions(Scanner scanner, GameProjection projection) {
         display(projection.currentRoom().introMessage());
         SequencedMap<FunString, Runnable> actions = makeTuiActionMap(
         );
@@ -117,12 +124,13 @@ public class TerminalDriver {
         for (Entity e : projection.currentRoom().entities()) {
             actions.put(new FunString(e.name()).italic().bold(), () -> projection.pickEntity(e));
         }
-        actions.put(new FunString("Exit game"), () -> exit(scanner, projection));
+        actions.put(new FunString("Exit game"), () -> menu_exit(scanner, projection));
+        actions.put(new FunString("Options"), () -> menu_options(scanner, projection));
         createActionInterface(scanner, actions);
 
     }
 
-    void pickEntityAction(Scanner scanner, GameProjection projection) {
+    void menu_entityAction(Scanner scanner, GameProjection projection) {
         projection.currentEntity().ifPresent(Entity::introduce);
         display(projection.currentMessage());
         var actions = makeTuiActionMap(
@@ -137,19 +145,36 @@ public class TerminalDriver {
         display(projection.currentMessage());
     }
 
-
     void gameLoop(Scanner scanner, GameProjection projection) {
-        while (true) { // TODO(gabri) come up with an end condition
-            if (projection.currentEntity().isPresent()) pickEntityAction(scanner, projection);
-            else roomActions(scanner, projection);
+        while (true) {
+            if (projection.currentEntity().isPresent()) menu_entityAction(scanner, projection);
+            else menu_roomActions(scanner, projection);
         }
     }
 
-    void exit(Scanner scanner, GameProjection projection) {
+    void menu_difficulty(Scanner scanner, GameProjection projection) {
+        var actions = makeTuiActionMap();
+
+        for (var diff : Difficulty.values()) {
+            actions.put(new FunString(diff.name()), () -> projection.setDifficulty(diff));
+        }
+        createActionInterface(scanner, actions);
+    }
+
+    void menu_options(Scanner scanner, GameProjection projection) {
+        var actions = makeTuiActionMap(
+                fs_r("Set difficulty", () -> menu_difficulty(scanner, projection)),
+                fs_r("Nevermind", () -> {})
+        );
+        createActionInterface(scanner, actions);
+    }
+
+    void menu_exit(Scanner scanner, GameProjection projection) {
         projection.logout();
         display("Logged out.\nThanks for playing!");
         System.exit(1);
     }
+
 
     // See JEP 495
     void main() {
@@ -167,6 +192,13 @@ public class TerminalDriver {
     }
 
 
+    private static String CLEAR = "2J";
+    private static String CLEAR_RESET = "H";
+    private static String MOVE_LINE = "1A";
+    private static String CLEAR_BELOW = "0J";
+    private static String escape(String innerCode) {
+        return String.format("\033[%s", innerCode);
+    }
     // Holder for decorated strings for terminal output.
     private record FunString(List<Object /*FunString, char*/> content, List<String> styleCodes, List<String> resetCodes) {
 
@@ -177,7 +209,8 @@ public class TerminalDriver {
         public FunString(FunString funString) {
             this(new ArrayList<>(funString.content.stream().toList()), new ArrayList<>(funString.styleCodes), new ArrayList<>(funString.resetCodes));
         }
-        public FunString(List<Object> strs ) {
+
+        public FunString(List<Object> strs) {
             this(new ArrayList<>(strs), new ArrayList<>(), new ArrayList<>());
         }
 
@@ -267,19 +300,16 @@ public class TerminalDriver {
             return s.chars().mapToObj(c -> (char) c).toList();
         }
 
-        private static String RED_FG = escape("31");
-        private static String DEFAULT_FG = escape("39");
-        private static String BOLD = escape("1"); // for controls
-        private static String BOLD_OFF = escape("22");
+        private static String RED_FG = escape("31m");
+        private static String DEFAULT_FG = escape("39m");
+        private static String BOLD = escape("1m"); // for controls
+        private static String BOLD_OFF = escape("22m");
 
-        private static String UNDERLINE = escape("4"); // for controls
-        private static String UNDERLINE_OFF = escape("24");
-        private static String RESET = escape("0");
-        private static String ITALIC = escape("3"); // for entities
-        private static String ITALIC_OFF = escape("23");
+        private static String UNDERLINE = escape("4m"); // for controls
+        private static String UNDERLINE_OFF = escape("24m");
+        private static String RESET = escape("0m");
+        private static String ITALIC = escape("3m"); // for entities
+        private static String ITALIC_OFF = escape("23m");
 
-        private static String escape(String innerCode) {
-            return String.format("\033[%sm", innerCode);
-        }
     }
 }
