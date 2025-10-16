@@ -105,13 +105,9 @@ public class TerminalDriver {
         System.out.printf(display + "\n", args);
     }
 
-    void pauseDisplay(String str, Object... args) {
+    void pauseDisplay(Scanner scanner, String str, Object... args) {
         display(str, args);
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        scanner.nextLine();
     }
 
     void clearScreen() {
@@ -155,7 +151,7 @@ public class TerminalDriver {
         );
 
         createActionInterface(scanner, actions, projection.currentMessage().orElse(""));
-        projection.currentMessage().ifPresent(this::pauseDisplay);
+        projection.currentMessage().ifPresent(i -> pauseDisplay(scanner, i));
     }
 
     void gameLoop(Scanner scanner, GameProjection projection) {
