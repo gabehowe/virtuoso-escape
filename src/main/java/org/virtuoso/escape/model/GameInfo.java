@@ -37,7 +37,7 @@ public class GameInfo {
     };
 
     public String string(String id, String stringId) {
-        if (!language.containsKey(id)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
+        if (!language.containsKey(id) || !language.get(id).containsKey(stringId)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
         return language.get(id).get(stringId);
     }
 
