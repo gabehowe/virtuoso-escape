@@ -73,6 +73,8 @@ public class GameState {
 
 	public void setCurrentFloor(Floor currentFloor) {
 		this.currentFloor = currentFloor;
+		this.currentEntity = null;
+		this.setCurrentRoom(currentFloor.rooms().getFirst());
 	}
 
 	public Optional<Entity> currentEntity() {
