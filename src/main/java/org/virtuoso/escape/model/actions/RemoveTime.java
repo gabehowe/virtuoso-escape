@@ -4,9 +4,14 @@ import org.virtuoso.escape.model.GameState;
 
 import java.time.Duration;
 
-public record RemoveTime(Duration time) implements Action{
+public record RemoveTime(Severity sevarity) implements Action{
     @Override
     public void execute() {
-        GameState.instance().addTime(time.negated());
+		final int BASE_TIME = 5;
+		Duration penalty = Duration.ofSeconds(BASE_TIME);
+		switch (sevarity) {case HIGH: penalty.multipliedBy(3); case MEDIUM: penalty.multipliedBy(2); case LOW:;}
+		switch (GameState.instance().difficulty()) {case VIRTUOSIC: penalty.multipliedBy(3); case SUBSTANTIAL: penalty.multipliedBy(2); case TRIVIAL:;}
+        GameState.instance().addTime(penalty.negated());
     }
 }
+
