@@ -38,7 +38,7 @@ public class GameState {
 	public void begin(Account account) {
 		JSONObject gameStateInfo = DataLoader.loadGameState(account);
 		if (gameStateInfo == null) throw new RuntimeException("Couldn't find game state for " + account.id());
-		this.currentFloor = GameInfo.instance().building.get((int) gameStateInfo.getOrDefault("currentFloor", 0));
+		this.currentFloor = GameInfo.instance().building().get((int) gameStateInfo.getOrDefault("currentFloor", 0));
 		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.getOrDefault("currentRoom", 0));
 		Object getEntity = gameStateInfo.getOrDefault("currentEntity", null);
 		this.currentEntity = (getEntity != null) ? currentRoom.entities().get((int) getEntity) : null;
@@ -49,6 +49,7 @@ public class GameState {
 		}
 		this.time = Duration.ofSeconds((int) gameStateInfo.getOrDefault("time", 0));
 		this.account = account;
+		this.difficulty = Difficulty.valueOf( (String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
 	}
 
 	public void pickEntity(Entity entity) {
