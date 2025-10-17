@@ -67,7 +67,7 @@ public class Entity {
 	}
 
 	public void takeInput(String input) {
-		String message = GameInfo.instance().string(this.id, input);
+		String message = GameInfo.instance().string(this.id, "input_" + input);
 		if (message != null) {
 			GameState.instance().setCurrentMessage(message);
 		}
