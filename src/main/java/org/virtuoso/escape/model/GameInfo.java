@@ -52,9 +52,13 @@ public class GameInfo {
 
 	//Floor One//
 	private Floor floor1() {
+		Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
+
+		Room room_1400 = new Room(List.of(trash_can), "room_1400", this.string("room_1400", "intro"));
+
 		final int PAGES = 32;
 		final Random rand = new Random();
-		final int LEFT_BREAD_PAGE = 1;//rand.nextInt(PAGES);
+		final int LEFT_BREAD_PAGE = rand.nextInt(PAGES);
 
 		Entity found_almanac = new Entity("found_almanac", null, null, null, null);
 		Entity brokenAlmanac = new Entity("broken_almanac", null, new Chain(new RemoveTime(Severity.HIGH), new GiveItem(Item.left_bread), new SwapEntities(found_almanac, "broken_almanac")), null, null);
@@ -66,23 +70,24 @@ public class GameInfo {
 		Entity almanac_5 = makeAlmanac(5, PAGES, LEFT_BREAD_PAGE, almanac_4, found_almanac);
 		almanac_1 = makeAlmanac(1, PAGES, LEFT_BREAD_PAGE, almanac_5, found_almanac);
 
-		Room almanacRoom = new Room(List.of(almanac_5), "almanac_room", this.string("almanac_room", "intro"));
- 		return new Floor("one", List.of(almanacRoom));
+		
+		Room janitor_closet = new Room(List.of(almanac_5), "janitor_closet", this.string("janitor_closet", "intro"));
+ 		return new Floor("one", List.of(room_1400, janitor_closet));
 	}
 
 	private Entity makeAlmanac (int flips, int pages, int correct_page, Entity nextPage, Entity foundPage) {
 		Map<String,Action> map = IntStream.range(1,pages).boxed()
 			.collect(Collectors.toMap( i -> String.valueOf(i), i -> (Action) turnPage(flips, i, correct_page, nextPage, foundPage)));
 		LinkedHashMap<String,Action> linkedMap = new LinkedHashMap<String,Action>(map);
-		return new Entity ("almanac" + String.valueOf(flips), null, null, null, new TakeInput("" , linkedMap));
+		return new Entity ("almanac_" + String.valueOf(flips), null, null, null, new TakeInput("" , linkedMap));
 	}
 
 	private Action turnPage(int flips, int currentPage, int correctPage, Entity nextPage, Entity foundPage) {
-		return new Chain(new SwapEntities(nextPage, "almanac" + String.valueOf(flips)), 
+		return new Chain(new SwapEntities(nextPage, "almanac_" + String.valueOf(flips)), 
 			new Conditional(() ->  currentPage > correctPage, new SetMessage("too_high_"+String.valueOf(flips-1)), 
 			new Conditional(() -> currentPage < correctPage, new SetMessage("too_low_"+String.valueOf(flips-1)), 
 			new Chain(new SetMessage("correct_page"), new GiveItem(Item.left_bread), 
-			new SwapEntities(foundPage, "almanac" + String.valueOf(flips-1)),
+			new SwapEntities(foundPage, "almanac_" + String.valueOf(flips-1)),
 			//Covers the case of getting the correct page on the last page
 			new SwapEntities(foundPage, "broken_almanac")))));
 	}

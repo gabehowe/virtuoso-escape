@@ -1,9 +1,9 @@
 package org.virtuoso.escape.model;
 
 public enum Item {
-
-    // Floor 1 items
-    left_bread("left bread");
+    //Floor 1 items//
+    left_bread("left bread"),
+	sealed_clean_food_safe_hummus("sealed clean food-safe hummus");
 
     private final String name;
 
