@@ -1,9 +1,12 @@
 package org.virtuoso.escape.model.account;
 
+import org.virtuoso.escape.model.Difficulty;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.util.UUID;
 
 /**
@@ -19,6 +22,7 @@ public class Account {
 	public Account(String username, String password) {
 		this.username = username;
 		this.hashedPassword = hashPassword(password);
+		this.highScore = new Score(Duration.ofSeconds(2700), Difficulty.TRIVIAL);
 		this.id = UUID.randomUUID();
 	}
 
@@ -69,7 +73,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account{" + "username='" + this.username + "', " +
+		return "Account{" + "id='" + this.id + "', " + "username='" + this.username + "', " +
 				"hashedPassword='" + this.hashedPassword + "', ";
 	}
 }

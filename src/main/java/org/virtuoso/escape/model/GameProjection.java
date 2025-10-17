@@ -54,6 +54,7 @@ public class GameProjection {
 	public Optional<String> currentMessage() {
 		return this.gameState.currentMessage();
 	}
+
 	public List<Item> currentItems() {
 		return this.gameState.currentItems();
 	}

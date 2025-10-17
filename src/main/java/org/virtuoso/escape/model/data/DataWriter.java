@@ -10,6 +10,7 @@ import java.util.List;
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
 import org.virtuoso.escape.model.*;
+import org.virtuoso.escape.model.account.Score;
 
 /**
  * @author Andrew
@@ -22,18 +23,18 @@ public class DataWriter {
 	public static void writeGameState() {
 		GameState currentGameState = GameState.instance();
 		JSONObject currentGameStateMap = loadGameStateInfo(currentGameState);
-		JSONObject allGameStatesMap = AccountManager.instance().gameStates;
+		JSONObject allGameStatesMap = AccountManager.instance().getGameStates();
 		allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
-		writeToFile(ACCOUNTS_PATH, allGameStatesMap);
+		writeToFile(GAME_STATES_PATH, allGameStatesMap);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static void writeAccount() {
 		Account currentAccount = GameState.instance().account();
 		JSONObject currentAccountMap = loadAccountInfo(currentAccount);
-		JSONObject allAccountsMap = AccountManager.instance().accounts;
+		JSONObject allAccountsMap = AccountManager.instance().getAccounts();
 		allAccountsMap.put(currentAccount.id().toString(), currentAccountMap);
-		writeToFile(GAME_STATES_PATH, allAccountsMap);
+		writeToFile(ACCOUNTS_PATH, allAccountsMap);
 	}
 
 	private static void writeToFile(String filepath, JSONObject json) {
@@ -69,9 +70,10 @@ public class DataWriter {
 	@SuppressWarnings("unchecked")
 	private static JSONObject loadAccountInfo(Account account) {
 		JSONObject accountMap = new JSONObject();
+		JSONObject highScore = account.highScore().toJSON();
 		accountMap.put("username", account.username());
 		accountMap.put("hashedPassword", account.hashedPassword());
-		accountMap.put("highScore", account.highScore());
+		accountMap.put("highScore", highScore);
 		return accountMap;
 	}
 }

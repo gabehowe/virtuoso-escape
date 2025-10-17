@@ -9,24 +9,70 @@
     "interact": "\"Hello fellow squirrel ... Wait! You're not supposed to be a squirrel! You need to get to the demetamorphinator! I think Gottfried knows where it is. Ask him!\"",
     "inspect": "Eckard's large bushy tail sways in the ever so acorn grove wind, catching colorless squirrel weather intuitions."
   },
-  "joe_hardy": {
-    "introduce": "Hi, I'm Joe Hardy",
-    "interact": "Hey, what's up?",
-    "attack": "Woah dude, quit that!",
-    "inspect": "Oh, Hi!",
-    "squirrels": "**You show Joe the squirrels.** Oh, those are cute babies..."
+  "portal_squirrel": {
+    "name": "Gottfried",
+    "introduce": "You see the unruly Gottfried.",
+    "attack": "You try to throw a punch, but you realize you're a squirrel.",
+    "interact": "\"Curious Curious Curious ... You're looking for the 'demetamorphinator?' Just follow me!\" You follow Gottfried into the hollow of a tree, but just as you cross the threshold, you stumble over your squirrel claws and fall into a gaping chasm ...",
+    "inspect": "Gottfried's matted and unruly fur is knotted in ways that would puzzle the most dedicated of knot theorists."
   },
-  "chip_the_squirrel": {
-    "introduce": "Squeak Squeak",
-    "interact": "...Squirrel noises...",
-    "attack": "**Chip the Squirrel lunges at your face.**",
-    "inspect": "**You stare a chip the squirrel, chip the squirrel stares back.**",
-    "squirrel_food": "**Chip the Squirrel eats your food.**"
+  "room_storey_i_0": {
+    "name": "Lobby",
+    "introduce": "*Crash!* You land on a sofa in the University of South Carolina M Bert Storey Research and Innovation Center Lobby! The lights have not yet begun to quit their work, but it still seems like there's something you're failing to acknowledge about this room."
+  },
+  "intro_joe": {
+    "name": "THE Joe Hardy",
+    "introduce": "You see the comparatively enormous stature of Joe Hardy leaning against a wall.",
+    "attack": "You try to scratch Joe, but he kicks you back.",
+    "interact": "\"Oh shoot, you can talk? Anyway, I'm assuming you want to get through that door. The first thing you'll need is a peanut butter and hummus sandwich.\"",
+    "inspect": "Joe's hair contains hints of green so slight they might be mere references to the past."
+  },
+  "sans_sandwich_joe": {
+    "name": "STILL Joe Hardy",
+    "introduce": "\"Nice to see you again but where's the sandwich?\"",
+    "attack": "You try to kick Joe, but he dodges and says, \"Hey! I thought we were friends.\"",
+    "interact": "Joe appears angry: \"How dare you come back without the sandwich?\". Then he adds, \"That's fine, I'm allergic to peanut butter anyways. What else do you have in your inventory?\"",
+    "inspect": "Joe firmly adjusts his glasses."
+  },
+  "sandwich_joe": {
+    "name": "STILL Joe Hardy",
+    "introduce": "You spot a manic Joe Hardy yearning for food.",
+    "attack": "Joe aggressively attacks you before you were able to strike a hit.",
+    "interact": "You hand over the peanut butter and hummus sandwich to Joe. He says: \"(munches) Thanks for the sandwich, but if you look closely (munches again), the door was open all along.\"",
+    "inspect": "**Joe salivates.**"
   },
   "elephant_in_the_room": {
     "introduce": "Are you addressing me?",
     "interact": "Take this sealed, food-safe jar of peanut butter",
     "attack": "**The elephant will no longer give you peanut butter**",
     "inspect": "It seems like nobody else in the room can see the elephant..."
+  },
+  "security": {
+    "name": "Security Bread",
+    "introduce": "You bump into a security guard roaming around the floor.",
+    "attack": "You try to punch the security, but he manhandles you to the ground and handcuffs you. **He had the right bread but you choose violence instead.**",
+    "interact": "\"What are you doing here? You need something? I got some leftover bread if you want.\" **Security hands over the right bread.**",
+    "inspect": "The security sends comms on his walkie-talkie."
+  },
+  "janitor_almanac": {
+    "name": "Dusty Old Almanac",
+    "introduce": "You find an extremely rusty, beat up almanac laying in the janitor's closet.",
+    "attack": "You tear up the pages, leaving pieces scattered around.",
+    "interact": "**You perform a binary search. Finding the right page rewards the left bread.**",
+    "inspect": "\"(whispering) Search me...\""
+  },
+  "trash_can": {
+    "name": "Trash Can",
+    "introduce": "You see the only available trash can on the 1st floor.",
+    "attack": "You knock over the trash can, revealing a sealed, clean, food-safe hummus.",
+    "interact": "**Can't interact with the trash can.**",
+    "inspect": "Flies circulate around the trash bin."
+  },
+  "first_door": {
+    "name": "Transport Door",
+    "introduce": "You figured it out! The door was open all along.",
+    "attack": "**Can't attack door.**",
+    "interact": "Transport is a success! Onto the next floor.",
+    "inspect": "The glowing door has a surprise behind it."
   }
 }

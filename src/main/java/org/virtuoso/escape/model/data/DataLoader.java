@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -42,15 +43,15 @@ public class DataLoader {
 		return result;
 	}
 
-	public static JSONObject loadGameLanguage() {
-		JSONObject result = new JSONObject();
+	public static Map<String, Map<String, String>> loadGameLanguage() {
+		Map<String, Map<String, String>> result = new HashMap<String, Map<String, String>>();
 		JSONObject root = parseJsonFile(Path.of("json", "language.json"));
 		if (root == null) return result;
 		for (Object key : root.keySet()) {
 			String id = String.valueOf(key);
 			Object inner = root.get(id);
 			if (inner instanceof JSONObject innerObj) {
-				JSONObject map = new JSONObject();
+				Map<String, String> map = new HashMap<String, String>();
 				for (Object sKey : innerObj.keySet()) {
 					String sk = String.valueOf(sKey);
 					Object sval = innerObj.get(sk);
