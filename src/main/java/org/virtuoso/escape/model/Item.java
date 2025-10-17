@@ -1,17 +1,14 @@
 package org.virtuoso.escape.model;
 
 public enum Item {
-    //TODO: add items
 
-    // Floor 3 items
-    ;
+    // Floor 1 items
+    left_bread("left bread");
 
-    private String name;
-    private String id;
+    private final String name;
 
-    Item(String name, String id) {
+    Item(String name) {
         this.name = name;
-        this.id = id;
     }
 
     public String itemName() {
@@ -19,6 +16,6 @@ public enum Item {
     }
 
     public String id() {
-        return this.id;
+        return this.toString();
     }
 }

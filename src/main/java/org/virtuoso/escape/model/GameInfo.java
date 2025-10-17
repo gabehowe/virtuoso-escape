@@ -2,11 +2,21 @@ package org.virtuoso.escape.model;
 
 import org.virtuoso.escape.model.actions.*;
 import org.virtuoso.escape.model.data.DataLoader;
+import org.virtuoso.escape.model.Entity;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.function.BooleanSupplier;
+
+import java.util.stream.IntStream;
+import java.util.stream.Collectors;
+
 
 /**
  * @author Andrew
@@ -78,11 +88,49 @@ public class GameInfo {
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
+	private Floor one() {
+		final int PAGES = 32;
+		final Random rand = new Random();
+		final int LEFT_BREAD_PAGE = rand.nextInt(PAGES);
+
+		Entity found_almanac = new Entity("found_almanac", null, null, null, null);
+
+		Entity almanac_1 = makeAlmanac(1, PAGES, LEFT_BREAD_PAGE, found_almanac, found_almanac);
+		Entity almanac_2 = makeAlmanac(2, PAGES, LEFT_BREAD_PAGE, almanac_1, found_almanac);
+		Entity almanac_3 = makeAlmanac(3, PAGES, LEFT_BREAD_PAGE, almanac_2, found_almanac);
+		Entity almanac_4 = makeAlmanac(4, PAGES, LEFT_BREAD_PAGE, almanac_3, found_almanac);
+		Entity almanac_5 = makeAlmanac(5, PAGES, LEFT_BREAD_PAGE, almanac_4, found_almanac);
+		almanac_1 = makeAlmanac(1, PAGES, LEFT_BREAD_PAGE, almanac_5, found_almanac);
+
+
+		Room almanacRoom = new Room(List.of(almanac_5), "almanac_room", this.string("almanac_room", "intro"));
+ 		return new Floor("one", List.of(almanacRoom));
+	}
+
+
+
+	private Entity makeAlmanac (int flips, int pages, int correct_page, Entity nextPage, Entity foundPage) {
+		Map<String,Action> map = IntStream.range(1,pages).boxed()
+		.collect(Collectors.toMap( i -> String.valueOf(i), i -> (Action) turnPage(flips, i, correct_page, nextPage, foundPage)));
+		LinkedHashMap<String,Action> linkedMap = new LinkedHashMap<String,Action>(map);
+		return new Entity ("almanac" + String.valueOf(flips), null, null, null, new TakeInput("" , linkedMap));
+	}
+
+	private Action turnPage(int flips, int currentPage, int correctPage, Entity nextPage, Entity foundPage) {
+		return new Chain(new SwapEntities(nextPage, "almanac" + String.valueOf(flips)), 
+			new Conditional(() ->  currentPage > correctPage, new SetMessage("too_high_"+String.valueOf(flips-1)), 
+			new Conditional(() -> currentPage < correctPage, new SetMessage("too_low_"+String.valueOf(flips-1)), 
+			new Chain(new SetMessage("correct_page"), new GiveItem(Item.left_bread), new SwapEntities(foundPage, "almanac" + String.valueOf(flips - 1))))));
+	}
+
+
     private GameInfo() {
         // todo: add other floors
         this.language = DataLoader.loadGameLanguage();
 
         this.building.add(acornGrove());
+		this.building.add(one());
+
         // TODO: floor 1
         // TODO: floor 2
         this.building.add(floor3());
