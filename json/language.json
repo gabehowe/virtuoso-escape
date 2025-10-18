@@ -24,27 +24,27 @@
     "name": "THE Joe Hardy",
     "introduce": "You see the comparatively enormous stature of Joe Hardy leaning against a wall.",
     "attack": "You try to scratch Joe, but he kicks you back.",
-    "interact": "\"Oh shoot, you can talk? Anyway, I'm assuming you want to get through that door. The first thing you'll need is a peanut butter and hummus sandwich.\"",
+    "interact": "\"Oh shoot, you can talk? Anyway, I'm assuming you want to get through that door. The first thing you'll need is a sunflower seed butter and hummus sandwich.\"",
     "inspect": "Joe's hair contains hints of green so slight they might be mere references to the past."
   },
   "sans_sandwich_joe": {
     "name": "STILL Joe Hardy",
     "introduce": "\"Nice to see you again but where's the sandwich?\"",
     "attack": "You try to kick Joe, but he dodges and says, \"Hey! I thought we were friends.\"",
-    "interact": "Joe appears angry: \"How dare you come back without the sandwich?\". Then he adds, \"That's fine, I'm allergic to peanut butter anyways. What else do you have in your inventory?\"",
+    "interact": "Joe appears angry: \"How dare you come back without the sandwich?\". Then he adds, \"That's okay, but what else do you have in your inventory?\"",
     "inspect": "Joe firmly adjusts his glasses."
   },
   "sandwich_joe": {
     "name": "STILL Joe Hardy",
     "introduce": "You spot a manic Joe Hardy yearning for food.",
     "attack": "Joe aggressively attacks you before you were able to strike a hit.",
-    "interact": "You hand over the peanut butter and hummus sandwich to Joe. He says: \"(munches) Thanks for the sandwich, but if you look closely (munches again), the door was open all along.\"",
+    "interact": "You hand over the sunflower seed butter and hummus sandwich to Joe. He says: \"(munches) Thanks for the sandwich, but if you look closely (munches again), the door was open all along.\"",
     "inspect": "**Joe salivates.**"
   },
   "elephant_in_the_room": {
     "introduce": "Are you addressing me?",
-    "interact": "Take this sealed, food-safe jar of peanut butter",
-    "attack": "**The elephant will no longer give you peanut butter**",
+    "interact": "Take this sealed, food-safe jar of sunflower seed butter",
+    "attack": "**The elephant will no longer give you sunflower seed butter**",
     "inspect": "It seems like nobody else in the room can see the elephant..."
   },
   "security": {
