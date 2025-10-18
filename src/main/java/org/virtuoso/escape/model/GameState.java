@@ -7,9 +7,7 @@ import org.virtuoso.escape.model.data.DataLoader;
 import org.virtuoso.escape.model.data.DataWriter;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Andrew
@@ -19,8 +17,9 @@ public class GameState {
 	private Floor currentFloor;
 	private Room currentRoom;
 	private Entity currentEntity;
-	private List<Item> currentItems;
+	private Set<Item> currentItems;
 	private Duration time;
+	private long startTime;
 	private Account account;
 
 	private Difficulty difficulty;
@@ -42,14 +41,15 @@ public class GameState {
 		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.getOrDefault("currentRoom", 0));
 		Object getEntity = gameStateInfo.getOrDefault("currentEntity", null);
 		this.currentEntity = (getEntity != null) ? currentRoom.entities().get((int) getEntity) : null;
-		this.currentItems = new ArrayList<Item>();
+		this.currentItems = new HashSet<>();
 		JSONArray items = (JSONArray) gameStateInfo.getOrDefault("currentItems", new JSONArray());
 		for (int i = 0; i < items.size(); i++) {
 			currentItems.add(Item.valueOf((String) items.get(i)));
 		}
-		this.time = Duration.ofSeconds((int) gameStateInfo.getOrDefault("time", 0));
+		this.time = Duration.ofSeconds((int) gameStateInfo.getOrDefault("time", 2700));
 		this.account = account;
 		this.difficulty = Difficulty.valueOf( (String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
+		this.startTime = System.currentTimeMillis();
 	}
 
 	public void pickEntity(Entity entity) {
@@ -88,11 +88,12 @@ public class GameState {
 
 
 	public List<Item> currentItems() {
-		return currentItems;
+		return currentItems.stream().toList();
 	}
 
 	public Duration time() {
-		return time;
+		var delta = System.currentTimeMillis() - this.startTime;
+		return time.minusMillis(delta);
 	}
 
 	public void setTime(Duration time) {
@@ -100,7 +101,7 @@ public class GameState {
 	}
 
 	public void addTime(Duration time) {
-		this.time.plus(time);
+		this.time = this.time.plus(time);
 	}
 
 	public Account account() {
@@ -134,6 +135,8 @@ public class GameState {
 	}
 
 	public void write() {
+		var delta = System.currentTimeMillis() - this.startTime;
+		this.time = this.time.minusMillis(delta);
 		DataWriter.writeGameState();
 	}
 }

@@ -1,19 +1,26 @@
 {
-  "c81d4e2e-bcf2-11e6-869b-7df92533d2db": {
-    "username": "JsonLaquermelonie",
-    "hashedPassword": "e49512524f47b4138d850c9d9d85972927281da0",
-    "highScore": {
-      "timeRemaining": 1620,
-      "difficulty": "SUBSTANTIAL"
-    }
-  },
   "c81d4e2e-bcf2-11e6-869b-7df92533d2a1": {
-    "username": "Jay'sSon",
     "hashedPassword": "9d989e8d27dc9e0ec3389fc855f142c3d40f0c50",
     "highScore": {
-      "timeRemaining": 1260,
-      "difficulty": "TRIVIAL"
-    }
+      "difficulty": "TRIVIAL",
+      "timeRemaining": 1260
+    },
+    "username": "Jay'sSon"
+  },
+  "c81d4e2e-bcf2-11e6-869b-7df92533d2db": {
+    "hashedPassword": "e49512524f47b4138d850c9d9d85972927281da0",
+    "highScore": {
+      "difficulty": "SUBSTANTIAL",
+      "timeRemaining": 1620
+    },
+    "username": "JsonLaquermelonie"
+  },
+  "39cccc63-6aa2-4832-a707-a9b23841ac9c": {
+    "highScore": {
+      "difficulty": "TRIVIAL",
+      "timeRemaining": 2700
+    },
+    "hashedPassword": "5c2dd944dde9e08881bef0894fe7b22a5c9c4b06",
+    "username": "j"
   }
 }
-        
