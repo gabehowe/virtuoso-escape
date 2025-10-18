@@ -151,11 +151,11 @@ public class TerminalDriver {
         int padwidth = (names.stream().map(String::length)).max(Integer::compare).get();
         for (int i = 0; i < names.size(); i += 2) {
             Function<String, String> j = (str) -> String.format("1✖ %-" + padwidth + "s", str);
-            String left = j.apply(names.get(i)+ ",") ;
+            String left = j.apply(names.get(i) + ",");
             String right = (i + 1 == names.size()) ? "" : j.apply(names.get(i + 1));
             lines.add(left + " " + right);
         }
-        pauseDisplay(scanner, "You have: \n"+String.join("\n", lines));
+        pauseDisplay(scanner, "You have: \n" + String.join("\n", lines));
     }
 
     void menu_entityAction(Scanner scanner, GameProjection projection) {
