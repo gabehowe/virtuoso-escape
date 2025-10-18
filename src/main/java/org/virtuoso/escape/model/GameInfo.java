@@ -3,14 +3,13 @@ package org.virtuoso.escape.model;
 import org.virtuoso.escape.model.actions.*;
 import org.virtuoso.escape.model.data.DataLoader;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -28,75 +27,111 @@ public class GameInfo {
         return instance;
     }
 
-	private GameInfo() {
-	this.language = DataLoader.loadGameLanguage();
-	// todo: add other floors
+    private GameInfo() {
+        this.language = DataLoader.loadGameLanguage();
+        // todo: add other floors
 
-	this.building.add(acornGrove());
-	this.building.add(floor1());
-	// TODO: floor 2
-	this.building.add(floor3());
+        this.building.add(acornGrove());
+        this.building.add(floor1());
+        // TODO: floor 2
+        this.building.add(floor3());
     }
 
-	//Acorn Grove//
-	private Floor acornGrove() {
-		Entity intro_squirrel = new Entity("intro_squirrel", null, null, null, null);
-		Entity portal_squirrel = new Entity("portal_squirrel",
-				null,
-				null,
-				() -> GameState.instance().setCurrentFloor(this.building.get(1)
-				), null);
-		Room acornGrove_0 = new Room(List.of(intro_squirrel, portal_squirrel), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
-		return new Floor("acorn_grove", List.of(acornGrove_0));
+    //Acorn Grove//
+    private Floor acornGrove() {
+        Entity intro_squirrel = new Entity("intro_squirrel", null, null, null, null);
+        Entity portal_squirrel = new Entity("portal_squirrel",
+                null,
+                null,
+                () -> GameState.instance().setCurrentFloor(this.building.get(1)
+                ), null);
+        Room acornGrove_0 = new Room(List.of(intro_squirrel, portal_squirrel), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
+        return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
-	//Floor One//
-	private Floor floor1() {
-		Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
+    //Floor One//
+    private Floor floor1() {
+        Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
+        Room room_1400 = new Room(List.of(trash_can), "room_1400", this.string("room_1400", "intro"));
 
-		Room room_1400 = new Room(List.of(trash_can), "room_1400", this.string("room_1400", "intro"));
+        Entity finalAlmanac = almanacChain(5);
+		Room janitor_closet = new Room(List.of(finalAlmanac), "janitor_closet", this.string("janitor_closet", "intro"));
 
-		final int PAGES = 32;
-		final Random rand = new Random();
-		final int LEFT_BREAD_PAGE = rand.nextInt(PAGES);
-
-		Entity found_almanac = new Entity("found_almanac", null, null, null, null);
-		Entity brokenAlmanac = new Entity("broken_almanac", null, new Chain(new RemoveTime(Severity.HIGH), new GiveItem(Item.left_bread), new SwapEntities(found_almanac, "broken_almanac")), null, null);
-
-		Entity almanac_1 = makeAlmanac(1, PAGES, LEFT_BREAD_PAGE, brokenAlmanac, found_almanac);
-		Entity almanac_2 = makeAlmanac(2, PAGES, LEFT_BREAD_PAGE, almanac_1, found_almanac);
-		Entity almanac_3 = makeAlmanac(3, PAGES, LEFT_BREAD_PAGE, almanac_2, found_almanac);
-		Entity almanac_4 = makeAlmanac(4, PAGES, LEFT_BREAD_PAGE, almanac_3, found_almanac);
-		Entity almanac_5 = makeAlmanac(5, PAGES, LEFT_BREAD_PAGE, almanac_4, found_almanac);
-		almanac_1 = makeAlmanac(1, PAGES, LEFT_BREAD_PAGE, almanac_5, found_almanac);
-
-		
-		Room janitor_closet = new Room(List.of(almanac_5), "janitor_closet", this.string("janitor_closet", "intro"));
  		return new Floor("one", List.of(room_1400, janitor_closet));
 	}
 
-	private Entity makeAlmanac (int flips, int pages, int correct_page, Entity nextPage, Entity foundPage) {
-		Map<String,Action> map = IntStream.range(1,pages).boxed()
-			.collect(Collectors.toMap( i -> String.valueOf(i), i -> (Action) turnPage(flips, i, correct_page, nextPage, foundPage)));
-		LinkedHashMap<String,Action> linkedMap = new LinkedHashMap<String,Action>(map);
-		return new Entity ("almanac_" + String.valueOf(flips), null, null, null, new TakeInput("" , linkedMap));
-	}
+    /**
+     * Create an Entity linkedlist through 2^length pages.
+     *
+     * @param length The number of almanacs
+     * @return An entity with actions holding references to the next entity.
+     */
+    private Entity almanacChain(int length) {
+        final int PAGES = (int) Math.pow(2, length);
+        final int LEFT_BREAD_PAGE = (int) (Math.random() * PAGES);
 
-	private Action turnPage(int flips, int currentPage, int correctPage, Entity nextPage, Entity foundPage) {
-		return new Chain(new SwapEntities(nextPage, "almanac_" + String.valueOf(flips)), 
-			new Conditional(() ->  currentPage > correctPage, new SetMessage("too_high_"+String.valueOf(flips-1)), 
-			new Conditional(() -> currentPage < correctPage, new SetMessage("too_low_"+String.valueOf(flips-1)), 
-			new Chain(new SetMessage("correct_page"), new GiveItem(Item.left_bread), 
-			new SwapEntities(foundPage, "almanac_" + String.valueOf(flips-1)),
-			//Covers the case of getting the correct page on the last page
-			new SwapEntities(foundPage, "broken_almanac")))));
-	}
+        Entity found_almanac = new Entity("found_almanac", null, null, null, null);
+        Entity brokenAlmanac = new Entity("broken_almanac", null, new Chain(
+                new RemoveTime(Severity.HIGH),
+                // Defer evaluation to stop infinite recursion
+                () -> (new SwapEntities(almanacChain(length), "broken_almanac")).execute()), null, null);
 
-	//Floor Two//
-	// TODO add floor 2
+        // Create all objects with bad values
+        Entity[] almanacChain = IntStream.range(0, length).mapToObj(_ -> new Entity("", null, null, null, null)).limit(length).toArray(Entity[]::new);
+        for (int i = 0; i < length; i++) {
+            // Copy data from makeAlmanac to stay in the same spot in memory
+            int finalI = i;
+            Function<Integer, Action> tp = (current) -> turnPage(finalI + 1, current, LEFT_BREAD_PAGE, found_almanac, almanacChain);
+            almanacChain[i].absorb(makeAlmanac(PAGES, i, tp));
+        }
+        return almanacChain[length - 1]; // Return head
+    }
 
-	//Floor Three/
-	private Floor floor3() {
+    private Entity makeAlmanac(int pages, int flips, Function<Integer, Action> turnPage) {
+        var j = IntStream.range(1, pages).boxed()
+                         .collect(Collectors.toMap(String::valueOf, turnPage));
+        return new Entity("almanac",
+                new SetMessage(String.format(this.string("almanac", "attack"), flips + 1)),
+                null,
+                null,
+                new TakeInput("", new LinkedHashMap<>(j)));
+    }
+
+    private Action turnPage(int flips, int currentPage, int correctPage, Entity foundPage, Entity[] chain) {
+        // 🚨 BAD DESIGN ALERT ⚠️ what if we invented something called pointers, so we were actually aware of what data is where?
+        // The element stored at the end of the array copies the data from the elements below it, so the current entity is always the last in the array.
+        // This design also creates a memory leak by recursively creating arrays -- fun stuff! Our overlord the Java garbage collector will save us!
+        Action swap = () -> chain[chain.length - 1].absorb((flips - 1 > 0) ? chain[flips - 2] : almanacChain(chain.length));
+        String guessesRemaining = String.format(this.string("almanac", "guesses_remaining"), flips - 1, flips);
+        Action caseBreak = new SetMessage(this, "almanac", "break");
+        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + guessesRemaining);
+        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + guessesRemaining);
+        Action caseFound = new Chain(
+                new SetMessage(this, "almanac", "correct_page"),
+                new GiveItem(Item.LEFT_BREAD),
+                () -> chain[flips - 1].absorb(foundPage),
+                //Covers the case of getting the correct page on the last page
+                new SwapEntities(foundPage, "broken_almanac"));
+        Action evaluatePage = new Conditional(
+                () -> currentPage > correctPage,
+                caseOvershoot,
+                new Conditional(
+                        () -> currentPage < correctPage,
+                        new Conditional(
+                                () -> flips -1 != 0,
+                                caseUndershoot,
+                                caseBreak
+                        ),
+                        caseFound
+                ));
+        return new Chain(swap, evaluatePage);
+    }
+
+    //Floor Two//
+    // TODO add floor 2
+
+    //Floor Three/
+    private Floor floor3() {
         // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = new Entity("man", null, null, null, null);
         var computtyBlocked = new Entity("computty_blocked", null, null, null, null);
@@ -111,28 +146,28 @@ public class GameInfo {
         Entity microwaveUnblocked = new Entity("microwave_unblocked", this::gameEnding_moral, null, this::gameEnding_immoral, null);
         var computtyTarLogic = new TakeInput("", TakeInput.makeCases(
                 "rotx 16 code", new SwapEntities(microwaveUnblocked, "microwave_blocked"),
-                "rotx 16 .*", new SetMessage(this,"computty", "no_file"),
-                "rotx \\d+", new SetMessage(this,"computty", "failed_rotx"),
-                "rotx.*", new SetMessage(this,"computty", "man_rotx")
+                "rotx 16 .*", new SetMessage(this, "computty", "no_file"),
+                "rotx \\d+", new SetMessage(this, "computty", "failed_rotx"),
+                "rotx.*", new SetMessage(this, "computty", "man_rotx")
                 // ls
         ));
         var computtyTar = new Entity("computty_tar", null, null, null, computtyTarLogic);
         var computtyCdLogic = new TakeInput("", TakeInput.makeCases(
                 "tar xvf code.tar$", new SwapEntities(computtyTar, "computty_cd"),
-                "tar xvf c.*", new SetMessage(this,"computty", "no_file"),
-                "tar.*", new SetMessage(this,"computty", "man_tar")
+                "tar xvf c.*", new SetMessage(this, "computty", "no_file"),
+                "tar.*", new SetMessage(this, "computty", "man_tar")
                 // ls, cat
         ));
         Entity computtyCd = new Entity("computty_cd", null, null, null, computtyCdLogic);
         var computtyDefault = new TakeInput("", TakeInput.makeCases(
                 "cd code", new SwapEntities(computtyCd, "computty"),
-                "cd.*", new SetMessage(this,"computty", "no_file")
+                "cd.*", new SetMessage(this, "computty", "no_file")
                 // ls
         ));
         return new Entity("computty", null, null, null, computtyDefault);
     }
 
-	//Ending//
+    //Ending//
     private void gameEnding_moral() {
         throw new RuntimeException("unimplemented!");
     }
@@ -141,7 +176,7 @@ public class GameInfo {
         throw new RuntimeException("unimplemented!");
     }
 
-	//Utils//
+    //Utils//
     public String string(String id, String stringId) {
         if (!language.containsKey(id) || !language.get(id).containsKey(stringId)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
         return language.get(id).get(stringId);
@@ -151,8 +186,10 @@ public class GameInfo {
         return language;
     }
 
-	public List<Floor> building(){
-		return this.building;
-	};
+    public List<Floor> building() {
+        return this.building;
+    }
+
+    ;
 
 }

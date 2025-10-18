@@ -54,12 +54,24 @@
     "interact": "\"What are you doing here? You need something? I got some leftover bread if you want.\" **Security hands over the right bread.**",
     "inspect": "The security sends comms on his walkie-talkie."
   },
-  "janitor_almanac": {
-    "name": "Dusty Old Almanac",
-    "introduce": "You find an extremely rusty, beat up almanac laying in the janitor's closet.",
-    "attack": "You tear up the pages, leaving pieces scattered around.",
-    "interact": "**You perform a binary search. Finding the right page rewards the left bread.**",
-    "inspect": "\"(whispering) Search me...\""
+  "almanac": {
+    "name": "Friendly Sunflower and Dusty Old Almanac",
+    "introduce": "You find a personable sunflower and an extremely rusty, beat-up almanac laying in the janitor's closet.",
+    "attack": "You tear up the pages, leaving pieces scattered around. The pieces suddenly reform and reveal the book to be %d pages away from losing it.",
+    "interact": "\"Hello, squirrel. I've been searching through this book all day, but every time I get five pages in, it closes on me.\"",
+    "inspect": "The sunflower has all the aspects characteristic of such a creature:\nA bright ring of ray florets, smaller, dimmer, inner florets, and a rough stalk.\nYou wonder how it remains bright in as dull a location as a janitor's closet.\nThe almanac has 32 pages, which may somehow be connected to the number 5...",
+    "too_high": "The book rustles in a way so as to indicate that a better page might precede the current.",
+    "guesses_remaining": "The book seems %d/%d as happy.",
+    "too_low": "The book rustles in a way so as to indicate that a better page might succeed the current.",
+    "correct_page": "\"Wow, you found the right page! ... Wow, this is brilliant!\nIt says here that for the next year, the sun will move from east to west! I'm saved! I don't need this spatially conditionally usable slice of bread anymore!\"",
+    "break": "\"If I knew you were just going to fail, I wouldn't have let you touch the book in the first place! How am I ever going to find the sun?!\"\nThe almanac slams shut and bursts into flames.\nA new dusty old almanac is born from the ashes."
+  },
+  "found_almanac": {
+    "name": "Friendly Sunflower and Distinct Lack of Almanac",
+    "introduce": "You find a personable sunflower and a spot where an almanac used to be...",
+    "attack": "You slash your squirrel claws at the lack of an almanac and create a lack of action.",
+    "interact": "\"Hello, squirrel. Thanks for helping me solve the puzzle. I can finally be sure of the sun's location from within this dim closet!\"",
+    "inspect": "The sunflower has all the aspects characteristic of such a creature:\nA bright ring of ray florets, smaller, dimmer, inner florets, and a rough stalk.\nYou wonder how it remains bright in as dull a location as a janitor's closet.\nThe almanac has 32 pages, which may somehow be connected to the number 5..."
   },
   "trash_can": {
     "name": "Trash Can",
