@@ -51,8 +51,10 @@
     "name": "Security Bread",
     "introduce": "You bump into a security guard roaming around the floor.",
     "attack": "You try to punch the security, but he manhandles you to the ground and handcuffs you. **He had the right bread but you choose violence instead.**",
-    "interact": "\"What are you doing here? You need something? I got some leftover bread if you want.\" **Security hands over the right bread.**",
-    "inspect": "The security sends comms on his walkie-talkie."
+    "interact": "\"You want the right right bread, right? Right. Answer my riddle right and you'll be left left with the right right bread:\nLeft Left-Right, son of Right Right and Left Left, brother of Right Left-Right, writes right, drives right. Left Left LEFT Left Left-Right with Right Right and Right Left-Right, which isn't right. Who is left?\"",
+    "right_answer":  "Right, \"Right\"! Right, You'll now be left left with the right right bread.",
+    "non_right_answer": "Sorry, but that answer just isn't 'right'!",
+    "inspect": "The security guard seems partially (mentally) composed of left and right hands. Where one would expect a set of shoes, he instead has wisdom.",
   },
   "almanac": {
     "name": "Friendly Sunflower and Dusty Old Almanac",

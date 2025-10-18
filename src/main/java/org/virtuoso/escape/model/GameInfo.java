@@ -55,11 +55,20 @@ public class GameInfo {
         Room room_1400 = new Room(new ArrayList<>(List.of(trash_can)), "room_1400", this.string("room_1400", "intro"));
 
         Entity[] almanacs = almanacChain(5);
-        Entity finalAlmanac = almanacs[almanacs.length-1];
-		Room janitor_closet = new Room(new ArrayList<>(List.of(finalAlmanac)), "janitor_closet", this.string("janitor_closet", "intro"));
+        Entity finalAlmanac = almanacs[almanacs.length - 1];
+        Room janitor_closet = new Room(new ArrayList<>(List.of(finalAlmanac)), "janitor_closet", this.string("janitor_closet", "intro"));
 
- 		return new Floor("floor1", List.of(room_1400, janitor_closet));
-	}
+        Entity securityBread = new Entity("security",
+                null,
+                null,
+                null,
+                new TakeInput("",
+                        TakeInput.makeCases(".*(?<!w)right.*", new Chain(new SetMessage(this, "security","right_answer"), new GiveItem(Item.right_bread)),
+                                ".*", new SetMessage(this, "security", "non_right_answer"))));
+        Room hallway = new Room(new ArrayList<>(List.of(securityBread)), "hallway", this.string("hallway", "intro"));
+
+        return new Floor("floor1", List.of(room_1400, janitor_closet, hallway));
+    }
 
     /**
      * Create an Entity linkedlist through 2^length pages.
@@ -99,11 +108,11 @@ public class GameInfo {
             if (flips - 1 == 0) {
                 Entity[] newEntities = almanacChain(chain.length);
                 Room properRoom =
-                this.building.stream().filter(i -> Objects.equals(i.id(), "floor1")).findFirst().orElseThrow()
-                             .rooms().stream().filter(i->Objects.equals(i.id(),"janitor_closet")).findFirst().orElseThrow();
+                        this.building.stream().filter(i -> Objects.equals(i.id(), "floor1")).findFirst().orElseThrow()
+                                     .rooms().stream().filter(i -> Objects.equals(i.id(), "janitor_closet")).findFirst().orElseThrow();
                 properRoom.entities().clear();
-                properRoom.entities().add(newEntities[chain.length-1]);
-                GameState.instance().pickEntity(newEntities[chain.length-1]);
+                properRoom.entities().add(newEntities[chain.length - 1]);
+                GameState.instance().pickEntity(newEntities[chain.length - 1]);
                 return;
             }
             chain[chain.length - 1].absorb(chain[flips - 2]);
@@ -124,7 +133,7 @@ public class GameInfo {
                 new Conditional(
                         () -> currentPage < correctPage,
                         new Conditional(
-                                () -> flips -1 != 0,
+                                () -> flips - 1 != 0,
                                 caseUndershoot,
                                 caseBreak
                         ),

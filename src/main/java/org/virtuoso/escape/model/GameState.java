@@ -7,9 +7,7 @@ import org.virtuoso.escape.model.data.DataLoader;
 import org.virtuoso.escape.model.data.DataWriter;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Andrew
@@ -19,7 +17,7 @@ public class GameState {
 	private Floor currentFloor;
 	private Room currentRoom;
 	private Entity currentEntity;
-	private List<Item> currentItems;
+	private Set<Item> currentItems;
 	private Duration time;
 	private long startTime;
 	private Account account;
@@ -43,7 +41,7 @@ public class GameState {
 		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.getOrDefault("currentRoom", 0));
 		Object getEntity = gameStateInfo.getOrDefault("currentEntity", null);
 		this.currentEntity = (getEntity != null) ? currentRoom.entities().get((int) getEntity) : null;
-		this.currentItems = new ArrayList<Item>();
+		this.currentItems = new HashSet<>();
 		JSONArray items = (JSONArray) gameStateInfo.getOrDefault("currentItems", new JSONArray());
 		for (int i = 0; i < items.size(); i++) {
 			currentItems.add(Item.valueOf((String) items.get(i)));
@@ -90,7 +88,7 @@ public class GameState {
 
 
 	public List<Item> currentItems() {
-		return currentItems;
+		return currentItems.stream().toList();
 	}
 
 	public Duration time() {
