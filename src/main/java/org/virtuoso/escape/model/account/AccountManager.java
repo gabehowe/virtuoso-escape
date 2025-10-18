@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 
+import javafx.scene.chart.PieChart;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameState;
@@ -16,12 +17,12 @@ import org.virtuoso.escape.model.data.*;
  */
 public class AccountManager {
 	private static AccountManager accountManager;
-	public JSONObject accounts;
-	public JSONObject gameStates;
+	private JSONObject accounts;
+	private JSONObject gameStates;
 
 	private AccountManager() {
-		this.accounts = DataLoader.loadAccounts();
-		this.gameStates = DataLoader.loadGameStates();
+		this.accounts = loadAccounts();
+		this.gameStates = loadGameStates();
 	}
 
 	public static AccountManager instance() {
@@ -36,27 +37,45 @@ public class AccountManager {
 		Account account = accountExists(username, password);
 		if (account != null) {
 			gameState.begin(account);
-			System.out.println(account + "highScore='" + account.highScore() + "'");
-			System.out.println("Signed in!");
+			System.out.println("Signed in!\n" + account);
 			return Optional.of(account);
 		}
-		System.out.println("Not logged in");
+		System.out.println("Account does not exist.");
 		return Optional.empty();
 	}
 
 	public Optional<Account> newAccount(String username, String password) {
 		if (username.length() <= 32 && password.length() <= 32) {
 			GameState gameState = GameState.instance();
-			Account account = login(username, password).orElse(new Account(username, password));
-			System.out.println(account + "\nCreated new account!");
-			gameState.begin(account);
-			return Optional.of(account);
+			Optional<Account> account = login(username, password);
+			if (account.isEmpty()) {
+				Account newAccount = new Account(username, password);
+				System.out.println("Created new account!\n" + account);
+				gameState.begin(newAccount);
+				return Optional.of(newAccount);
+			}
 		}
 		return Optional.empty();
 	}
 
 	public void logout() {
 		DataWriter.writeAccount();
+	}
+
+	public JSONObject getAccounts() {
+		return this.accounts;
+	}
+
+	public JSONObject getGameStates() {
+		return this.gameStates;
+	}
+
+	private JSONObject loadAccounts() {
+		return DataLoader.loadAccounts();
+	}
+
+	private JSONObject loadGameStates() {
+		return DataLoader.loadGameStates();
 	}
 
 	private Account accountExists(String username, String password) {

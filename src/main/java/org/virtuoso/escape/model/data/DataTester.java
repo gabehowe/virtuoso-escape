@@ -2,7 +2,10 @@ package org.virtuoso.escape.model.data;
 
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.GameProjection;
+import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
+
+import java.util.Map;
 
 public class DataTester {
 	private static DataLoader dl;
@@ -18,9 +21,14 @@ public class DataTester {
 		gP.login("JsonLaquermelonie", "dog");
 		//gP.login("Jay'sSon", "cat");
 
-
 		//gP.newAccount("JsonLaquermelonie", "dog");
-		gP.createAccount("JSONJR.", "cat");
-		gP.login("JSONJR.", "cat"); //accounts.json never updates. results in null
+		gP.createAccount("JSONJR.", "drake");
+
+		gP.logout();
+		gP.login("JSONJR.", "drake");
+
+		//Map<String, Map<String, String>> language = DataLoader.loadGameLanguage();
+
+
 	}
 }
