@@ -108,7 +108,7 @@ public class GameInfo {
         Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + guessesRemaining);
         Action caseFound = new Chain(
                 new SetMessage(this, "almanac", "correct_page"),
-                new GiveItem(Item.LEFT_BREAD),
+                new GiveItem(Item.left_bread),
                 () -> chain[flips - 1].absorb(foundPage),
                 //Covers the case of getting the correct page on the last page
                 new SwapEntities(foundPage, "broken_almanac"));
