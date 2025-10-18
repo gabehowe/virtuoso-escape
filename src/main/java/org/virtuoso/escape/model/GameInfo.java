@@ -96,7 +96,7 @@ public class GameInfo {
 
     private Action turnPage(int flips, int currentPage, int correctPage, Entity foundPage, Entity[] chain) {
         Action swap = () -> {
-            if (flips - 2 == 0) {
+            if (flips - 2 > 0) {
                 Entity[] newEntities = almanacChain(chain.length);
                 this.building.get(1).rooms().get(1).entities().clear();
                 this.building.get(1).rooms().get(1).entities().add(newEntities[chain.length-1]);
