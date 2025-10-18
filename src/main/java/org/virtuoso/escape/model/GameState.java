@@ -21,6 +21,7 @@ public class GameState {
 	private Entity currentEntity;
 	private List<Item> currentItems;
 	private Duration time;
+	private long startTime;
 	private Account account;
 
 	private Difficulty difficulty;
@@ -50,6 +51,7 @@ public class GameState {
 		this.time = Duration.ofSeconds((int) gameStateInfo.getOrDefault("time", 0));
 		this.account = account;
 		this.difficulty = Difficulty.valueOf( (String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
+		this.startTime = System.currentTimeMillis();
 	}
 
 	public void pickEntity(Entity entity) {
@@ -92,7 +94,8 @@ public class GameState {
 	}
 
 	public Duration time() {
-		return time;
+		var delta = System.currentTimeMillis() - this.startTime;
+		return time.minusMillis(delta);
 	}
 
 	public void setTime(Duration time) {
@@ -100,7 +103,7 @@ public class GameState {
 	}
 
 	public void addTime(Duration time) {
-		this.time.plus(time);
+		this.time = this.time.plus(time);
 	}
 
 	public Account account() {
@@ -134,6 +137,8 @@ public class GameState {
 	}
 
 	public void write() {
+		var delta = System.currentTimeMillis() - this.startTime;
+		this.time = this.time.minusMillis(delta);
 		DataWriter.writeGameState();
 	}
 }

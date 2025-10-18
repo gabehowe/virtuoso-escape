@@ -59,6 +59,7 @@ public class AccountManager {
 	}
 
 	public void logout() {
+
 		DataWriter.writeAccount();
 	}
 

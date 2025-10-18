@@ -58,7 +58,7 @@ public class GameInfo {
         Entity finalAlmanac = almanacs[almanacs.length-1];
 		Room janitor_closet = new Room(new ArrayList<>(List.of(finalAlmanac)), "janitor_closet", this.string("janitor_closet", "intro"));
 
- 		return new Floor("one", List.of(room_1400, janitor_closet));
+ 		return new Floor("floor1", List.of(room_1400, janitor_closet));
 	}
 
     /**
@@ -96,10 +96,13 @@ public class GameInfo {
 
     private Action turnPage(int flips, int currentPage, int correctPage, Entity foundPage, Entity[] chain) {
         Action swap = () -> {
-            if (flips - 2 == 0) {
+            if (flips - 1 == 0) {
                 Entity[] newEntities = almanacChain(chain.length);
-                this.building.get(1).rooms().get(1).entities().clear();
-                this.building.get(1).rooms().get(1).entities().add(newEntities[chain.length-1]);
+                Room properRoom =
+                this.building.stream().filter(i -> Objects.equals(i.id(), "floor1")).findFirst().orElseThrow()
+                             .rooms().stream().filter(i->Objects.equals(i.id(),"janitor_closet")).findFirst().orElseThrow();
+                properRoom.entities().clear();
+                properRoom.entities().add(newEntities[chain.length-1]);
                 GameState.instance().pickEntity(newEntities[chain.length-1]);
                 return;
             }
