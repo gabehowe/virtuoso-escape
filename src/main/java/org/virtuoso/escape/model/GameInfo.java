@@ -96,14 +96,15 @@ public class GameInfo {
 
     private Action turnPage(int flips, int currentPage, int correctPage, Entity foundPage, Entity[] chain) {
         Action swap = () -> {
-            if (flips - 2 > 0) {
+            if (flips - 2 == 0) {
                 Entity[] newEntities = almanacChain(chain.length);
                 this.building.get(1).rooms().get(1).entities().clear();
                 this.building.get(1).rooms().get(1).entities().add(newEntities[chain.length-1]);
                 GameState.instance().pickEntity(newEntities[chain.length-1]);
                 return;
             }
-            chain[chain.length - 1].absorb(chain[flips - 2]);};
+            chain[chain.length - 1].absorb(chain[flips - 2]);
+        };
         String guessesRemaining = String.format(this.string("almanac", "guesses_remaining"), flips - 1, flips);
         Action caseBreak = new SetMessage(this, "almanac", "break");
         Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + guessesRemaining);
@@ -191,7 +192,5 @@ public class GameInfo {
     public List<Floor> building() {
         return this.building;
     }
-
-    ;
 
 }
