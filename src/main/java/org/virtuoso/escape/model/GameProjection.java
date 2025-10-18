@@ -2,6 +2,7 @@ package org.virtuoso.escape.model;
 
 import org.virtuoso.escape.model.account.*;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,10 @@ public class GameProjection {
 
 	public void leaveEntity() {
 		this.gameState.leaveEntity();
+	}
+
+	public Duration time() {
+		return this.gameState.time();
 	}
 
 	public void interact() {

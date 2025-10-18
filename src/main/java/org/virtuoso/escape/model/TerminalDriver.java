@@ -115,32 +115,6 @@ public class TerminalDriver {
         System.out.print(escape(CLEAR_RESET) + escape(CLEAR));
     }
 
-    void changeRoom(Scanner scanner, GameProjection projection) {
-        var actions = makeTuiActionMap();
-        for (Room room : projection.currentFloor().rooms()) {
-            actions.put(new FunString(room.name()).bold(), () -> projection.pickRoom(room));
-        }
-        actions.put(new FunString("Nevermind"), () -> {
-        });
-        createActionInterface(scanner, actions, "Change room");
-    }
-
-    void menu_roomActions(Scanner scanner, GameProjection projection) {
-        SequencedMap<FunString, Runnable> actions = makeTuiActionMap(
-        );
-        // It makes no sense to change rooms if there are no rooms to change to!
-        if (projection.currentFloor().rooms().size() > 1) {
-            actions.put(new FunString("Change room"), () -> this.changeRoom(scanner, projection));
-        }
-        for (Entity e : projection.currentRoom().entities()) {
-            actions.put(new FunString(e.name()).italic().bold(), () -> projection.pickEntity(e));
-        }
-        actions.put(new FunString("Exit game"), () -> menu_exit(scanner, projection));
-        actions.put(new FunString("Options"), () -> menu_options(scanner, projection));
-        createActionInterface(scanner, actions, projection.currentRoom().introMessage());
-
-    }
-
     void displayItems(Scanner scanner, GameProjection projection) {
         List<String> names = projection.currentItems().stream().map(Item::itemName).toList();
         if (names.isEmpty()) {
@@ -158,16 +132,44 @@ public class TerminalDriver {
         pauseDisplay(scanner, "You have: \n" + String.join("\n", lines));
     }
 
+    void menu_changeRoom(Scanner scanner, GameProjection projection) {
+        var actions = makeTuiActionMap();
+        for (Room room : projection.currentFloor().rooms()) {
+            actions.put(new FunString(room.name()).bold(), () -> projection.pickRoom(room));
+        }
+        actions.put(new FunString("Nevermind"), () -> {
+        });
+        createActionInterface(scanner, actions, "Change room");
+    }
+
+    void menu_roomActions(Scanner scanner, GameProjection projection) {
+        SequencedMap<FunString, Runnable> actions = makeTuiActionMap(
+        );
+        // It makes no sense to change rooms if there are no rooms to change to!
+        if (projection.currentFloor().rooms().size() > 1) {
+            actions.put(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection));
+        }
+        for (Entity e : projection.currentRoom().entities()) {
+            actions.put(new FunString(e.name()).italic().bold(), () -> projection.pickEntity(e));
+        }
+        actions.put(new FunString("Exit game"), () -> menu_exit(scanner, projection));
+        actions.put(new FunString("Options"), () -> menu_options(scanner, projection));
+        String prompt = projection.time().toMinutesPart() + ":" + projection.time().toSecondsPart() + "\n" + projection.currentRoom().introMessage();
+        createActionInterface(scanner, actions, prompt);
+
+    }
+
     void menu_entityAction(Scanner scanner, GameProjection projection) {
         projection.currentEntity().ifPresent(Entity::introduce);
         var actions = makeTuiActionMap(
                 fs_r("Interact", projection::interact),
                 fs_r("Inspect", projection::inspect),
                 fs_r("Attack", projection::attack),
-                fs_r("Speak", () -> projection.input(validateInput(scanner, "What would you like to say? ", _ -> true))),
-                fs_r("Items", () -> this.displayItems(scanner, projection)),
-                fs_r("Leave", projection::leaveEntity)
-        );
+                fs_r("Speak", () -> projection.input(validateInput(scanner, "What would you like to say? ", _ -> true)))
+                );
+        if (!projection.currentItems().isEmpty()) actions.put(new FunString("Items"), () -> this.displayItems(scanner, projection));
+
+        actions.put(new FunString("Leave"), projection::leaveEntity);
 
         createActionInterface(scanner, actions, projection.currentMessage().orElse(""));
         projection.currentMessage().ifPresent(i -> pauseDisplay(scanner, i));
@@ -179,16 +181,14 @@ public class TerminalDriver {
         for (var diff : Difficulty.values()) {
             actions.put(new FunString(diff.name()), () -> projection.setDifficulty(diff));
         }
-        actions.put(new FunString("Nevermind"), () -> {
-        });
+        actions.put(new FunString("Nevermind"), () -> {});
         createActionInterface(scanner, actions, "Choose difficulty");
     }
 
     void menu_options(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap(
                 fs_r("Set difficulty", () -> menu_difficulty(scanner, projection)),
-                fs_r("Nevermind", () -> {
-                })
+                fs_r("Nevermind", () -> {})
         );
         createActionInterface(scanner, actions, "Options");
     }
