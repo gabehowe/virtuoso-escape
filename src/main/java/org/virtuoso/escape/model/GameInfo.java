@@ -71,10 +71,6 @@ public class GameInfo {
         final int LEFT_BREAD_PAGE = (int) (Math.random() * PAGES);
 
         Entity found_almanac = new Entity("found_almanac", null, null, null, null);
-        Entity brokenAlmanac = new Entity("broken_almanac", null, new Chain(
-                new RemoveTime(Severity.HIGH),
-                // Defer evaluation to stop infinite recursion
-                () -> (new SwapEntities(almanacChain(length), "broken_almanac")).execute()), null, null);
 
         // Create all objects with bad values
         Entity[] almanacChain = IntStream.range(0, length).mapToObj(_ -> new Entity("", null, null, null, null)).limit(length).toArray(Entity[]::new);
