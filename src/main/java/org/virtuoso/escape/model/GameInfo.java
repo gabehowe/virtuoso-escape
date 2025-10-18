@@ -45,17 +45,18 @@ public class GameInfo {
                 null,
                 () -> GameState.instance().setCurrentFloor(this.building.get(1)
                 ), null);
-        Room acornGrove_0 = new Room(List.of(intro_squirrel, portal_squirrel), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
+        Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
     //Floor One//
     private Floor floor1() {
         Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
-        Room room_1400 = new Room(List.of(trash_can), "room_1400", this.string("room_1400", "intro"));
+        Room room_1400 = new Room(new ArrayList<>(List.of(trash_can)), "room_1400", this.string("room_1400", "intro"));
 
-        Entity finalAlmanac = almanacChain(5);
-		Room janitor_closet = new Room(List.of(finalAlmanac), "janitor_closet", this.string("janitor_closet", "intro"));
+        Entity[] almanacs = almanacChain(5);
+        Entity finalAlmanac = almanacs[almanacs.length-1];
+		Room janitor_closet = new Room(new ArrayList<>(List.of(finalAlmanac)), "janitor_closet", this.string("janitor_closet", "intro"));
 
  		return new Floor("one", List.of(room_1400, janitor_closet));
 	}
@@ -66,7 +67,7 @@ public class GameInfo {
      * @param length The number of almanacs
      * @return An entity with actions holding references to the next entity.
      */
-    private Entity almanacChain(int length) {
+    private Entity[] almanacChain(int length) {
         final int PAGES = (int) Math.pow(2, length);
         final int LEFT_BREAD_PAGE = (int) (Math.random() * PAGES);
 
@@ -80,7 +81,7 @@ public class GameInfo {
             Function<Integer, Action> tp = (current) -> turnPage(finalI + 1, current, LEFT_BREAD_PAGE, found_almanac, almanacChain);
             almanacChain[i].absorb(makeAlmanac(PAGES, i, tp));
         }
-        return almanacChain[length - 1]; // Return head
+        return almanacChain;
     }
 
     private Entity makeAlmanac(int pages, int flips, Function<Integer, Action> turnPage) {
@@ -94,10 +95,15 @@ public class GameInfo {
     }
 
     private Action turnPage(int flips, int currentPage, int correctPage, Entity foundPage, Entity[] chain) {
-        // 🚨 BAD DESIGN ALERT ⚠️ what if we invented something called pointers, so we were actually aware of what data is where?
-        // The element stored at the end of the array copies the data from the elements below it, so the current entity is always the last in the array.
-        // This design also creates a memory leak by recursively creating arrays -- fun stuff! Our overlord the Java garbage collector will save us!
-        Action swap = () -> chain[chain.length - 1].absorb((flips - 1 > 0) ? chain[flips - 2] : almanacChain(chain.length));
+        Action swap = () -> {
+            if (flips - 2 == 0) {
+                Entity[] newEntities = almanacChain(chain.length);
+                this.building.get(1).rooms().get(1).entities().clear();
+                this.building.get(1).rooms().get(1).entities().add(newEntities[chain.length-1]);
+                GameState.instance().pickEntity(newEntities[chain.length-1]);
+                return;
+            }
+            chain[chain.length - 1].absorb(chain[flips - 2]);};
         String guessesRemaining = String.format(this.string("almanac", "guesses_remaining"), flips - 1, flips);
         Action caseBreak = new SetMessage(this, "almanac", "break");
         Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + guessesRemaining);
@@ -133,7 +139,7 @@ public class GameInfo {
         var computtyBlocked = new Entity("computty_blocked", null, null, null, null);
         Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities(makeComputtyChain(), "computty_blocked"), null, null, null);
         Entity microwave = new Entity("microwave_blocked", null, null, null, null);
-        Room floor3_0 = new Room(List.of(man, sock_squirrel, computtyBlocked, microwave), "floor3_0", this.string("floor3_0", "intro"));
+        Room floor3_0 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computtyBlocked, microwave)), "floor3_0", this.string("floor3_0", "intro"));
         return new Floor("floor3", List.of(floor3_0));
     }
 
