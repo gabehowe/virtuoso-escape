@@ -29,7 +29,6 @@ public class TerminalDriver {
         return map;
     }
 
-    ;
 
     // Sequenced retains order.
     void createActionInterface(Scanner scanner, SequencedMap<FunString, Runnable> tuiAction, String status) {
@@ -215,7 +214,7 @@ public class TerminalDriver {
         var actions = makeTuiActionMap();
 
         for (var diff : Difficulty.values()) {
-            actions.put(new FunString(diff.name()), () -> projection.setDifficulty(diff));
+            actions.put(new FunString(diff.name()).terminalColor(diff.ordinal() + 196), () -> projection.setDifficulty(diff));
         }
         actions.put(new FunString("Nevermind"), () -> {});
         createActionInterface(scanner, actions, "Choose difficulty");
@@ -383,6 +382,12 @@ public class TerminalDriver {
 
         public FunString purple() {
             this.styleCodes.add(PURPLE_FG);
+            this.resetCodes.add(DEFAULT_FG);
+            return this;
+        }
+        public FunString terminalColor(int color) {
+            assert color > 0 && color < 256;
+            this.styleCodes.add(escape("38;5;" + color + "m"));
             this.resetCodes.add(DEFAULT_FG);
             return this;
         }

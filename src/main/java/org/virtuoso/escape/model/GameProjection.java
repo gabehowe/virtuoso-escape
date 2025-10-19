@@ -30,6 +30,7 @@ public class GameProjection {
 
 	public void logout() {
 		this.accountManager.logout();
+		this.gameState.write();
 	}
 
 	public Room currentRoom() {

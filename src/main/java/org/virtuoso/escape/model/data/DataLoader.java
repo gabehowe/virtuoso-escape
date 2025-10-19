@@ -90,7 +90,7 @@ public class DataLoader {
 		if (root == null) return result;
 
 		if (account == null) return null;
-		Object value = root.get(account.id());
+		Object value = root.get(account.id().toString());
 		if (value instanceof JSONObject obj) {
 			result = obj;
 		}

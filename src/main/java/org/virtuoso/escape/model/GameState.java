@@ -38,16 +38,15 @@ public class GameState {
 	public void begin(Account account) {
 		JSONObject gameStateInfo = DataLoader.loadGameState(account);
 		if (gameStateInfo == null) throw new RuntimeException("Couldn't find game state for " + account.id());
-		this.currentFloor = GameInfo.instance().building().get((int) gameStateInfo.getOrDefault("currentFloor", 0));
-		this.currentRoom = currentFloor.rooms().get((int) gameStateInfo.getOrDefault("currentRoom", 0));
-		Object getEntity = gameStateInfo.getOrDefault("currentEntity", null);
-		this.currentEntity = (getEntity != null) ? currentRoom.entities().get((int) getEntity) : null;
+		this.currentFloor = GameInfo.instance().building().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentFloor"))).findFirst().orElse(GameInfo.instance().building().getFirst());
+		this.currentRoom = currentFloor.rooms().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentRoom"))).findFirst().orElse(currentFloor.rooms().getFirst());
+		this.currentEntity = currentRoom.entities().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentEntity"))).findFirst().orElse(null);
 		this.currentItems = new HashSet<>();
 		JSONArray items = (JSONArray) gameStateInfo.getOrDefault("currentItems", new JSONArray());
 		for (int i = 0; i < items.size(); i++) {
 			currentItems.add(Item.valueOf((String) items.get(i)));
 		}
-		this.time = Duration.ofSeconds((int) gameStateInfo.getOrDefault("time", 2700));
+		this.time = Duration.ofSeconds((long) gameStateInfo.getOrDefault("time", 2700));
 		this.account = account;
 		this.difficulty = Difficulty.valueOf( (String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
 		this.startTime = System.currentTimeMillis();
