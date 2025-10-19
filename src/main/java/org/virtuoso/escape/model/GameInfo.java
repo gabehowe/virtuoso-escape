@@ -38,22 +38,21 @@ public class GameInfo {
     //Acorn Grove//
     private Floor acornGrove() {
         Entity intro_squirrel = new Entity("intro_squirrel", null, null, null, null);
-        Entity portal_squirrel = new Entity("portal_squirrel", null, null, this::nextFloor, null);
+        Entity portal_squirrel = new Entity("portal_squirrel", null, null, new SetFloor(1), null);
         Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "introduce"));
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
     //Floor One//
     private Floor floor1() {
-        Entity door = new Entity("first_door", null, null, this::nextFloor, null);
+        Entity door = new Entity("first_door", null, null, new SetFloor(2), null);
         Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
         Entity joeHardy = joeHardy();
         Entity elephant = new Entity("elephant_in_the_room", null, null, new GiveItem(Item.sunflower_seed_butter), null);
         Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy,trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));
 
-        Entity[] almanacs = almanacChain(5);
-        Entity finalAlmanac = almanacs[almanacs.length - 1];
-        Room janitor_closet = new Room(new ArrayList<>(List.of(finalAlmanac)), "storey_i_1", this.string("storey_i_1", "introduce"));
+		Entity almanac = makeAlmanacs(4);
+        Room janitor_closet = new Room(List.of(almanac), "storey_i_1", this.string("storey_i_1", "introduce"));
 
         Entity securityBread = new Entity("security",
                 null,
@@ -65,21 +64,20 @@ public class GameInfo {
         Room hallway = new Room(new ArrayList<>(List.of(securityBread)), "storey_i_2", this.string("storey_i_2", "introduce"));
 
 
-
         return new Floor("storey_i", List.of(room_1400, janitor_closet, hallway));
     }
 
     private Entity joeHardy() {
         Predicate<Item[]> hasItems = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a&&b).get();
-        Entity sandwichJoe = new Entity("sandwich_joe", null, null, null, null);
-        Entity sansSandwichJoe = new Entity("sans_sandwich_joe", null, null, new Conditional(
+        EntityState sandwichJoe = new EntityState("sandwich_joe", null, null, null, null);
+        EntityState sansSandwichJoe = new EntityState("sans_sandwich_joe", null, null, new Conditional(
                 () -> hasItems.test(new Item[]{Item.left_bread, Item.right_bread, Item.sunflower_seed_butter, Item.sealed_clean_food_safe_hummus}),
                 new Chain(new SetMessage(this, "sans_sandwich_joe", "interact_sandwich"),
-                        new SwapEntities(sandwichJoe, "sans_sandwich_joe")
+                        new SwapEntities("joe_hardy", "sandwich_joe")
                         )
         ), null);
-        Entity joeHardy = new Entity("intro_joe", null, null, new SwapEntities(sansSandwichJoe, "intro_joe"), null);
-        return joeHardy;
+        EntityState introJoe = new EntityState("intro_joe", null, null, new SwapEntities("joe_hardy", "sandwich_joe"), null);
+        return new Entity("joe_hardy", introJoe, sansSandwichJoe, sandwichJoe);
     }
 
     /**
@@ -88,57 +86,35 @@ public class GameInfo {
      * @param length The number of almanacs
      * @return An entity with actions holding references to the next entity.
      */
-    private Entity[] almanacChain(int length) {
-        final int PAGES = (int) Math.pow(2, length);
-        final int LEFT_BREAD_PAGE = (int) (Math.random() * PAGES);
+    private Entity makeAlmanacs(int length) {
+        final int PAGES = (int) Math.pow(2,length);
+        final int CORRECT_PAGE = (int) (Math.random() * PAGES);
 
-        Entity found_almanac = new Entity("found_almanac", null, null, null, null);
-
-        // Create all objects with bad values
-        Entity[] almanacChain = IntStream.range(0, length).mapToObj(_ -> new Entity("", null, null, null, null)).limit(length).toArray(Entity[]::new);
+		ArrayList<EntityState> almanacStates = new ArrayList<EntityState>();
         for (int i = 0; i < length; i++) {
-            // Copy data from makeAlmanac to stay in the same spot in memory
-            int finalI = i;
-            Function<Integer, Action> tp = (current) -> turnPage(finalI + 1, current, LEFT_BREAD_PAGE, found_almanac, almanacChain);
-            almanacChain[i].absorb(makeAlmanac(PAGES, i, tp));
+			int current_i = i;
+            Map<String,Action> map = IntStream.range(1,PAGES).boxed()
+			.collect(Collectors.toMap(j -> String.valueOf(j), j -> turnPage(length-current_i, j, length, CORRECT_PAGE)));
+			LinkedHashMap<String,Action> linkedMap = new LinkedHashMap<String,Action>(map);
+			almanacStates.add(new EntityState(String.valueOf(length-i), null, null, null, new TakeInput("", linkedMap)));
+
         }
-        return almanacChain;
+		almanacStates.add(new EntityState("found", null, null, null, null));
+		return new Entity("almanac", almanacStates.toArray(new EntityState[0]));
     }
 
-    private Entity makeAlmanac(int pages, int flips, Function<Integer, Action> turnPage) {
-        var j = IntStream.range(1, pages).boxed()
-                         .collect(Collectors.toMap(String::valueOf, turnPage));
-        return new Entity("almanac",
-                new SetMessage(String.format(this.string("almanac", "attack"), flips + 1)),
-                null,
-                null,
-                new TakeInput("", new LinkedHashMap<>(j)));
-    }
+    private Action turnPage(int flips, int currentPage, int max_flips, int correctPage) {
+        Action swap = flips > 1 ? new SwapEntities("almanac", String.valueOf(flips-1)) : 
+		new SwapEntities("almanac", String.valueOf(max_flips));
 
-    private Action turnPage(int flips, int currentPage, int correctPage, Entity foundPage, Entity[] chain) {
-        Action swap = () -> {
-            if (flips - 1 == 0) {
-                Entity[] newEntities = almanacChain(chain.length);
-                Room properRoom =
-                        this.building.stream().filter(i -> Objects.equals(i.id(), "storey_i")).findFirst().orElseThrow()
-                                     .rooms().stream().filter(i -> Objects.equals(i.id(), "storey_i_1")).findFirst().orElseThrow();
-                properRoom.entities().clear();
-                properRoom.entities().add(newEntities[chain.length - 1]);
-                GameState.instance().pickEntity(newEntities[chain.length - 1]);
-                return;
-            }
-            chain[chain.length - 1].absorb(chain[flips - 2]);
-        };
-        String guessesRemaining = String.format(this.string("almanac", "guesses_remaining"), flips - 1, flips);
         Action caseBreak = new SetMessage(this, "almanac", "break");
-        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + guessesRemaining);
-        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + guessesRemaining);
+        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + String.valueOf(flips-1));
+        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + String.valueOf(flips-1));
         Action caseFound = new Chain(
                 new SetMessage(this, "almanac", "correct_page"),
                 new GiveItem(Item.left_bread),
-                () -> chain[flips - 1].absorb(foundPage),
-                //Covers the case of getting the correct page on the last page
-                new SwapEntities(foundPage, "broken_almanac"));
+                new SwapEntities("almanac", "found"));
+
         Action evaluatePage = new Conditional(
                 () -> currentPage > correctPage,
                 caseOvershoot,
@@ -189,20 +165,23 @@ public class GameInfo {
     private Floor floor3() {
         // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = new Entity("man", null, null, null, null);
-        var computtyBlocked = new Entity("computty_blocked", null, null, null, null);
-        Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities(makeComputtyChain(), "computty_blocked"), null, null, null);
-        Entity microwave = new Entity("microwave_blocked", null, null, null, null);
-        Room floor3_0 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computtyBlocked, microwave)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
+
+		Entity computty = makeComputtyLogic();
+        Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities("computty", "computty_unblocked"), null, null, null);
+        EntityState microwave_blocked = new EntityState("microwave_blocked", null, null, null, null);
+	    // Whoops! JEP 126!
+        EntityState microwaveUnblocked = new EntityState("microwave_unblocked", this::gameEnding, null, this::gameEnding, null);
+		Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
+        Room floor3_0 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
         return new Floor("storey_iii_0", List.of(floor3_0));
     }
 
-    private Entity makeComputtyChain() {
+    private Entity makeComputtyLogic() {
         // Dichotomy: DRY violation or unreadable code?
+		var computtyBlocked = new EntityState("computty_blocked", null, null, null, null);
         Function<String, Action> ttyStr = (string) -> new SetMessage(this, "computty", string);
-        // Whoops! JEP 126!
-        Entity microwaveUnblocked = new Entity("microwave_unblocked", this::gameEnding, null, this::gameEnding, null);
         var computtyTarLogic = new TakeInput("", TakeInput.makeCases(
-                "rotx 16 code", new Chain(ttyStr.apply("good_rotx"),new SwapEntities(microwaveUnblocked, "microwave_blocked")),
+                "rotx 16 code", new Chain(ttyStr.apply("good_rotx"),new SwapEntities("microwave", "microwave_unblocked")),
                 "rotx 16 .*", ttyStr.apply("no_file"),
                 "rotx \\d+", ttyStr.apply("failed_rotx"),
                 "rotx.*", ttyStr.apply("man_rotx"),
@@ -210,23 +189,25 @@ public class GameInfo {
                 "cat code", ttyStr.apply("cat_code"),
                 "cat.*", ttyStr.apply("man_cat")
         ));
-        var computtyTar = new Entity("computty_tar", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyTarLogic);
+        var computtyTar = new EntityState("computty_tar", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyTarLogic);
         var computtyCdLogic = new TakeInput("", TakeInput.makeCases(
-                "tar xvf code.tar$", new Chain(new SetMessage("code"),new SwapEntities(computtyTar, "computty_cd")),
+                "tar xvf code.tar$", new Chain(new SetMessage("code"),new SwapEntities("computty", "computty_tar")),
                 "tar xvf c.*", ttyStr.apply( "no_file"),
                 "tar.*", ttyStr.apply( "man_tar"),
                 "ls", ttyStr.apply("ls_cd"),
                 "cat code.tar", ttyStr.apply("cat_tar"),
                 "cat.*", ttyStr.apply("man_cat")
         ));
-        Entity computtyCd = new Entity("computty_cd", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyCdLogic);
+        var computtyCd = new EntityState("computty_cd", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyCdLogic);
         var computtyDefault = new TakeInput("", TakeInput.makeCases(
-                "cd code", new SwapEntities(computtyCd, "computty"),
+                "cd code", new SwapEntities("computty", "computty_cd"),
                 "cd.*", ttyStr.apply( "no_file"),
                 "ls", ttyStr.apply("ls_default"),
                 "cat.*", ttyStr.apply("man_cat")
         ));
-        return new Entity("computty", null, null, null, computtyDefault);
+		var computtyUnblocked = new EntityState("computty_unblocked", null, null, null, computtyDefault);
+
+        return new Entity("computty", computtyBlocked, computtyUnblocked, computtyTar, computtyCd);
     }
 
     //Ending//

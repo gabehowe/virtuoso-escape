@@ -1,85 +1,65 @@
 package org.virtuoso.escape.model;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.virtuoso.escape.model.actions.Action;
 import org.virtuoso.escape.model.actions.TakeInput;
 
-import java.util.Map;
-
+/**
+ * A finite state machine that holds all possible states for an entity to be in and which state it is currently in.
+ * @author Andrew
+ */
 public class Entity {
 	private String id;
-	private Action attackAction;
-	private Action inspectAction;
-	private Action interactAction;
-	private TakeInput inputAction;
+	private Map<String,EntityState> states;
+	private String currentState;
 
+	/**
+	 * Constructs and entity with multiple states.
+	 * @param id The ID of the entity you want to construct.
+	 * @param entities The states you want the entity to have,
+	 * the default state will be a state with the name of the the entity id or the first state argument.
+	 */
+	public Entity(String id, EntityState... entity_states) {
+		this.id = id;
+		this.states = Arrays.stream(entity_states).collect(Collectors.toMap(EntityState::id, state -> state));
+		currentState = this.states.containsKey(id) ? id : entity_states[0].id();
+	}
+
+	/**
+	 * Constructs a one-state entity and its state.
+	 * @param id The entity id.
+	 * @param attackAction The entity attack behavior.
+	 * @param inspectAction The entity inspect behavior.
+	 * @param interactAction The entity interact behavior.
+	 * @param inputAction The entity input behavior.
+	 */
 	public Entity(String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
 		this.id = id;
-		this.attackAction = attackAction;
-		this.inspectAction = inspectAction;
-		this.interactAction = interactAction;
-		this.inputAction = inputAction;
+		this.states = Map.of(id, new EntityState(id, attackAction, inspectAction, interactAction, inputAction));
+		this.currentState = id;
 	}
 
-	public void absorb(Entity other){
-		this.id = other.id;
-		this.attackAction = other.attackAction;
-		this.inspectAction = other.inspectAction;
-		this.interactAction = other.interactAction;
-		this.inputAction = other.inputAction;
+	/**
+	 * Gets the current entity state.
+	 * @return The current state of the entity.
+	 */
+	public EntityState state(){
+		return states.get(currentState);
 	}
 
-	private String getText(String key) {
-		try {
-			return GameInfo.instance().string(this.id, key);
-		} catch (Exception e) {
-			return "[Missing text: " + key + "]";
-		}
+	/**
+	 * Changes the state of an entity.
+	 * @param newState The name of the state to swap to.
+	 */
+	public void swapState(String newState){
+		this.currentState = newState;
 	}
 
-	public void interact() {
-		GameState.instance().setCurrentMessage(getText("interact"));
-
-		if (interactAction != null) interactAction.execute();
-	}
-
-	public void attack() {
-		GameState.instance().setCurrentMessage(getText("attack"));
-		if (attackAction != null) attackAction.execute();
-	}
-
-	public void inspect() {
-		GameState.instance().setCurrentMessage(getText("inspect"));
-		if (inspectAction != null) inspectAction.execute();
-	}
-
-	public String name() {
-		return GameInfo.instance().string(this.id, "name");
-	}
-
-	public void introduce() {
-		GameState.instance().setCurrentMessage(getText("introduce"));
-	}
-
-	public boolean equals(Entity other) {
-		return this.id.equals(other.id);
-	}
-
-	public String id() {
+	public String id(){
 		return this.id;
-	}
-
-	public void takeInput(String input) {
-		String message;
-		if (GameInfo.instance().language().get(id) == null || GameInfo.instance().language().get(id).get("input_" + input) == null)
-			message = "I couldn't understand '" +input+ "'";
-		else message = GameInfo.instance().string(id, "input_" +input);
-		if (message != null) {
-			GameState.instance().setCurrentMessage(message);
-		}
-
-		if (inputAction != null) {
-			inputAction.withInput(input).execute();
-		}
 	}
 
 }
