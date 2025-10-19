@@ -1,12 +1,8 @@
 package org.virtuoso.escape.model.actions;
 
-import org.virtuoso.escape.model.GameInfo;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.SequencedMap;
-import java.util.function.Consumer;
 
 public class TakeInput implements Action {
     String input;

@@ -82,19 +82,19 @@ public class GameProjection {
 	}
 
 	public void interact() {
-		currentEntity().orElseThrow().interact();
+		currentEntity().orElseThrow().state().interact();
 	}
 
 	public void attack() {
-		currentEntity().orElseThrow().attack();
+		currentEntity().orElseThrow().state().attack();
 	}
 
 	public void inspect() {
-		currentEntity().orElseThrow().inspect();
+		currentEntity().orElseThrow().state().inspect();
 	}
 
 	public void input(String input) {
-		currentEntity().orElseThrow().takeInput(input);
+		currentEntity().orElseThrow().state().takeInput(input);
 	}
 
 	public boolean isEnded() {

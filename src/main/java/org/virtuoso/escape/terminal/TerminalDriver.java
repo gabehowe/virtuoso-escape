@@ -194,7 +194,7 @@ public class TerminalDriver {
             actions.put(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection));
         }
         for (Entity e : projection.currentRoom().entities()) {
-            actions.put(new FunString(e.name()).italic().bold(), () -> projection.pickEntity(e));
+            actions.put(new FunString(e.state().name()).italic().bold(), () -> projection.pickEntity(e));
         }
         actions.put(new FunString("Exit game"), () -> menu_exit(scanner, projection));
         actions.put(new FunString("Options"), () -> menu_options(scanner, projection));
@@ -204,7 +204,7 @@ public class TerminalDriver {
     }
 
     void menu_entityAction(Scanner scanner, GameProjection projection) {
-        projection.currentEntity().ifPresent(Entity::introduce);
+        projection.currentEntity().ifPresent(e -> e.state().introduce());
         var actions = makeTuiActionMap(
                 fs_r(new FunString("Interact").blue(), projection::interact),
                 fs_r(new FunString("Inspect").green(), projection::inspect),
