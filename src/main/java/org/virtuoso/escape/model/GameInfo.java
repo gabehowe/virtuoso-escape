@@ -136,7 +136,7 @@ public class GameInfo {
         Room doorRoom = new Room(new ArrayList<>(),"storey_ii_1", this.string("storey_ii_1", "introduce"));
         Action shuffle =  () -> Collections.shuffle(doorRoom.entities());
         Entity door1 = createDoorChain(3, shuffle);
-        Action failDoor = new Chain(new SwapEntities("door1","3"), shuffle, GameState.instance()::leaveEntity);
+        Action failDoor = new Chain(new SwapEntities("door1","door1_2"), shuffle, GameState.instance()::leaveEntity);
         Entity door2 = new Entity("door2", null, null, failDoor, null);
         Entity door3 = new Entity("door3", null, null, failDoor, null);
         doorRoom.entities().addAll(List.of(door1, door2, door3));
@@ -194,7 +194,7 @@ public class GameInfo {
     private Entity makeComputtyLogic() {
         // Dichotomy: DRY violation or unreadable code?
 		var computtyBlocked = new EntityState("computty_blocked", null, null, null, null);
-        Function<String, Action> ttyStr = (string) -> new SetMessage(this, "computty", string);
+        Function<String, Action> ttyStr = (string) -> new SetMessage(this, "computty_unblocked", string);
         var computtyTarLogic = new TakeInput("", TakeInput.makeCases(
                 "rotx 16 code", new Chain(ttyStr.apply("good_rotx"),new SwapEntities("microwave", "microwave_unblocked")),
                 "rotx 16 .*", ttyStr.apply("no_file"),
