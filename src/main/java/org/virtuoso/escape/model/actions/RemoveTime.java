@@ -4,7 +4,14 @@ import org.virtuoso.escape.model.GameState;
 
 import java.time.Duration;
 
+/**
+ * Penalize the player by removing time.
+ * @param severity The degree of penalty to award
+ */
 public record RemoveTime(Severity severity) implements Action {
+    /**
+     * Apply the penalty.
+     */
     @Override
     public void execute() {
         final int BASE_TIME = 5;

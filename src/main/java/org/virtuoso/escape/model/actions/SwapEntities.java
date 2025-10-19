@@ -7,6 +7,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Swap two entities
+ * @param toPlace The entity to replace the entity to replace with.
+ * @param toReplace The entity to replace.
+ * @author gabri
+ */
 public record SwapEntities(Entity toPlace, String toReplace) implements Action {
 	@Override
 	public void execute() {
