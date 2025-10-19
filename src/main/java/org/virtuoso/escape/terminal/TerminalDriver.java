@@ -16,6 +16,7 @@ import static org.virtuoso.escape.terminal.FunString.escape;
  * @author gabri
  */
 public class TerminalDriver {
+    private boolean DEBUG = true;
     // Tree
 
     // Avoid java's lack of belief in runnable type
@@ -54,7 +55,7 @@ public class TerminalDriver {
                 }
                 index++;
             }
-            ;
+
             FunString name = new FunString(pair.getKey());
             FunString small = new FunString(key).underline();
 
@@ -85,7 +86,7 @@ public class TerminalDriver {
             scanAttempt = scanner.nextLine().strip().toLowerCase();
             System.out.print(escape( MOVE_LINE) + escape(CLEAR_BELOW));
             if (predicate.test(scanAttempt)) break;
-            System.out.print(escape("2A") + escape(CLEAR_BELOW));
+            System.out.print(escape("1A") + escape(CLEAR_BELOW));
         }
         return scanAttempt;
     }
@@ -234,12 +235,31 @@ public class TerminalDriver {
         actions.put(new FunString("Nevermind"), () -> {});
         createActionInterface(scanner, actions, "Choose difficulty");
     }
+    void menu_debugSwitchFloor(Scanner scanner, GameProjection projection){
+        var actions = makeTuiActionMap();
+        for (Floor floor: GameInfo.instance().building()) {
+            actions.put(new FunString(floor.id()).green(), () -> GameState.instance().setCurrentFloor(floor));
+        }
+        actions.put(new FunString("Nevermind"), ()-> {});
+        createActionInterface(scanner, actions, "Pick floor");
+    }
+    void menu_debug(Scanner scanner, GameProjection projection){
+        var actions = makeTuiActionMap(
+                fs_r("Switch floor", () -> menu_debugSwitchFloor(scanner, projection))
+        );
+        actions.forEach((k,_) -> k.green());
+        actions.put(new FunString("Nevermind"), ()-> {});
+        createActionInterface(scanner, actions, "");
+    }
 
     void menu_options(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap(
                 fs_r("Set difficulty", () -> menu_difficulty(scanner, projection)),
                 fs_r("Nevermind", () -> {})
         );
+        if (DEBUG){
+            actions.putFirst(new FunString("DEBUG").green(), () -> menu_debug(scanner, projection));
+        }
         createActionInterface(scanner, actions, "Options");
     }
 
