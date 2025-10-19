@@ -18,32 +18,35 @@ import static org.virtuoso.escape.terminal.FunString.escape;
 public class TerminalDriver {
     private boolean DEBUG = true;
     // Tree
-
-    // Avoid java's lack of belief in runnable type
-    Map.Entry<FunString, Runnable> fs_r(String s, Runnable r) {
-        return Map.entry(new FunString(s), r);
+    private record P<U, V> (U u, V v) {
+        public static <U, V> P<U, V> of(U u, V v){
+            return new P<>(u,v);
+        }
     }
 
-    Map.Entry<FunString, Runnable> fs_r(FunString s, Runnable r) {
-        return Map.entry(s, r);
+    // Avoid java's lack of belief in runnable type
+    P<FunString, Runnable> fs_r(String s, Runnable r) {
+        return P.of(new FunString(s), r);
+    }
+
+    P<FunString, Runnable> fs_r(FunString s, Runnable r) {
+        return P.of(s, r);
     }
 
     @SafeVarargs
-    final SequencedMap<FunString, Runnable> makeTuiActionMap(Map.Entry<FunString, Runnable>... input) {
-        SequencedMap<FunString, Runnable> map = new LinkedHashMap<>();
-        Arrays.stream(input).forEachOrdered(i -> map.put(i.getKey(), i.getValue()));
-        return map;
+    final List<P<FunString, Runnable>> makeTuiActionMap(P<FunString, Runnable>... input) {
+        return new ArrayList<>(Arrays.asList(input));
     }
 
 
     // Sequenced retains order.
-    void createActionInterface(Scanner scanner, SequencedMap<FunString, Runnable> tuiAction, String status) {
+    void createActionInterface(Scanner scanner, List<P<FunString, Runnable>> tuiAction, String status) {
         assert !tuiAction.isEmpty();
-        Map<String, Map.Entry<FunString, Runnable>> keyMap = new LinkedHashMap<>();
+        Map<String, P<FunString, Runnable>> keyMap = new LinkedHashMap<>();
         // Create a unique key (or group of keys) to press for each action.
-        for (Map.Entry<FunString, Runnable> pair : tuiAction.entrySet()) {
+        for (P<FunString, Runnable> pair : tuiAction) {
             String key;
-            String sourceKey = pair.getKey().rawText();
+            String sourceKey = pair.u.rawText();
             int index = 0;
             int width = 1;
             while (true) { // Try to get a unique key.
@@ -56,14 +59,14 @@ public class TerminalDriver {
                 index++;
             }
 
-            FunString name = new FunString(pair.getKey());
+            FunString name = new FunString(pair.u);
             FunString small = new FunString(key).underline();
 
             name.replaceSubstring(index, index + width, small);
-            keyMap.put(key.toLowerCase(), Map.entry(name, pair.getValue()));
+            keyMap.put(key.toLowerCase(), P.of(name, pair.v));
         }
         Set<String> validResponses = keyMap.keySet();
-        var prompts = keyMap.values().stream().map(Map.Entry::getKey).toList();
+        var prompts = keyMap.values().stream().map(P::u).toList();
         String delim = " ■ ";
         FunString prompt = FunString.join(delim, prompts);
         // If long, cut into two lines for readability -- We can only assume terminal width because of java's cross-platform nature.
@@ -76,7 +79,7 @@ public class TerminalDriver {
         clearScreen();
         display(status);
         String response = validateInput(scanner, prompt.toString(), validResponses::contains);
-        keyMap.get(response).getValue().run();
+        keyMap.get(response).v.run();
     }
 
     String validateInput(Scanner scanner, String prompt, Predicate<String> predicate) {
@@ -180,25 +183,24 @@ public class TerminalDriver {
     void menu_changeRoom(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap();
         for (Room room : projection.currentFloor().rooms()) {
-            actions.put(new FunString(room.name()).bold(), () -> projection.pickRoom(room));
+            actions.add(P.of(new FunString(room.name()).bold(), () -> projection.pickRoom(room)));
         }
-        actions.put(new FunString("Nevermind"), () -> {
-        });
+        actions.add(P.of(new FunString("Nevermind"), () -> {
+        }));
         createActionInterface(scanner, actions, "Change room");
     }
 
     void menu_roomActions(Scanner scanner, GameProjection projection) {
-        SequencedMap<FunString, Runnable> actions = makeTuiActionMap(
-        );
+        var actions = makeTuiActionMap();
         // It makes no sense to change rooms if there are no rooms to change to!
         if (projection.currentFloor().rooms().size() > 1) {
-            actions.put(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection));
+            actions.add(P.of(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection)));
         }
         for (Entity e : projection.currentRoom().entities()) {
-            actions.put(new FunString(e.name()).italic().bold(), () -> projection.pickEntity(e));
+            actions.add(P.of(new FunString(e.name()).italic().bold(), () -> projection.pickEntity(e)));
         }
-        actions.put(new FunString("Exit game"), () -> menu_exit(scanner, projection));
-        actions.put(new FunString("Options"), () -> menu_options(scanner, projection));
+        actions.add(P.of(new FunString("Exit game"), () -> menu_exit(scanner, projection)));
+        actions.add(P.of(new FunString("Options"), () -> menu_options(scanner, projection)));
         String prompt = projection.time().toMinutesPart() + ":" + projection.time().toSecondsPart() + "\n" + projection.currentRoom().introMessage();
         createActionInterface(scanner, actions, prompt);
 
@@ -212,9 +214,9 @@ public class TerminalDriver {
                 fs_r(new FunString("Attack").red(), projection::attack),
                 fs_r(new FunString("Speak").purple(), () -> projection.input(validateInput(scanner, "What would you like to say? ", _ -> true)))
                 );
-        if (!projection.currentItems().isEmpty()) actions.put(new FunString("Items"), () -> this.displayItems(scanner, projection));
+        if (!projection.currentItems().isEmpty()) actions.add(P.of(new FunString("Items"), () -> this.displayItems(scanner, projection)));
 
-        actions.put(new FunString("Leave"), projection::leaveEntity);
+        actions.add(P.of(new FunString("Leave"), projection::leaveEntity));
 
         var itemsCache = projection.currentItems();
         createActionInterface(scanner, actions, projection.currentMessage().orElse(""));
@@ -230,25 +232,25 @@ public class TerminalDriver {
         var actions = makeTuiActionMap();
 
         for (var diff : Difficulty.values()) {
-            actions.put(new FunString(diff.name()).terminalColor(diff.ordinal() + 196), () -> projection.setDifficulty(diff));
+            actions.add(P.of(new FunString(diff.name()).terminalColor(diff.ordinal() + 196), () -> projection.setDifficulty(diff)));
         }
-        actions.put(new FunString("Nevermind"), () -> {});
+        actions.add(P.of(new FunString("Nevermind"), () -> {}));
         createActionInterface(scanner, actions, "Choose difficulty");
     }
     void menu_debugSwitchFloor(Scanner scanner, GameProjection projection){
         var actions = makeTuiActionMap();
         for (Floor floor: GameInfo.instance().building()) {
-            actions.put(new FunString(floor.id()).green(), () -> GameState.instance().setCurrentFloor(floor));
+            actions.add(P.of(new FunString(floor.id()).green(), () -> GameState.instance().setCurrentFloor(floor)));
         }
-        actions.put(new FunString("Nevermind"), ()-> {});
+        actions.add(P.of(new FunString("Nevermind"), ()-> {}));
         createActionInterface(scanner, actions, "Pick floor");
     }
     void menu_debug(Scanner scanner, GameProjection projection){
         var actions = makeTuiActionMap(
                 fs_r("Switch floor", () -> menu_debugSwitchFloor(scanner, projection))
         );
-        actions.forEach((k,_) -> k.green());
-        actions.put(new FunString("Nevermind"), ()-> {});
+        actions.forEach((k) -> k.u.green());
+        actions.add(P.of(new FunString("Nevermind"), ()-> {}));
         createActionInterface(scanner, actions, "");
     }
 
@@ -258,7 +260,7 @@ public class TerminalDriver {
                 fs_r("Nevermind", () -> {})
         );
         if (DEBUG){
-            actions.putFirst(new FunString("DEBUG").green(), () -> menu_debug(scanner, projection));
+            actions.addFirst(P.of(new FunString("DEBUG").green(), () -> menu_debug(scanner, projection)));
         }
         createActionInterface(scanner, actions, "Options");
     }
