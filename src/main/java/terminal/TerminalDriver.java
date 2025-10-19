@@ -143,7 +143,7 @@ public class TerminalDriver {
         int padwidth = (names.stream().map(String::length)).max(Integer::compare).get();
         for (int i = 0; i < names.size(); i += 2) {
             Function<String, String> j = (str) -> String.format("1✖ %-" + padwidth + "s", str);
-            String left = j.apply(names.get(i) + ",");
+            String left = j.apply(names.get(i) + ((i + 1 == names.size()) ? "" : ","));
             String right = (i + 1 == names.size()) ? "" : j.apply(names.get(i + 1));
             lines.add(left + " " + right);
         }
@@ -215,8 +215,14 @@ public class TerminalDriver {
 
         actions.put(new FunString("Leave"), projection::leaveEntity);
 
+        var itemsCache = projection.currentItems();
         createActionInterface(scanner, actions, projection.currentMessage().orElse(""));
+        var newItems = new ArrayList<>(projection.currentItems());
         projection.currentMessage().ifPresent(i -> typewriterDisplay(scanner, i));
+        if (newItems.size() > itemsCache.size()) {
+            newItems.removeIf(itemsCache::contains);
+            pauseDisplay(scanner, "You received " + newItems.getFirst().itemName() + ".");
+        }
     }
 
     void menu_difficulty(Scanner scanner, GameProjection projection) {
