@@ -30,27 +30,22 @@ public class GameInfo {
         // todo: add other floors
 
         this.building.add(acornGrove());
-        // TODO: floor 2
         this.building.add(floor1());
+        this.building.add(floor2());
         this.building.add(floor3());
     }
 
     //Acorn Grove//
     private Floor acornGrove() {
         Entity intro_squirrel = new Entity("intro_squirrel", null, null, null, null);
-        Entity portal_squirrel = new Entity("portal_squirrel",
-                null,
-                null,
-                () -> GameState.instance().setCurrentFloor(this.building.get(1)
-                ), null);
+        Entity portal_squirrel = new Entity("portal_squirrel", null, null, this::nextFloor, null);
         Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "introduce"));
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
     //Floor One//
     private Floor floor1() {
-        Entity door = new Entity("first_door", null, null, () -> GameState.instance().setCurrentFloor(this.building.get(2))
-, null);
+        Entity door = new Entity("first_door", null, null, this::nextFloor, null);
         Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
         Entity joeHardy = joeHardy();
         Entity elephant = new Entity("elephant_in_the_room", null, null, new GiveItem(Item.sunflower_seed_butter), null);
@@ -161,6 +156,34 @@ public class GameInfo {
 
     //Floor Two//
     // TODO add floor 2
+    private Floor floor2() {
+        Room doorRoom = new Room(new ArrayList<>(),"storey_ii_1", this.string("storey_ii_1", "introduce"));
+        Action shuffle =  () -> Collections.shuffle(doorRoom.entities());
+        Entity door1 = createDoorChain(3, shuffle);
+        Action failDoor = new Chain(() -> new SwapEntities(createDoorChain(3, shuffle), "door1").execute(), shuffle, GameState.instance()::leaveEntity);
+        Entity door2 = new Entity("door2", null, null, failDoor, null);
+        Entity door3 = new Entity("door3", null, null, failDoor, null);
+        doorRoom.entities().addAll(List.of(door1, door2, door3));
+        shuffle.execute();
+
+        Entity pitcherPlant = new Entity("pitcher_plant", null, null, null, null);
+        Room plantOffice = new Room(new ArrayList<>(List.of(pitcherPlant)), "storey_ii_0", this.string("storey_ii_0", "introduce"));
+        return new Floor("storey_ii", List.of(plantOffice, doorRoom));
+    }
+
+    private Entity createDoorChain(int length, Action shuffle) {
+        Entity[] doors = new Entity[length];
+        Entity door1_final = new Entity("door1", null, null, new Chain(new SetMessage(this, "door1", "final_door"),this::nextFloor), null);
+        doors[0] = door1_final;
+        for (int i = 1; i < length; i++) {
+            Entity next = new Entity("door1", null, null, new Chain(
+                    new SwapEntities(doors[i-1], "door1"),
+                    GameState.instance()::leaveEntity,
+                    shuffle), null);
+            doors[i] = next;
+        }
+        return doors[length-1];
+    }
 
     //Floor Three/
     private Floor floor3() {
@@ -212,6 +235,10 @@ public class GameInfo {
     }
 
     //Utils//
+    private void nextFloor(){
+        int currentIndex = this.building.indexOf(GameState.instance().currentFloor());
+        GameState.instance().setCurrentFloor(this.building.get(currentIndex+1));
+    }
     public String string(String id, String stringId) {
         if (!language.containsKey(id) || !language.get(id).containsKey(stringId)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
         return language.get(id).get(stringId);

@@ -60,7 +60,7 @@ public class TerminalDriver {
             }
 
             FunString name = new FunString(pair.u);
-            FunString small = new FunString(key).underline();
+            FunString small = new FunString(key).underline().bold();
 
             name.replaceSubstring(index, index + width, small);
             keyMap.put(key.toLowerCase(), P.of(name, pair.v));
@@ -197,7 +197,7 @@ public class TerminalDriver {
             actions.add(P.of(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection)));
         }
         for (Entity e : projection.currentRoom().entities()) {
-            actions.add(P.of(new FunString(e.name()).italic().bold(), () -> projection.pickEntity(e)));
+            actions.add(P.of(new FunString(e.name()).italic(), () -> projection.pickEntity(e)));
         }
         actions.add(P.of(new FunString("Exit game"), () -> menu_exit(scanner, projection)));
         actions.add(P.of(new FunString("Options"), () -> menu_options(scanner, projection)));

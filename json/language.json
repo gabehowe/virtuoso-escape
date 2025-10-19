@@ -99,6 +99,43 @@
     "interact": "The door wasn't locked! You travel up the stairs to the next floor.",
     "inspect": "The glowing door has a surprise behind it."
   },
+  "storey_ii_0": {
+    "name": "Plant Office",
+    "introduce": "You enter an academic office with a standard desk, chair, and a bookshelf."
+  },
+  "storey_ii_1": {
+    "name": "Blue Room",
+    "introduce": "You enter a room with three identical doors."
+  },
+  "pitcher_plant": {
+    "name": "Pitcher Plant",
+    "introduce": "You see a professional baseball pitcher sitting behind the desk.",
+    "interact": "\"Hi, squirrel! What a wonderful day to play baseball!\nIf you go into the next room, you must pass through three correct doors. Passing through an incorrect door will land you in the same place.\nJust remember, go through the door that rings with the most life!",
+    "attack": "You jump at the pitcher, but she hits you out of the air with a baseball bat. You fly into the wall at 98 miles per hour.",
+    "inspect": "Pitcher Plant is wearing a pinstriped baseball uniform with patches of dirt on it."
+  },
+  "door1": {
+    "name": "nondescript door",
+    "interact": "You move through the door and enter a new room.",
+    "attack": "You throw yourself against the door, and it shakes like the smell of a blooming citrus tree.",
+    "inspect": "You see absolutely nothing remarkable about this door.",
+    "introduce": "You see a door so closed that Rome must be at peace.",
+    "final_door": "You move through the door and find a very long flight of stairs. You slowly proceed up them..."
+  },
+  "door2": {
+    "name": "nondescript door",
+    "interact": "You move through the door and see the door you just walked through shut in front of you. You're in the same room you started in.",
+    "attack": "You throw yourself against the door, and it shakes like a hot, dry, dust-laden wind.",
+    "inspect": "You see absolutely nothing remarkable about this door.",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door3": {
+    "name": "nondescript door",
+    "interact": "You move through the door and see the door you just walked through shut in front of you. You're in the same room you started in.",
+    "attack": "You throw yourself against the door, and it shakes like melting prevernal snow...",
+    "inspect": "You see absolutely nothing remarkable about this door.",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
   "storey_iii_0": {
     "name": "Fin Foyer",
     "introduce": "You enter a culminating room, filled with urgency and a feeling that you might be nearing the end of your adventure..."
