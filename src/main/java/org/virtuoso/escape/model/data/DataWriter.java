@@ -55,7 +55,7 @@ public class DataWriter {
 		gameStateMap.put("currentRoom", gameState.currentRoom().id());
 		gameStateMap.put("currentEntity", gameState.currentEntity().isPresent() ? gameState.currentEntity().get().id() : null);
 		gameStateMap.put("currentItems", itemIds(gameState.currentItems()));
-		gameStateMap.put("time", String.valueOf(gameState.time().getSeconds()));
+		gameStateMap.put("time", gameState.time().getSeconds());
 		gameStateMap.put("difficulty", gameState.difficulty().toString());
 		return gameStateMap;
 	}

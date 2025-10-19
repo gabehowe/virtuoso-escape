@@ -1,6 +1,7 @@
 package org.virtuoso.escape.model.account;
 
 import org.virtuoso.escape.model.Difficulty;
+import org.virtuoso.escape.model.GameState;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -22,7 +23,7 @@ public class Account {
 	public Account(String username, String password) {
 		this.username = username;
 		this.hashedPassword = hashPassword(password);
-		this.highScore = new Score(Duration.ofSeconds(2700), Difficulty.TRIVIAL);
+		this.highScore = new Score(Duration.ofSeconds(GameState.initialTime.getSeconds()), Difficulty.TRIVIAL);
 		this.id = UUID.randomUUID();
 	}
 

@@ -29,8 +29,8 @@ public class GameProjection {
 	}
 
 	public void logout() {
-		this.accountManager.logout();
 		this.gameState.write();
+		this.accountManager.logout();
 	}
 
 	public Room currentRoom() {

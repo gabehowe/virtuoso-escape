@@ -3,6 +3,7 @@ package org.virtuoso.escape.model;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.account.Account;
+import org.virtuoso.escape.model.account.Score;
 import org.virtuoso.escape.model.data.DataLoader;
 import org.virtuoso.escape.model.data.DataWriter;
 
@@ -19,6 +20,7 @@ public class GameState {
 	private Entity currentEntity;
 	private Set<Item> currentItems;
 	private Duration time;
+	public static final Duration initialTime = Duration.ofSeconds(2700);
 	private long startTime;
 	private Account account;
 	private boolean ended;
@@ -46,7 +48,7 @@ public class GameState {
 		for (int i = 0; i < items.size(); i++) {
 			currentItems.add(Item.valueOf((String) items.get(i)));
 		}
-		this.time = Duration.ofSeconds(Long.valueOf((String) gameStateInfo.getOrDefault("time", "2700")));
+		this.time = Duration.ofSeconds((Long) gameStateInfo.getOrDefault("time", initialTime));
 		this.account = account;
 		this.difficulty = Difficulty.valueOf((String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
 		this.startTime = System.currentTimeMillis();
@@ -116,6 +118,16 @@ public class GameState {
 		this.difficulty = diff;
 	}
 
+	public void updateHighScore() {
+		if (isEnded()) {
+			long currentTimeRemaining = initialTime.minus(this.time).getSeconds();
+			long oldTimeRemaining = this.account.highScore().timeRemaining().getSeconds();
+			if (oldTimeRemaining == 2700 || currentTimeRemaining > oldTimeRemaining) {
+				this.account.setHighScore(new Score(Duration.ofSeconds(currentTimeRemaining), this.difficulty));
+			}
+		}
+	}
+
 	public Optional<String> currentMessage() {
 		String currentMessage = this.currentMessage;
 		this.currentMessage = null;
@@ -145,6 +157,7 @@ public class GameState {
 	public void write() {
 		var delta = System.currentTimeMillis() - this.startTime;
 		this.time = this.time.minusMillis(delta);
+		updateHighScore();
 		DataWriter.writeGameState();
 	}
 }

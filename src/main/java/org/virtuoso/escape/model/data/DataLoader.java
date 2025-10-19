@@ -101,6 +101,9 @@ public class DataLoader {
 						if (sk.equals("currentItems")) {
 							sval = (JSONArray) innerObj.get(sk);
 							map.put(sk, sval);
+						} else if (sk.equals("time")) {
+							sval = (Long) innerObj.get(sk);
+							map.put(sk, sval);
 						} else map.put(sk, String.valueOf(sval));
 					}
 				}

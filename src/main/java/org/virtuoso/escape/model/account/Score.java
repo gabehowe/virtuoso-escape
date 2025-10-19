@@ -13,7 +13,7 @@ import java.time.Duration;
 public record Score(Duration timeRemaining, Difficulty difficulty) {
 	public JSONObject toJSON() {
 		JSONObject obj = new JSONObject();
-		obj.put("timeRemaining", timeRemaining.toSeconds());
+		obj.put("timeRemaining", timeRemaining.getSeconds());
 		obj.put("difficulty", difficulty.toString());
 		return obj;
 	}
