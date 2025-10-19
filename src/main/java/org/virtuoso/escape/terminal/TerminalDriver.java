@@ -1,4 +1,4 @@
-package terminal;
+package org.virtuoso.escape.terminal;
 
 import org.virtuoso.escape.model.*;
 
@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static terminal.FunString.escape;
+import static org.virtuoso.escape.terminal.FunString.escape;
 
 
 /**

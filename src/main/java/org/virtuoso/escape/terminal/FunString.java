@@ -1,4 +1,4 @@
-package terminal;
+package org.virtuoso.escape.terminal;
 
 import java.util.ArrayList;
 import java.util.Iterator;

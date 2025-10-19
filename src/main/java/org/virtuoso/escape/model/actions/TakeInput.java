@@ -1,5 +1,7 @@
 package org.virtuoso.escape.model.actions;
 
+import org.virtuoso.escape.model.GameInfo;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;

@@ -8,5 +8,5 @@ module org.virtuoso.escape.gui {
     opens org.virtuoso.escape.model to javafx.fxml;
     opens org.virtuoso.escape.gui to javafx.fxml;
     exports org.virtuoso.escape.gui;
-    opens terminal to javafx.fxml;
+    opens org.virtuoso.escape.terminal to javafx.fxml;
 }

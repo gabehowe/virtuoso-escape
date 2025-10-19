@@ -3,6 +3,8 @@ package org.virtuoso.escape.model;
 import org.virtuoso.escape.model.actions.Action;
 import org.virtuoso.escape.model.actions.TakeInput;
 
+import java.util.Map;
+
 public class Entity {
 	private String id;
 	private Action attackAction;
@@ -67,7 +69,10 @@ public class Entity {
 	}
 
 	public void takeInput(String input) {
-		String message = GameInfo.instance().string(this.id, "input_" + input);
+		String message;
+		if (GameInfo.instance().language().get(id) == null || GameInfo.instance().language().get(id).get("input_" + input) == null)
+			message = "I couldn't understand '" +input+ "'";
+		else message = GameInfo.instance().string(id, "input_" +input);
 		if (message != null) {
 			GameState.instance().setCurrentMessage(message);
 		}
