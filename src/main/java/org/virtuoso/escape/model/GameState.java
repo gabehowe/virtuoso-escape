@@ -21,6 +21,7 @@ public class GameState {
 	private Duration time;
 	private long startTime;
 	private Account account;
+	private boolean ended;
 
 	private Difficulty difficulty;
 	private String currentMessage;
@@ -132,6 +133,13 @@ public class GameState {
 
 	public void setCurrentRoom(Room currentRoom) {
 		this.currentRoom = currentRoom;
+	}
+
+	public boolean isEnded(){
+		return this.ended;
+	}
+	public void end(){
+		this.ended = true;
 	}
 
 	public void write() {

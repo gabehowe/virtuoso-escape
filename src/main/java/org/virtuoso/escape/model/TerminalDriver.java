@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 
 /**
@@ -78,7 +79,7 @@ public class TerminalDriver {
         while (true) {
             display(prompt);
             scanAttempt = scanner.nextLine().strip().toLowerCase();
-            System.out.print(escape(MOVE_LINE));
+            System.out.print(escape(MOVE_LINE) + escape("2K"));
             if (predicate.test(scanAttempt)) break;
             System.out.print(escape(MOVE_LINE) + escape("2K"));
         }
@@ -110,6 +111,19 @@ public class TerminalDriver {
         display(str, args);
         scanner.nextLine();
     }
+    void typewriterDisplay(Scanner scanner, String str) {
+        long rate = 60;
+        for(char s: str.toCharArray()){
+            System.out.print(s);
+            try {
+                Thread.sleep(1000 / rate);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println();
+        scanner.nextLine();
+    }
 
     void clearScreen() {
         System.out.print(escape(CLEAR_RESET) + escape(CLEAR));
@@ -130,6 +144,28 @@ public class TerminalDriver {
             lines.add(left + " " + right);
         }
         pauseDisplay(scanner, "You have: \n" + String.join("\n", lines));
+    }
+
+    void menu_ending(Scanner scanner, GameProjection projection) {
+        List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> GameInfo.instance().string("credits", "contributor_" + i)).toList());
+        Collections.shuffle(contributors);
+        String formattedTime = GameState.instance().time().toMinutesPart() + ":"+ GameState.instance().time().toSecondsPart();
+        String scoremsg = String.format(GameInfo.instance().string("credits","score"), formattedTime, GameState.instance().difficulty());
+        List<String> msg = new ArrayList<>();
+        msg.addAll(List.of(scoremsg));
+        msg.addAll(List.of(GameInfo.instance().string("credits", "message").split("\n")));
+        msg.add("Credits:");
+        msg.addAll(contributors);
+        for (String s : msg) {
+            System.out.println(s);
+            try {
+                Thread.sleep(750);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        pauseDisplay(scanner, "");
+
     }
 
     void menu_changeRoom(Scanner scanner, GameProjection projection) {
@@ -162,17 +198,17 @@ public class TerminalDriver {
     void menu_entityAction(Scanner scanner, GameProjection projection) {
         projection.currentEntity().ifPresent(Entity::introduce);
         var actions = makeTuiActionMap(
-                fs_r("Interact", projection::interact),
-                fs_r("Inspect", projection::inspect),
-                fs_r("Attack", projection::attack),
-                fs_r("Speak", () -> projection.input(validateInput(scanner, "What would you like to say? ", _ -> true)))
+                fs_r(new FunString("Interact").blue(), projection::interact),
+                fs_r(new FunString("Inspect").green(), projection::inspect),
+                fs_r(new FunString("Attack").red(), projection::attack),
+                fs_r(new FunString("Speak").purple(), () -> projection.input(validateInput(scanner, "What would you like to say? ", _ -> true)))
                 );
         if (!projection.currentItems().isEmpty()) actions.put(new FunString("Items"), () -> this.displayItems(scanner, projection));
 
         actions.put(new FunString("Leave"), projection::leaveEntity);
 
         createActionInterface(scanner, actions, projection.currentMessage().orElse(""));
-        projection.currentMessage().ifPresent(i -> pauseDisplay(scanner, i));
+        projection.currentMessage().ifPresent(i -> typewriterDisplay(scanner, i));
     }
 
     void menu_difficulty(Scanner scanner, GameProjection projection) {
@@ -201,6 +237,11 @@ public class TerminalDriver {
 
     void gameLoop(Scanner scanner, GameProjection projection) {
         while (true) {
+            if (projection.isEnded()){
+                this.menu_ending(scanner,projection);
+                projection.logout();
+                return;
+            }
             if (projection.currentEntity().isPresent()) menu_entityAction(scanner, projection);
             else menu_roomActions(scanner, projection);
         }
@@ -328,11 +369,32 @@ public class TerminalDriver {
             return this;
         }
 
+        public FunString blue() {
+            this.styleCodes.add(BLUE_FG);
+            this.resetCodes.add(DEFAULT_FG);
+            return this;
+        }
+
+        public FunString green() {
+            this.styleCodes.add(GREEN_FG);
+            this.resetCodes.add(DEFAULT_FG);
+            return this;
+        }
+
+        public FunString purple() {
+            this.styleCodes.add(PURPLE_FG);
+            this.resetCodes.add(DEFAULT_FG);
+            return this;
+        }
+
         private static List<Character> stringChars(String s) {
             return s.chars().mapToObj(c -> (char) c).toList();
         }
 
         private static String RED_FG = escape("31m");
+        private static String BLUE_FG = escape("38;5;44m");
+        private static String GREEN_FG = escape("38;5;76m");
+        private static String PURPLE_FG = escape("38;5;201m");
         private static String DEFAULT_FG = escape("39m");
         private static String BOLD = escape("1m"); // for controls
         private static String BOLD_OFF = escape("22m");

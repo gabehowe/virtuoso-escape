@@ -91,4 +91,8 @@ public class GameProjection {
 	public void input(String input) {
 		currentEntity().orElseThrow().takeInput(input);
 	}
+
+	public boolean isEnded(){
+		return this.gameState.isEnded();
+	}
 }

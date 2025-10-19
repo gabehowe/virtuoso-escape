@@ -1,6 +1,6 @@
 {
   "acorn_grove_0": {
-    "intro": "You wake up in an acorn grove, seemingly smaller than usual."
+    "introduce": "You wake up in an acorn grove, seemingly smaller than usual."
   },
   "intro_squirrel": {
     "name": "Eckard",
@@ -16,9 +16,17 @@
     "interact": "\"Curious Curious Curious ... You're looking for the 'demetamorphinator?' Just follow me!\" You follow Gottfried into the hollow of a tree, but just as you cross the threshold, you stumble over your squirrel claws and fall into a gaping chasm ...",
     "inspect": "Gottfried's matted and unruly fur is knotted in ways that would puzzle the most dedicated of knot theorists."
   },
-  "room_storey_i_0": {
+  "storey_i_0": {
     "name": "Lobby",
     "introduce": "*Crash!* You land on a sofa in the University of South Carolina M Bert Storey Research and Innovation Center Lobby! The lights have not yet begun to quit their work, but it still seems like there's something you're failing to acknowledge about this room."
+  },
+  "storey_i_1": {
+    "name": "Janitor's Dusty Old Closet",
+    "introduce": "You enter a dusty old closet that vaguely smells of the American Nuclear Society's 2002 article on the scientific contributions of Enrico Fermi.\nThere isn't much sun in here."
+  },
+  "storey_i_2": {
+    "name": "Hallway",
+    "introduce": "You enter a narrow and unremarkable hallway. Nothing interesting could possibly happen here."
   },
   "intro_joe": {
     "name": "THE Joe Hardy",
@@ -54,7 +62,7 @@
     "interact": "\"You want the right right bread, right? Right. Answer my riddle right and you'll be left left with the right right bread:\nLeft Left-Right, son of Right Right and Left Left, brother of Right Left-Right, writes right, drives right. Left Left LEFT Left Left-Right with Right Right and Right Left-Right, which isn't right. Who is left?\"",
     "right_answer":  "Right, \"Right\"! Right, You'll now be left left with the right right bread.",
     "non_right_answer": "Sorry, but that answer just isn't 'right'!",
-    "inspect": "The security guard seems partially (mentally) composed of left and right hands. Where one would expect a set of shoes, he instead has wisdom.",
+    "inspect": "The security guard seems partially (mentally) composed of left and right hands. Where one would expect a set of shoes, he instead has wisdom."
   },
   "almanac": {
     "name": "Friendly Sunflower and Dusty Old Almanac",
@@ -88,5 +96,83 @@
     "attack": "**Can't attack door.**",
     "interact": "Transport is a success! Onto the next floor.",
     "inspect": "The glowing door has a surprise behind it."
+  },
+  "storey_iii_0": {
+    "name": "Fin Foyer",
+    "introduce": "You enter a culminating room, filled with urgency and a feeling that you might be nearing the end of your adventure..."
+  },
+  "man": {
+    "name": "man",
+    "attack": "Man doesn't respond to your attempts to attack.",
+    "introduce": "What manual page do you want?\nFor example, try 'man man'.",
+    "interact": "There's nothing to interact with, only a mere wish to know more...",
+    "inspect": "You don't see anything, but you feel millimeters away from endless knowledge.",
+    "input_man": "MAN(1)            Manual pager utils        MAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS man [man options]\n\nDESCRIPTION     Provide information about a utility.",
+    "input_ls": "LS(1)                                         User Commands                                         LS(1)\n\nNAME\n       ls - list directory contents\n\nSYNOPSIS\n       ls [OPTION]... [FILE]...\n\nDESCRIPTION\n       List  information about the FILEs (the current directory by default). ",
+    "input_cd": "cd: cd [dir]\n    Change the shell working directory.\n    \n    Change the current directory to DIR.",
+    "input_tar": "TAR(1)                                        TAR                                       TAR(1)\n\nNAME\n       tar - an archiving utility\n\nSYNOPSIS\n     tar xvf [file]",
+    "input_rotx": "ROTX(1)                                        ROTX                                       TAR(1)\n\nNAME\n       rotx - A ceaser cipher decrypter\n\nSYNOPSIS\n   rotx [amount to rotate] [file]"
+  },
+  "computty_blocked": {
+    "name": "CompuTTY",
+    "introduce": "CompuTTY 0.0.0 ]LOCKED[",
+    "interact": "The terminal is locked.",
+    "inspect": "You see a terminal fit for use by a squirrel, but it's locked.",
+    "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5."
+  },
+  "computty": {
+    "name": "Computty",
+    "introduce": "CompuTTY 0.0.0\n~$ ",
+    "interact": "The terminal awaits input.",
+    "inspect": "You see a terminal fit for use by a squirrel.",
+    "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5.",
+    "ls_default": "code/",
+    "ls_cd": "code.tar",
+    "ls_tar": "code.tar  code",
+    "cat_tar": "code0000664000175000017500000000006615075030073010651 0ustar  squirrelsquirrelxubbe, jxyi yi q fuhvusjbo vydu unqcfbu ev iecu junj.",
+    "cat_code": "xubbe, jxyi yi q fuhvusjbo vydu unqcfbu ev iecu junj.",
+    "no_file": "cd: No such file or directory",
+    "failed_rotx": "Failed to decrypt: vcjyhvao kchvridcrsav bviirgv. ifkyhhva xvgvbdco hkavi!",
+    "good_rotx": "Password: praise_squirrel_hegemon67\nDemetamorphinator Unlocked!",
+    "man_cat": "see man cat",
+    "man_tar": "see man tar",
+    "man_rotx": "see man rotx"
+  },
+  "computty_cd": {
+    "name": "Computty",
+    "introduce": "CompuTTY 0.0.0\n~/code$"
+  },
+  "computty_tar": {
+    "name": "Computty",
+    "introduce": "CompuTTY 0.0.0\n~/code$"
+  },
+  "microwave_blocked": {
+    "name": "Demetamorphinator",
+    "introduce": "You behold the Demetamorphinator, the machine the Squirrels wish to destroy.",
+    "attack": "You try to attack the Demetamorphinator open, but you damage a claw.",
+    "inspect": "The Demetamorhphinator has a popcorn button, a pizza button, and an option to reheat frozen meat.",
+    "interact": "The Demetamorphinator is locked. Despite all your wishing, it won't open."
+  },
+  "microwave_unblocked": {
+    "name": "Demetamorphinator",
+    "introduce": "As you step towards the demetamorphinator, you feel your claws begin to tremble as a stampede of squirrels rushes towards you, screaming like a horde of demons.\nYou jump farther and just barely reach it, suddenly  realizing that if you use the Demetamorphinator, you won't have time to destroy it after and the squirrel hegemony will reign.\nYou can: \nAttack and destroy it now, and remain a squirrel.\nInteract with it, and ignore the well-being of countless squirrels.",
+    "inspect": "In your minute moment of thought, you examine the Demetamorphinator and reflect on your past decisions: Intro to Kantian Ethics in sophomore year; Every squirrel you've ever seen with a family, a life; The Russell House 70th anniversary (with squirrels). Is it worth sacrificing the well-being of millions of squirrels for your own selfish humanity?",
+    "attack": "You grab a fork off the ground and throw it into the microwave, slam it shut, and press the 30 seconds button, just as you're hit by a wall of squirrel mass. As the Demetamorphinator melts, you sink into simultaneous sorrow and satisfaction: You've saved your own humanity by sacrificing it for the lives of millions of squirrels. As your squirrel body is ripped to shreds by the now further enraged mass of oppressive squirrels, you stare off into the setting sun and think \"Was I ever human, until now?\"",
+    "interact": "You grab a fork off the ground and throw at a calculated angle into the air as you leap across the floor into the Demetamorphinator, slamming the door shut behind yourself. The carefully calculated fork hits the 30 seconds button and you begin to increase in size, just as the mass of angry squirrels pounds against the glass. Your arms grow longer, your spine shrinks in proportion, and your legs stretch out...\n\nYou wake up in the beaver field with a roaring headache. Everything is bright, but you begin to make out a group of people standing over you. \"Are you alright, son? That beaver hit you pretty hard.\" one of them says. \"Yeah, I'm fine,\" you say, curious at the sound of your own voice.\nYou walk towards your car beaverless and sit down to drive, but accidentally sit on something. As you reach down to check your back pocket, you find a metal fork with hummus residue."
+  },
+  "sock_squirrel": {
+    "name": "Angry squirrel with one sock",
+    "attack": "You throw a punch at the angry squirrel, which then becomes placated and unlocks CompuTTY",
+    "inspect": "You see a squirrel as angry as an aggressively unwatered plant.",
+    "interact": "You try to negotiate peacefully with the squirrel, but it just snarls and screams.",
+    "introduce": "You see a squirrel with one squirrel-sized sock on. You think it might know something, but it just keeps snarling and screaming.",
+  },
+  "credits": {
+    "contributor_0": "Gabriel Howe <gabri@sc.edu>",
+    "contributor_1": "Treasure Uzondu <tuzondu@email.sc.edu>",
+    "contributor_2": "Andrew Heuer <aheuer@email.sc.edu>",
+    "contributor_3": "Bose Kaikini <bkaikini@email.sc.edu>",
+    "message": "Thanks for playing Escape: A Storey!\nSpecial thanks to Joe Hardy for permission for his appearance and for his excellence in teaching assistance.",
+    "score": "You had %s remaining on %s difficulty."
   }
 }

@@ -5,9 +5,6 @@ import org.virtuoso.escape.model.data.DataLoader;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,8 +29,8 @@ public class GameInfo {
         // todo: add other floors
 
         this.building.add(acornGrove());
-        this.building.add(floor1());
         // TODO: floor 2
+        this.building.add(floor1());
         this.building.add(floor3());
     }
 
@@ -45,18 +42,18 @@ public class GameInfo {
                 null,
                 () -> GameState.instance().setCurrentFloor(this.building.get(1)
                 ), null);
-        Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "intro"));
+        Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "introduce"));
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
     //Floor One//
     private Floor floor1() {
         Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
-        Room room_1400 = new Room(new ArrayList<>(List.of(trash_can)), "room_1400", this.string("room_1400", "intro"));
+        Room room_1400 = new Room(new ArrayList<>(List.of(trash_can)), "storey_i_0", this.string("storey_i_0", "introduce"));
 
         Entity[] almanacs = almanacChain(5);
         Entity finalAlmanac = almanacs[almanacs.length - 1];
-        Room janitor_closet = new Room(new ArrayList<>(List.of(finalAlmanac)), "janitor_closet", this.string("janitor_closet", "intro"));
+        Room janitor_closet = new Room(new ArrayList<>(List.of(finalAlmanac)), "storey_i_1", this.string("storey_i_1", "introduce"));
 
         Entity securityBread = new Entity("security",
                 null,
@@ -65,9 +62,9 @@ public class GameInfo {
                 new TakeInput("",
                         TakeInput.makeCases(".*(?<!w)right.*", new Chain(new SetMessage(this, "security","right_answer"), new GiveItem(Item.right_bread)),
                                 ".*", new SetMessage(this, "security", "non_right_answer"))));
-        Room hallway = new Room(new ArrayList<>(List.of(securityBread)), "hallway", this.string("hallway", "intro"));
+        Room hallway = new Room(new ArrayList<>(List.of(securityBread)), "storey_i_2", this.string("storey_i_2", "introduce"));
 
-        return new Floor("floor1", List.of(room_1400, janitor_closet, hallway));
+        return new Floor("storey_i", List.of(room_1400, janitor_closet, hallway));
     }
 
     /**
@@ -108,8 +105,8 @@ public class GameInfo {
             if (flips - 1 == 0) {
                 Entity[] newEntities = almanacChain(chain.length);
                 Room properRoom =
-                        this.building.stream().filter(i -> Objects.equals(i.id(), "floor1")).findFirst().orElseThrow()
-                                     .rooms().stream().filter(i -> Objects.equals(i.id(), "janitor_closet")).findFirst().orElseThrow();
+                        this.building.stream().filter(i -> Objects.equals(i.id(), "storey_i")).findFirst().orElseThrow()
+                                     .rooms().stream().filter(i -> Objects.equals(i.id(), "storey_i_1")).findFirst().orElseThrow();
                 properRoom.entities().clear();
                 properRoom.entities().add(newEntities[chain.length - 1]);
                 GameState.instance().pickEntity(newEntities[chain.length - 1]);
@@ -152,43 +149,46 @@ public class GameInfo {
         var computtyBlocked = new Entity("computty_blocked", null, null, null, null);
         Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities(makeComputtyChain(), "computty_blocked"), null, null, null);
         Entity microwave = new Entity("microwave_blocked", null, null, null, null);
-        Room floor3_0 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computtyBlocked, microwave)), "floor3_0", this.string("floor3_0", "intro"));
-        return new Floor("floor3", List.of(floor3_0));
+        Room floor3_0 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computtyBlocked, microwave)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
+        return new Floor("storey_iii_0", List.of(floor3_0));
     }
 
     private Entity makeComputtyChain() {
+        // Dichotomy: DRY violation or unreadable code?
+        Function<String, Action> ttyStr = (string) -> new SetMessage(this, "computty", string);
         // Whoops! JEP 126!
-        Entity microwaveUnblocked = new Entity("microwave_unblocked", this::gameEnding_moral, null, this::gameEnding_immoral, null);
+        Entity microwaveUnblocked = new Entity("microwave_unblocked", this::gameEnding, null, this::gameEnding, null);
         var computtyTarLogic = new TakeInput("", TakeInput.makeCases(
-                "rotx 16 code", new SwapEntities(microwaveUnblocked, "microwave_blocked"),
-                "rotx 16 .*", new SetMessage(this, "computty", "no_file"),
-                "rotx \\d+", new SetMessage(this, "computty", "failed_rotx"),
-                "rotx.*", new SetMessage(this, "computty", "man_rotx")
-                // ls
+                "rotx 16 code", new Chain(ttyStr.apply("good_rotx"),new SwapEntities(microwaveUnblocked, "microwave_blocked")),
+                "rotx 16 .*", ttyStr.apply("no_file"),
+                "rotx \\d+", ttyStr.apply("failed_rotx"),
+                "rotx.*", ttyStr.apply("man_rotx"),
+                "ls", ttyStr.apply("ls_tar"),
+                "cat code", ttyStr.apply("cat_code"),
+                "cat.*", ttyStr.apply("man_cat")
         ));
-        var computtyTar = new Entity("computty_tar", null, null, null, computtyTarLogic);
+        var computtyTar = new Entity("computty_tar", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyTarLogic);
         var computtyCdLogic = new TakeInput("", TakeInput.makeCases(
-                "tar xvf code.tar$", new SwapEntities(computtyTar, "computty_cd"),
-                "tar xvf c.*", new SetMessage(this, "computty", "no_file"),
-                "tar.*", new SetMessage(this, "computty", "man_tar")
-                // ls, cat
+                "tar xvf code.tar$", new Chain(new SetMessage("code"),new SwapEntities(computtyTar, "computty_cd")),
+                "tar xvf c.*", ttyStr.apply( "no_file"),
+                "tar.*", ttyStr.apply( "man_tar"),
+                "ls", ttyStr.apply("ls_cd"),
+                "cat code.tar", ttyStr.apply("cat_tar"),
+                "cat.*", ttyStr.apply("man_cat")
         ));
-        Entity computtyCd = new Entity("computty_cd", null, null, null, computtyCdLogic);
+        Entity computtyCd = new Entity("computty_cd", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyCdLogic);
         var computtyDefault = new TakeInput("", TakeInput.makeCases(
                 "cd code", new SwapEntities(computtyCd, "computty"),
-                "cd.*", new SetMessage(this, "computty", "no_file")
-                // ls
+                "cd.*", ttyStr.apply( "no_file"),
+                "ls", ttyStr.apply("ls_default"),
+                "cat.*", ttyStr.apply("man_cat")
         ));
         return new Entity("computty", null, null, null, computtyDefault);
     }
 
     //Ending//
-    private void gameEnding_moral() {
-        throw new RuntimeException("unimplemented!");
-    }
-
-    private void gameEnding_immoral() {
-        throw new RuntimeException("unimplemented!");
+    private void gameEnding() {
+        GameState.instance().end();
     }
 
     //Utils//
