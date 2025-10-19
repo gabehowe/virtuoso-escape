@@ -46,7 +46,7 @@ public class GameState {
 		for (int i = 0; i < items.size(); i++) {
 			currentItems.add(Item.valueOf((String) items.get(i)));
 		}
-		this.time = Duration.ofSeconds((long) gameStateInfo.getOrDefault("time", 2700));
+		this.time = Duration.ofSeconds(Long.valueOf((String)gameStateInfo.getOrDefault("time", "2700")));
 		this.account = account;
 		this.difficulty = Difficulty.valueOf( (String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
 		this.startTime = System.currentTimeMillis();
