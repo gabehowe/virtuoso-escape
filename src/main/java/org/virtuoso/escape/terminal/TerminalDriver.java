@@ -66,7 +66,7 @@ public class TerminalDriver {
         String delim = " ■ ";
         FunString prompt = FunString.join(delim, prompts);
         // If long, cut into two lines for readability -- We can only assume terminal width because of java's cross-platform nature.
-        if (prompt.length() > 75) {
+        if (prompt.length() > 125) {
             prompt = FunString.join(delim, prompts.subList(0, prompts.size() / 2));
             prompt.add("\n");
             prompt.add(FunString.join(delim, prompts.subList(prompts.size() / 2, prompts.size())));

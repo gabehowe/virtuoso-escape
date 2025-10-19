@@ -5,6 +5,7 @@ import org.virtuoso.escape.model.data.DataLoader;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -48,8 +49,12 @@ public class GameInfo {
 
     //Floor One//
     private Floor floor1() {
+        Entity door = new Entity("first_door", null, null, () -> GameState.instance().setCurrentFloor(this.building.get(2))
+, null);
         Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
-        Room room_1400 = new Room(new ArrayList<>(List.of(trash_can)), "storey_i_0", this.string("storey_i_0", "introduce"));
+        Entity joeHardy = joeHardy();
+        Entity elephant = new Entity("elephant_in_the_room", null, null, new GiveItem(Item.sunflower_seed_butter), null);
+        Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy,trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));
 
         Entity[] almanacs = almanacChain(5);
         Entity finalAlmanac = almanacs[almanacs.length - 1];
@@ -64,7 +69,22 @@ public class GameInfo {
                                 ".*", new SetMessage(this, "security", "non_right_answer"))));
         Room hallway = new Room(new ArrayList<>(List.of(securityBread)), "storey_i_2", this.string("storey_i_2", "introduce"));
 
+
+
         return new Floor("storey_i", List.of(room_1400, janitor_closet, hallway));
+    }
+
+    private Entity joeHardy() {
+        Predicate<Item[]> hasItems = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a&&b).get();
+        Entity sandwichJoe = new Entity("sandwich_joe", null, null, null, null);
+        Entity sansSandwichJoe = new Entity("sans_sandwich_joe", null, null, new Conditional(
+                () -> hasItems.test(new Item[]{Item.left_bread, Item.right_bread, Item.sunflower_seed_butter, Item.sealed_clean_food_safe_hummus}),
+                new Chain(new SetMessage(this, "sans_sandwich_joe", "interact_sandwich"),
+                        new SwapEntities(sandwichJoe, "sans_sandwich_joe")
+                        )
+        ), null);
+        Entity joeHardy = new Entity("intro_joe", null, null, new SwapEntities(sansSandwichJoe, "intro_joe"), null);
+        return joeHardy;
     }
 
     /**

@@ -36,8 +36,7 @@ public class GameState {
 	}
 
 	public void begin(Account account) {
-		JSONObject gameStateInfo = (JSONObject) DataLoader.loadGameStates().get(account.id().toString());
-		if (gameStateInfo == null) throw new RuntimeException("Couldn't find game state for " + account.id());
+		JSONObject gameStateInfo = (JSONObject) DataLoader.loadGameStates().getOrDefault(account.id().toString(), new JSONObject());
 		this.currentFloor = GameInfo.instance().building().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentFloor"))).findFirst().orElse(GameInfo.instance().building().getFirst());
 		this.currentRoom = currentFloor.rooms().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentRoom"))).findFirst().orElse(currentFloor.rooms().getFirst());
 		this.currentEntity = currentRoom.entities().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentEntity"))).findFirst().orElse(null);
