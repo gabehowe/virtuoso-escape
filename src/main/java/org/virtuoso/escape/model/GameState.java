@@ -36,7 +36,7 @@ public class GameState {
 	}
 
 	public void begin(Account account) {
-		JSONObject gameStateInfo = DataLoader.loadGameState(account);
+		JSONObject gameStateInfo = (JSONObject) DataLoader.loadGameStates().get(account.id().toString());
 		if (gameStateInfo == null) throw new RuntimeException("Couldn't find game state for " + account.id());
 		this.currentFloor = GameInfo.instance().building().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentFloor"))).findFirst().orElse(GameInfo.instance().building().getFirst());
 		this.currentRoom = currentFloor.rooms().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentRoom"))).findFirst().orElse(currentFloor.rooms().getFirst());
@@ -46,9 +46,9 @@ public class GameState {
 		for (int i = 0; i < items.size(); i++) {
 			currentItems.add(Item.valueOf((String) items.get(i)));
 		}
-		this.time = Duration.ofSeconds(Long.valueOf((String)gameStateInfo.getOrDefault("time", "2700")));
+		this.time = Duration.ofSeconds(Long.valueOf((String) gameStateInfo.getOrDefault("time", "2700")));
 		this.account = account;
-		this.difficulty = Difficulty.valueOf( (String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
+		this.difficulty = Difficulty.valueOf((String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
 		this.startTime = System.currentTimeMillis();
 	}
 
@@ -134,10 +134,11 @@ public class GameState {
 		this.currentRoom = currentRoom;
 	}
 
-	public boolean isEnded(){
+	public boolean isEnded() {
 		return this.ended;
 	}
-	public void end(){
+
+	public void end() {
 		this.ended = true;
 	}
 

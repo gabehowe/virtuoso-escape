@@ -57,9 +57,7 @@ public class Account {
 			//md.update(salt);
 			byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
 			String hex = "";
-			for (byte b : hash) {
-				hex += String.format("%02x", b);
-			}
+			for (byte b : hash) hex += String.format("%02x", b);
 			return hex;
 		} catch (NoSuchAlgorithmException e) {
 			// TODO(gabri) come up with a more elegant way to proceed.
@@ -73,7 +71,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account{" + "id='" + this.id + "', " + "username='" + this.username + "', " +
+		return "Account: {" + "id='" + this.id + "', " + "username='" + this.username + "', " +
 				"hashedPassword='" + this.hashedPassword + "', ";
 	}
 }

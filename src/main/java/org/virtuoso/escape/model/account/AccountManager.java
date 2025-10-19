@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 
-import javafx.scene.chart.PieChart;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameState;
@@ -48,18 +47,16 @@ public class AccountManager {
 		if (username.length() <= 32 && password.length() <= 32) {
 			GameState gameState = GameState.instance();
 			Optional<Account> account = login(username, password);
-			if (account.isEmpty()) {
-				Account newAccount = new Account(username, password);
-				System.out.println("Created new account!\n" + account);
-				gameState.begin(newAccount);
-				return Optional.of(newAccount);
-			}
+			if (account.isPresent()) return account;
+			Account newAccount = new Account(username, password);
+			System.out.println("Created new account!\n" + account);
+			gameState.begin(newAccount);
+			return Optional.of(newAccount);
 		}
 		return Optional.empty();
 	}
 
 	public void logout() {
-
 		DataWriter.writeAccount();
 	}
 

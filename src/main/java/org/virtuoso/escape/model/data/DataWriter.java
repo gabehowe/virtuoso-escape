@@ -70,10 +70,9 @@ public class DataWriter {
 	@SuppressWarnings("unchecked")
 	private static JSONObject loadAccountInfo(Account account) {
 		JSONObject accountMap = new JSONObject();
-		JSONObject highScore = account.highScore().toJSON();
 		accountMap.put("username", account.username());
 		accountMap.put("hashedPassword", account.hashedPassword());
-		accountMap.put("highScore", highScore);
+		accountMap.put("highScore", account.highScore().toJSON());
 		return accountMap;
 	}
 }

@@ -61,6 +61,10 @@ public class GameProjection {
 		return this.gameState.currentItems();
 	}
 
+	public void addItem(Item item) {
+		this.gameState.addItem(item);
+	}
+
 	public void setDifficulty(Difficulty difficulty) {
 		this.gameState.setDifficulty(difficulty);
 	}
@@ -93,7 +97,7 @@ public class GameProjection {
 		currentEntity().orElseThrow().takeInput(input);
 	}
 
-	public boolean isEnded(){
+	public boolean isEnded() {
 		return this.gameState.isEnded();
 	}
 }

@@ -17,4 +17,8 @@ public record Score(Duration timeRemaining, Difficulty difficulty) {
 		obj.put("difficulty", difficulty.toString());
 		return obj;
 	}
+
+	public String toString() {
+		return "Score: {timeRemaining='" + timeRemaining.toSeconds() + "s', difficulty='" + difficulty + "'}";
+	}
 }

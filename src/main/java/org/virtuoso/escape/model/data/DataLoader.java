@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -64,7 +65,7 @@ public class DataLoader {
 	}
 
 	public static Map<String, Score> loadHighScores() {
-		Map<String, Score> result = Map.of();
+		Map<String, Score> result = new HashMap<>();
 		JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
 		if (root == null) return result;
 
@@ -84,19 +85,6 @@ public class DataLoader {
 		return result;
 	}
 
-	public static JSONObject loadGameState(Account account) {
-		JSONObject result = new JSONObject();
-		JSONObject root = parseJsonFile(Path.of("json", "gamestates.json"));
-		if (root == null) return result;
-
-		if (account == null) return null;
-		Object value = root.get(account.id().toString());
-		if (value instanceof JSONObject obj) {
-			result = obj;
-		}
-		return result;
-	}
-
 	public static JSONObject loadGameStates() {
 		JSONObject result = new JSONObject();
 		JSONObject root = parseJsonFile(Path.of("json", "gamestates.json"));
@@ -109,7 +97,12 @@ public class DataLoader {
 				for (Object sKey : innerObj.keySet()) {
 					String sk = String.valueOf(sKey);
 					Object sval = innerObj.get(sk);
-					if (sval != null) map.put(sk, String.valueOf(sval));
+					if (sval != null) {
+						if (sk.equals("currentItems")) {
+							sval = (JSONArray) innerObj.get(sk);
+							map.put(sk, sval);
+						} else map.put(sk, String.valueOf(sval));
+					}
 				}
 				result.put(id, map);
 			}
