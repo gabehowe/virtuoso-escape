@@ -83,9 +83,9 @@ public class TerminalDriver {
         while (true) {
             display(prompt);
             scanAttempt = scanner.nextLine().strip().toLowerCase();
-            System.out.print(escape(MOVE_LINE) + escape("2K"));
+            System.out.print(escape( MOVE_LINE) + escape(CLEAR_BELOW));
             if (predicate.test(scanAttempt)) break;
-            System.out.print(escape(MOVE_LINE) + escape("2K"));
+            System.out.print(escape("2A") + escape(CLEAR_BELOW));
         }
         return scanAttempt;
     }
