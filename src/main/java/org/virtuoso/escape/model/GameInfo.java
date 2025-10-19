@@ -183,6 +183,7 @@ public class GameInfo {
         Function<String, Action> manMsg = (stringId) -> new SetMessage(this, "man", stringId);
         Entity man = new Entity("man", null, null, null,
                 new TakeInput(
+                        "(?:man )?help", manMsg.apply("input_help"),
                         "(?:man )?man", manMsg.apply("input_man"),
                         "(?:man )?ls", manMsg.apply("input_ls"),
                         "(?:man )?cd", manMsg.apply("input_cd"),
@@ -215,12 +216,12 @@ public class GameInfo {
         ));
         var computtyCd = new EntityState("computty_cd", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyCdLogic);
         var computtyDefault = new TakeInput("", TakeInput.makeCases(
-                "cd code", new SwapEntities("computty", "computty_cd"),
+                "cd code", new Chain(new SwapEntities("computty", "computty_cd"), ttyStr.apply("input_cd")),
                 "cd.*", ttyStr.apply( "no_file"),
                 "ls", ttyStr.apply("ls_default"),
                 "cat.*", ttyStr.apply("man_cat")
         ));
-		var computtyUnblocked = new EntityState("computty_unblocked", null, null, null, computtyDefault);
+		var computtyUnblocked = new EntityState("computty_unblocked", ttyStr.apply("attack"), ttyStr.apply("attack"), ttyStr.apply("interact"), computtyDefault);
 
         return new Entity("computty", computtyBlocked, computtyUnblocked, computtyTar, computtyCd);
     }

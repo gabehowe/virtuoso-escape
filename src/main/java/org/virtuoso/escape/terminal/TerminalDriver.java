@@ -291,7 +291,7 @@ public class TerminalDriver {
         }
         actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
         actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
-        String prompt = projection.time().toMinutesPart() + ":" + projection.time().toSecondsPart() + "\n" + projection.currentRoom().introMessage();
+        String prompt = String.format("%02d:%02d\n%s",projection.time().toMinutesPart(), projection.time().toSecondsPart() ,projection.currentRoom().introMessage());
         createActionInterface(scanner, actions, prompt);
 
     }

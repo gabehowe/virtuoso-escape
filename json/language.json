@@ -159,9 +159,10 @@
   "man": {
     "name": "man",
     "attack": "Man doesn't respond to your attempts to attack.",
-    "introduce": "What manual page do you want?\nFor example, try 'man man'.",
+    "introduce": "What manual page do you want?\nFor example, try 'man help'.",
     "interact": "There's nothing to interact with, only a mere wish to know more...",
     "inspect": "You don't see anything, but you feel millimeters away from endless knowledge.",
+    "input_help": "HELP(1)          List of all commands      HELP(1)\n\nLIST\n\tman\tls\tcd\ttar\trotx\n\nTry asking man for information on these!",
     "input_man": "MAN(1)            Manual pager utils        MAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS man [man options]\n\nDESCRIPTION     Provide information about a utility.",
     "input_ls": "LS(1)                                         User Commands                                         LS(1)\n\nNAME\n       ls - list directory contents\n\nSYNOPSIS\n       ls [OPTION]... [FILE]...\n\nDESCRIPTION\n       List  information about the FILEs (the current directory by default). ",
     "input_cd": "cd: cd [dir]\n    Change the shell working directory.\n    \n    Change the current directory to DIR.",
@@ -176,6 +177,10 @@
     "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5."
   },
   "computty_unblocked": {
+    "name": "CompuTTY",
+    "introduce": "CompuTTY 0;0;0\n~$"
+  },
+  "computty": {
     "name": "Computty",
     "introduce": "CompuTTY 0.0.0\n~$ ",
     "interact": "The terminal awaits input.",
@@ -219,7 +224,7 @@
   "sock_squirrel": {
     "name": "Angry squirrel with one sock",
     "attack": "You throw a punch at the angry squirrel, which then becomes placated and unlocks CompuTTY",
-    "inspect": "You see a squirrel as angry as an aggressively unwatered plant.",
+    "inspect": "You see a squirrel as angry as an aggressively unwatered plant. You notice it has a total of 16 claws. Maybe that's important?",
     "interact": "You try to negotiate peacefully with the squirrel, but it just snarls and screams.",
     "introduce": "You see a squirrel with one squirrel-sized sock on. You think it might know something, but it just keeps snarling and screaming."
   },
