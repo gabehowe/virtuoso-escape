@@ -136,7 +136,7 @@ public class GameInfo {
         Room doorRoom = new Room(new ArrayList<>(),"storey_ii_1", this.string("storey_ii_1", "introduce"));
         Action shuffle =  () -> Collections.shuffle(doorRoom.entities());
         Entity door1 = createDoorChain(3, shuffle);
-        Action failDoor = new Chain(() -> new SwapEntities(createDoorChain(3, shuffle), "door1").execute(), shuffle, GameState.instance()::leaveEntity);
+        Action failDoor = new Chain(new SwapEntities("door1","3"), shuffle, GameState.instance()::leaveEntity);
         Entity door2 = new Entity("door2", null, null, failDoor, null);
         Entity door3 = new Entity("door3", null, null, failDoor, null);
         doorRoom.entities().addAll(List.of(door1, door2, door3));
@@ -148,17 +148,17 @@ public class GameInfo {
     }
 
     private Entity createDoorChain(int length, Action shuffle) {
-        Entity[] doors = new Entity[length];
-        Entity door1_final = new Entity("door1", null, null, new Chain(new SetMessage(this, "door1", "final_door"),this::nextFloor), null);
-        doors[0] = door1_final;
+        EntityState[] door1 = new EntityState[length];
+        EntityState door1_final = new EntityState("0", null, null, new Chain(new SetMessage(this, "door1", "final_door"),this::nextFloor), null);
+        door1[length-1] = door1_final;
         for (int i = 1; i < length; i++) {
-            Entity next = new Entity("door1", null, null, new Chain(
-                    new SwapEntities(doors[i-1], "door1"),
+            EntityState next = new EntityState(String.valueOf(i), null, null, new Chain(
+                    new SwapEntities("door1", String.valueOf(i-1)),
                     GameState.instance()::leaveEntity,
                     shuffle), null);
-            doors[i] = next;
+            door1[length-(i+1)] = next;
         }
-        return doors[length-1];
+        return new Entity("door1", door1);
     }
 
     //Floor Three/
