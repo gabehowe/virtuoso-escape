@@ -21,14 +21,14 @@ public class DataTester {
 		GameState gs = GameState.instance();
 
 		GameProjection gP = new GameProjection();
-		System.out.println(gP.login("j", "drake"));
+		System.out.println(gP.login("q", "q"));
 		//gP.login("Jay'sSon", "cat");
 
-		/*gP.createAccount("JsonLaquermelonie", "dog");
+		gP.createAccount("JsonLaquermelonie", "dog");
 		gP.createAccount("JSONJR.", "json123");
 
 		gP.logout();
-		gP.login("JSONJR.", "json123");*/
+		gP.login("JSONJR.", "json123");
 
 		//works
 		Map<String, Map<String, String>> language = DataLoader.loadGameLanguage();

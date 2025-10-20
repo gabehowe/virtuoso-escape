@@ -23,7 +23,7 @@ public class Account {
 	public Account(String username, String password) {
 		this.username = username;
 		this.hashedPassword = hashPassword(password);
-		this.highScore = new Score(Duration.ofSeconds(GameState.initialTime.getSeconds()), Difficulty.TRIVIAL);
+		this.highScore = new Score(Duration.ofSeconds(GameState.initialTime), Difficulty.TRIVIAL);
 		this.id = UUID.randomUUID();
 	}
 

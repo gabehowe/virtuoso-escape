@@ -20,7 +20,7 @@ public class GameState {
 	private Entity currentEntity;
 	private Set<Item> currentItems;
 	private Duration time;
-	public static final Duration initialTime = Duration.ofSeconds(2700);
+	public static final long initialTime = 2700;
 	private long startTime;
 	private Account account;
 	private boolean ended;
@@ -119,7 +119,7 @@ public class GameState {
 
 	public void updateHighScore() {
 		if (isEnded()) {
-			long currentTimeRemaining = initialTime.minus(this.time).getSeconds();
+			long currentTimeRemaining = initialTime - (this.time).getSeconds();
 			long oldTimeRemaining = this.account.highScore().timeRemaining().getSeconds();
 			if (oldTimeRemaining == 2700 || currentTimeRemaining > oldTimeRemaining) {
 				this.account.setHighScore(new Score(Duration.ofSeconds(currentTimeRemaining), this.difficulty));
