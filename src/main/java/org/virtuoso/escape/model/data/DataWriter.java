@@ -19,6 +19,9 @@ public class DataWriter {
 	private static final String GAME_STATES_PATH = "json/gamestates.json";
 	private static final String ACCOUNTS_PATH = "json/accounts.json";
 
+	/**
+	 * Write {@link GameState#instance()} to a {@link DataWriter#GAME_STATES_PATH}.
+	 */
 	@SuppressWarnings("unchecked")
 	public static void writeGameState() {
 		GameState currentGameState = GameState.instance();
@@ -28,6 +31,9 @@ public class DataWriter {
 		writeToFile(GAME_STATES_PATH, allGameStatesMap);
 	}
 
+	/**
+	 * Write the current account ({@link GameState#instance()#account()}) to {@link DataWriter#ACCOUNTS_PATH}.
+	 */
 	@SuppressWarnings("unchecked")
 	public static void writeAccount() {
 		Account currentAccount = GameState.instance().account();
@@ -37,6 +43,11 @@ public class DataWriter {
 		writeToFile(ACCOUNTS_PATH, allAccountsMap);
 	}
 
+	/**
+	 * Write a {@link JSONObject} to a file.
+	 * @param filepath The file to write to.
+	 * @param json The object to write.
+	 */
 	private static void writeToFile(String filepath, JSONObject json) {
 		try (FileWriter file = new FileWriter(filepath)) {
 
@@ -48,6 +59,11 @@ public class DataWriter {
 		}
 	}
 
+	/**
+	 * Create a {@link JSONObject} for writing from a {@link GameState}.
+	 * @param gameState The {@link GameState} to parse.
+	 * @return A {@link JSONObject} ready for writing.
+	 */
 	@SuppressWarnings("unchecked")
 	private static JSONObject loadGameStateInfo(GameState gameState) {
 		JSONObject gameStateMap = new JSONObject();
@@ -60,6 +76,11 @@ public class DataWriter {
 		return gameStateMap;
 	}
 
+	/**
+	 * Create a {@link JSONArray} from a {@link List<Item>}.
+	 * @param currentItems The item list to parse.
+	 * @return A {@link JSONArray} ready for writing.
+	 */
 	@SuppressWarnings("unchecked")
 	private static JSONArray itemIds(List<Item> currentItems) {
 		JSONArray itemJSON = new JSONArray();
@@ -67,6 +88,11 @@ public class DataWriter {
 		return itemJSON;
 	}
 
+	/**
+	 * Create a {@link JSONObject} for writing from an {@link Account}.
+	 * @param account The {@link Account} to parse.
+	 * @return A {@link JSONObject} ready for writing.
+	 */
 	@SuppressWarnings("unchecked")
 	private static JSONObject loadAccountInfo(Account account) {
 		JSONObject accountMap = new JSONObject();

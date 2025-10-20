@@ -319,6 +319,7 @@ public class TerminalDriver {
         projection.currentMessage().ifPresent(i -> typewriterDisplay(scanner, i));
         if (newItems.size() > itemsCache.size()) {
             newItems.removeIf(itemsCache::contains);
+            System.out.print("\007");
             pauseDisplay(scanner, "You received " + newItems.getFirst().itemName() + ".");
         }
     }

@@ -12,6 +12,11 @@ import org.virtuoso.escape.model.account.Score;
 import java.time.Duration;
 import java.util.Map;
 
+/**
+ * Tests for {@link DataLoader} and {@link DataTester}
+ * @author Andrew
+ * @author Treasure
+ */
 public class DataTester {
 	private static DataLoader dl;
 	private static JSONObject states;
