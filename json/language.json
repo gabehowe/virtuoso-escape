@@ -224,7 +224,7 @@
   "sock_squirrel": {
     "name": "Angry squirrel with one sock",
     "attack": "You throw a punch at the angry squirrel, which then becomes placated and unlocks CompuTTY",
-    "inspect": "You see a squirrel as angry as an aggressively unwatered plant.",
+    "inspect": "You see a squirrel as angry as an aggressively unwatered plant. You notice it has a total of 16 claws. Maybe that's important?",
     "interact": "You try to negotiate peacefully with the squirrel, but it just snarls and screams.",
     "introduce": "You see a squirrel with one squirrel-sized sock on. You think it might know something, but it just keeps snarling and screaming."
   },
