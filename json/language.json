@@ -114,6 +114,22 @@
     "attack": "You jump at the pitcher, but she hits you out of the air with a baseball bat. You fly into the wall at 98 miles per hour.",
     "inspect": "Pitcher Plant is wearing a pinstriped baseball uniform with patches of dirt on it."
   },
+  "door1_0": {
+    "name": "nondescript door",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door1_1": {
+    "name": "nondescript door",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door1_2": {
+    "name": "nondescript door",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door1_3": {
+    "name": "nondescript door",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
   "door1": {
     "name": "nondescript door",
     "interact": "You move through the door and enter a new room.",

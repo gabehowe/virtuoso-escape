@@ -35,6 +35,14 @@ public class TakeInput implements Action {
     }
 
     /**
+     * Construct from cases.
+     * @param args The cases to use.
+     */
+    public TakeInput(Object... args){
+        this("", TakeInput.makeCases(args));
+    }
+
+    /**
      * Helper function for creating input-action mappings
      *
      * @param args Sequential pairs of input: Action
@@ -47,7 +55,7 @@ public class TakeInput implements Action {
             map.put((String) args[i], (Action) args[i+1]);
         }
         return map;
-    };
+    }
 
     /**
      * Run the current input against the mapping.

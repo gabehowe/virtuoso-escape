@@ -149,13 +149,16 @@ public class GameInfo {
 
     private Entity createDoorChain(int length, Action shuffle) {
         EntityState[] door1 = new EntityState[length];
-        EntityState door1_final = new EntityState("0", null, null, new Chain(new SetMessage(this, "door1", "final_door"),this::nextFloor), null);
+        Function<String, Action> sm = (stringId) -> new SetMessage(this, "door1", stringId);
+        EntityState door1_final = new EntityState("door1_0", sm.apply("attack"), sm.apply("inspect"), new Chain(new SetMessage(this, "door1", "final_door"),this::nextFloor), null);
         door1[length-1] = door1_final;
         for (int i = 1; i < length; i++) {
-            EntityState next = new EntityState(String.valueOf(i), null, null, new Chain(
-                    new SwapEntities("door1", String.valueOf(i-1)),
+            EntityState next = new EntityState("door1_" + i, sm.apply("attack"), sm.apply("inspect"), new Chain(
+                    new SwapEntities("door1", "door1_" +(i-1)),
                     GameState.instance()::leaveEntity,
-                    shuffle), null);
+                    shuffle,
+                    sm.apply("interact")
+                    ), null);
             door1[length-(i+1)] = next;
         }
         return new Entity("door1", door1);
@@ -164,9 +167,9 @@ public class GameInfo {
     //Floor Three/
     private Floor floor3() {
         // Basic info entity -- provide logic by adding dialogue in language.json
-        Entity man = new Entity("man", null, null, null, null);
+        Entity man = man();
 
-		Entity computty = makeComputtyLogic();
+        Entity computty = makeComputtyLogic();
         Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities("computty", "computty_unblocked"), null, null, null);
         EntityState microwave_blocked = new EntityState("microwave_blocked", null, null, null, null);
 	    // Whoops! JEP 126!
@@ -174,6 +177,18 @@ public class GameInfo {
 		Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
         Room floor3_0 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
         return new Floor("storey_iii_0", List.of(floor3_0));
+    }
+
+    private Entity man() {
+        Function<String, Action> manMsg = (stringId) -> new SetMessage(this, "man", stringId);
+        Entity man = new Entity("man", null, null, null,
+                new TakeInput(
+                        "(?:man )?man", manMsg.apply("input_man"),
+                        "(?:man )?ls", manMsg.apply("input_ls"),
+                        "(?:man )?cd", manMsg.apply("input_cd"),
+                        "(?:man )?tar", manMsg.apply("input_tar"),
+                        "(?:man )?rotx", manMsg.apply("input_rotx")));
+        return man;
     }
 
     private Entity makeComputtyLogic() {
