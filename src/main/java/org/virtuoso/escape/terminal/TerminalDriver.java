@@ -13,32 +13,70 @@ import static org.virtuoso.escape.terminal.FunString.escape;
 
 
 /**
+ * Creates and runs the game.
  * @author gabri
  */
 public class TerminalDriver {
     private boolean DEBUG = true;
-    // Tree
+
+    /**
+     * A simple tuple class.
+     * @param u The first element.
+     * @param v The second element
+     * @param <U> The type of the first element.
+     * @param <V> The type of the second element.
+     */
     private record P<U, V> (U u, V v) {
+        /**
+         * Shorthand for creating a pair.
+         * @param u The first element.
+         * @param v The second element
+         * @param <U> The type of the first element.
+         * @param <V> The type of the second element.
+         * @return a pair of {@code u} and {@code v}.
+         */
         public static <U, V> P<U, V> of(U u, V v){
             return new P<>(u,v);
         }
     }
 
+    /**
+     * Shorthand to narrow casting to r to Runnable.
+     * @param s The string for a name:action mapping.
+     * @param r The action for a name:action mapping.
+     * @return A pair of s and r.
+     */
     // Avoid java's lack of belief in runnable type
     P<FunString, Runnable> fs_r(String s, Runnable r) {
         return P.of(new FunString(s), r);
     }
 
+    /**
+     * Shorthand to narrow casting to r to Runnable.
+     * @param s The string for a name:action mapping.
+     * @param r The action for a name:action mapping.
+     * @return A pair of s and r.
+     */
     P<FunString, Runnable> fs_r(FunString s, Runnable r) {
         return P.of(s, r);
     }
 
+    /**
+     * Create a list of pairings.
+     * @param input Pairings.
+     * @return A list of pairings.
+     */
     @SafeVarargs
     final List<P<FunString, Runnable>> makeTuiActionMap(P<FunString, Runnable>... input) {
         return new ArrayList<>(Arrays.asList(input));
     }
 
-
+    /**
+     * Create a terminal with unique keys for action name: action pairings.
+     * @param scanner The scanner to request input on.
+     * @param tuiAction A list of name, action pairings. Note this is not an injective mapping.
+     * @param status A prompt to display before the actions.
+     */
     // Sequenced retains order.
     void createActionInterface(Scanner scanner, List<P<FunString, Runnable>> tuiAction, String status) {
         assert !tuiAction.isEmpty();
@@ -63,7 +101,7 @@ public class TerminalDriver {
             FunString small = new FunString(key).underline().bold();
 
             name.replaceSubstring(index, index + width, small);
-            keyMap.put(key.toLowerCase(), P.of(name, pair.v));
+            keyMap.put(key.toLowerCase(), fs_r(name, pair.v));
         }
         Set<String> validResponses = keyMap.keySet();
         var prompts = keyMap.values().stream().map(P::u).toList();
@@ -82,6 +120,13 @@ public class TerminalDriver {
         keyMap.get(response).v.run();
     }
 
+    /**
+     * Request user input until they provide valid input.
+     * @param scanner The scanner to request input on.
+     * @param prompt The thing to ask the user.
+     * @param predicate The function that validates the string.
+     * @return Valid input.
+     */
     String validateInput(Scanner scanner, String prompt, Predicate<String> predicate) {
         String scanAttempt;
         while (true) {
@@ -94,13 +139,18 @@ public class TerminalDriver {
         return scanAttempt;
     }
 
-    void tryLogin(Scanner scanner, GameProjection projection, BiPredicate<String, String> type) {
+    /**
+     * Request a valid username and password from the user.
+     * @param scanner The scanner to request for input on.
+     * @param authenticator The function to try to authenticate on, usually create account or login.
+     */
+    void tryLogin(Scanner scanner, BiPredicate<String, String> authenticator) {
         String username, password;
         boolean flag = false;
         do {
             username = validateInput(scanner, "Enter your username:", i -> !i.isBlank());
             password = validateInput(scanner, "Enter your password:", i -> !i.isBlank());
-            flag = type.test(username.strip(), password.strip());
+            flag = authenticator.test(username.strip(), password.strip());
             // Move to the second console line
             System.out.print(escape("2;1H") + escape(CLEAR_BELOW));
             if (!flag) display(new FunString("Failed to process login.").red().toString());
@@ -110,15 +160,32 @@ public class TerminalDriver {
         // or the choice is 1 and createAccount, continue
     }
 
+    /**
+     * Display something to the user.
+     * @param display The format string to display.
+     * @param args Variables for the format string.
+     */
     void display(String display, Object... args) {
         // wrapper function allows for flair
         System.out.printf(display + "\n", args);
     }
 
+    /**
+     * Display something to the user and wait for carriage return.
+     * @param scanner The scanner to wait for input on.
+     * @param str The format string to display
+     * @param args Variables for the format string.
+     */
     void pauseDisplay(Scanner scanner, String str, Object... args) {
         display(str, args);
         scanner.nextLine();
     }
+
+    /**
+     * Animate a display to the user by showing each character printed sequentially, then wait.
+     * @param scanner The scanner to request input on.
+     * @param str The string to typewrite.
+     */
     void typewriterDisplay(Scanner scanner, String str) {
         long rate = 60;
         for(char s: str.toCharArray()){
@@ -133,10 +200,18 @@ public class TerminalDriver {
         scanner.nextLine();
     }
 
+    /**
+     * Clear the terminal window.
+     */
     void clearScreen() {
         System.out.print(escape(CLEAR_RESET) + escape(CLEAR));
     }
 
+    /**
+     * Display all user items.
+     * @param scanner The scanner to wait on.
+     * @param projection The source for the items.
+     */
     void displayItems(Scanner scanner, GameProjection projection) {
         List<String> names = projection.currentItems().stream().map(Item::itemName).toList();
         if (names.isEmpty()) {
@@ -154,6 +229,11 @@ public class TerminalDriver {
         pauseDisplay(scanner, "You have: \n" + String.join("\n", lines));
     }
 
+    /**
+     * Present the end of the game.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_ending(Scanner scanner, GameProjection projection) {
         List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> GameInfo.instance().string("credits", "contributor_" + i)).toList());
         contributors = contributors.stream().map(it -> {
@@ -180,32 +260,47 @@ public class TerminalDriver {
 
     }
 
+    /**
+     * Ask the user to change rooms.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_changeRoom(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap();
         for (Room room : projection.currentFloor().rooms()) {
-            actions.add(P.of(new FunString(room.name()).bold(), () -> projection.pickRoom(room)));
+            actions.add(fs_r(new FunString(room.name()).bold(), () -> projection.pickRoom(room)));
         }
-        actions.add(P.of(new FunString("Nevermind"), () -> {
+        actions.add(fs_r(new FunString("Nevermind"), () -> {
         }));
         createActionInterface(scanner, actions, "Change room");
     }
 
+    /**
+     * Ask the user to perform room-specific actions.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_roomActions(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap();
         // It makes no sense to change rooms if there are no rooms to change to!
         if (projection.currentFloor().rooms().size() > 1) {
-            actions.add(P.of(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection)));
+            actions.add(fs_r(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection)));
         }
         for (Entity e : projection.currentRoom().entities()) {
-            actions.add(P.of(new FunString(e.state().name()).italic(), () -> projection.pickEntity(e)));
+            actions.add(fs_r(new FunString(e.state().name()).italic(), () -> projection.pickEntity(e)));
         }
-        actions.add(P.of(new FunString("Exit game"), () -> menu_exit(scanner, projection)));
-        actions.add(P.of(new FunString("Options"), () -> menu_options(scanner, projection)));
+        actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
+        actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
         String prompt = projection.time().toMinutesPart() + ":" + projection.time().toSecondsPart() + "\n" + projection.currentRoom().introMessage();
         createActionInterface(scanner, actions, prompt);
 
     }
 
+    /**
+     * Ask the user to perform entity-specific actions.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_entityAction(Scanner scanner, GameProjection projection) {
         projection.currentEntity().ifPresent(e -> e.state().introduce());
         var actions = makeTuiActionMap(
@@ -214,9 +309,9 @@ public class TerminalDriver {
                 fs_r(new FunString("Attack").red(), projection::attack),
                 fs_r(new FunString("Speak").purple(), () -> projection.input(validateInput(scanner, "What would you like to say? ", _ -> true)))
                 );
-        if (!projection.currentItems().isEmpty()) actions.add(P.of(new FunString("Items"), () -> this.displayItems(scanner, projection)));
+        if (!projection.currentItems().isEmpty()) actions.add(fs_r(new FunString("Items"), () -> this.displayItems(scanner, projection)));
 
-        actions.add(P.of(new FunString("Leave"), projection::leaveEntity));
+        actions.add(fs_r(new FunString("Leave"), projection::leaveEntity));
 
         var itemsCache = projection.currentItems();
         createActionInterface(scanner, actions, projection.currentMessage().orElse(""));
@@ -228,49 +323,81 @@ public class TerminalDriver {
         }
     }
 
+    /**
+     * Ask the user to change the difficulty.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_difficulty(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap();
 
         for (var diff : Difficulty.values()) {
-            actions.add(P.of(new FunString(diff.name()).terminalColor(diff.ordinal() + 196), () -> projection.setDifficulty(diff)));
+            actions.add(fs_r(new FunString(diff.name()).terminalColor(diff.ordinal() + 196), () -> projection.setDifficulty(diff)));
         }
-        actions.add(P.of(new FunString("Nevermind"), () -> {}));
+        actions.add(fs_r(new FunString("Nevermind"), () -> {}));
         createActionInterface(scanner, actions, "Choose difficulty");
     }
+
+    /**
+     * Debug floor switching menu. Is inaccessible if {@link TerminalDriver#DEBUG} variable is {@code false}.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_debugSwitchFloor(Scanner scanner, GameProjection projection){
         var actions = makeTuiActionMap();
         for (Floor floor: GameInfo.instance().building()) {
-            actions.add(P.of(new FunString(floor.id()).green(), () -> GameState.instance().setCurrentFloor(floor)));
+            actions.add(fs_r(new FunString(floor.id()).green(), () -> GameState.instance().setCurrentFloor(floor)));
         }
-        actions.add(P.of(new FunString("Nevermind"), ()-> {}));
+        actions.add(fs_r(new FunString("Nevermind"), ()-> {}));
         createActionInterface(scanner, actions, "Pick floor");
     }
+
+    /**
+     * Debug options. Is inaccessible if  {@link TerminalDriver#DEBUG} variable is {@code false}.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_debug(Scanner scanner, GameProjection projection){
         var actions = makeTuiActionMap(
                 fs_r("Switch floor", () -> menu_debugSwitchFloor(scanner, projection))
         );
         actions.forEach((k) -> k.u.green());
-        actions.add(P.of(new FunString("Nevermind"), ()-> {}));
+        actions.add(fs_r(new FunString("Nevermind"), ()-> {}));
         createActionInterface(scanner, actions, "");
     }
 
+    /**
+     * Ask the user to select an option to change.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_options(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap(
                 fs_r("Set difficulty", () -> menu_difficulty(scanner, projection)),
                 fs_r("Nevermind", () -> {})
         );
         if (DEBUG){
-            actions.addFirst(P.of(new FunString("DEBUG").green(), () -> menu_debug(scanner, projection)));
+            actions.addFirst(fs_r(new FunString("DEBUG").green(), () -> menu_debug(scanner, projection)));
         }
         createActionInterface(scanner, actions, "Options");
     }
 
-    void menu_exit(Scanner scanner, GameProjection projection) {
+    /**
+     * Exit the game.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
+    void exit(Scanner scanner, GameProjection projection) {
         projection.logout();
         display("Logged out.\nThanks for playing!");
         System.exit(1);
     }
 
+    /**
+     * Continuously ask the user for context-specific input.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
     void gameLoop(Scanner scanner, GameProjection projection) {
         while (true) {
             if (projection.isEnded()){
@@ -283,14 +410,17 @@ public class TerminalDriver {
         }
     }
 
+    /**
+     * Program entrance.
+     */
     // See JEP 495
     void main() {
         Scanner scanner = new Scanner(System.in);
         GameProjection projection = new GameProjection();
         // Ensure these are initialized
         var actions = makeTuiActionMap(
-                fs_r("Login", () -> tryLogin(scanner, projection, projection::login)),
-                fs_r("Create Account", () -> tryLogin(scanner, projection, projection::createAccount))
+                fs_r("Login", () -> tryLogin(scanner, projection::login)),
+                fs_r("Create Account", () -> tryLogin(scanner, projection::createAccount))
         );
 
 

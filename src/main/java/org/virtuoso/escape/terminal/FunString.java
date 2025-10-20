@@ -5,25 +5,55 @@ import java.util.Iterator;
 import java.util.List;
 
 
-// Holder for decorated strings for terminal output.
+/**
+ * Holder for decorated strings for terminal output.
+ * @param content The child nodes to output, FunString or char
+ * @param styleCodes The console style codes to prefix to the string.
+ * @param resetCodes The console style reset codes to suffix to the string.
+ * @author gabri
+ */
 public record FunString(List<Object /*FunString, char*/> content, List<String> styleCodes, List<String> resetCodes) {
 
+    /**
+     * Create a terminal escape code.
+     * @param innerCode the inner part of the code.
+     * @return An escaped ANSI terminal code.
+     */
     public static String escape(String innerCode) {
         return String.format("\033[%s", innerCode);
     }
 
+    /**
+     * Create an {@link FunString} from a {@link String}.
+     * @param content the string to create this with.
+     */
     public FunString(String content) {
         this(new ArrayList<>(FunString.stringChars(content)), new ArrayList<>(), new ArrayList<>());
     }
 
+    /**
+     * Clone another {@link FunString}.
+     * @param funString the {@link FunString} to clone.
+     */
     public FunString(FunString funString) {
         this(new ArrayList<>(funString.content.stream().toList()), new ArrayList<>(funString.styleCodes), new ArrayList<>(funString.resetCodes));
     }
 
+    /**
+     * Create a {@link FunString} from a {@link List} of {@link FunString} and char.
+     * @param strs a {@link List} of {@link FunString} and {@code char}.
+     */
     public FunString(List<Object> strs) {
         this(new ArrayList<>(strs), new ArrayList<>(), new ArrayList<>());
     }
 
+    /**
+     * Join {@link Iterable<FunString>} by a delimiter.
+     * Similar to {@link String#join(CharSequence, CharSequence...)}
+     * @param delimiter The string to delimit by.
+     * @param funStrings The FunStrings to join
+     * @return the joined object.
+     */
     public static FunString join(String delimiter, Iterable<FunString> funStrings) {
         Iterator<FunString> iterator = funStrings.iterator();
         assert iterator.hasNext();
@@ -35,6 +65,10 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
         return accumulator;
     }
 
+    /**
+     * Convert this to a string with escape codes.
+     * @return A string with escape codes.
+     */
     @Override
     public String toString() {
         var result = new StringBuilder();
@@ -45,10 +79,18 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
         return result.toString();
     }
 
+    /**
+     * Returns the length of the string without escape codes.
+     * @return the visual length.
+     */
     public int length() {
         return this.rawText().length();
     }
 
+    /**
+     * The text content without escape codes.
+     * @return A string with no escape codes.
+     */
     public String rawText() {
         var result = new StringBuilder();
         for (Object i : this.content) {
@@ -62,18 +104,37 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
         return result.toString();
     }
 
+    /**
+     * Add another {@link FunString} to the end of this.
+     * @param fs the object to append.
+     */
     public void add(FunString fs) {
         this.content.add(fs);
     }
 
+    /**
+     * Add another {@link Character} to this.
+     * @param s The object to append.
+     */
     public void add(Character s) {
         this.content.add(s);
     }
 
+    /**
+     * Add another {@link String} to this.
+     * @param s The object to append.
+     */
     public void add(String s) {
         this.content.addAll(this.stringChars(s));
     }
 
+    /**
+     * Replaces part of this object with {@code toReplace}
+     * @apiNote The behavior when {@link FunString}s collide is unknown.
+     * @param start The index to start replacing at.
+     * @param end The index to stop replacing before.
+     * @param toReplace The {@link FunString} to replace the substring with.
+     */
     // doesn't support FunString collisions
     public void replaceSubstring(int start, int end, FunString toReplace) {
         for (int i = end-1; i >= start; i--) {
@@ -82,47 +143,81 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
         this.content.add(start, toReplace);
     }
 
+    /**
+     * Add an underline decoration to this.
+     * @return This with an underline decoration.
+     */
     public FunString underline() {
         this.styleCodes.add(UNDERLINE);
         this.resetCodes.add(UNDERLINE_OFF);
         return this;
     }
 
+    /**
+     * Add an italic decoration to this.
+     * @return This with an italic decoration.
+     */
     public FunString italic() {
         this.styleCodes.add(ITALIC);
         this.resetCodes.add(ITALIC_OFF);
         return this;
     }
 
+    /**
+     * Add a bold decoration to this.
+     * @return This with a bold decoration.
+     */
     public FunString bold() {
         this.styleCodes.add(BOLD);
         this.resetCodes.add(BOLD_OFF);
         return this;
     }
 
+    /**
+     * Make this red.
+     * @return This, but red.
+     */
     public FunString red() {
         this.styleCodes.add(RED_FG);
         this.resetCodes.add(DEFAULT_FG);
         return this;
     }
 
+    /**
+     * Make this blue.
+     * @return This, but blue.
+     */
     public FunString blue() {
         this.styleCodes.add(BLUE_FG);
         this.resetCodes.add(DEFAULT_FG);
         return this;
     }
 
+    /**
+     * Make this green.
+     * @return This, but green.
+     */
     public FunString green() {
         this.styleCodes.add(GREEN_FG);
         this.resetCodes.add(DEFAULT_FG);
         return this;
     }
 
+    /**
+     * Make this purple.
+     * @return This, but purple.
+     */
     public FunString purple() {
         this.styleCodes.add(PURPLE_FG);
         this.resetCodes.add(DEFAULT_FG);
         return this;
     }
+
+    /**
+     * Color this with an 8-bit terminal color.
+     * @param color A color index from 0-256.
+     * @return This, but colored.
+     */
     public FunString terminalColor(int color) {
         assert color > 0 && color < 256;
         this.styleCodes.add(escape("38;5;" + color + "m"));
@@ -130,6 +225,11 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
         return this;
     }
 
+    /**
+     * Convert a string into a list of characters.
+     * @param s the string to convert.
+     * @return a list of characters.
+     */
     private static List<Character> stringChars(String s) {
         return s.chars().mapToObj(c -> (char) c).toList();
     }
