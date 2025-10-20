@@ -183,6 +183,7 @@ public class GameInfo {
         Function<String, Action> manMsg = (stringId) -> new SetMessage(this, "man", stringId);
         Entity man = new Entity("man", null, null, null,
                 new TakeInput(
+                        "(?:man )?help", manMsg.apply("input_help"),
                         "(?:man )?man", manMsg.apply("input_man"),
                         "(?:man )?ls", manMsg.apply("input_ls"),
                         "(?:man )?cd", manMsg.apply("input_cd"),

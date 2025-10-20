@@ -159,9 +159,10 @@
   "man": {
     "name": "man",
     "attack": "Man doesn't respond to your attempts to attack.",
-    "introduce": "What manual page do you want?\nFor example, try 'man man'.",
+    "introduce": "What manual page do you want?\nFor example, try 'man help'.",
     "interact": "There's nothing to interact with, only a mere wish to know more...",
     "inspect": "You don't see anything, but you feel millimeters away from endless knowledge.",
+    "input_help": "HELP(1)          List of all commands      HELP(1)\n\nLIST\n\tman\tls\tcd\ttar\trotx\n\nTry asking man for information on these!",
     "input_man": "MAN(1)            Manual pager utils        MAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS man [man options]\n\nDESCRIPTION     Provide information about a utility.",
     "input_ls": "LS(1)                                         User Commands                                         LS(1)\n\nNAME\n       ls - list directory contents\n\nSYNOPSIS\n       ls [OPTION]... [FILE]...\n\nDESCRIPTION\n       List  information about the FILEs (the current directory by default). ",
     "input_cd": "cd: cd [dir]\n    Change the shell working directory.\n    \n    Change the current directory to DIR.",
