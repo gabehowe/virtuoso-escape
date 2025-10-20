@@ -13,7 +13,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.virtuoso.escape.model.Difficulty;
-import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.Score;
 
 /**

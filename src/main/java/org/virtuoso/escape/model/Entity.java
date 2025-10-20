@@ -62,4 +62,8 @@ public class Entity {
 		return this.id;
 	}
 
+	public String[] write() {
+		return new String[] {this.id, this.currentState};
+	}
+
 }

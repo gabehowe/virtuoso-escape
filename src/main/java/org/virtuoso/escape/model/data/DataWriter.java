@@ -5,7 +5,9 @@ import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
@@ -71,6 +73,7 @@ public class DataWriter {
 		gameStateMap.put("currentRoom", gameState.currentRoom().id());
 		gameStateMap.put("currentEntity", gameState.currentEntity().isPresent() ? gameState.currentEntity().get().id() : null);
 		gameStateMap.put("currentItems", itemIds(gameState.currentItems()));
+		gameStateMap.put("currentRooms", entityStates(gameState.currentFloor().rooms()));
 		gameStateMap.put("time", gameState.time().getSeconds());
 		gameStateMap.put("difficulty", gameState.difficulty().toString());
 		return gameStateMap;
@@ -86,6 +89,20 @@ public class DataWriter {
 		JSONArray itemJSON = new JSONArray();
 		currentItems.stream().map(Item::id).forEach(itemJSON::add);
 		return itemJSON;
+	}
+
+	/**
+	 * Create a {@link JSONArray} from a {@link List<Room>}.
+	 * @param currentRooms The room list to parse.
+	 * @return A {@link JSONArray} ready for writing.
+	 */
+	@SuppressWarnings("unchecked")
+	private static JSONObject entityStates(List<Room> currentRooms) {
+		JSONObject entityJSON = new JSONObject();
+		currentRooms.stream().map(Room::entities)
+		.flatMap(list -> list.stream()).map(Entity::write)
+		.forEach(pair -> entityJSON.put(pair[0], pair[1]));
+		return entityJSON;
 	}
 
 	/**
