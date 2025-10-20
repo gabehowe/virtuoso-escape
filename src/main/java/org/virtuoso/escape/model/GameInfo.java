@@ -12,19 +12,26 @@ import java.util.stream.IntStream;
 
 /**
  * @author Andrew
- * @author Gabri
+ * @author gabri
  */
 public class GameInfo {
     private static GameInfo instance;
     private Map<String, Map<String, String>> language = Map.of();
     private List<Floor> building = new ArrayList<Floor>();
 
+    /**
+     * The global singleton.
+     * @return The global singleton.
+     */
     public static GameInfo instance() {
         if (instance == null)
             instance = new GameInfo();
         return instance;
     }
 
+    /**
+     * Construct this singleton.
+     */
     private GameInfo() {
         this.language = DataLoader.loadGameLanguage();
         // todo: add other floors
@@ -36,6 +43,10 @@ public class GameInfo {
     }
 
     //Acorn Grove//
+    /**
+     * Build the Acorn Grove.
+     * @return The Acorn Grove.
+     */
     private Floor acornGrove() {
         Entity intro_squirrel = new Entity("intro_squirrel", null, null, null, null);
         Entity portal_squirrel = new Entity("portal_squirrel", null, null, new SetFloor(1), null);
@@ -44,6 +55,10 @@ public class GameInfo {
     }
 
     //Floor One//
+    /**
+     * Build M. Bert Storey floor 1.
+     * @return M. Bert Storey floor 1.
+     */
     private Floor floor1() {
         Entity door = new Entity("first_door", null, null, new SetFloor(2), null);
         Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
@@ -67,6 +82,10 @@ public class GameInfo {
         return new Floor("storey_i", List.of(room_1400, janitor_closet, hallway));
     }
 
+    /**
+     * Create Joe Hardy for floor 1.
+     * @return Joe Hardy.
+     */
     private Entity joeHardy() {
         Predicate<Item[]> hasItems = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a&&b).get();
         EntityState sandwichJoe = new EntityState("sandwich_joe", null, null, null, null);
@@ -103,9 +122,17 @@ public class GameInfo {
 		return new Entity("almanac", almanacStates.toArray(new EntityState[0]));
     }
 
-    private Action turnPage(int flips, int currentPage, int max_flips, int correctPage) {
+    /**
+     * Test the user input page.
+     * @param flips Attempts remaining
+     * @param currentPage The page attempted.
+     * @param maxFlips The total number of attemptable flips.
+     * @param correctPage The correct, desired page
+     * @return An Action to be run later.
+     */
+    private Action turnPage(int flips, int currentPage, int maxFlips, int correctPage) {
         Action swap = flips > 1 ? new SwapEntities("almanac", String.valueOf(flips-1)) : 
-		new SwapEntities("almanac", String.valueOf(max_flips));
+		new SwapEntities("almanac", String.valueOf(maxFlips));
 
         Action caseBreak = new SetMessage(this, "almanac", "break");
         Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + String.valueOf(flips-1));
@@ -131,7 +158,10 @@ public class GameInfo {
     }
 
     //Floor Two//
-    // TODO add floor 2
+    /**
+     * Build M. Bert Storey floor 2.
+     * @return M. Bert Storey floor 2.
+     */
     private Floor floor2() {
         Room doorRoom = new Room(new ArrayList<>(),"storey_ii_1", this.string("storey_ii_1", "introduce"));
         Action shuffle =  () -> Collections.shuffle(doorRoom.entities());
@@ -147,6 +177,12 @@ public class GameInfo {
         return new Floor("storey_ii", List.of(plantOffice, doorRoom));
     }
 
+    /**
+     * Create a linked list of proper doors.
+     * @param length The number of doors in the linked list.
+     * @param shuffle The function to shuffle doors.
+     * @return A single door with an internal link to the next door.
+     */
     private Entity createDoorChain(int length, Action shuffle) {
         EntityState[] door1 = new EntityState[length];
         Function<String, Action> sm = (stringId) -> new SetMessage(this, "door1", stringId);
@@ -165,6 +201,10 @@ public class GameInfo {
     }
 
     //Floor Three/
+    /**
+     * Build M. Bert Storey floor 3.
+     * @return M. Bert Storey floor 3.
+     */
     private Floor floor3() {
         // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = man();
@@ -179,6 +219,10 @@ public class GameInfo {
         return new Floor("storey_iii_0", List.of(floor3_0));
     }
 
+    /**
+     * Create the man entity.
+     * @return the man entity.
+     */
     private Entity man() {
         Function<String, Action> manMsg = (stringId) -> new SetMessage(this, "man", stringId);
         Entity man = new Entity("man", null, null, null,
@@ -192,6 +236,10 @@ public class GameInfo {
         return man;
     }
 
+    /**
+     * Create CompuTTY -- a terminal entity.
+     * @return CompuTTY.
+     */
     private Entity makeComputtyLogic() {
         // Dichotomy: DRY violation or unreadable code?
 		var computtyBlocked = new EntityState("computty_blocked", null, null, null, null);
@@ -227,24 +275,46 @@ public class GameInfo {
     }
 
     //Ending//
+    /**
+     * End the game.
+     */
     private void gameEnding() {
         GameState.instance().end();
     }
 
     //Utils//
+
+    /**
+     * Move to the next floor.
+     */
     private void nextFloor(){
         int currentIndex = this.building.indexOf(GameState.instance().currentFloor());
         GameState.instance().setCurrentFloor(this.building.get(currentIndex+1));
     }
+
+    /**
+     * Get a string resource from {@link GameInfo#language()} safely.
+     * @param id The parent of the string resource.
+     * @param stringId The id of the string resource.
+     * @return A string resource.
+     */
     public String string(String id, String stringId) {
         if (!language.containsKey(id) || !language.get(id).containsKey(stringId)) return "[" + id + "/" + stringId + "]"; // Default behavior for string
         return language.get(id).get(stringId);
     }
 
+    /**
+     * The language parent-(id-resource) mapping..
+     * @return The language mapping.
+     */
     public Map<String, Map<String, String>> language() {
         return language;
     }
 
+    /**
+     * The list of {@link Floor} in the building.
+     * @return The list of {@link Floor} in the building.
+     */
     public List<Floor> building() {
         return this.building;
     }

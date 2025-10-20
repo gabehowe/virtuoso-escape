@@ -19,7 +19,7 @@ public class Entity {
 	/**
 	 * Constructs and entity with multiple states.
 	 * @param id The ID of the entity you want to construct.
-	 * @param entities The states you want the entity to have,
+	 * @param entity_states The states you want the entity to have,
 	 * the default state will be a state with the name of the the entity id or the first state argument.
 	 */
 	public Entity(String id, EntityState... entity_states) {
