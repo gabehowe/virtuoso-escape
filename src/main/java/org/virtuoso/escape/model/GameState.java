@@ -58,6 +58,12 @@ public class GameState {
 		this.account = account;
 		this.difficulty = Difficulty.valueOf((String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
 		this.startTime = System.currentTimeMillis();
+		JSONObject states = (JSONObject) gameStateInfo.getOrDefault("currentEntityStates", new JSONObject());
+		for (Room room : currentFloor.rooms())
+			for (Entity entity : room.entities())
+				if (states.containsKey(entity.id()))
+					entity.swapState((String) states.get(entity.id()));
+
 	}
 
 	/**

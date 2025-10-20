@@ -120,6 +120,9 @@ public class DataLoader {
 						} else if (sk.equals("time")) {
 							sval = (Long) innerObj.get(sk);
 							map.put(sk, sval);
+						} else if (sk.equals("currentEntityStates")) {
+							sval = (JSONObject) innerObj.get(sk);
+							map.put(sk, sval);
 						} else map.put(sk, String.valueOf(sval));
 					}
 				}
