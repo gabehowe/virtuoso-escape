@@ -221,7 +221,7 @@ public class GameInfo {
                 "ls", ttyStr.apply("ls_default"),
                 "cat.*", ttyStr.apply("man_cat")
         ));
-		var computtyUnblocked = new EntityState("computty_unblocked", null, null, null, computtyDefault);
+		var computtyUnblocked = new EntityState("computty_unblocked", ttyStr.apply("attack"), ttyStr.apply("attack"), ttyStr.apply("interact"), computtyDefault);
 
         return new Entity("computty", computtyBlocked, computtyUnblocked, computtyTar, computtyCd);
     }
