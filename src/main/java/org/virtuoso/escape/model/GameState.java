@@ -135,6 +135,13 @@ public class GameState {
 	}
 
 	/**
+	 * Remove all items.
+	 */
+	public void clearItems() {
+		currentItems.clear();
+	}
+
+	/**
 	 * The time remaining on the countdown.
 	 * @return The time remaining on the countdown.
 	 */

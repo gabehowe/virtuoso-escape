@@ -7,6 +7,7 @@ import java.time.Duration;
 /**
  * Penalize the player by removing time.
  * @param severity The degree of penalty to award
+ * @author Andrew
  */
 public record RemoveTime(Severity severity) implements Action {
     /**

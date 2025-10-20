@@ -187,7 +187,7 @@ public class GameInfo {
     private Entity createDoorChain(int length, Action shuffle) {
         EntityState[] door1 = new EntityState[length];
         Function<String, Action> sm = (stringId) -> new SetMessage(this, "door1", stringId);
-        EntityState door1_final = new EntityState("door1_0", sm.apply("attack"), sm.apply("inspect"), new Chain(new SetMessage(this, "door1", "final_door"),this::nextFloor), null);
+        EntityState door1_final = new EntityState("door1_0", sm.apply("attack"), sm.apply("inspect"), new Chain(new SetMessage(this, "door1", "final_door"),new SetFloor(3)), null);
         door1[length-1] = door1_final;
         for (int i = 1; i < length; i++) {
             EntityState next = new EntityState("door1_" + i, sm.apply("attack"), sm.apply("inspect"), new Chain(
@@ -285,13 +285,6 @@ public class GameInfo {
 
     //Utils//
 
-    /**
-     * Move to the next floor.
-     */
-    private void nextFloor(){
-        int currentIndex = this.building.indexOf(GameState.instance().currentFloor());
-        GameState.instance().setCurrentFloor(this.building.get(currentIndex+1));
-    }
 
     /**
      * Get a string resource from {@link GameInfo#language()} safely.

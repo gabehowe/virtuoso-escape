@@ -1,1 +1,31 @@
-{"fc89029d-be21-49db-a418-6394701e9cc8":{"currentItems":["sunflower_seed_butter","sealed_clean_food_safe_hummus","left_bread","right_bread"],"difficulty":"SUBSTANTIAL","currentRoom":"storey_iii_0","currentEntity":"microwave","currentFloor":"storey_iii_0","time":506},"68be43d5-afcc-4608-ba98-d1ca70cab0a4":{"currentItems":["sealed_clean_food_safe_hummus"],"difficulty":"SUBSTANTIAL","currentRoom":"storey_i_0","currentEntity":null,"currentFloor":"storey_i","time":2664},"a5d51814-f2f6-4e16-a8f3-7861fa3aa880":{"currentItems":[],"difficulty":"SUBSTANTIAL","currentRoom":"storey_iii_0","currentEntity":"microwave","currentFloor":"storey_iii_0","time":722}}
+{
+  "fc89029d-be21-49db-a418-6394701e9cc8": {
+    "currentItems": [
+      "sunflower_seed_butter",
+      "sealed_clean_food_safe_hummus",
+      "left_bread",
+      "right_bread"
+    ],
+    "difficulty": "SUBSTANTIAL",
+    "currentRoom": "storey_iii_0",
+    "currentEntity": "microwave",
+    "currentFloor": "storey_iii_0",
+    "time": 506
+  },
+  "68be43d5-afcc-4608-ba98-d1ca70cab0a4": {
+    "currentItems": [],
+    "difficulty": "SUBSTANTIAL",
+    "currentRoom": "storey_ii_0",
+    "currentEntity": null,
+    "currentFloor": "storey_ii",
+    "time": 2624
+  },
+  "a5d51814-f2f6-4e16-a8f3-7861fa3aa880": {
+    "currentItems": [],
+    "difficulty": "SUBSTANTIAL",
+    "currentRoom": "storey_iii_0",
+    "currentEntity": "microwave",
+    "currentFloor": "storey_iii_0",
+    "time": 722
+  }
+}
