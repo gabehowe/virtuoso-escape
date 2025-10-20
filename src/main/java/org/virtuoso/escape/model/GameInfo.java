@@ -216,7 +216,7 @@ public class GameInfo {
         ));
         var computtyCd = new EntityState("computty_cd", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyCdLogic);
         var computtyDefault = new TakeInput("", TakeInput.makeCases(
-                "cd code", new SwapEntities("computty", "computty_cd"),
+                "cd code", new Chain(new SwapEntities("computty", "computty_cd"), ttyStr.apply("input_cd")),
                 "cd.*", ttyStr.apply( "no_file"),
                 "ls", ttyStr.apply("ls_default"),
                 "cat.*", ttyStr.apply("man_cat")
