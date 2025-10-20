@@ -17,11 +17,16 @@ import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.Score;
 
 /**
+ * Loads data from JSON files.
  * @author Bose
  * @author Treasure
  * @author Andrew
  */
 public class DataLoader {
+	/**
+	 * Load all accounts from accounts.json
+	 * @return An id-account accounts map.
+	 */
 	public static JSONObject loadAccounts() {
 		JSONObject result = new JSONObject();
 		JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
@@ -44,6 +49,10 @@ public class DataLoader {
 		return result;
 	}
 
+	/**
+	 * Loads language mapping from language.json
+	 * @return A mapping of id: (id: string)
+	 */
 	public static Map<String, Map<String, String>> loadGameLanguage() {
 		Map<String, Map<String, String>> result = new HashMap<String, Map<String, String>>();
 		JSONObject root = parseJsonFile(Path.of("json", "language.json"));
@@ -64,6 +73,10 @@ public class DataLoader {
 		return result;
 	}
 
+	/**
+	 * Loads all high scores from a file.
+	 * @return A id-score mapping.
+	 */
 	public static Map<String, Score> loadHighScores() {
 		Map<String, Score> result = new HashMap<>();
 		JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
@@ -85,6 +98,10 @@ public class DataLoader {
 		return result;
 	}
 
+	/**
+	 * Load all gamestates from gamestates.json
+	 * @return An id-gamestate mapping.
+	 */
 	public static JSONObject loadGameStates() {
 		JSONObject result = new JSONObject();
 		JSONObject root = parseJsonFile(Path.of("json", "gamestates.json"));
@@ -113,6 +130,11 @@ public class DataLoader {
 		return result;
 	}
 
+	/**
+	 * Parses a JSON file into a {@link JSONObject}.
+	 * @param file The file to parse
+	 * @return The loaded into a {@link JSONObject}.
+	 */
 	private static JSONObject parseJsonFile(Path file) {
 		if (!Files.exists(file)) {
 			System.err.println("File not found");
