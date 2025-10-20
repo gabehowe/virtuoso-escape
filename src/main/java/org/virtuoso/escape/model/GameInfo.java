@@ -199,7 +199,7 @@ public class GameInfo {
         var computtyTarLogic = new TakeInput("", TakeInput.makeCases(
                 "rotx 16 code", new Chain(ttyStr.apply("good_rotx"),new SwapEntities("microwave", "microwave_unblocked")),
                 "rotx 16 .*", ttyStr.apply("no_file"),
-                "rotx \\d+", ttyStr.apply("failed_rotx"),
+                "rotx \\d+.*", ttyStr.apply("failed_rotx"),
                 "rotx.*", ttyStr.apply("man_rotx"),
                 "ls", ttyStr.apply("ls_tar"),
                 "cat code", ttyStr.apply("cat_code"),

@@ -241,7 +241,7 @@ public class TerminalDriver {
             return j[0] + new FunString("<" + j[1]).italic().terminalColor(50);
         }).collect(Collectors.toList());
         Collections.shuffle(contributors);
-        String formattedTime = GameState.instance().time().toMinutesPart() + ":"+ GameState.instance().time().toSecondsPart();
+        String formattedTime = String.format("%02d:%02d", GameState.instance().time().toMinutesPart(), GameState.instance().time().toSecondsPart());
         String scoremsg = String.format(GameInfo.instance().string("credits","score"), formattedTime, GameState.instance().difficulty());
         List<String> msg = new ArrayList<>();
         msg.addAll(List.of(new FunString(scoremsg).purple().toString()));

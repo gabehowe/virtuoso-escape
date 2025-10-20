@@ -52,8 +52,8 @@ public class TerminalTests {
         scanner = new Scanner(System.in);
         projection = new GameProjection();
         projection.login("j", "j");
-//        testEnding();
+        testEnding();
 //        testTypewriterText();
-        testFunStrings();
+//        testFunStrings();
     }
 }

@@ -5,7 +5,7 @@
   "intro_squirrel": {
     "name": "Eckard",
     "introduce": "You see the well-mannered Eckard.",
-    "attack": "You try to throw a punch, but you realize you're a squirrel",
+    "attack": "You try to throw a punch, but you realize you're a squirrel.",
     "interact": "\"Hello fellow squirrel ... Wait! You're not supposed to be a squirrel! You need to get to the demetamorphinator! I think Gottfried knows where it is. Ask him!\"",
     "inspect": "Eckard's large bushy tail sways in the ever so acorn grove wind, catching colorless squirrel weather intuitions."
   },
@@ -48,7 +48,7 @@
     "introduce": "You see Joe eating a sandwich.",
     "attack": "Joe doesn't care anymore, as long as he has his sandwich.",
     "interact": "\"Thanks for the sandwich!\"",
-    "inspect": "On a table next to joe you see a no longer sealed food safe jar of hummus and a no longer sealed food safe jar of sunflower seed butter."
+    "inspect": "On a table next to Joe you see a no longer sealed food safe jar of hummus and a no longer sealed food safe jar of sunflower seed butter."
   },
   "elephant_in_the_room": {
     "name": "The elephant in the room",
@@ -223,7 +223,7 @@
   },
   "sock_squirrel": {
     "name": "Angry squirrel with one sock",
-    "attack": "You throw a punch at the angry squirrel, which then becomes placated and unlocks CompuTTY",
+    "attack": "You throw a punch at the angry squirrel, which then becomes placated and unlocks CompuTTY.",
     "inspect": "You see a squirrel as angry as an aggressively unwatered plant. You notice it has a total of 16 claws. Maybe that's important?",
     "interact": "You try to negotiate peacefully with the squirrel, but it just snarls and screams.",
     "introduce": "You see a squirrel with one squirrel-sized sock on. You think it might know something, but it just keeps snarling and screaming."
