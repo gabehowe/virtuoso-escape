@@ -51,7 +51,7 @@ public class GameInfo {
         Entity elephant = new Entity("elephant_in_the_room", null, null, new GiveItem(Item.sunflower_seed_butter), null);
         Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy,trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));
 
-		Entity almanac = makeAlmanacs(4);
+		Entity almanac = makeAlmanacs(5);
         Room janitor_closet = new Room(List.of(almanac), "storey_i_1", this.string("storey_i_1", "introduce"));
 
         Entity securityBread = new Entity("security",
@@ -81,10 +81,10 @@ public class GameInfo {
     }
 
     /**
-     * Create an Entity linkedlist through 2^length pages.
-     *
-     * @param length The number of almanacs
-     * @return An entity with actions holding references to the next entity.
+     *Returns almanacs for a binary search puzzle
+	 * 
+     * @param length The number of guesses
+     * @return An entity with states for each almanac guess
      */
     private Entity makeAlmanacs(int length) {
         final int PAGES = (int) Math.pow(2,length);
@@ -96,24 +96,25 @@ public class GameInfo {
             Map<String,Action> map = IntStream.range(1,PAGES).boxed()
 			.collect(Collectors.toMap(j -> String.valueOf(j), j -> turnPage(length-current_i, j, length, CORRECT_PAGE)));
 			LinkedHashMap<String,Action> linkedMap = new LinkedHashMap<String,Action>(map);
-			almanacStates.add(new EntityState(String.valueOf(length-i), null, null, null, new TakeInput("", linkedMap)));
+			Function<String, Action> alm = (stringId) -> new SetMessage(this, "almanac", stringId);
+			almanacStates.add(new EntityState("almanac_"+String.valueOf(length-i), alm.apply("attack"), alm.apply("inspect"), alm.apply("interact"), new TakeInput("", linkedMap)));
 
         }
-		almanacStates.add(new EntityState("found", null, null, null, null));
+		almanacStates.add(new EntityState("found_almanac", null, null, null, null));
 		return new Entity("almanac", almanacStates.toArray(new EntityState[0]));
     }
 
     private Action turnPage(int flips, int currentPage, int max_flips, int correctPage) {
-        Action swap = flips > 1 ? new SwapEntities("almanac", String.valueOf(flips-1)) : 
-		new SwapEntities("almanac", String.valueOf(max_flips));
+        Action swap = flips > 1 ? new SwapEntities("almanac", "almanac_"+String.valueOf(flips-1)) : 
+		new SwapEntities("almanac", "almanac_"+String.valueOf(max_flips));
 
         Action caseBreak = new SetMessage(this, "almanac", "break");
-        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + String.valueOf(flips-1));
-        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + String.valueOf(flips-1));
+        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + String.valueOf(flips-1) + this.string("almanac", "guesses_remaining"));
+        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + String.valueOf(flips-1) + this.string("almanac", "guesses_remaining"));
         Action caseFound = new Chain(
                 new SetMessage(this, "almanac", "correct_page"),
                 new GiveItem(Item.left_bread),
-                new SwapEntities("almanac", "found"));
+                new SwapEntities("almanac", "found_almanac"));
 
         Action evaluatePage = new Conditional(
                 () -> currentPage > correctPage,

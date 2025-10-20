@@ -69,14 +69,34 @@
   "almanac": {
     "name": "Friendly Sunflower and Dusty Old Almanac",
     "introduce": "You find a personable sunflower and an extremely rusty, beat-up almanac laying in the janitor's closet.",
-    "attack": "You tear up the pages, leaving pieces scattered around. The pieces suddenly reform and reveal the book to be %d pages away from losing it.",
+    "attack": "You tear up the pages, leaving pieces scattered around. The pieces suddenly reform.",
     "interact": "\"Hello, squirrel. I've been searching through this book all day, but every time I get five pages in, it closes on me.\"",
     "inspect": "The sunflower has all the aspects characteristic of such a creature:\nA bright ring of ray florets, smaller, dimmer, inner florets, and a rough stalk.\nYou wonder how it remains bright in as dull a location as a janitor's closet.\nThe almanac has 32 pages, which may somehow be connected to the number 5...",
     "too_high": "The book rustles in a way so as to indicate that a better page might precede the current.",
-    "guesses_remaining": "The book seems %d/%d as happy.",
+    "guesses_remaining": " pages remain before the almanac closes.",
     "too_low": "The book rustles in a way so as to indicate that a better page might succeed the current.",
     "correct_page": "\"Wow, you found the right page! ... Wow, this is brilliant!\nIt says here that for the next year, the sun will move from east to west! I'm saved! I don't need this spatially conditionally usable slice of bread anymore!\"",
     "break": "\"If I knew you were just going to fail, I wouldn't have let you touch the book in the first place! How am I ever going to find the sun?!\"\nThe almanac slams shut and bursts into flames.\nA new dusty old almanac is born from the ashes."
+  },
+  "almanac_5": {
+    "name": "Friendly Sunflower and Dusty Old Almanac",
+    "introduce": "You find a personable sunflower and an extremely rusty, beat-up almanac laying in the janitor's closet."
+  },
+  "almanac_4": {
+    "name": "Friendly Sunflower and Displeased Old Almanac",
+    "introduce": "As you flip through the almanac, you can't shake the feeling that it is unhappy with your attempt's to discover its contents."
+  },
+  "almanac_3": {
+    "name": "Friendly Sunflower and Disgruntled Old Almanac",
+    "introduce": "You begin to imagine that the almanac is developing some further animosity towards this series of events."
+  },
+  "almanac_2": {
+    "name": "Friendly Sunflower and Disdainful Old Almanac",
+    "introduce": "You have the striking impression that the almanac considers itself more important than you."
+  },
+  "almanac_1": {
+    "name": "Friendly Sunflower and Demented Old Almanac",
+    "introduce": "You feel the almanac practically vibrating with its pure hatred of your mere existence."
   },
   "found_almanac": {
     "name": "Friendly Sunflower and Distinct Lack of Almanac",
