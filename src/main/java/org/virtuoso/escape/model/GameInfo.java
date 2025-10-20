@@ -61,7 +61,11 @@ public class GameInfo {
      */
     private Floor floor1() {
         Entity door = new Entity("first_door", null, null, new SetFloor(2), null);
-        Entity trash_can = new Entity("trash_can", new GiveItem(Item.sealed_clean_food_safe_hummus), null, null, null);
+
+        EntityState hummus_trash_can = new EntityState("trash_can", new Chain(new GiveItem(Item.sealed_clean_food_safe_hummus), new SwapEntities("trash_can","sans_hummus_trash_can")), null, null, null);
+		EntityState sans_hummus_trash_can = new EntityState("sans_hummus_trash_can", null, null, null, null);
+		Entity trash_can = new Entity("trash_can", hummus_trash_can, sans_hummus_trash_can);
+
         Entity joeHardy = joeHardy();
         Entity elephant = new Entity("elephant_in_the_room", null, null, new GiveItem(Item.sunflower_seed_butter), null);
         Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy,trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));

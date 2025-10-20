@@ -112,6 +112,13 @@
     "interact": "**Can't interact with the trash can.**",
     "inspect": "Flies circulate around the trash bin."
   },
+  "sans_hummus_trash_can": {
+    "name": "Trash Can",
+    "introduce": "You see the trash can, lying pitifully on the ground.",
+    "attack": "You attack the trash can, and it rolls slightly.",
+    "interact": "**Can't interact with the trash can.**",
+    "inspect": "Ants crawl around the spilled garbage."
+  },
   "first_door": {
     "name": "Mysterious Door",
     "introduce": "This door is probably, most definitely locked.",
