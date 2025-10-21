@@ -4,7 +4,7 @@ import java.util.function.BooleanSupplier;
 
 /**
  * Control flow action.
- * Runs `if_` if `condition`, else runs `else_`.
+ * Runs {@code if_} if {@code condition}, else runs {@code else_}.
  * @param condition A boolean-returning function to check.
  * @param if_ The action to run if the condition returns true.
  * @param else_ The action to run if the condition returns false.
