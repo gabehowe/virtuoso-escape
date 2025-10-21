@@ -17,9 +17,9 @@ public class Entity {
 	private String currentState;
 
 	/**
-	 * Constructs and entity with multiple states.
-	 * @param id The ID of the entity you want to construct.
-	 * @param entity_states The states you want the entity to have,
+	 * Construct an entity with multiple states.
+	 * @param id The ID of the entity to change.
+	 * @param entity_states The states the entity has,
 	 * the default state will be a state with the name of the the entity id or the first state argument.
 	 */
 	public Entity(String id, EntityState... entity_states) {
@@ -29,7 +29,7 @@ public class Entity {
 	}
 
 	/**
-	 * Constructs a one-state entity and its state.
+	 * Construct a one-state entity and its state.
 	 * @param id The entity id.
 	 * @param attackAction The entity attack behavior.
 	 * @param inspectAction The entity inspect behavior.
@@ -43,7 +43,7 @@ public class Entity {
 	}
 
 	/**
-	 * Gets the current entity state.
+	 * Get the current entity state.
 	 * @return The current state of the entity.
 	 */
 	public EntityState state(){
@@ -51,17 +51,25 @@ public class Entity {
 	}
 
 	/**
-	 * Changes the state of an entity.
+	 * Change the state of an entity.
 	 * @param newState The name of the state to swap to.
 	 */
 	public void swapState(String newState){
 		this.currentState = newState;
 	}
 
+	/**
+	 * The id of the entity.
+	 * @return The id of the entity.
+	 */
 	public String id(){
 		return this.id;
 	}
 
+	/**
+	 * Get the id and state id of the entity of data saving.
+	 * @return The id and state id of an entity.
+	 */
 	public String[] write() {
 		return new String[] {this.id, this.currentState};
 	}
