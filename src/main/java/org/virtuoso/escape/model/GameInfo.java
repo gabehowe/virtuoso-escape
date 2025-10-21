@@ -67,7 +67,11 @@ public class GameInfo {
 		Entity trash_can = new Entity("trash_can", hummus_trash_can, sans_hummus_trash_can);
 
         Entity joeHardy = joeHardy();
-        Entity elephant = new Entity("elephant_in_the_room", null, null, new GiveItem(Item.sunflower_seed_butter), null);
+
+        EntityState hummus_elephant = new EntityState("elephant_in_the_room", null, null, new Chain(new GiveItem(Item.sunflower_seed_butter), new SwapEntities( "elephant_in_the_room", "sans_butter_elephant")), null);
+	    EntityState sans_butter_elephant = new EntityState("sans_butter_elephant", null, null, null, null);
+		Entity elephant = new Entity("elephant_in_the_room", hummus_elephant, sans_butter_elephant);
+
         Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy,trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));
 
 		Entity almanac = makeAlmanacs(5);

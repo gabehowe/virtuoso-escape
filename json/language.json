@@ -53,9 +53,16 @@
   "elephant_in_the_room": {
     "name": "The elephant in the room",
     "introduce": "\"Are you addressing me?\"",
-    "interact": "You address the elephant in the room. \"Wow, I feel recognized! I no longer need this sealed, food-safe jar of comforting sunflower seed butter!\"",
+    "interact": "You address the elephant in the room. \"Wow, I feel recognized! I no longer need this sealed, food-safe, jar of comforting sunflower seed butter!\"",
     "attack": "\"Ouch! but at least someone is acknowledging me.\"",
     "inspect": "Everyone in the room is avoiding looking at the elephant."
+  },
+  "sans_butter_elephant": {
+    "name": "The elephant in the room",
+    "introduce": "The elephant seems far more content. \"It's nice to actually meet someone, my name is Jeremy.\"",
+    "interact": "\"I hope you enjoy my sealed, food-safe, jar of comforting sunflower seed butter! I'll miss it dearly.\"",
+    "attack": "\"Ouch! but at least someone is acknowledging me.\"",
+    "inspect": "Everyone in the room seems seems suddenly shocked to discover the presence of an elephant."
   },
   "security": {
     "name": "Security Bread",
