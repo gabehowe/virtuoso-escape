@@ -99,7 +99,7 @@ public class GameInfo {
                         new SwapEntities("joe_hardy", "sandwich_joe")
                         )
         ), null);
-        EntityState introJoe = new EntityState("intro_joe", null, null, new SwapEntities("joe_hardy", "sandwich_joe"), null);
+        EntityState introJoe = new EntityState("intro_joe", null, null, new SwapEntities("joe_hardy", "sans_sandwich_joe"), null);
         return new Entity("joe_hardy", introJoe, sansSandwichJoe, sandwichJoe);
     }
 
