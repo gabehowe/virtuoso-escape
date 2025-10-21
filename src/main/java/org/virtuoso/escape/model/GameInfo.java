@@ -232,7 +232,7 @@ public class GameInfo {
         EntityState box_open = new EntityState("box_open", null, null,
                 new Chain(
                         puzzleMsg.apply("solved"),
-                        //TODO, add keys item
+                        //TODO(bkaikini), add keys item
                         new GiveItem(Item.keys)
                 ), null);
 
