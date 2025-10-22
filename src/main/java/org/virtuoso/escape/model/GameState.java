@@ -208,8 +208,8 @@ public class GameState {
 	public void updateHighScore() {
 		if (isEnded()) {
 			long currentTimeRemaining = initialTime - (this.time).getSeconds();
-			long oldTimeRemaining = this.account.highScore().timeRemaining().getSeconds();
-			if (oldTimeRemaining == 2700 || currentTimeRemaining > oldTimeRemaining) {
+			Duration oldTimeRemaining = this.account.highScore().timeRemaining();
+			if (oldTimeRemaining == null || currentTimeRemaining > oldTimeRemaining.getSeconds()) {
 				this.account.setHighScore(new Score(Duration.ofSeconds(currentTimeRemaining), this.difficulty));
 			}
 		}

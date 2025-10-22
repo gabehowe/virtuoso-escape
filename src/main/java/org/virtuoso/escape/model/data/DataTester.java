@@ -26,8 +26,12 @@ public class DataTester {
 		GameState gs = GameState.instance();
 
 		GameProjection gP = new GameProjection();
-		System.out.println(gP.login("q", "q"));
+		//System.out.println(gP.createAccount("q", "q")); //Account already exists so returns false
 		//gP.login("Jay'sSon", "cat");
+
+		//works
+		System.out.println(gP.login("f", "q")); //Outputs "Username input is invalid"
+		System.out.println(gP.login("q", "t")); //Outputs "Password input is invalid"
 
 		/*gP.createAccount("JsonLaquermelonie", "dog");
 		gP.createAccount("JSONJR.", "json123");*/
@@ -47,13 +51,13 @@ public class DataTester {
 		JSONObject qGameState1 = (JSONObject) DataLoader.loadGameStates().get("5531f883-41fd-4f3c-b3f7-a1ef6d3c82e6");
 		System.out.println("Q's Game State: " + qGameState1);
 
-		gP.setDifficulty(Difficulty.VIRTUOSIC);
-		gP.addItem(Item.left_bread);
-
-		gs.setTime(Duration.ofSeconds(2000));
-		gs.end();
-
-		gP.logout();
+//		gP.setDifficulty(Difficulty.VIRTUOSIC);
+//		gP.addItem(Item.left_bread);
+//
+//		gs.setTime(Duration.ofSeconds(2000));
+//		gs.end();
+//
+//		gP.logout();
 
 		//works. prints post changed data.
 		Map<String, Score> qHighScores2 = DataLoader.loadHighScores();
