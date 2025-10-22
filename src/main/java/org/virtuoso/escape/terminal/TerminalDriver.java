@@ -156,7 +156,7 @@ public class TerminalDriver {
 			System.out.print(escape("2;1H") + escape(CLEAR_BELOW));
 			if (!flag) {
 				display(new FunString("Failed to process login.").red().toString());
-				display((new FunString(AccountManager.instance().getInvalidLoginInfo(username, password))).bold().purple().toString());
+				display((new FunString(AccountManager.instance().getInvalidLoginInfo(username, password))).purple().toString());
 			}
 		} while (!flag);
 		// logical negation:
