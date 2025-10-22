@@ -3,6 +3,7 @@ module org.virtuoso.escape.gui {
     requires javafx.fxml;
     requires json.simple;
     requires java.sql;
+	requires freetts;
 
 
     opens org.virtuoso.escape.model to javafx.fxml;

@@ -1,6 +1,7 @@
 package org.virtuoso.escape.terminal;
 
 import org.virtuoso.escape.model.*;
+import org.virtuoso.escape.speech.SpeechPlayer;
 
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -79,6 +80,7 @@ public class TerminalDriver {
      */
     // Sequenced retains order.
     void createActionInterface(Scanner scanner, List<P<FunString, Runnable>> tuiAction, String status) {
+		SpeechPlayer.instance().playSoundbite(status);
         assert !tuiAction.isEmpty();
         Map<String, P<FunString, Runnable>> keyMap = new LinkedHashMap<>();
         // Create a unique key (or group of keys) to press for each action.
@@ -187,6 +189,7 @@ public class TerminalDriver {
      * @param str The string to typewrite.
      */
     void typewriterDisplay(Scanner scanner, String str) {
+		SpeechPlayer.instance().playSoundbite(str);
         long rate = 60;
         for(char s: str.toCharArray()){
             System.out.print(s);
@@ -407,7 +410,7 @@ public class TerminalDriver {
                 return;
             }
             if (projection.currentEntity().isPresent()) menu_entityAction(scanner, projection);
-            else menu_roomActions(scanner, projection);
+            else menu_roomActions(scanner, projection);	
         }
     }
 
@@ -423,8 +426,6 @@ public class TerminalDriver {
                 fs_r("Login", () -> tryLogin(scanner, projection::login)),
                 fs_r("Create Account", () -> tryLogin(scanner, projection::createAccount))
         );
-
-
         createActionInterface(scanner, actions, "Welcome to Virtuoso Escape!");
         gameLoop(scanner, projection);
     }

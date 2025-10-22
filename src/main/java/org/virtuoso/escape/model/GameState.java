@@ -41,6 +41,11 @@ public class GameState {
 	}
 
 	/**
+	 * Prevents GameState from being constructed.
+	 */
+	private GameState(){};
+
+	/**
 	 * Initialize the singleton with data.
 	 * @param account The account to draw data with.
 	 */
