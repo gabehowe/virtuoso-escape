@@ -1,7 +1,9 @@
 package org.virtuoso.escape.terminal;
 
 import org.virtuoso.escape.model.*;
+import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
+import org.virtuoso.escape.model.account.Leaderboard;
 import org.virtuoso.escape.speech.SpeechPlayer;
 
 import java.util.*;
@@ -20,6 +22,7 @@ import static org.virtuoso.escape.terminal.FunString.escape;
  */
 public class TerminalDriver {
 	private boolean DEBUG = true;
+	private final Leaderboard leaderboard = new Leaderboard();
 
 	/**
 	 * A simple tuple class.
@@ -237,35 +240,50 @@ public class TerminalDriver {
 	}
 
 	/**
-	 * Present the end of the game.
-	 * @param scanner The scanner to request input on.
-	 * @param projection The source for data.
-	 */
-	void menu_ending(Scanner scanner, GameProjection projection) {
-		List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> GameInfo.instance().string("credits", "contributor_" + i)).toList());
-		contributors = contributors.stream().map(it -> {
-			var j = it.split("<");
-			return j[0] + new FunString("<" + j[1]).italic().terminalColor(50);
-		}).collect(Collectors.toList());
-		Collections.shuffle(contributors);
-		String formattedTime = String.format("%02d:%02d", GameState.instance().time().toMinutesPart(), GameState.instance().time().toSecondsPart());
-		String scoremsg = String.format(GameInfo.instance().string("credits", "score"), formattedTime, GameState.instance().difficulty());
-		List<String> msg = new ArrayList<>();
-		msg.add(new FunString(scoremsg).purple().toString());
-		msg.addAll(List.of(GameInfo.instance().string("credits", "message").split("\n")));
-		msg.add("Credits:");
-		msg.addAll(contributors);
-		for (String s : msg) {
-			System.out.println(s);
-			try {
-				Thread.sleep(750);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-		}
-		pauseDisplay(scanner, "");
+     * Present the end of the game, record score, and display the leaderboard.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
+    void menu_ending(Scanner scanner, GameProjection projection) {
+        // --- Display Credits/End Message ---
+        List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> GameInfo.instance().string("credits", "contributor_" + i)).toList());
+        contributors = contributors.stream().map(it -> {
+            var j = it.split("<");
+            return j[0] + new FunString("<" + j[1]).italic().terminalColor(50);
+        }).collect(Collectors.toList());
+        Collections.shuffle(contributors);
+        String formattedTime = String.format("%02d:%02d", GameState.instance().time().toMinutesPart(), GameState.instance().time().toSecondsPart());
+        String scoremsg = String.format(GameInfo.instance().string("credits", "score"), formattedTime, GameState.instance().difficulty());
+        List<String> msg = new ArrayList<>();
+        msg.add(new FunString(scoremsg).purple().toString());
+        msg.addAll(List.of(GameInfo.instance().string("credits", "message").split("\n")));
+        msg.add("Credits:");
+        msg.addAll(contributors);
+        
+        // Loop to display the credits line by line
+        for (String s : msg) {
+            System.out.println(s);
+            try {
+                Thread.sleep(750);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        pauseDisplay(scanner, "");
 
-	}
+        Account currentAccount = GameState.instance().account();
+
+        String usernameToRecord = (currentAccount != null) 
+            ? currentAccount.username() 
+            : "Guest";
+            
+        leaderboard.recordSession(usernameToRecord);
+
+        // Show
+        leaderboard.showLeaderboard();
+        pauseDisplay(scanner, "Press enter to logout"); 
+        projection.logout();
+    }
 
 	/**
 	 * Ask the user to change rooms.
@@ -407,21 +425,22 @@ public class TerminalDriver {
 	}
 
 	/**
-	 * Continuously ask the user for context-specific input.
-	 * @param scanner The scanner to request input on.
-	 * @param projection The source for data.
-	 */
-	void gameLoop(Scanner scanner, GameProjection projection) {
-		while (true) {
-			if (projection.isEnded()) {
-				this.menu_ending(scanner, projection);
-				projection.logout();
-				return;
-			}
-			if (projection.currentEntity().isPresent()) menu_entityAction(scanner, projection);
-			else menu_roomActions(scanner, projection);	
-		}
-	}
+     * Continuously ask the user for context-specific input.
+     * @param scanner The scanner to request input on.
+     * @param projection The source for data.
+     */
+    void gameLoop(Scanner scanner, GameProjection projection) {
+        while (true) {
+            if (projection.isEnded()) {
+                // If the game is over (due to win or time run out), call menu_ending.
+                // menu_ending now handles: display, recording, leaderboard, pause, and logout.
+                this.menu_ending(scanner, projection); 
+                return; // Exit the game loop
+            }
+            if (projection.currentEntity().isPresent()) menu_entityAction(scanner, projection);
+            else menu_roomActions(scanner, projection); 
+        }
+    }
 
 	/**
 	 * Program entrance.

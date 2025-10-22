@@ -10,6 +10,7 @@ public enum Item {
     sunflower_seed_butter("sunflower seed butter"),
     right_bread("right bread"),
 	sealed_clean_food_safe_hummus("sealed clean food-safe hummus"),
+    //Floor 3 items//
     keys("keys");
 
     private final String name;

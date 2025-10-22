@@ -211,6 +211,15 @@
     "attack": "You try to smash the box, but it's ineffective. You gain nothing but a bruised hand.",
     "inspect": "The box is designed to hide its mechanism. Only by understanding the flow of the puzzle will you find the way in."
   },
+"exit_door": {
+  "name": "Exit door",
+  "introduce": "Here lies a door",
+  "locked_msg": "The door needs a key to open, how would you get that?",
+  "unlocked_msg": "You use the key and the door is now open.",
+  "unlocked_success": "You step through the open door and proceed to the next floor.",
+  "inspect_locked": "The door looks like it needs a key to open",
+  "inspect_unlocked": "You see the light of (tentative) salvation behind the next door as the first sounds of squirrel chattering behind you become apparent."
+},
   "storey_iv": {
     "name": "Fin Foyer",
     "introduce": "You enter a culminating room, filled with urgency and a feeling that you might be nearing the end of your adventure. A critical moment is approaching..."

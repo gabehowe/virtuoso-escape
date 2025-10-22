@@ -213,54 +213,86 @@ public class GameInfo {
 
     //Floor Three//
     /**
-     * Build M. Bert Storey floor 3.
-     * @return M. Bert Storey floor 3.
+     * Build 3rd floor
      */
-
+    /**
+ * Build M. Bert Storey floor 3.
+ * @return M. Bert Storey floor 3.
+ */
     private Floor floor3() {
         Entity sparrowAmbassador = new Entity("sparrow_ambassador",
-                null,
-                null,
-                new SetMessage(this, "sparrow_ambassador", "interact_intro"),
-                new TakeInput(
-                        "(?:sparrow )?help", new SetMessage(this, "sparrow_ambassador", "hint_help"),
-                        ".*", new SetMessage(this, "sparrow_ambassador", "hint_general")
-                ));
+            null,
+            null,
+            new SetMessage(this, "sparrow_ambassador", "interact_intro"),
+            new TakeInput(
+                    "(?:sparrow )?help", new SetMessage(this, "sparrow_ambassador", "hint_help"),
+                    ".*", new SetMessage(this, "sparrow_ambassador", "hint_general")
+            ));
 
         Function<String, Action> puzzleMsg = (string) -> new SetMessage(this, "box_riddle", string);
 
         EntityState box_open = new EntityState("box_open", null, null,
-                new Chain(
-                        puzzleMsg.apply("solved"),
-                        //TODO(bkaikini), add keys item
-                        new GiveItem(Item.keys)
-                ), null);
+            new Chain(
+                    puzzleMsg.apply("solved"),
+                    new GiveItem(Item.keys)
+            ), null);
 
         var boxLogicSuccess = new TakeInput("", TakeInput.makeCases(
-                "(?:box )?open", new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
-                ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
+            "(?:box )?open", new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
+            ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
         ));
         EntityState box_success = new EntityState("box_success", null, null, null, boxLogicSuccess);
 
         var boxLogicFollow = new TakeInput("", TakeInput.makeCases(
-                "(?:box )?follow", new Chain(new SwapEntities("box_riddle", "box_success"), puzzleMsg.apply("step_follow")),
-                ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
+            "(?:box )?follow", new Chain(new SwapEntities("box_riddle", "box_success"), puzzleMsg.apply("step_follow")),
+            ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
         ));
         EntityState box_step1 = new EntityState("box_step1", null, null, null, boxLogicFollow);
 
         var boxLogicStart = new TakeInput("", TakeInput.makeCases(
-                "(?:box )?start", new Chain(new SwapEntities("box_riddle", "box_step1"), puzzleMsg.apply("step_start")),
-                ".*", puzzleMsg.apply("step_wrong")
+            "(?:box )?start", new Chain(new SwapEntities("box_riddle", "box_step1"), puzzleMsg.apply("step_start")),
+            ".*", puzzleMsg.apply("step_wrong")
         ));
         EntityState box_start = new EntityState("box_start", null, null, puzzleMsg.apply("interact"), boxLogicStart);
 
         Entity puzzleBox = new Entity("box_riddle", box_start, box_step1, box_success, box_open);
+        Function<String, Action> doorMsg = (string) -> new SetMessage(this, "exit_door", string);
+        Predicate<Item[]> hasKeys = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a&&b).get();
 
-        Room boxRoom = new Room(new ArrayList<>(List.of(sparrowAmbassador, puzzleBox)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
+        Action goToFloor4 = new Chain(
+            doorMsg.apply("unlocked_success"),
+            new SetFloor(4) 
+        );
+        EntityState doorUnlocked = new EntityState("exit_door_unlocked",
+            null,                     
+            doorMsg.apply("inspect_unlocked"), 
+            goToFloor4,                
+            null                    
+        );
+
+        Action checkKeysAndSwap = new Conditional(
+            () -> hasKeys.test(new Item[]{Item.keys}),
+            new Chain(
+                doorMsg.apply("unlocked_msg"),
+                new SwapEntities("exit_door", "exit_door_unlocked")
+            ),
+            doorMsg.apply("locked_msg")
+        );
+        EntityState doorLocked = new EntityState("exit_door_locked",
+            null,                   
+            doorMsg.apply("inspect_locked"),
+            checkKeysAndSwap,            
+            null                  
+        );
+
+        Entity exitDoor = new Entity("exit_door", doorLocked, doorUnlocked);
+
+        Room boxRoom = new Room(new ArrayList<>(List.of(sparrowAmbassador, puzzleBox, exitDoor)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
         return new Floor("floor_iii", List.of(boxRoom));
     }
-    ///////////////////////////////////////////////////////////////
-    //Floor Four/
+
+
+    //Floor Four//
     private Floor floor4() {
         // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = man();
