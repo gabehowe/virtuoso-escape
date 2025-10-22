@@ -22,7 +22,7 @@ public class GameState {
 	private Entity currentEntity;
 	private Set<Item> currentItems;
 	private Duration time;
-	public static final long initialTime = 2700;
+	public static long initialTime = 2700;
 	private long startTime;
 	private Account account;
 	private boolean ended;
@@ -169,6 +169,13 @@ public class GameState {
 	 */
 	public void addTime(Duration time) {
 		this.time = this.time.plus(time);
+	}
+
+	/**
+	 * Increments the {@code initialTime} by 1 minute if it is less than 2 hours.
+	 */
+	public void incrementInitialTime() {
+		if (initialTime < 7200) initialTime += 60;
 	}
 
 	/**

@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.Map;
 
 /**
- * Tests for {@link DataLoader} and {@link DataTester}
+ * Tests for {@link DataLoader} and {@link DataWriter}
  * @author Andrew
  * @author Treasure
  */
@@ -29,23 +29,23 @@ public class DataTester {
 		System.out.println(gP.login("q", "q"));
 		//gP.login("Jay'sSon", "cat");
 
-		gP.createAccount("JsonLaquermelonie", "dog");
-		gP.createAccount("JSONJR.", "json123");
+		/*gP.createAccount("JsonLaquermelonie", "dog");
+		gP.createAccount("JSONJR.", "json123");*/
 
-		gP.logout();
-		gP.login("JSONJR.", "json123");
+		/*gP.logout();
+		gP.login("JSONJR.", "json123");*/
 
 		//works
 		Map<String, Map<String, String>> language = DataLoader.loadGameLanguage();
 		System.out.println(language.get("intro_joe"));
 
 		//works
-		Map<String, Score> jHighScores1 = DataLoader.loadHighScores();
-		System.out.println(jHighScores1.get("39cccc63-6aa2-4832-a707-a9b23841ac9c").toString());
+		Map<String, Score> qHighScores1 = DataLoader.loadHighScores();
+		System.out.println(qHighScores1.get("5531f883-41fd-4f3c-b3f7-a1ef6d3c82e6").toString());
 
 		//works. print pre changed data.
-		JSONObject jGameState1 = (JSONObject) DataLoader.loadGameStates().get("39cccc63-6aa2-4832-a707-a9b23841ac9c");
-		System.out.println("J's Game State: " + jGameState1);
+		JSONObject qGameState1 = (JSONObject) DataLoader.loadGameStates().get("5531f883-41fd-4f3c-b3f7-a1ef6d3c82e6");
+		System.out.println("Q's Game State: " + qGameState1);
 
 		gP.setDifficulty(Difficulty.VIRTUOSIC);
 		gP.addItem(Item.left_bread);
@@ -56,10 +56,10 @@ public class DataTester {
 		gP.logout();
 
 		//works. prints post changed data.
-		Map<String, Score> jHighScores2 = DataLoader.loadHighScores();
-		System.out.println(jHighScores2.get("39cccc63-6aa2-4832-a707-a9b23841ac9c").toString());
+		Map<String, Score> qHighScores2 = DataLoader.loadHighScores();
+		System.out.println(qHighScores2.get("5531f883-41fd-4f3c-b3f7-a1ef6d3c82e6").toString());
 
-		JSONObject jGameState2 = (JSONObject) DataLoader.loadGameStates().get("39cccc63-6aa2-4832-a707-a9b23841ac9c");
-		System.out.println("J's Game State: " + jGameState2);
+		JSONObject qGameState2 = (JSONObject) DataLoader.loadGameStates().get("5531f883-41fd-4f3c-b3f7-a1ef6d3c82e6");
+		System.out.println("Q's Game State: " + qGameState2);
 	}
 }

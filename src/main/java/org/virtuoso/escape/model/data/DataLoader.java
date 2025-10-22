@@ -34,10 +34,10 @@ public class DataLoader {
 			String id = String.valueOf(key);
 			Object value = root.get(id);
 			if (value instanceof JSONObject acct) {
-				Object username = acct.get("username");
-				Object hashed = acct.get("hashedPassword");
+				String username = acct.get("username").toString();
+				String hashed = acct.get("hashedPassword").toString();
 				Object highScore = acct.get("highScore");
-				if (username != null && hashed != null && highScore != null)
+				if (highScore instanceof JSONObject)
 					result.put(id, new JSONObject(Map.of(
 							"username", username,
 							"hashedPassword", hashed,

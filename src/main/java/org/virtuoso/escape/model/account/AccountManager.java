@@ -82,13 +82,13 @@ public class AccountManager {
 		for (Object id : this.accounts.keySet()) {
 			Object value = this.accounts.get(id);
 			if (value instanceof JSONObject acct) {
-				Object highScore = acct.get("highScore");
 				String uName = acct.get("username").toString();
 				String pWord = acct.get("hashedPassword").toString();
-				if (highScore instanceof JSONObject score) {
-					long timeRemaining = (long) score.get("timeRemaining");
-					Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
-					if (uName.equals(username) && pWord.equals(hashedPassword)) {
+				Object highScore = acct.get("highScore");
+				if (uName.equals(username) && pWord.equals(hashedPassword)) {
+					if (highScore instanceof JSONObject score) {
+						long timeRemaining = (long) score.get("timeRemaining");
+						Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
 						return new Account(username, password, UUID.fromString(id.toString()),
 								new Score(Duration.ofSeconds(timeRemaining), difficulty));
 					}
