@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 
 /**
  * @author Andrew
+ * @author Bose
  * @author gabri
  */
 public class GameInfo {
@@ -40,6 +41,7 @@ public class GameInfo {
         this.building.add(floor1());
         this.building.add(floor2());
         this.building.add(floor3());
+        this.building.add(floor4());
     }
 
     //Acorn Grove//
@@ -109,7 +111,7 @@ public class GameInfo {
 
     /**
      *Returns almanacs for a binary search puzzle
-	 * 
+	 *
      * @param length The number of guesses
      * @return An entity with states for each almanac guess
      */
@@ -140,7 +142,7 @@ public class GameInfo {
      * @return An Action to be run later.
      */
     private Action turnPage(int flips, int currentPage, int maxFlips, int correctPage) {
-        Action swap = flips > 1 ? new SwapEntities("almanac", "almanac_"+String.valueOf(flips-1)) : 
+        Action swap = flips > 1 ? new SwapEntities("almanac", "almanac_"+String.valueOf(flips-1)) :
 		new SwapEntities("almanac", "almanac_"+String.valueOf(maxFlips));
 
         Action caseBreak = new SetMessage(this, "almanac", "break");
@@ -209,12 +211,57 @@ public class GameInfo {
         return new Entity("door1", door1);
     }
 
-    //Floor Three/
+    //Floor Three//
     /**
      * Build M. Bert Storey floor 3.
      * @return M. Bert Storey floor 3.
      */
+
     private Floor floor3() {
+        Entity sparrowAmbassador = new Entity("sparrow_ambassador",
+                null,
+                null,
+                new SetMessage(this, "sparrow_ambassador", "interact_intro"),
+                new TakeInput(
+                        "(?:sparrow )?help", new SetMessage(this, "sparrow_ambassador", "hint_help"),
+                        ".*", new SetMessage(this, "sparrow_ambassador", "hint_general")
+                ));
+
+        Function<String, Action> puzzleMsg = (string) -> new SetMessage(this, "box_riddle", string);
+
+        EntityState box_open = new EntityState("box_open", null, null,
+                new Chain(
+                        puzzleMsg.apply("solved"),
+                        //TODO(bkaikini), add keys item
+                        new GiveItem(Item.keys)
+                ), null);
+
+        var boxLogicSuccess = new TakeInput("", TakeInput.makeCases(
+                "(?:box )?open", new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
+                ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
+        ));
+        EntityState box_success = new EntityState("box_success", null, null, null, boxLogicSuccess);
+
+        var boxLogicFollow = new TakeInput("", TakeInput.makeCases(
+                "(?:box )?follow", new Chain(new SwapEntities("box_riddle", "box_success"), puzzleMsg.apply("step_follow")),
+                ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
+        ));
+        EntityState box_step1 = new EntityState("box_step1", null, null, null, boxLogicFollow);
+
+        var boxLogicStart = new TakeInput("", TakeInput.makeCases(
+                "(?:box )?start", new Chain(new SwapEntities("box_riddle", "box_step1"), puzzleMsg.apply("step_start")),
+                ".*", puzzleMsg.apply("step_wrong")
+        ));
+        EntityState box_start = new EntityState("box_start", null, null, puzzleMsg.apply("interact"), boxLogicStart);
+
+        Entity puzzleBox = new Entity("box_riddle", box_start, box_step1, box_success, box_open);
+
+        Room boxRoom = new Room(new ArrayList<>(List.of(sparrowAmbassador, puzzleBox)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
+        return new Floor("floor_iii", List.of(boxRoom));
+    }
+    ///////////////////////////////////////////////////////////////
+    //Floor Four/
+    private Floor floor4() {
         // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = man();
 
@@ -224,8 +271,8 @@ public class GameInfo {
 	    // Whoops! JEP 126!
         EntityState microwaveUnblocked = new EntityState("microwave_unblocked", this::gameEnding, null, this::gameEnding, null);
 		Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
-        Room floor3_0 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
-        return new Floor("storey_iii_0", List.of(floor3_0));
+        Room floor4 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave)), "storey_iv", this.string("storey_iv", "introduce"));
+        return new Floor("storey_iv", List.of(floor4));
     }
 
     /**

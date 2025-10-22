@@ -20,7 +20,7 @@ public class Entity {
 	 * Construct an entity with multiple states.
 	 * @param id The ID of the entity to change.
 	 * @param entity_states The states the entity has,
-	 * the default state will be a state with the name of the the entity id or the first state argument.
+	 * the default state will be a state with the name of the entity id or the first state argument.
 	 */
 	public Entity(String id, EntityState... entity_states) {
 		this.id = id;

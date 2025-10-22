@@ -9,7 +9,8 @@ public enum Item {
     left_bread("left bread"),
     sunflower_seed_butter("sunflower seed butter"),
     right_bread("right bread"),
-	sealed_clean_food_safe_hummus("sealed clean food-safe hummus");
+	sealed_clean_food_safe_hummus("sealed clean food-safe hummus"),
+    keys("keys");
 
     private final String name;
 

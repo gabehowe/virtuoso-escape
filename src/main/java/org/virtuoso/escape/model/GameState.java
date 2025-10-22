@@ -22,7 +22,7 @@ public class GameState {
 	private Entity currentEntity;
 	private Set<Item> currentItems;
 	private Duration time;
-	public static final long initialTime = 2700;
+	public static long initialTime = 2700;
 	private long startTime;
 	private Account account;
 	private boolean ended;
@@ -177,6 +177,13 @@ public class GameState {
 	}
 
 	/**
+	 * Increments the {@code initialTime} by 1 minute if it is less than 2 hours.
+	 */
+	public void incrementInitialTime() {
+		if (initialTime < 7200) initialTime += 60;
+	}
+
+	/**
 	 * The account logged in with.
 	 * @return The account logged in with.
 	 */
@@ -206,8 +213,8 @@ public class GameState {
 	public void updateHighScore() {
 		if (isEnded()) {
 			long currentTimeRemaining = initialTime - (this.time).getSeconds();
-			long oldTimeRemaining = this.account.highScore().timeRemaining().getSeconds();
-			if (oldTimeRemaining == 2700 || currentTimeRemaining > oldTimeRemaining) {
+			Duration oldTimeRemaining = this.account.highScore().timeRemaining();
+			if (oldTimeRemaining == null || currentTimeRemaining > oldTimeRemaining.getSeconds()) {
 				this.account.setHighScore(new Score(Duration.ofSeconds(currentTimeRemaining), this.difficulty));
 			}
 		}

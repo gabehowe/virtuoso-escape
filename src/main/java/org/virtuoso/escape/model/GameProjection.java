@@ -148,8 +148,15 @@ public class GameProjection {
 	}
 
 	/**
+	 * Increments the {@code initialTime} by 1 minute if it is less than 2 hours.
+	 */
+	public void incrementInitialTime() {
+		this.gameState.incrementInitialTime();
+	}
+
+	/**
 	 * Interact with the currently focused entity.
-	 * @exception java.util.NoSuchElementException if no entity is focused.
+	 * @throws java.util.NoSuchElementException if no entity is focused.
 	 */
 	public void interact() {
 		currentEntity().orElseThrow().state().interact();
@@ -157,7 +164,7 @@ public class GameProjection {
 
 	/**
 	 * Attack the currently focused entity.
-	 * @exception java.util.NoSuchElementException if no entity is focused.
+	 * @throws java.util.NoSuchElementException if no entity is focused.
 	 */
 	public void attack() {
 		currentEntity().orElseThrow().state().attack();
@@ -165,7 +172,7 @@ public class GameProjection {
 
 	/**
 	 * Inspect the currently focused entity.
-	 * @exception java.util.NoSuchElementException if no entity is focused.
+	 * @throws java.util.NoSuchElementException if no entity is focused.
 	 */
 	public void inspect() {
 		currentEntity().orElseThrow().state().inspect();
@@ -174,7 +181,7 @@ public class GameProjection {
 	/**
 	 * Speak to the current entity.
 	 * @param input The input to give to the entity.
-	 * @exception java.util.NoSuchElementException if no entity is focused.
+	 * @throws java.util.NoSuchElementException if no entity is focused.
 	 */
 	public void input(String input) {
 		currentEntity().orElseThrow().state().takeInput(input);
