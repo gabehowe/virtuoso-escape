@@ -91,6 +91,7 @@ public class AccountManager {
 	 * Displays which information was incorrect when attempt to log in/create an account fails.
 	 * @param username the username to be checked.
 	 * @param password the password to be checked.
+	 * @param signal the signal, represented as a character, that tells whether it was an attempt to log in or create an account.
 	 * @return the respective string output based on which information was incorrect.
 	 */
 	public String getInvalidLoginInfo(String username, String password, char signal) {

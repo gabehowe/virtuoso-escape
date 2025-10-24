@@ -149,6 +149,7 @@ public class TerminalDriver {
 	 * Request a valid username and password from the user.
 	 * @param scanner The scanner to request for input on.
 	 * @param authenticator The function to try to authenticate on, usually create account or login.
+	 * @param signal the signal, represented as a character, that tells whether it was an attempt to log in or create an account.
 	 */
 	void tryLogin(Scanner scanner, BiPredicate<String, String> authenticator, char signal) {
 		String username, password;
