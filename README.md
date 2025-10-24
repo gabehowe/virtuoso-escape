@@ -17,8 +17,15 @@ Our project scores players based on how long they take to complete the course, a
 
 ## Compilation
 
-This part hasn't been completed yet.
+To use the GUI
+```bash
+$ ./gradlew run
+```
 
+To use the TUI
+```bash
+$ ./gradlew tui
+```
 
 ## Object Links
 

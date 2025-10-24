@@ -1,4 +1,4 @@
-module org.virtuoso.escape.gui {
+module org.virtuoso.escape {
     requires javafx.controls;
     requires javafx.fxml;
     requires json.simple;
@@ -8,6 +8,7 @@ module org.virtuoso.escape.gui {
 
     opens org.virtuoso.escape.model to javafx.fxml;
     opens org.virtuoso.escape.gui to javafx.fxml;
-    exports org.virtuoso.escape.gui;
     opens org.virtuoso.escape.terminal to javafx.fxml;
+    exports org.virtuoso.escape.terminal;
+    exports org.virtuoso.escape.gui;
 }
