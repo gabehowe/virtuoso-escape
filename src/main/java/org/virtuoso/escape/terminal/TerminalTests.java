@@ -1,7 +1,6 @@
 package org.virtuoso.escape.terminal;
 
 import org.virtuoso.escape.model.GameProjection;
-import org.virtuoso.escape.terminal.TerminalDriver;
 
 import java.util.ArrayList;
 import java.util.Scanner;

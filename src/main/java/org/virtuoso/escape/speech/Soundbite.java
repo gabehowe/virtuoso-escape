@@ -27,7 +27,7 @@ public class Soundbite extends Thread {
     public void run(){
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         VoiceManager voiceManger = VoiceManager.getInstance();
-        voice = voiceManger.getVoice(VOICE_NAME);
+    	voice = voiceManger.getVoice(VOICE_NAME);
 		if(voice == null){
 			System.err.println("Voice not found: " + VOICE_NAME);
 			return;
@@ -36,7 +36,7 @@ public class Soundbite extends Thread {
 		// Disables the error output stream to avoid speak printing an error when canceled.
 		System.setErr(new java.io.PrintStream(new java.io.OutputStream() {
                 public void write(int b) {
-                    //Does n
+                    //Does nothing
                 }
             }));
 		voice.speak(text);
