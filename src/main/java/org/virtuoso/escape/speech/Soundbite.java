@@ -15,6 +15,7 @@ public class Soundbite extends Thread {
 
 	/**
 	 * Construct a soundbite from text.
+	 * 
 	 * @param text Text to play as sound.
 	 */
 	public Soundbite(String text){
@@ -33,13 +34,7 @@ public class Soundbite extends Thread {
 			return;
 		}
 		voice.allocate();
-		// Disables the error output stream to avoid speak printing an error when canceled.
-		System.setErr(new java.io.PrintStream(new java.io.OutputStream() {
-                public void write(int b) {
-                    //Does nothing
-                }
-            }));
-		voice.speak(text);
+		voice.speak(new CancelableSpeakable(text));
 		voice.deallocate();
     }
 
