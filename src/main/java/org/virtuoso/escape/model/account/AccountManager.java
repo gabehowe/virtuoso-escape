@@ -61,15 +61,16 @@ public class AccountManager {
 	 */
 	public Optional<Account> newAccount(String username, String password) {
 		boolean usernameExists = false;
+
+		Optional<Account> account = login(username, password);
+		if (account.isPresent()) return account;
+
 		for (Object id : this.accounts.keySet()) {
 			JSONObject value = (JSONObject) this.accounts.get(id);
 			if (value.get("username").equals(username)) usernameExists = true;
 		}
 		if (!usernameExists && username.length() <= 32 && password.length() <= 32) {
 			GameState gameState = GameState.instance();
-
-			Optional<Account> account = login(username, password);
-			if (account.isPresent()) return account;
 
 			Account newAccount = new Account(username, password);
 			gameState.begin(newAccount);
@@ -87,12 +88,12 @@ public class AccountManager {
 	}
 
 	/**
-	 * Displays which information was incorrect when attempt to log in fails.
+	 * Displays which information was incorrect when attempt to log in/create an account fails.
 	 * @param username the username to be checked.
 	 * @param password the password to be checked.
 	 * @return the respective string output based on which information was incorrect.
 	 */
-	public String getInvalidLoginInfo(String username, String password) {
+	public String getInvalidLoginInfo(String username, String password, char signal) {
 		int usernameCount = 0;
 		int passwordCount = 0;
 		String hashedPassword = Account.hashPassword(password);
@@ -100,12 +101,14 @@ public class AccountManager {
 			JSONObject value = (JSONObject) this.accounts.get(id);
 			String uName = value.get("username").toString();
 			String pWord = value.get("hashedPassword").toString();
-			if (uName.equals(username)) ++usernameCount;
-			else if (pWord.equals(hashedPassword)) ++passwordCount;
+			if (uName.equals(username)) usernameCount++;
+			else if (pWord.equals(hashedPassword)) passwordCount++;
 		}
-		if (usernameCount == 0 && passwordCount == 0) return "Both username and password input is invalid.";
-		else if (usernameCount > 0) return "Password input is invalid.";
-		else return "Username input is invalid";
+		if (Character.toLowerCase(signal) == 'l') {
+			if (usernameCount == 0 && passwordCount == 0) return "Both username and password input is invalid.";
+			else if (usernameCount > 0) return "Password input is invalid.";
+			else return "Username input is invalid.";
+		} else return "Username already exists.";
 	}
 
 	/**
@@ -156,9 +159,9 @@ public class AccountManager {
 				Object highScore = acct.get("highScore");
 				if (uName.equals(username) && (pWord.equals(hashedPassword))) {
 					if (highScore instanceof JSONObject score) {
-						long timeRemaining = (long) score.get("timeRemaining");
+						Duration timeRemaining = Duration.ofSeconds((long) score.get("timeRemaining"));
 						Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
-						return new Account(username, password, UUID.fromString(id.toString()), new Score(Duration.ofSeconds(timeRemaining), difficulty));
+						return new Account(username, password, UUID.fromString(id.toString()), new Score(timeRemaining, difficulty));
 					}
 				}
 			}
