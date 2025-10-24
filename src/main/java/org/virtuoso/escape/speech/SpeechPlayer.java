@@ -36,4 +36,13 @@ public class SpeechPlayer {
 		currentClip.start();
 
 	}
+
+	/**
+	 * Stop the currently playing soundbite.
+	 */
+	public void stopSoundbite() {
+		if (currentClip != null && currentClip.isAlive()){
+			currentClip.interrupt();
+		}
+	}
 }

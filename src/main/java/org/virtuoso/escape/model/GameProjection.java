@@ -1,6 +1,7 @@
 package org.virtuoso.escape.model;
 
 import org.virtuoso.escape.model.account.*;
+import org.virtuoso.escape.speech.SpeechPlayer;
 
 import java.time.Duration;
 import java.util.List;
@@ -48,6 +49,7 @@ public class GameProjection {
 	 * Log the current user out and write data.
 	 */
 	public void logout() {
+		SpeechPlayer.instance().stopSoundbite();
 		this.gameState.write();
 		this.accountManager.logout();
 	}
