@@ -142,7 +142,6 @@ public class TerminalDriver {
      *
      * @param scanner       The scanner to request for input on.
      * @param authenticator The function to try to authenticate on, usually create account or login.
-     * @param signal        the signal, represented as a character, that tells whether it was an attempt to log in or create an account.
      */
     boolean tryLogin(Scanner scanner, BiPredicate<String, String> authenticator, BiFunction<String, String, String> checkAuthError) {
         String username, password;
@@ -269,7 +268,7 @@ public class TerminalDriver {
 
         String progressText = String.format("Floor %d of %d (%d%%)", currentFloorIndex + 1, totalFloors, progressPercentage);
 
-        return progressText + "\n" + bar.toString();
+        return progressText + "\n" + bar;
     }
 
     /**
