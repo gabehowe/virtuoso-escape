@@ -318,5 +318,21 @@
     "message": "Thanks for playing Escape: A Storey!\nSpecial thanks to Joe Hardy for permission for his appearance and for his excellence in teaching assistance.",
     "score": "You had %s remaining on %s difficulty.",
 	"hints": "You used %s hints."
+  },
+  "narrator": {
+    "introduce": "A mearly transparent figure stands here, whispering secret stories.",
+    "inspect": "The narrator seems to be an extension of the building itself, offering silent, wise counsel.",
+    "attack": "Your attack passes straight through the figure, leaving you questioning either your ability or sanity.",
+    "hints_exhausted": "I have shared all my wisdom for this floor. You must proceed on your own now.",
+    "acorn_grove_hint_1": "You need to escape this grove to reach the building. Perhaps one of your squirrel friends knows how to use the machinery.",
+    "acorn_grove_hint_2": "The friendly squirrel wants to help you.",
+    "storey_i_hint_1": "You need THE sandwich. The ingredients are scattered across the floor, disguised as other objects or rewards for solving puzzles, try your best stoic mammal.",
+    "storey_i_hint_2": "The bread is the crux of all this. One piece is a reward for a numbers game in the closet, and the other is a reward for a tricky word puzzle with the guard.",
+    "storey_ii_hint_1": "The door puzzle requires you to choose the door that 'rings with the most life.' Think about what the pitcher plant values.",
+    "storey_ii_hint_2": "The doors must be opened in a specific sequence, which is shuffled after every failure. The hint lies in the doors' numerical property.",
+    "storey_iii_hint_1": "The sparrow says the box's trick lies in finding the one true cycle. The puzzle is solved by correctly ordering three words: START, CONTINUE, and OPEN.",
+    "storey_iii_hint_2": "The exit door requires a key, which you receive upon successfully opening the box. The box must be opened in the sequence: START, CONTINUE, OPEN.",
+    "storey_iv_hint_1": "You need to unlock the Demetamorphinator. The blocked terminal (CompuTTY) needs to be unblocked by the squirrel with one sock.",
+    "storey_iv_hint_2": "The terminal puzzle involves common Linux commands: cd, tar, and others. The final solution is the password in the good_rotx message."
   }
 }

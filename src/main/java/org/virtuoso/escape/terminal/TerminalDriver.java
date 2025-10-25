@@ -235,28 +235,91 @@ public class TerminalDriver {
         pauseDisplay(scanner, "You have: \n" + String.join("\n", lines));
     }
 
+    
     /**
-     * Present the end of the game, record score, and display the leaderboard.
-     *
-     * @param scanner    The scanner to request input on.
-     * @param projection The source for data.
+     * 
+     * 
+     * Provides progress bar for user to track their progress through the game
+     * @param projection
+     * @return
      */
+
+    private String getProgressBar(GameProjection projection) {
+        GameInfo gameInfo = GameInfo.instance();
+        int totalFloors = gameInfo.building().size();
+    
+       //finds flor
+        int currentFloorIndex = IntStream.range(0, totalFloors)
+            .filter(i -> gameInfo.building().get(i).id().equals(projection.currentFloor().id()))
+            .findFirst().orElse(0);
+
+        // Progress is a simple fraction of floors completed
+        int progressPercentage = (int) ( (float)(currentFloorIndex + 1) / totalFloors * 100);
+    
+        // Define bar length (here it is arbitrarily 70)
+        int barWidth = 70;
+        int progressChars = (int) ( (float)(currentFloorIndex + 1) / totalFloors * barWidth);
+    
+        String completed = "=".repeat(Math.max(0, progressChars));
+        String remaining = ".".repeat(Math.max(0, barWidth - progressChars));
+    
+        // FunString!!
+        FunString bar = new FunString("[")
+            .add(new FunString(completed).green())
+            .add(new FunString(remaining).terminalColor(240)) // Light Gray
+            .add("]");
+        
+        String progressText = String.format("Floor %d of %d (%d%%)", currentFloorIndex + 1, totalFloors, progressPercentage);
+    
+        return progressText + "\n" + bar.toString();
+    }
+
+    /**
+    * Present the end of the game, record score, and display the leaderboard.
+    *
+    * 
+    * @param scanner    The scanner to request input on.
+    * @param projection The source for data.
+    */
     void menu_ending(Scanner scanner, GameProjection projection) {
-        // --- Display Credits/End Message ---
-        List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> GameInfo.instance().string("credits", "contributor_" + i)).toList());
+    
+        //hint data
+        GameInfo gameInfo = GameInfo.instance();
+        List<String> hintsUsedList = gameInfo.usedHints();
+        int totalHintsUsed = hintsUsedList.size();
+    
+        String hintsListDisplay = totalHintsUsed > 0 ? 
+            String.join(", ", hintsUsedList) : 
+            "None";
+    
+        List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> gameInfo.string("credits", "contributor_" + i)).toList());
         contributors = contributors.stream().map(it -> {
             var j = it.split("<");
             return j[0] + new FunString("<" + j[1]).italic().terminalColor(50);
         }).collect(Collectors.toList());
         Collections.shuffle(contributors);
+    
         String formattedTime = String.format("%02d:%02d", GameState.instance().time().toMinutesPart(), GameState.instance().time().toSecondsPart());
-        String scoremsg = String.format(GameInfo.instance().string("credits", "score"), formattedTime, GameState.instance().difficulty());
-		String hintmsg = String.format(GameInfo.instance().string("credits", "hints"), 0);
+        String scoremsg = String.format(gameInfo.string("credits", "score"), formattedTime, GameState.instance().difficulty());
+    
+        //num hints
+        String hintmsg = String.format(gameInfo.string("credits", "hints"), totalHintsUsed);
+    
+        // Each of the hints used
+        String specificHintsMsg = "Specific hints used: " + hintsListDisplay;
+
         List<String> msg = new ArrayList<>();
         msg.add(new FunString(scoremsg).purple().toString());
-		msg.add(new FunString(hintmsg).purple().toString());
-        msg.addAll(List.of(GameInfo.instance().string("credits", "message").split("\n")));
+        msg.add(new FunString(hintmsg).purple().toString());
+    
+        // list of the strings
+        msg.add(new FunString(specificHintsMsg).purple().toString());
+    
+        // main credits
+        msg.addAll(List.of(gameInfo.string("credits", "message").split("\n")));
         msg.add("Credits:");
+    
+        // contributors (that's us lets gooo)
         msg.addAll(contributors);
 
         // Loop to display the credits line by line
@@ -270,12 +333,10 @@ public class TerminalDriver {
         }
         pauseDisplay(scanner, "");
 
+        // leaderboard + logout
         Account currentAccount = GameState.instance().account();
 
-        String usernameToRecord = (currentAccount != null)
-                ? currentAccount.username()
-                : "Guest";
-
+        String usernameToRecord = (currentAccount != null) ? currentAccount.username() : "Guest";
         leaderboard.recordSession(usernameToRecord);
 
         // Show
@@ -337,7 +398,8 @@ public class TerminalDriver {
         }
         actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
         actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
-        String prompt = String.format("%02d:%02d\n%s", projection.time().toMinutesPart(), projection.time().toSecondsPart(), projection.currentRoom()
+        String progressBar=getProgressBar(projection);
+        String prompt = String.format("%02d:%02d\n%s", projection.time().toMinutesPart(), projection.time().toSecondsPart(), progressBar, projection.currentRoom()
                                                                                                                                        .introMessage());
         createActionInterface(scanner, actions, prompt);
 

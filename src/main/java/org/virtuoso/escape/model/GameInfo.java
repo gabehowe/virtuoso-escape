@@ -17,8 +17,9 @@ import java.util.stream.IntStream;
  */
 public class GameInfo {
     private static GameInfo instance;
-    private Map<String, Map<String, String>> language;
-    private List<Floor> building = new ArrayList<>();
+    private Map<String, Map<String, String>> language = Map.of();
+    private List<Floor> building = new ArrayList<Floor>();
+    private List<String> usedHints = new ArrayList<>();
 
 
     /**
@@ -46,6 +47,63 @@ public class GameInfo {
         return instance;
     }
 
+    public List<String> usedHints() {
+                return this.usedHints;
+    }
+
+    /**
+     * Making the narrator.
+     * @param floorID, unique id per floor
+     * @return the narrator
+     */
+     private Entity makeNarrator(String floorId) {
+        // Utility function to easily create the message setter
+        Function<String, Action> narratorMsg = (stringId) -> new SetMessage(this, "narrator", stringId);
+
+        //No left
+        EntityState hintsUsedUp = new EntityState (
+                "narrator_hint_2",
+                new Default(),
+                new Default(),
+                narratorMsg.apply("hints_exhausted"), 
+                null
+        );
+
+        // 1 hint given
+        String hint2Id = floorId + "_hint_2";
+        Action giveHint2 = new Chain(
+        narratorMsg.apply(hint2Id), // Give the specific hint text
+                () -> this.usedHints.add(hint2Id), // Record the hint
+                new SwapEntities("narrator", "narrator_hint_2") // Swap to final state
+        );
+        EntityState hint1Given = new EntityState(
+                "narrator_hint_1", 
+                new Default(), 
+                new Default(), 
+                giveHint2, // Interact action: Give Hint 2 and move to final state
+                null
+        );
+
+        // No hints given
+        String hint1Id = floorId + "_hint_1";
+        Action giveHint1 = new Chain(
+                narratorMsg.apply(hint1Id), // Give the specific hint text
+                () -> this.usedHints.add(hint1Id), // Record the hint
+                new SwapEntities("narrator", "narrator_hint_1") // Swap to hint1Given state
+        );
+        EntityState start = new EntityState(
+                "narrator_start", 
+                new Default(), 
+                new Default(), 
+                giveHint1, // Interact action: Give Hint 1 and move to next state
+                null
+        );
+
+        //hi gabe
+        return new Entity("narrator", start, hint1Given, hintsUsedUp);
+}
+
+
     //Acorn Grove//
 
     /**
@@ -56,7 +114,8 @@ public class GameInfo {
     private Floor acornGrove() {
         Entity intro_squirrel = new Entity("intro_squirrel", new Default(), new Default(), new Default(), null);
         Entity portal_squirrel = new Entity("portal_squirrel", new Default(), new Default(), new SetFloor(1), null);
-        Room acornGrove_0 = new Room(this,"acorn_grove_0",  intro_squirrel, portal_squirrel);
+        Entity narrator = makeNarrator("acorn_grove");
+        Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "introduce"));
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
@@ -69,7 +128,8 @@ public class GameInfo {
      */
     private Floor floor1() {
         Entity door = new Entity("first_door", new Default(), new Default(), new SetFloor(2), null);
-
+        Entity narrator= makeNarrator("storey_i");
+        //hi andrews
         EntityState hummus_trash_can = new EntityState("trash_can", new Chain(new GiveItem(Item.sealed_clean_food_safe_hummus), new SwapEntities("trash_can", "sans_hummus_trash_can")), new Default(), new Default(), null);
         EntityState sans_hummus_trash_can = new EntityState("sans_hummus_trash_can", new Default(), new Default(), new Default(), null);
         Entity trash_can = new Entity("trash_can", hummus_trash_can, sans_hummus_trash_can);
@@ -80,7 +140,7 @@ public class GameInfo {
         EntityState sans_butter_elephant = new EntityState("sans_butter_elephant", new Default(), new Default(), new Default(), null);
         Entity elephant = new Entity("elephant_in_the_room", hummus_elephant, sans_butter_elephant);
 
-        Room room_1400 = new Room(this,"storey_i_0", joeHardy, trash_can, elephant, door);
+        Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy, trash_can, elephant, door, narrator)), "storey_i_0", this.string("storey_i_0", "introduce"));
 
         Entity almanac = makeAlmanacs(5);
         Room janitor_closet = new Room(this,"storey_i_1", almanac);
@@ -184,13 +244,14 @@ public class GameInfo {
      * @return M. Bert Storey floor 2.
      */
     private Floor floor2() {
-        Room doorRoom = new Room(this, "storey_ii_1");
+        Room doorRoom = new Room(new ArrayList<>(), "storey_ii_1", this.string("storey_ii_1", "introduce"));
+        Entity narrator = makeNarrator("storey_ii");
         Action shuffle = () -> Collections.shuffle(doorRoom.entities());
         Entity door1 = createDoorChain(3, shuffle);
         Action failDoor = new Chain(new SwapEntities("door1", "door1_2"), shuffle, GameState.instance()::leaveEntity);
         Entity door2 = new Entity("door2", new Default(), new Default(), failDoor, null);
         Entity door3 = new Entity("door3", new Default(), new Default(), failDoor, null);
-        doorRoom.entities().addAll(List.of(door1, door2, door3));
+        doorRoom.entities().addAll(List.of(door1, door2, door3, narrator));
         shuffle.execute();
 
         Entity pitcherPlant = new Entity("pitcher_plant");
@@ -229,6 +290,8 @@ public class GameInfo {
      * @return M. Bert Storey floor 3.
      */
     private Floor floor3() {
+        Entity narrator=makeNarrator("storey_iii");
+        //hi treasure
         Entity sparrowAmbassador = new Entity("sparrow_ambassador",
                 new Default(),
                 new Default(),
@@ -295,7 +358,8 @@ public class GameInfo {
         );
 
         Entity exitDoor = new Entity("exit_door", doorLocked, doorUnlocked);
-        Room boxRoom = new Room(this, "storey_iii_0", sparrowAmbassador,puzzleBox,exitDoor);
+
+        Room boxRoom = new Room(new ArrayList<>(List.of(sparrowAmbassador, puzzleBox, exitDoor, narrator)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
         return new Floor("storey_iii", List.of(boxRoom));
     }
 
@@ -304,6 +368,7 @@ public class GameInfo {
     private Floor floor4() {
         // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = man();
+        Entity narrator=makeNarrator("storey_iv");
 
         Entity computty = makeComputtyLogic();
         Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities("computty", "computty_unblocked"), new Default(), new Default(), null);
@@ -311,7 +376,7 @@ public class GameInfo {
         // Whoops! JEP 126!
         EntityState microwaveUnblocked = new EntityState("microwave_unblocked", this::gameEnding, new Default(), this::gameEnding, null);
         Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
-        Room floor4 = new Room(this, "storey_iv", man, sock_squirrel, computty, microwave);
+        Room floor4 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave, narrator)), "storey_iv", this.string("storey_iv", "introduce"));
         return new Floor("storey_iv", List.of(floor4));
     }
 
