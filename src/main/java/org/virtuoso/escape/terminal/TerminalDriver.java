@@ -23,6 +23,7 @@ import static org.virtuoso.escape.terminal.FunString.escape;
  */
 public class TerminalDriver {
     private boolean DEBUG = true;
+	private boolean returningUser;
     private final Leaderboard leaderboard = new Leaderboard();
 
     /**
@@ -176,6 +177,7 @@ public class TerminalDriver {
         // logical negation:
         // If the choice is 0 and login
         // or the choice is 1 and createAccount, continue
+		returningUser = signal == 'l';
     }
 
     /**
@@ -297,6 +299,26 @@ public class TerminalDriver {
         leaderboard.showLeaderboard();
         pauseDisplay(scanner, "Press enter to logout");
         projection.logout();
+    }
+
+/**
+     * Provide the user with a summary of their current progress when the sign into a preexisting account.
+     *
+     * @param scanner    The scanner to request input on.
+     * @param projection The source for data.
+     */
+    void resume_summary(Scanner scanner, GameProjection projection) {
+			if (returningUser) {
+				var resumeAction = makeTuiActionMap(fs_r("Resume Game", () -> {}));
+				createActionInterface(scanner, resumeAction, String.format(GameInfo.instance().string("welcome", "welcome_back"), 
+				GameState.instance().account().username(),
+				((float) IntStream.range(0,GameInfo.instance().building().size())
+				.filter(floor_index -> GameInfo.instance().building().get(floor_index).id() == GameState.instance().currentFloor().id())
+				.findFirst().getAsInt()+1)*100/GameInfo.instance().building().size(),
+				"%%",
+				"Insert puzzles completed and hits used list here."
+				));
+			};
     }
 
     /**
@@ -480,7 +502,8 @@ public class TerminalDriver {
                 fs_r("Login", () -> tryLogin(scanner, projection::login, 'l')),
                 fs_r("Create Account", () -> tryLogin(scanner, projection::createAccount, 'c'))
         );
-        createActionInterface(scanner, actions, "Welcome to Virtuoso Escape!");
+		createActionInterface(scanner, actions, GameInfo.instance().string("welcome", "welcome"));
+		resume_summary(scanner, projection);
         gameLoop(scanner, projection);
     }
 

@@ -1,4 +1,8 @@
 {
+  "welcome": {
+	"welcome": "Welcome to Virtuoso Escape!", 
+	"welcome_back": "Welcome back %s!\nYou are %.2f%s percent of the way through this experience!\nYou have answered the following riddles: %s"
+  },
   "acorn_grove_0": {
     "introduce": "You wake up in an acorn grove, seemingly smaller and...furrier...than usual."
   },
