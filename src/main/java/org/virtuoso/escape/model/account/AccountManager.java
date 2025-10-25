@@ -169,11 +169,12 @@ public class AccountManager {
 				String uName = acct.get("username").toString();
 				String pWord = acct.get("hashedPassword").toString();
 				Object highScore = acct.get("highScore");
+				Boolean ttsStatus = (Boolean) acct.get("ttsOn");
 				if (uName.equals(username) && (pWord.equals(hashedPassword))) {
 					if (highScore instanceof JSONObject score) {
 						Duration timeRemaining = score.get("timeRemaining") == null ? null : Duration.ofSeconds((Long) score.get("timeRemaining"));
 						Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
-						return new Account(username, password, UUID.fromString(id.toString()), new Score(timeRemaining, difficulty));
+						return new Account(username, password, UUID.fromString(id.toString()), new Score(timeRemaining, difficulty), ttsStatus);
 					}
 				}
 			}

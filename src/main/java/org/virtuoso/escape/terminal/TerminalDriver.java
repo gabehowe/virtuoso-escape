@@ -433,6 +433,9 @@ public class TerminalDriver {
     void menu_options(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap(
                 fs_r("Set difficulty", () -> menu_difficulty(scanner, projection)),
+				GameState.instance().account().ttsOn() ?
+				fs_r("Disable Text-To-Speech", () -> GameState.instance().account().SetTtsOn(false)):
+				fs_r("Enable Text-To-Speech", () -> GameState.instance().account().SetTtsOn(true)),
                 fs_r("Nevermind", () -> {
                 })
         );

@@ -38,11 +38,13 @@ public class DataLoader {
                 String username = acct.get("username").toString();
                 String hashed = acct.get("hashedPassword").toString();
                 Object highScore = acct.get("highScore");
+				Object ttsOn = acct.getOrDefault("ttsOn", true);
                 if (highScore instanceof JSONObject)
                     result.put(id, new JSONObject(Map.of(
                             "username", username,
                             "hashedPassword", hashed,
-                            "highScore", highScore
+                            "highScore", highScore,
+							"ttsOn", ttsOn
                     )));
             }
         }

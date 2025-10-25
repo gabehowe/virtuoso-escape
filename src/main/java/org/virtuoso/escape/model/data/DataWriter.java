@@ -120,6 +120,7 @@ public class DataWriter {
         accountMap.put("username", account.username());
         accountMap.put("hashedPassword", account.hashedPassword());
         accountMap.put("highScore", account.highScore().toJSON());
+		accountMap.put("ttsOn", account.ttsOn());
         return accountMap;
     }
 }
