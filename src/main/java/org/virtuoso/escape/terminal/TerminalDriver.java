@@ -516,6 +516,9 @@ public class TerminalDriver {
         System.exit(0);
     }
 
+    private void menu_prelude(Scanner scanner, GameProjection projection) {
+        pauseDisplay(scanner, GameInfo.instance().string("welcome", "prelude"));
+    }
     /**
      * Continuously ask the user for context-specific input.
      *

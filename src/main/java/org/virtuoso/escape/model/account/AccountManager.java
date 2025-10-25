@@ -61,9 +61,6 @@ public class AccountManager {
 	}
 
 
-	private void menu_prelude(Scanner scanner, GameProjection projection) {
-		pauseDisplay(scanner, GameInfo.instance().string("welcome", "prelude"));	
-	}
 	/**
 	 * Attempts to create an {@link Account} with the indicated username and password.
 	 *
