@@ -22,16 +22,6 @@ public class GameInfo {
 
 
     /**
-     * The global singleton.
-     * @return The global singleton.
-     */
-    public static GameInfo instance() {
-        if (instance == null)
-            instance = new GameInfo();
-        return instance;
-    }
-
-    /**
      * Construct this singleton.
      */
     private GameInfo() {
@@ -45,9 +35,22 @@ public class GameInfo {
         this.building.add(floor4());
     }
 
+    /**
+     * The global singleton.
+     *
+     * @return The global singleton.
+     */
+    public static GameInfo instance() {
+        if (instance == null)
+            instance = new GameInfo();
+        return instance;
+    }
+
     //Acorn Grove//
+
     /**
      * Build the Acorn Grove.
+     *
      * @return The Acorn Grove.
      */
     private Floor acornGrove() {
@@ -58,26 +61,28 @@ public class GameInfo {
     }
 
     //Floor One//
+
     /**
      * Build M. Bert Storey floor 1.
+     *
      * @return M. Bert Storey floor 1.
      */
     private Floor floor1() {
         Entity door = new Entity("first_door", new Default(), new Default(), new SetFloor(2), null);
 
-        EntityState hummus_trash_can = new EntityState("trash_can", new Chain(new GiveItem(Item.sealed_clean_food_safe_hummus), new SwapEntities("trash_can","sans_hummus_trash_can")), new Default(), new Default(), null);
-		EntityState sans_hummus_trash_can = new EntityState("sans_hummus_trash_can", new Default(), new Default(), new Default(), null);
-		Entity trash_can = new Entity("trash_can", hummus_trash_can, sans_hummus_trash_can);
+        EntityState hummus_trash_can = new EntityState("trash_can", new Chain(new GiveItem(Item.sealed_clean_food_safe_hummus), new SwapEntities("trash_can", "sans_hummus_trash_can")), new Default(), new Default(), null);
+        EntityState sans_hummus_trash_can = new EntityState("sans_hummus_trash_can", new Default(), new Default(), new Default(), null);
+        Entity trash_can = new Entity("trash_can", hummus_trash_can, sans_hummus_trash_can);
 
         Entity joeHardy = joeHardy();
 
-        EntityState hummus_elephant = new EntityState("elephant_in_the_room", new Default(), new Default(), new Chain(new GiveItem(Item.sunflower_seed_butter), new SwapEntities( "elephant_in_the_room", "sans_butter_elephant")), null);
-	    EntityState sans_butter_elephant = new EntityState("sans_butter_elephant", new Default(), new Default(), new Default(), null);
-		Entity elephant = new Entity("elephant_in_the_room", hummus_elephant, sans_butter_elephant);
+        EntityState hummus_elephant = new EntityState("elephant_in_the_room", new Default(), new Default(), new Chain(new GiveItem(Item.sunflower_seed_butter), new SwapEntities("elephant_in_the_room", "sans_butter_elephant")), null);
+        EntityState sans_butter_elephant = new EntityState("sans_butter_elephant", new Default(), new Default(), new Default(), null);
+        Entity elephant = new Entity("elephant_in_the_room", hummus_elephant, sans_butter_elephant);
 
-        Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy,trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));
+        Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy, trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));
 
-		Entity almanac = makeAlmanacs(5);
+        Entity almanac = makeAlmanacs(5);
         Room janitor_closet = new Room(List.of(almanac), "storey_i_1", this.string("storey_i_1", "introduce"));
 
         Entity securityBread = new Entity("security",
@@ -85,7 +90,7 @@ public class GameInfo {
                 new Default(),
                 new Default(),
                 new TakeInput("",
-                        TakeInput.makeCases(".*(?<!w)right.*", new Chain(new SetMessage(this, "security","right_answer"), new GiveItem(Item.right_bread)),
+                        TakeInput.makeCases(".*(?<!w)right.*", new Chain(new SetMessage(this, "security", "right_answer"), new GiveItem(Item.right_bread)),
                                 ".*", new SetMessage(this, "security", "non_right_answer"))));
         Room hallway = new Room(new ArrayList<>(List.of(securityBread)), "storey_i_2", this.string("storey_i_2", "introduce"));
 
@@ -95,60 +100,62 @@ public class GameInfo {
 
     /**
      * Create Joe Hardy for floor 1.
+     *
      * @return Joe Hardy.
      */
     private Entity joeHardy() {
-        Predicate<Item[]> hasItems = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a&&b).get();
+        Predicate<Item[]> hasItems = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a && b).get();
         EntityState sandwichJoe = new EntityState("sandwich_joe", new Default(), new Default(), new Default(), null);
         EntityState sansSandwichJoe = new EntityState("sans_sandwich_joe", new Default(), new Default(), new Conditional(
                 () -> hasItems.test(new Item[]{Item.left_bread, Item.right_bread, Item.sunflower_seed_butter, Item.sealed_clean_food_safe_hummus}),
                 new Chain(new SetMessage(this, "sans_sandwich_joe", "interact_sandwich"),
                         new SwapEntities("joe_hardy", "sandwich_joe")
-                        )
+                )
         ), null);
         EntityState introJoe = new EntityState("intro_joe", new Default(), new Default(), new SwapEntities("joe_hardy", "sans_sandwich_joe"), null);
         return new Entity("joe_hardy", introJoe, sansSandwichJoe, sandwichJoe);
     }
 
     /**
-     *Returns almanacs for a binary search puzzle
-	 *
+     * Returns almanacs for a binary search puzzle
+     *
      * @param length The number of guesses
      * @return An entity with states for each almanac guess
      */
     private Entity makeAlmanacs(int length) {
-        final int PAGES = (int) Math.pow(2,length);
+        final int PAGES = (int) Math.pow(2, length);
         final int CORRECT_PAGE = (int) (Math.random() * PAGES);
 
-		ArrayList<EntityState> almanacStates = new ArrayList<EntityState>();
+        ArrayList<EntityState> almanacStates = new ArrayList<EntityState>();
         for (int i = 0; i < length; i++) {
-			int current_i = i;
-            Map<String,Action> map = IntStream.range(1,PAGES).boxed()
-			.collect(Collectors.toMap(j -> String.valueOf(j), j -> turnPage(length-current_i, j, length, CORRECT_PAGE)));
-			LinkedHashMap<String,Action> linkedMap = new LinkedHashMap<String,Action>(map);
-			Function<String, Action> alm = (stringId) -> new SetMessage(this, "almanac", stringId);
-			almanacStates.add(new EntityState("almanac_"+String.valueOf(length-i), alm.apply("attack"), alm.apply("inspect"), alm.apply("interact"), new TakeInput("", linkedMap)));
+            int current_i = i;
+            Map<String, Action> map = IntStream.range(1, PAGES).boxed()
+                                               .collect(Collectors.toMap(j -> String.valueOf(j), j -> turnPage(length - current_i, j, length, CORRECT_PAGE)));
+            LinkedHashMap<String, Action> linkedMap = new LinkedHashMap<String, Action>(map);
+            Function<String, Action> alm = (stringId) -> new SetMessage(this, "almanac", stringId);
+            almanacStates.add(new EntityState("almanac_" + (length - i), alm.apply("attack"), alm.apply("inspect"), alm.apply("interact"), new TakeInput("", linkedMap)));
 
         }
-		almanacStates.add(new EntityState("found_almanac"));
-		return new Entity("almanac", almanacStates.toArray(new EntityState[0]));
+        almanacStates.add(new EntityState("found_almanac"));
+        return new Entity("almanac", almanacStates.toArray(new EntityState[0]));
     }
 
     /**
      * Test the user input page.
-     * @param flips Attempts remaining
+     *
+     * @param flips       Attempts remaining
      * @param currentPage The page attempted.
-     * @param maxFlips The total number of attemptable flips.
+     * @param maxFlips    The total number of attemptable flips.
      * @param correctPage The correct, desired page
      * @return An Action to be run later.
      */
     private Action turnPage(int flips, int currentPage, int maxFlips, int correctPage) {
-        Action swap = flips > 1 ? new SwapEntities("almanac", "almanac_"+String.valueOf(flips-1)) :
-		new SwapEntities("almanac", "almanac_"+String.valueOf(maxFlips));
+        Action swap = flips > 1 ? new SwapEntities("almanac", "almanac_" + (flips - 1)) :
+                new SwapEntities("almanac", "almanac_" + maxFlips);
 
         Action caseBreak = new SetMessage(this, "almanac", "break");
-        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + String.valueOf(flips-1) + this.string("almanac", "guesses_remaining"));
-        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + String.valueOf(flips-1) + this.string("almanac", "guesses_remaining"));
+        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + (flips - 1) + this.string("almanac", "guesses_remaining"));
+        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + (flips - 1) + this.string("almanac", "guesses_remaining"));
         Action caseFound = new Chain(
                 new SetMessage(this, "almanac", "correct_page"),
                 new GiveItem(Item.left_bread),
@@ -170,15 +177,17 @@ public class GameInfo {
     }
 
     //Floor Two//
+
     /**
      * Build M. Bert Storey floor 2.
+     *
      * @return M. Bert Storey floor 2.
      */
     private Floor floor2() {
-        Room doorRoom = new Room(new ArrayList<>(),"storey_ii_1", this.string("storey_ii_1", "introduce"));
-        Action shuffle =  () -> Collections.shuffle(doorRoom.entities());
+        Room doorRoom = new Room(new ArrayList<>(), "storey_ii_1", this.string("storey_ii_1", "introduce"));
+        Action shuffle = () -> Collections.shuffle(doorRoom.entities());
         Entity door1 = createDoorChain(3, shuffle);
-        Action failDoor = new Chain(new SwapEntities("door1","door1_2"), shuffle, GameState.instance()::leaveEntity);
+        Action failDoor = new Chain(new SwapEntities("door1", "door1_2"), shuffle, GameState.instance()::leaveEntity);
         Entity door2 = new Entity("door2", new Default(), new Default(), failDoor, null);
         Entity door3 = new Entity("door3", new Default(), new Default(), failDoor, null);
         doorRoom.entities().addAll(List.of(door1, door2, door3));
@@ -191,23 +200,24 @@ public class GameInfo {
 
     /**
      * Create a linked list of proper doors.
-     * @param length The number of doors in the linked list.
+     *
+     * @param length  The number of doors in the linked list.
      * @param shuffle The function to shuffle doors.
      * @return A single door with an internal link to the next door.
      */
     private Entity createDoorChain(int length, Action shuffle) {
         EntityState[] door1 = new EntityState[length];
         Function<String, Action> sm = (stringId) -> new SetMessage(this, "door1", stringId);
-        EntityState door1_final = new EntityState("door1_0", sm.apply("attack"), sm.apply("inspect"), new Chain(new SetMessage(this, "door1", "final_door"),new SetFloor(3)), null);
-        door1[length-1] = door1_final;
+        EntityState door1_final = new EntityState("door1_0", sm.apply("attack"), sm.apply("inspect"), new Chain(new SetMessage(this, "door1", "final_door"), new SetFloor(3)), null);
+        door1[length - 1] = door1_final;
         for (int i = 1; i < length; i++) {
             EntityState next = new EntityState("door1_" + i, sm.apply("attack"), sm.apply("inspect"), new Chain(
-                    new SwapEntities("door1", "door1_" +(i-1)),
+                    new SwapEntities("door1", "door1_" + (i - 1)),
                     GameState.instance()::leaveEntity,
                     shuffle,
                     sm.apply("interact")
-                    ), null);
-            door1[length-(i+1)] = next;
+            ), null);
+            door1[length - (i + 1)] = next;
         }
         return new Entity("door1", door1);
     }
@@ -217,73 +227,74 @@ public class GameInfo {
      * Build 3rd floor
      */
     /**
- * Build M. Bert Storey floor 3.
- * @return M. Bert Storey floor 3.
- */
+     * Build M. Bert Storey floor 3.
+     *
+     * @return M. Bert Storey floor 3.
+     */
     private Floor floor3() {
         Entity sparrowAmbassador = new Entity("sparrow_ambassador",
-            new Default(),
-            new Default(),
-            new SetMessage(this, "sparrow_ambassador", "interact_intro"),
-            new TakeInput(
-                    "(?:sparrow )?help", new SetMessage(this, "sparrow_ambassador", "hint_help"),
-                    ".*", new SetMessage(this, "sparrow_ambassador", "hint_general")
-            ));
+                new Default(),
+                new Default(),
+                new SetMessage(this, "sparrow_ambassador", "interact_intro"),
+                new TakeInput(
+                        "(?:sparrow )?help", new SetMessage(this, "sparrow_ambassador", "hint_help"),
+                        ".*", new SetMessage(this, "sparrow_ambassador", "hint_general")
+                ));
 
         Function<String, Action> puzzleMsg = (string) -> new SetMessage(this, "box_riddle", string);
 
         EntityState box_open = new EntityState("box_open", new Default(), new Default(),
-            new Chain(
-                    puzzleMsg.apply("solved"),
-                    new GiveItem(Item.keys)
-            ), null);
+                new Chain(
+                        puzzleMsg.apply("solved"),
+                        new GiveItem(Item.keys)
+                ), null);
 
         var boxLogicSuccess = new TakeInput("", TakeInput.makeCases(
-            "(?:box )?open", new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
-            ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
+                "(?:box )?open", new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
+                ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
         ));
         EntityState box_success = new EntityState("box_success", new Default(), new Default(), null, boxLogicSuccess);
 
         var boxLogicFollow = new TakeInput("", TakeInput.makeCases(
-            "(?:box )?follow", new Chain(new SwapEntities("box_riddle", "box_success"), puzzleMsg.apply("step_follow")),
-            ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
+                "(?:box )?follow", new Chain(new SwapEntities("box_riddle", "box_success"), puzzleMsg.apply("step_follow")),
+                ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))
         ));
         EntityState box_step1 = new EntityState("box_step1", new Default(), new Default(), new Default(), boxLogicFollow);
 
         var boxLogicStart = new TakeInput("", TakeInput.makeCases(
-            "(?:box )?start", new Chain(new SwapEntities("box_riddle", "box_step1"), puzzleMsg.apply("step_start")),
-            ".*", puzzleMsg.apply("step_wrong")
+                "(?:box )?start", new Chain(new SwapEntities("box_riddle", "box_step1"), puzzleMsg.apply("step_start")),
+                ".*", puzzleMsg.apply("step_wrong")
         ));
         EntityState box_start = new EntityState("box_start", new Default(), new Default(), puzzleMsg.apply("interact"), boxLogicStart);
 
         Entity puzzleBox = new Entity("box_riddle", box_start, box_step1, box_success, box_open);
         Function<String, Action> doorMsg = (string) -> new SetMessage(this, "exit_door", string);
-        Predicate<Item[]> hasKeys = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a&&b).get();
+        Predicate<Item[]> hasKeys = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a && b).get();
 
         Action goToFloor4 = new Chain(
-            doorMsg.apply("unlocked_success"),
-            new SetFloor(4) 
+                doorMsg.apply("unlocked_success"),
+                new SetFloor(4)
         );
         EntityState doorUnlocked = new EntityState("exit_door_unlocked",
-            new Default(),
-            doorMsg.apply("inspect_unlocked"), 
-            goToFloor4,                
-            null                    
+                new Default(),
+                doorMsg.apply("inspect_unlocked"),
+                goToFloor4,
+                null
         );
 
         Action checkKeysAndSwap = new Conditional(
-            () -> hasKeys.test(new Item[]{Item.keys}),
-            new Chain(
-                doorMsg.apply("unlocked_msg"),
-                new SwapEntities("exit_door", "exit_door_unlocked")
-            ),
-            doorMsg.apply("locked_msg")
+                () -> hasKeys.test(new Item[]{Item.keys}),
+                new Chain(
+                        doorMsg.apply("unlocked_msg"),
+                        new SwapEntities("exit_door", "exit_door_unlocked")
+                ),
+                doorMsg.apply("locked_msg")
         );
         EntityState doorLocked = new EntityState("exit_door_locked",
-            new Default(),
-            doorMsg.apply("inspect_locked"),
-            checkKeysAndSwap,            
-            null                  
+                new Default(),
+                doorMsg.apply("inspect_locked"),
+                checkKeysAndSwap,
+                null
         );
 
         Entity exitDoor = new Entity("exit_door", doorLocked, doorUnlocked);
@@ -301,15 +312,16 @@ public class GameInfo {
         Entity computty = makeComputtyLogic();
         Entity sock_squirrel = new Entity("sock_squirrel", new SwapEntities("computty", "computty_unblocked"), new Default(), new Default(), null);
         EntityState microwave_blocked = new EntityState("microwave_blocked", new Default(), new Default(), new Default(), null);
-	    // Whoops! JEP 126!
+        // Whoops! JEP 126!
         EntityState microwaveUnblocked = new EntityState("microwave_unblocked", this::gameEnding, new Default(), this::gameEnding, null);
-		Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
+        Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
         Room floor4 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave)), "storey_iv", this.string("storey_iv", "introduce"));
         return new Floor("storey_iv", List.of(floor4));
     }
 
     /**
      * Create the man entity.
+     *
      * @return the man entity.
      */
     private Entity man() {
@@ -327,28 +339,29 @@ public class GameInfo {
 
     /**
      * Create CompuTTY -- a terminal entity.
+     *
      * @return CompuTTY.
      */
     private Entity makeComputtyLogic() {
         // Dichotomy: DRY violation or unreadable code?
-		var computtyBlocked = new EntityState("computty_blocked");
+        var computtyBlocked = new EntityState("computty_blocked");
         Function<String, Action> ttyStr = (string) -> new SetMessage(this, "computty_unblocked", string);
         var computtyTarLogic = new TakeInput("", TakeInput.makeCases(
-                "rotx 16 code", new Chain(ttyStr.apply("good_rotx"),new SwapEntities("microwave", "microwave_unblocked")),
+                "rotx 16 code", new Chain(ttyStr.apply("good_rotx"), new SwapEntities("microwave", "microwave_unblocked")),
                 "rotx 16 .*", ttyStr.apply("no_file"),
                 "rotx \\d+.*", ttyStr.apply("failed_rotx"),
                 "rotx.*", ttyStr.apply("man_rotx"),
                 "ls", ttyStr.apply("ls_tar"),
                 "cat code", ttyStr.apply("cat_code"),
                 "cat.*", ttyStr.apply("man_cat"),
-                "tar xvf .*", ttyStr.apply( "no_file"),
-                "cd.*", ttyStr.apply( "no_file")
+                "tar xvf .*", ttyStr.apply("no_file"),
+                "cd.*", ttyStr.apply("no_file")
         ));
         var computtyTar = new EntityState("computty_tar", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyTarLogic);
         var computtyCdLogic = new TakeInput("", TakeInput.makeCases(
-                "tar xvf code.tar$", new Chain(new SetMessage("code"),new SwapEntities("computty", "computty_tar")),
-                "tar xvf .*", ttyStr.apply( "no_file"),
-                "tar.*", ttyStr.apply( "man_tar"),
+                "tar xvf code.tar$", new Chain(new SetMessage("code"), new SwapEntities("computty", "computty_tar")),
+                "tar xvf .*", ttyStr.apply("no_file"),
+                "tar.*", ttyStr.apply("man_tar"),
                 "ls", ttyStr.apply("ls_cd"),
                 "cat code.tar", ttyStr.apply("cat_tar"),
                 "cat.*", ttyStr.apply("man_cat"),
@@ -359,19 +372,20 @@ public class GameInfo {
         var computtyCd = new EntityState("computty_cd", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyCdLogic);
         var computtyDefault = new TakeInput("", TakeInput.makeCases(
                 "cd code", new Chain(new SwapEntities("computty", "computty_cd"), ttyStr.apply("input_cd")),
-                "cd.*", ttyStr.apply( "no_file"),
+                "cd.*", ttyStr.apply("no_file"),
                 "ls", ttyStr.apply("ls_default"),
                 "cat.*", ttyStr.apply("man_cat"),
                 "tar.*", ttyStr.apply("man_tar"),
                 "rotx \\d+.*", ttyStr.apply("no_file"),
                 "rotx.*", ttyStr.apply("man_rotx")
         ));
-		var computtyUnblocked = new EntityState("computty_unblocked", ttyStr.apply("attack"), ttyStr.apply("attack"), ttyStr.apply("interact"), computtyDefault);
+        var computtyUnblocked = new EntityState("computty_unblocked", ttyStr.apply("attack"), ttyStr.apply("attack"), ttyStr.apply("interact"), computtyDefault);
 
         return new Entity("computty", computtyBlocked, computtyUnblocked, computtyTar, computtyCd);
     }
 
     //Ending//
+
     /**
      * End the game.
      */
@@ -384,7 +398,8 @@ public class GameInfo {
 
     /**
      * Get a string resource from {@link GameInfo#language()} safely.
-     * @param id The parent of the string resource.
+     *
+     * @param id       The parent of the string resource.
      * @param stringId The id of the string resource.
      * @return A string resource.
      */
@@ -395,6 +410,7 @@ public class GameInfo {
 
     /**
      * The language parent-(id-resource) mapping..
+     *
      * @return The language mapping.
      */
     public Map<String, Map<String, String>> language() {
@@ -403,6 +419,7 @@ public class GameInfo {
 
     /**
      * The list of {@link Floor} in the building.
+     *
      * @return The list of {@link Floor} in the building.
      */
     public List<Floor> building() {

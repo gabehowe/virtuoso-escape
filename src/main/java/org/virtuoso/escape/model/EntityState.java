@@ -15,7 +15,13 @@ import org.virtuoso.escape.model.actions.TakeInput;
  * @param capabilities   What this entity will perform an action for.
  * @author Andrew
  */
-public record EntityState(String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction, Capabilities capabilities) {
+public record EntityState(
+        String id,
+        Action attackAction,
+        Action inspectAction,
+        Action interactAction,
+        TakeInput inputAction,
+        Capabilities capabilities) {
     /**
      * Default constructor
      *
@@ -34,13 +40,10 @@ public record EntityState(String id, Action attackAction, Action inspectAction, 
      * @param interactAction The entity state interact behavior.
      * @param inputAction    The entity state input behavior.
      */
-    public EntityState(String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
+    public EntityState(
+            String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
         Capabilities capabilities = new Capabilities(
-                attackAction != null,
-                inspectAction != null,
-                interactAction != null,
-                inputAction != null
-        );
+                attackAction != null, inspectAction != null, interactAction != null, inputAction != null);
         this(id, attackAction, inspectAction, interactAction, inputAction, capabilities);
     }
 
@@ -125,7 +128,8 @@ public record EntityState(String id, Action attackAction, Action inspectAction, 
      */
     public void takeInput(String input) {
         String message;
-        if (GameInfo.instance().language().get(id) == null || GameInfo.instance().language().get(id).get("input_" + input) == null)
+        if (GameInfo.instance().language().get(id) == null
+                || GameInfo.instance().language().get(id).get("input_" + input) == null)
             message = "I couldn't understand '" + input + "'";
         else message = GameInfo.instance().string(id, "input_" + input);
         if (message != null) {
@@ -137,8 +141,13 @@ public record EntityState(String id, Action attackAction, Action inspectAction, 
         }
     }
 
-    public record Capabilities(boolean attack, boolean inspect, boolean interact, boolean input) {
-
-    }
+    /**
+     * The action capabilities of the entity -- Can it be spoken to?
+     *
+     * @param attack   If the entity can be attacked to.
+     * @param inspect  If the entity can be inspected.
+     * @param interact If the entity can be interacted with.
+     * @param input    If the entity can be spoken with.
+     */
+    public record Capabilities(boolean attack, boolean inspect, boolean interact, boolean input) {}
 }
-

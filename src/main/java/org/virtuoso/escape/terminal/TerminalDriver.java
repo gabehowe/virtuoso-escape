@@ -22,31 +22,12 @@ import static org.virtuoso.escape.terminal.FunString.escape;
  * @author gabri
  */
 public class TerminalDriver {
-    private boolean DEBUG = true;
+    private static String CLEAR = "2J";
+    private static String CLEAR_RESET = "H";
+    private static String MOVE_LINE = "1A";
+    private static String CLEAR_BELOW = "0J";
     private final Leaderboard leaderboard = new Leaderboard();
-
-    /**
-     * A simple tuple class.
-     *
-     * @param u   The first element.
-     * @param v   The second element
-     * @param <U> The type of the first element.
-     * @param <V> The type of the second element.
-     */
-    private record P<U, V>(U u, V v) {
-        /**
-         * Shorthand for creating a pair.
-         *
-         * @param u   The first element.
-         * @param v   The second element
-         * @param <U> The type of the first element.
-         * @param <V> The type of the second element.
-         * @return a pair of {@code u} and {@code v}.
-         */
-        public static <U, V> P<U, V> of(U u, V v) {
-            return new P<>(u, v);
-        }
-    }
+    private boolean DEBUG = true;
 
     /**
      * Shorthand to narrow casting to r to Runnable.
@@ -484,10 +465,27 @@ public class TerminalDriver {
         gameLoop(scanner, projection);
     }
 
-
-    private static String CLEAR = "2J";
-    private static String CLEAR_RESET = "H";
-    private static String MOVE_LINE = "1A";
-    private static String CLEAR_BELOW = "0J";
+    /**
+     * A simple tuple class.
+     *
+     * @param u   The first element.
+     * @param v   The second element
+     * @param <U> The type of the first element.
+     * @param <V> The type of the second element.
+     */
+    private record P<U, V>(U u, V v) {
+        /**
+         * Shorthand for creating a pair.
+         *
+         * @param u   The first element.
+         * @param v   The second element
+         * @param <U> The type of the first element.
+         * @param <V> The type of the second element.
+         * @return a pair of {@code u} and {@code v}.
+         */
+        public static <U, V> P<U, V> of(U u, V v) {
+            return new P<>(u, v);
+        }
+    }
 
 }
