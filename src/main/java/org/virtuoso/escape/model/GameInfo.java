@@ -235,7 +235,7 @@ public class GameInfo {
         Entity sparrowAmbassador = new Entity("sparrow_ambassador",
                 new Default(),
                 new Default(),
-                new SetMessage(this, "sparrow_ambassador", "interact_intro"),
+                new Default(),
                 new TakeInput(
                         "(?:sparrow )?help", new SetMessage(this, "sparrow_ambassador", "hint_help"),
                         ".*", new SetMessage(this, "sparrow_ambassador", "hint_general")
@@ -265,7 +265,7 @@ public class GameInfo {
                 "(?:box )?start", new Chain(new SwapEntities("box_riddle", "box_step1"), puzzleMsg.apply("step_start")),
                 ".*", puzzleMsg.apply("step_wrong")
         ));
-        EntityState box_start = new EntityState("box_start", new Default(), new Default(), puzzleMsg.apply("interact"), boxLogicStart);
+        EntityState box_start = new EntityState("box_start", puzzleMsg.apply("attack"), puzzleMsg.apply("inspect"), puzzleMsg.apply("interact"), boxLogicStart);
 
         Entity puzzleBox = new Entity("box_riddle", box_start, box_step1, box_success, box_open);
         Function<String, Action> doorMsg = (string) -> new SetMessage(this, "exit_door", string);
@@ -300,7 +300,7 @@ public class GameInfo {
         Entity exitDoor = new Entity("exit_door", doorLocked, doorUnlocked);
 
         Room boxRoom = new Room(new ArrayList<>(List.of(sparrowAmbassador, puzzleBox, exitDoor)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
-        return new Floor("floor_iii", List.of(boxRoom));
+        return new Floor("storey_iii", List.of(boxRoom));
     }
 
 

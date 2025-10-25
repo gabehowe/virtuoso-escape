@@ -26,7 +26,7 @@
     "attack": "You try to throw a punch, but Eckard just looks at you disappointed.",
     "interact": "We don't have much time. Believe it or not, I don't want a squirrel hegemony. Our only chance is for you to get to the demetamorphinator and break this candy cane - he hands you an exquisite looking red and white cane. Here, I'm sending you there now. Remember: top floor.",
     "inspect": "Eckard is ushering you towards an open portal."
-},
+  },
   "storey_i_0": {
     "name": "Lobby",
     "introduce": "*Crash!* You land on a sofa in the University of South Carolina M Bert Storey Research and Innovation Center Lobby! Under the all-day 50W lighting, it still seems like there's something you're failing to acknowledge about this room."
@@ -80,7 +80,7 @@
     "introduce": "You bump into a security guard roaming around the floor.",
     "attack": "You try to punch the security, but he manhandles you to the ground and handcuffs you. **He had the right bread but you choose violence instead.**",
     "interact": "\"You want the right right bread, right? Right. Answer my riddle 'right' and you'll be left left with the right right bread:\nLeft Left-Right, son of Right Right and Left Left, brother of Right Left-Right, writes right, drives right. Left Left LEFT Left Left-Right with Right Right and Right Left-Right, which isn't right. Who is left?\"",
-    "right_answer":  "Right, \"Right\"! Right, You'll now be left left with the right right bread.",
+    "right_answer": "Right, \"Right\"! Right, You'll now be left left with the right right bread.",
     "non_right_answer": "Sorry, but that answer just isn't 'right'!",
     "inspect": "The security guard seems partially (mentally) composed of left and right hands. Where one would expect a set of shoes, he instead has wisdom."
   },
@@ -201,9 +201,18 @@
     "introduce": "The room is bare except for a pedestal in the center holding an intricately designed wooden box. A small, but well-dressed, sparrow sits atop it, looking expectantly at you."
   },
   "sparrow_ambassador": {
-    "interact_intro": "Chirp chirp. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in finding the one true cycle.",
+    "name": "Apine Ambassador",
+    "inspect": "The sparrow's well-dressed attire glints in the dim light of the bare room.",
+    "introduce":"You behold the sparrow atop the pedestal.",
+    "attack": "You can't get up to the sparrow, so you sit and think angry thoughts.",
+    "interact": "Chirp chirp. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in finding the one true cycle.",
     "hint_general": "Hmm? The box is a closed system. Think about the first number you see—it must be the key to finding the second, and so on. Where do you *start* the chain?",
     "hint_help": "I've said all I can, little squirrel. The wise know where to begin their journey. The patient know they must follow the path laid before them. The intelligent know when to *open* the door."
+  },
+  "box_start": {
+    "name": "Starting box",
+    "introduce": "You see a box."
+
   },
   "box_riddle": {
     "interact": "You stand before the box. You realize you need a strategy to move forward.",
@@ -215,15 +224,20 @@
     "attack": "You try to smash the box, but it's ineffective. You gain nothing but a bruised hand.",
     "inspect": "The box is designed to hide its mechanism. Only by understanding the flow of the puzzle will you find the way in."
   },
-"exit_door": {
-  "name": "Exit door",
-  "introduce": "Here lies a door",
-  "locked_msg": "The door needs a key to open, how would you get that?",
-  "unlocked_msg": "You use the key and the door is now open.",
-  "unlocked_success": "You step through the open door and proceed to the next floor.",
-  "inspect_locked": "The door looks like it needs a key to open",
-  "inspect_unlocked": "You see the light of (tentative) salvation behind the next door as the first sounds of squirrel chattering behind you become apparent."
-},
+  "exit_door_locked": {
+    "name": "Exit Door (locked)",
+    "introduce": "You see a locked door.",
+    "attack":"You throw yourself against the door, but nothing happens."
+  },
+  "exit_door": {
+    "name": "Exit door",
+    "introduce": "Here lies a door",
+    "locked_msg": "The door needs a key to open, how would you get that?",
+    "unlocked_msg": "You use the key and the door is now open.",
+    "unlocked_success": "You step through the open door and proceed to the next floor.",
+    "inspect_locked": "The door looks like it needs a key to open",
+    "inspect_unlocked": "You see the light of (tentative) salvation behind the next door as the first sounds of squirrel chattering behind you become apparent."
+  },
   "storey_iv": {
     "name": "Fin Foyer",
     "introduce": "You enter a culminating room, filled with urgency and a feeling that you might be nearing the end of your adventure. A critical moment is approaching..."

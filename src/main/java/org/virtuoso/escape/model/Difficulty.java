@@ -1,7 +1,7 @@
 package org.virtuoso.escape.model;
 
 /**
- * An enumeration for game difficulty.
+ * Enumeration for game difficulty.
  *
  * @author gabri
  */
