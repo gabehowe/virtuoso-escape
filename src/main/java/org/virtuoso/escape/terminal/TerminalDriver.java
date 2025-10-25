@@ -242,6 +242,14 @@ public class TerminalDriver {
      * @param projection The source for data.
      */
     void menu_ending(Scanner scanner, GameProjection projection) {
+		// --- Save data ---
+		Account currentAccount = GameState.instance().account();
+
+        String usernameToRecord = (currentAccount != null)
+                ? currentAccount.username()
+                : "Guest";
+
+        leaderboard.recordSession(usernameToRecord);
         // --- Display Credits/End Message ---
         List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> GameInfo.instance().string("credits", "contributor_" + i)).toList());
         contributors = contributors.stream().map(it -> {
@@ -269,14 +277,6 @@ public class TerminalDriver {
             }
         }
         pauseDisplay(scanner, "");
-
-        Account currentAccount = GameState.instance().account();
-
-        String usernameToRecord = (currentAccount != null)
-                ? currentAccount.username()
-                : "Guest";
-
-        leaderboard.recordSession(usernameToRecord);
 
         // Show
         leaderboard.showLeaderboard();

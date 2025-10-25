@@ -314,7 +314,7 @@ public class GameInfo {
         EntityState microwave_blocked = new EntityState("microwave_blocked", new Default(), new Default(), new Default(), null);
         // Whoops! JEP 126!
         EntityState microwaveUnblocked = new EntityState("microwave_unblocked", this::gameEnding, new Default(), this::gameEnding, null);
-        Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
+        Entity microwave = new Entity("microwave", microwaveUnblocked);
         Room floor4 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave)), "storey_iv", this.string("storey_iv", "introduce"));
         return new Floor("storey_iv", List.of(floor4));
     }
