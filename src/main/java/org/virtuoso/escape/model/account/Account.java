@@ -60,10 +60,7 @@ public class Account {
     public static String hashPassword(String password) {
         try {
             SecureRandom random = new SecureRandom();
-            //byte[] salt = new byte[16];
-            //random.nextBytes(salt);
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            //md.update(salt);
             byte[] hash = md.digest(password.getBytes(StandardCharsets.UTF_8));
             String hex = "";
             for (byte b : hash) hex += String.format("%02x", b);
