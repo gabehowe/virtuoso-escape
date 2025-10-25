@@ -77,15 +77,6 @@ public class GameProjection {
     }
 
     /**
-     * A list of all entities in the current room.
-     *
-     * @return A list of all entities in the current room.
-     */
-    public List<Entity> roomEntities() {
-        return currentRoom().entities();
-    }
-
-    /**
      * The currently focused entity.
      *
      * @return The {@link Optional<Entity>} if the current entity is non-null, otherwise {@link Optional#empty()}.
@@ -119,15 +110,6 @@ public class GameProjection {
      */
     public List<Item> currentItems() {
         return this.gameState.currentItems();
-    }
-
-    /**
-     * Add an {@link Item} to the user's inventory.
-     *
-     * @param item The {@link Item} to add.
-     */
-    public void addItem(Item item) {
-        this.gameState.addItem(item);
     }
 
     /**

@@ -548,7 +548,7 @@ public class TerminalDriver {
             var actions = makeTuiActionMap(
                     fs_r("Login", () -> {
                         flag.set(tryLogin(scanner, projection::login,
-                                AccountManager.instance()::getInvalidLoginInfo));
+                                AccountManager.instance()::invalidLoginInfo));
                         if (flag.get()) menu_summary(scanner, projection);
                     }),
                     fs_r("Create Account", () -> {flag.set(tryLogin(scanner, projection::createAccount,

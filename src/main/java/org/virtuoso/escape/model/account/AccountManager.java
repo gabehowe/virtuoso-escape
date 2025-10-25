@@ -97,13 +97,13 @@ public class AccountManager {
 	}
 
 	/**
-	 * Displays which information was incorrect when attempt to log in/create an account fails.
+	 * Displays which information was incorrect when attempt to log in fails.
 	 *
 	 * @param username the username to be checked.
 	 * @param password the password to be checked.
 	 * @return the respective string output based on which information was incorrect.
 	 */
-	public String getInvalidLoginInfo(String username, String password) {
+	public String invalidLoginInfo(String username, String password) {
 		int usernameCount = 0;
 		int passwordCount = 0;
 		String hashedPassword = Account.hashPassword(password);
@@ -124,7 +124,7 @@ public class AccountManager {
 	 *
 	 * @return a JSONObject of {@code accounts}.
 	 */
-	public JSONObject getAccounts() {
+	public JSONObject accounts() {
 		return this.accounts;
 	}
 
@@ -133,7 +133,7 @@ public class AccountManager {
 	 *
 	 * @return a JSONObject of {@code gameStates}.
 	 */
-	public JSONObject getGameStates() {
+	public JSONObject gameStates() {
 		return this.gameStates;
 	}
 
