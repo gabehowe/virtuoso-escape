@@ -4,10 +4,11 @@ import java.util.Arrays;
 
 /**
  * Represents chained action functions.
+ *
  * @param actions The actions to run in the order they are input.
  * @author gabri
  */
-public record Chain(Action... actions) implements Action{
+public record Chain(Action... actions) implements Action {
     /**
      * Execute the actions in the order they were declared.
      */

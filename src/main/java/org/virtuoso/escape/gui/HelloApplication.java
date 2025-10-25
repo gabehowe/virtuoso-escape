@@ -1,8 +1,9 @@
 package org.virtuoso.escape.gui;
 
 // JEP 511
-import module javafx.graphics;
+
 import module javafx.fxml;
+import module javafx.graphics;
 
 import java.io.IOException;
 

@@ -11,14 +11,14 @@ import java.time.Duration;
  * @author gabri
  */
 public record Score(Duration timeRemaining, Difficulty difficulty) {
-	public JSONObject toJSON() {
-		JSONObject obj = new JSONObject();
-		obj.put("timeRemaining", timeRemaining == null ? null : timeRemaining.getSeconds());
-		obj.put("difficulty", difficulty.toString());
-		return obj;
-	}
+    public JSONObject toJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("timeRemaining", timeRemaining == null ? null : timeRemaining.getSeconds());
+        obj.put("difficulty", difficulty.toString());
+        return obj;
+    }
 
-	public String toString() {
-		return "Score: {timeRemaining='" + timeRemaining.toSeconds() + "s', difficulty='" + difficulty + "'}";
-	}
+    public String toString() {
+        return "Score: {timeRemaining='" + timeRemaining.toSeconds() + "s', difficulty='" + difficulty + "'}";
+    }
 }

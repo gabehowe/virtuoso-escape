@@ -6,17 +6,19 @@ import java.util.SequencedMap;
 
 /**
  * Perform actions based on input-action mappings.
+ *
  * @author gabri
  */
 public class TakeInput implements Action {
-    String input;
     private final Map<String, Action> cases;
     private final Action default_;
+    String input;
 
     /**
      * Create an action with a default input.
-     * @param input A default input to try on execution.
-     * @param cases The input-action mapping.
+     *
+     * @param input    A default input to try on execution.
+     * @param cases    The input-action mapping.
      * @param default_ The default action to run if no other input matches.
      */
     public TakeInput(String input, SequencedMap<String, Action> cases, Action default_) {
@@ -27,6 +29,7 @@ public class TakeInput implements Action {
 
     /**
      * Create an action without a default action.
+     *
      * @param input A default input to try on execution.
      * @param cases The input-action mapping.
      */
@@ -36,9 +39,10 @@ public class TakeInput implements Action {
 
     /**
      * Construct from cases.
+     *
      * @param args The cases to use.
      */
-    public TakeInput(Object... args){
+    public TakeInput(Object... args) {
         this("", TakeInput.makeCases(args));
     }
 
@@ -48,11 +52,11 @@ public class TakeInput implements Action {
      * @param args Sequential pairs of input: Action
      * @return a SequencedMap for usage in the TakeInput constructor.
      */
-    public static SequencedMap<String, Action> makeCases(Object... args){
-        assert args.length % 2 == 0: "TakeInput::makeCases must be called with an even number of arguments!";
+    public static SequencedMap<String, Action> makeCases(Object... args) {
+        assert args.length % 2 == 0 : "TakeInput::makeCases must be called with an even number of arguments!";
         SequencedMap<String, Action> map = new LinkedHashMap<>();
-        for (int i = 0; i< args.length; i += 2){
-            map.put((String) args[i], (Action) args[i+1]);
+        for (int i = 0; i < args.length; i += 2) {
+            map.put((String) args[i], (Action) args[i + 1]);
         }
         return map;
     }
@@ -72,6 +76,7 @@ public class TakeInput implements Action {
 
     /**
      * Create this Action with a new input.
+     *
      * @param input the input to test on.
      * @return this, but with the input.
      */

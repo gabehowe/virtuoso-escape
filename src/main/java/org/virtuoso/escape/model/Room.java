@@ -4,13 +4,15 @@ import java.util.List;
 
 /**
  * A collection of entities and an introductory message.
- * @param entities The list of entities in the room.
- * @param id The id of the room.
+ *
+ * @param entities     The list of entities in the room.
+ * @param id           The id of the room.
  * @param introMessage The message to introduce with.
  */
-public record Room(List<Entity> entities, String id, String introMessage){
+public record Room(List<Entity> entities, String id, String introMessage) {
     /**
      * The string resource name of the room.
+     *
      * @return The string resource name of the room.
      */
     public String name() {

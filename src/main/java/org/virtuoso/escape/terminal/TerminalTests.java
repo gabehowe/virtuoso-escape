@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 /**
  * Human-verified tests for the terminal interface.
+ *
  * @author gabri
  */
 public class TerminalTests {
