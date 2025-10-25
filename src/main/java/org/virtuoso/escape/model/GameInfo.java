@@ -17,8 +17,8 @@ import java.util.stream.IntStream;
  */
 public class GameInfo {
     private static GameInfo instance;
-    private Map<String, Map<String, String>> language = Map.of();
-    private List<Floor> building = new ArrayList<Floor>();
+    private Map<String, Map<String, String>> language;
+    private List<Floor> building = new ArrayList<>();
 
 
     /**
@@ -56,7 +56,7 @@ public class GameInfo {
     private Floor acornGrove() {
         Entity intro_squirrel = new Entity("intro_squirrel", new Default(), new Default(), new Default(), null);
         Entity portal_squirrel = new Entity("portal_squirrel", new Default(), new Default(), new SetFloor(1), null);
-        Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "introduce"));
+        Room acornGrove_0 = new Room(this,"acorn_grove_0",  intro_squirrel, portal_squirrel);
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
@@ -80,10 +80,10 @@ public class GameInfo {
         EntityState sans_butter_elephant = new EntityState("sans_butter_elephant", new Default(), new Default(), new Default(), null);
         Entity elephant = new Entity("elephant_in_the_room", hummus_elephant, sans_butter_elephant);
 
-        Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy, trash_can, elephant, door)), "storey_i_0", this.string("storey_i_0", "introduce"));
+        Room room_1400 = new Room(this,"storey_i_0", joeHardy, trash_can, elephant, door);
 
         Entity almanac = makeAlmanacs(5);
-        Room janitor_closet = new Room(List.of(almanac), "storey_i_1", this.string("storey_i_1", "introduce"));
+        Room janitor_closet = new Room(this,"storey_i_1", almanac);
 
         Entity securityBread = new Entity("security",
                 new Default(),
@@ -92,7 +92,7 @@ public class GameInfo {
                 new TakeInput("",
                         TakeInput.makeCases(".*(?<!w)right.*", new Chain(new SetMessage(this, "security", "right_answer"), new GiveItem(Item.right_bread)),
                                 ".*", new SetMessage(this, "security", "non_right_answer"))));
-        Room hallway = new Room(new ArrayList<>(List.of(securityBread)), "storey_i_2", this.string("storey_i_2", "introduce"));
+        Room hallway = new Room(this, "storey_i_2",securityBread);
 
 
         return new Floor("storey_i", List.of(room_1400, janitor_closet, hallway));
@@ -126,7 +126,7 @@ public class GameInfo {
         final int PAGES = (int) Math.pow(2, length);
         final int CORRECT_PAGE = (int) (Math.random() * PAGES);
 
-        ArrayList<EntityState> almanacStates = new ArrayList<EntityState>();
+        ArrayList<EntityState> almanacStates = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             int current_i = i;
             Map<String, Action> map = IntStream.range(1, PAGES).boxed()
@@ -184,7 +184,7 @@ public class GameInfo {
      * @return M. Bert Storey floor 2.
      */
     private Floor floor2() {
-        Room doorRoom = new Room(new ArrayList<>(), "storey_ii_1", this.string("storey_ii_1", "introduce"));
+        Room doorRoom = new Room(this, "storey_ii_1");
         Action shuffle = () -> Collections.shuffle(doorRoom.entities());
         Entity door1 = createDoorChain(3, shuffle);
         Action failDoor = new Chain(new SwapEntities("door1", "door1_2"), shuffle, GameState.instance()::leaveEntity);
@@ -194,7 +194,7 @@ public class GameInfo {
         shuffle.execute();
 
         Entity pitcherPlant = new Entity("pitcher_plant");
-        Room plantOffice = new Room(new ArrayList<>(List.of(pitcherPlant)), "storey_ii_0", this.string("storey_ii_0", "introduce"));
+        Room plantOffice = new Room(this, "storey_ii_0", pitcherPlant);
         return new Floor("storey_ii", List.of(plantOffice, doorRoom));
     }
 
@@ -223,9 +223,6 @@ public class GameInfo {
     }
 
     //Floor Three//
-    /**
-     * Build 3rd floor
-     */
     /**
      * Build M. Bert Storey floor 3.
      *
@@ -298,8 +295,7 @@ public class GameInfo {
         );
 
         Entity exitDoor = new Entity("exit_door", doorLocked, doorUnlocked);
-
-        Room boxRoom = new Room(new ArrayList<>(List.of(sparrowAmbassador, puzzleBox, exitDoor)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
+        Room boxRoom = new Room(this, "storey_iii_0", sparrowAmbassador,puzzleBox,exitDoor);
         return new Floor("storey_iii", List.of(boxRoom));
     }
 
@@ -315,7 +311,7 @@ public class GameInfo {
         // Whoops! JEP 126!
         EntityState microwaveUnblocked = new EntityState("microwave_unblocked", this::gameEnding, new Default(), this::gameEnding, null);
         Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
-        Room floor4 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave)), "storey_iv", this.string("storey_iv", "introduce"));
+        Room floor4 = new Room(this, "storey_iv", man, sock_squirrel, computty, microwave);
         return new Floor("storey_iv", List.of(floor4));
     }
 
