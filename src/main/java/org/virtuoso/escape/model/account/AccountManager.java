@@ -173,11 +173,11 @@ public class AccountManager {
 				Boolean ttsStatus = (Boolean) acct.get("ttsOn");
 				if (uName.equals(username) && (pWord.equals(hashedPassword))) {
 					if (highScore instanceof JSONObject score) {
-						long totalScore = (long) score.getOrDefault("totalScore", 0);
+						Long totalScore = (Long) score.getOrDefault("totalScore", null);
 						Duration timeRemaining = score.get("timeRemaining") == null ? null : Duration.ofSeconds((Long) score.get("timeRemaining"));
 						Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
 						return  new Account(username, password, UUID.fromString(id.toString()), 
-						totalScore != -1 ? new Score(timeRemaining, difficulty, totalScore) : new Score(timeRemaining, difficulty, totalScore), 
+						totalScore != null ? new Score(timeRemaining, difficulty, totalScore) : new Score(timeRemaining, difficulty, totalScore), 
 						ttsStatus);
 					}
 				}

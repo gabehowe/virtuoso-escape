@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /**
  * Holds information about the users score.
@@ -14,7 +15,7 @@ import java.time.Duration;
 public class Score {
 	private Duration timeRemaining;
 	private Difficulty difficulty;
-	private long totalScore;
+	private Long totalScore;
 
 	/**
 	 * Construct a score object an calculate score.
@@ -25,7 +26,7 @@ public class Score {
 	public Score(Duration timeRemaining, Difficulty difficulty){
 		this.timeRemaining = timeRemaining;
 		this.difficulty = difficulty;
-		this.totalScore = timeRemaining != null ? (long) timeRemaining.toSeconds() : -1;
+		this.totalScore = timeRemaining != null ? (Long) timeRemaining.toSeconds() : null;
 	}
 
 	/**
@@ -35,7 +36,9 @@ public class Score {
 	 * @param difficulty The difficulty the user was playing on when they finished the game.
 	 * @param totalScore The overall high score of a user.
 	 */
-	public Score(Duration timeRemaining, Difficulty difficulty, long totalScore){
+	public Score(Duration timeRemaining, Difficulty difficulty, Long totalScore){
+		if (!Objects.nonNull(totalScore))
+			new Score(timeRemaining,difficulty);
 		this.timeRemaining = timeRemaining;
 		this.difficulty = difficulty;
 		this.totalScore = totalScore;
@@ -74,14 +77,7 @@ public class Score {
 	 * Get the total score from the user's game.
 	 * @return The total score from the user's game.
 	 */
-	public long totalScore() {
+	public Long totalScore() {
 		return totalScore;
 	}
-
-	/**
-	 * Print score information.
-	 */
-    public String toString() {
-        return "Score: {totalScore=" + totalScore + " timeRemaining='" + timeRemaining.toSeconds() + "s', difficulty='" + difficulty + "'}";
-    }
 }

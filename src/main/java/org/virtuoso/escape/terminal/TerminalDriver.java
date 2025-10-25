@@ -281,6 +281,12 @@ public class TerminalDriver {
     */
     void menu_ending(Scanner scanner, GameProjection projection) {
 
+		// leaderboard + logout
+        Account currentAccount = GameState.instance().account();
+
+        String usernameToRecord = (currentAccount != null) ? currentAccount.username() : "Guest";
+        leaderboard.recordSession(usernameToRecord);
+
         //hint data
         GameInfo gameInfo = GameInfo.instance();
         List<String> hintsUsedList = gameInfo.usedHints();
@@ -309,6 +315,7 @@ public class TerminalDriver {
         List<String> msg = new ArrayList<>();
         msg.add(new FunString(scoremsg).purple().toString());
         msg.add(new FunString(hintmsg).purple().toString());
+		
 
         // list of the strings
         msg.add(new FunString(specificHintsMsg).purple().toString());
@@ -330,12 +337,6 @@ public class TerminalDriver {
             }
         }
         pauseDisplay(scanner, "");
-
-        // leaderboard + logout
-        Account currentAccount = GameState.instance().account();
-
-        String usernameToRecord = (currentAccount != null) ? currentAccount.username() : "Guest";
-        leaderboard.recordSession(usernameToRecord);
 
         // Show
         leaderboard.showLeaderboard();

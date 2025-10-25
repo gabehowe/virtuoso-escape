@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +30,7 @@ public class Leaderboard {
             Score newScore = new Score(state.time(), state.difficulty());
             Score currentHighScore = account.highScore();
 
-            if (newScore.totalScore() > currentHighScore.totalScore()) {
+            if (Objects.nonNull(newScore.totalScore()) && Objects.nonNull(currentHighScore.totalScore()) && newScore.totalScore() > currentHighScore.totalScore()) {
                 account.setHighScore(newScore);
                 System.out.println("Score updated");
             }
@@ -48,10 +49,10 @@ public class Leaderboard {
             if (value instanceof JSONObject acct) {
                 String username = acct.get("username").toString();
                 Object highScoreObj = acct.get("highScore");
-                if (highScoreObj instanceof JSONObject scoreJson && scoreJson.get("timeRemaining") != null) {
-                    long timeRemainingSeconds = (long) scoreJson.get("timeRemaining");
+                if (highScoreObj instanceof JSONObject scoreJson && scoreJson.get("timeRemaining") != null && scoreJson.get("totalScore") != null) {
+                    Long timeRemainingSeconds = (Long) scoreJson.get("timeRemaining");
                     String difficultyName = scoreJson.get("difficulty").toString();
-					long totalScore = (long) scoreJson.get("totalScore");
+					Long totalScore = (Long) scoreJson.get("totalScore");
 
                     if (timeRemainingSeconds > 0) {
                         allScores.add(new ScoreEntry(
@@ -77,7 +78,7 @@ public class Leaderboard {
                                               .limit(5)
                                               .collect(Collectors.toList());
 
-        System.out.println("\n Top 5 Leaderboard");
+        System.out.println("\nTop 5 Leaderboard");
         if (topScores.isEmpty()) {
             System.out.println("No scores yet.");
             return;
@@ -100,7 +101,7 @@ public class Leaderboard {
         System.out.println("==========================================================");
     }
 
-    public record ScoreEntry(String username, long totalScore, long scoreTimeSeconds, String difficulty) {
+    public record ScoreEntry(String username, Long totalScore, Long scoreTimeSeconds, String difficulty) {
         public String getFormattedTime() {
             Duration d = Duration.ofSeconds(scoreTimeSeconds);
             return String.format("%02d:%02d", d.toMinutesPart(), d.toSecondsPart());
