@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class Leaderboard {
 
     private boolean isNewScoreBetter(Score newScore, Score currentScore) {
+		if (currentScore.timeRemaining() == null) return true;
         int timeComparison = newScore.timeRemaining().compareTo(currentScore.timeRemaining());
 
         if (timeComparison != 0) {
