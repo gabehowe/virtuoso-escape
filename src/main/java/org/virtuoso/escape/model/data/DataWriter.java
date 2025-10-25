@@ -27,7 +27,7 @@ public class DataWriter {
     public static void writeGameState() {
         GameState currentGameState = GameState.instance();
         JSONObject currentGameStateMap = loadGameStateInfo(currentGameState);
-        JSONObject allGameStatesMap = AccountManager.instance().getGameStates();
+        JSONObject allGameStatesMap = AccountManager.instance().gameStates();
         allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
         writeToFile(GAME_STATES_PATH, allGameStatesMap);
     }
@@ -39,7 +39,7 @@ public class DataWriter {
     public static void writeAccount() {
         Account currentAccount = GameState.instance().account();
         JSONObject currentAccountMap = loadAccountInfo(currentAccount);
-        JSONObject allAccountsMap = AccountManager.instance().getAccounts();
+        JSONObject allAccountsMap = AccountManager.instance().accounts();
         allAccountsMap.put(currentAccount.id().toString(), currentAccountMap);
         writeToFile(ACCOUNTS_PATH, allAccountsMap);
     }

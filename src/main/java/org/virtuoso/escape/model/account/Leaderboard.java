@@ -40,7 +40,7 @@ public class Leaderboard {
 	 * Print the leaderboard of scores and difficulties.
 	 */
     public void showLeaderboard() {
-        JSONObject accountsJson = AccountManager.instance().getAccounts();
+        JSONObject accountsJson = AccountManager.instance().accounts();
         List<ScoreEntry> allScores = new ArrayList<>();
 
         for (Object id : accountsJson.keySet()) {

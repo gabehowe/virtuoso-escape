@@ -31,7 +31,7 @@ public class CancelableSpeakable implements FreeTTSSpeakable {
     /**
      * Construct a speakable that will speak a document input.
      *
-     * @param text The document input to speak.
+     * @param doc The document input to speak.
      */
     public CancelableSpeakable(Document doc) {
         this.doc = doc;
@@ -40,7 +40,7 @@ public class CancelableSpeakable implements FreeTTSSpeakable {
     /**
      * Construct a speakable that will speak a stream input.
      *
-     * @param text The stream input to speak.
+     * @param is The stream input to speak.
      */
     public CancelableSpeakable(InputStream is) {
         this.inputStream = is;
