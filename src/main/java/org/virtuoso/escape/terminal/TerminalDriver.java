@@ -267,7 +267,7 @@ public class TerminalDriver {
         FunString bar = new FunString("[")
             .add(new FunString(completed).green())
             .add(new FunString(remaining).terminalColor(240)) // Light Gray
-            .add("]");
+            .add(new FunString ("]"));
         
         String progressText = String.format("Floor %d of %d (%d%%)", currentFloorIndex + 1, totalFloors, progressPercentage);
     
