@@ -1,6 +1,7 @@
 {
   "welcome": {
 	"welcome": "Welcome to Virtuoso Escape!", 
+  "prelude": "You choose to go to a beaver farm, because of beavers. A very conspicuous beaver approaches, stripping off a mask and hitting you over the head, grinning as you lose consciousness",
 	"welcome_back": "Welcome back %s!\nYou are %.2f%s percent of the way through this experience!\nYou have answered the following riddles: %s"
   },
   "acorn_grove_0": {
