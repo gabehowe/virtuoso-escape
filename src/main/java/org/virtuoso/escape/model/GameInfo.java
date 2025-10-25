@@ -53,7 +53,7 @@ public class GameInfo {
 
     /**
      * Making the narrator.
-     * @param floorID, unique id per floor
+     * @param floorId, unique id per floor
      * @return the narrator
      */
      private Entity makeNarrator(String floorId) {
@@ -65,7 +65,7 @@ public class GameInfo {
                 "narrator_hint_2",
                 new Default(),
                 new Default(),
-                narratorMsg.apply("hints_exhausted"), 
+                narratorMsg.apply("hints_exhausted"),
                 null
         );
 
@@ -77,9 +77,9 @@ public class GameInfo {
                 new SwapEntities("narrator", "narrator_hint_2") // Swap to final state
         );
         EntityState hint1Given = new EntityState(
-                "narrator_hint_1", 
-                new Default(), 
-                new Default(), 
+                "narrator_hint_1",
+                new Default(),
+                new Default(),
                 giveHint2, // Interact action: Give Hint 2 and move to final state
                 null
         );
@@ -92,9 +92,9 @@ public class GameInfo {
                 new SwapEntities("narrator", "narrator_hint_1") // Swap to hint1Given state
         );
         EntityState start = new EntityState(
-                "narrator_start", 
-                new Default(), 
-                new Default(), 
+                "narrator_start",
+                new Default(),
+                new Default(),
                 giveHint1, // Interact action: Give Hint 1 and move to next state
                 null
         );
@@ -115,7 +115,7 @@ public class GameInfo {
         Entity intro_squirrel = new Entity("intro_squirrel", new Default(), new Default(), new Default(), null);
         Entity portal_squirrel = new Entity("portal_squirrel", new Default(), new Default(), new SetFloor(1), null);
         Entity narrator = makeNarrator("acorn_grove");
-        Room acornGrove_0 = new Room(new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), "acorn_grove_0", this.string("acorn_grove_0", "introduce"));
+        Room acornGrove_0 = new Room("acorn_grove_0", new ArrayList<>(List.of(intro_squirrel, portal_squirrel)), this.string("acorn_grove_0", "introduce"));
         return new Floor("acorn_grove", List.of(acornGrove_0));
     }
 
@@ -140,7 +140,7 @@ public class GameInfo {
         EntityState sans_butter_elephant = new EntityState("sans_butter_elephant", new Default(), new Default(), new Default(), null);
         Entity elephant = new Entity("elephant_in_the_room", hummus_elephant, sans_butter_elephant);
 
-        Room room_1400 = new Room(new ArrayList<>(List.of(joeHardy, trash_can, elephant, door, narrator)), "storey_i_0", this.string("storey_i_0", "introduce"));
+        Room room_1400 = new Room("storey_i_0", new ArrayList<>(List.of(joeHardy, trash_can, elephant, door, narrator)), this.string("storey_i_0", "introduce"));
 
         Entity almanac = makeAlmanacs(5);
         Room janitor_closet = new Room(this,"storey_i_1", almanac);
@@ -244,7 +244,7 @@ public class GameInfo {
      * @return M. Bert Storey floor 2.
      */
     private Floor floor2() {
-        Room doorRoom = new Room(new ArrayList<>(), "storey_ii_1", this.string("storey_ii_1", "introduce"));
+        Room doorRoom = new Room("storey_ii_1", new ArrayList<>(), this.string("storey_ii_1", "introduce"));
         Entity narrator = makeNarrator("storey_ii");
         Action shuffle = () -> Collections.shuffle(doorRoom.entities());
         Entity door1 = createDoorChain(3, shuffle);
@@ -359,7 +359,7 @@ public class GameInfo {
 
         Entity exitDoor = new Entity("exit_door", doorLocked, doorUnlocked);
 
-        Room boxRoom = new Room(new ArrayList<>(List.of(sparrowAmbassador, puzzleBox, exitDoor, narrator)), "storey_iii_0", this.string("storey_iii_0", "introduce"));
+        Room boxRoom = new Room("storey_iii_0", new ArrayList<>(List.of(sparrowAmbassador, puzzleBox, exitDoor, narrator)), this.string("storey_iii_0", "introduce"));
         return new Floor("storey_iii", List.of(boxRoom));
     }
 
@@ -376,7 +376,7 @@ public class GameInfo {
         // Whoops! JEP 126!
         EntityState microwaveUnblocked = new EntityState("microwave_unblocked", this::gameEnding, new Default(), this::gameEnding, null);
         Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
-        Room floor4 = new Room(new ArrayList<>(List.of(man, sock_squirrel, computty, microwave, narrator)), "storey_iv", this.string("storey_iv", "introduce"));
+        Room floor4 = new Room("storey_iv", new ArrayList<>(List.of(man, sock_squirrel, computty, microwave, narrator)), this.string("storey_iv", "introduce"));
         return new Floor("storey_iv", List.of(floor4));
     }
 
