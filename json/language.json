@@ -316,6 +316,7 @@
     "contributor_2": "Andrew Heuer <aheuer@email.sc.edu>",
     "contributor_3": "Bose Kaikini <bkaikini@email.sc.edu>",
     "message": "Thanks for playing Escape: A Storey!\nSpecial thanks to Joe Hardy for permission for his appearance and for his excellence in teaching assistance.",
-    "score": "You had %s remaining on %s difficulty."
+    "score": "You had %s remaining on %s difficulty.",
+	"hints": "You used %s hints."
   }
 }

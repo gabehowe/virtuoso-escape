@@ -251,8 +251,10 @@ public class TerminalDriver {
         Collections.shuffle(contributors);
         String formattedTime = String.format("%02d:%02d", GameState.instance().time().toMinutesPart(), GameState.instance().time().toSecondsPart());
         String scoremsg = String.format(GameInfo.instance().string("credits", "score"), formattedTime, GameState.instance().difficulty());
+		String hintmsg = String.format(GameInfo.instance().string("credits", "hints"), 0);
         List<String> msg = new ArrayList<>();
         msg.add(new FunString(scoremsg).purple().toString());
+		msg.add(new FunString(hintmsg).purple().toString());
         msg.addAll(List.of(GameInfo.instance().string("credits", "message").split("\n")));
         msg.add("Credits:");
         msg.addAll(contributors);
@@ -295,7 +297,7 @@ public class TerminalDriver {
 				GameState.instance().account().username(),
 				((float) IntStream.range(0,GameInfo.instance().building().size())
 				.filter(floor_index -> GameInfo.instance().building().get(floor_index).id() == GameState.instance().currentFloor().id())
-				.findFirst().getAsInt()+1)*100/GameInfo.instance().building().size(),
+				.findFirst().getAsInt())*100/GameInfo.instance().building().size(),
 				"%%",
 				"Insert puzzles completed and hits used list here."
 				));
