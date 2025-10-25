@@ -7,6 +7,8 @@ import org.virtuoso.escape.model.account.Leaderboard;
 import org.virtuoso.escape.speech.SpeechPlayer;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -140,25 +142,20 @@ public class TerminalDriver {
      *
      * @param scanner       The scanner to request for input on.
      * @param authenticator The function to try to authenticate on, usually create account or login.
-     * @param signal        the signal, represented as a character, that tells whether it was an attempt to log in or create an account.
      */
-    void tryLogin(Scanner scanner, BiPredicate<String, String> authenticator, char signal) {
+    boolean tryLogin(Scanner scanner, BiPredicate<String, String> authenticator, BiFunction<String, String, String> checkAuthError) {
         String username, password;
-        boolean flag = false;
-        do {
-            username = validateInput(scanner, "Enter your username:", i -> !i.isBlank());
-            password = validateInput(scanner, "Enter your password:", i -> !i.isBlank());
-            flag = authenticator.test(username.strip(), password.strip());
-            // Move to the second console line
-            System.out.print(escape("2;1H") + escape(CLEAR_BELOW));
-            if (!flag) {
-                display((new FunString(AccountManager.instance().getInvalidLoginInfo(username, password, signal))).red().toString());
-            }
-        } while (!flag);
-        // logical negation:
-        // If the choice is 0 and login
-        // or the choice is 1 and createAccount, continue
-		returningUser = signal == 'l';
+        boolean flag;
+        username = validateInput(scanner, "Enter your username:", i -> !i.isBlank());
+        password = validateInput(scanner, "Enter your password:", i -> !i.isBlank());
+        flag = authenticator.test(username.strip(), password.strip());
+        // Move to the second console line
+        System.out.print(escape("2;1H") + escape(CLEAR_BELOW));
+        if (!flag) {
+            display((new FunString(checkAuthError.apply(username, password))).red().toString());
+        }
+
+        return flag;
     }
 
     /**
@@ -235,10 +232,10 @@ public class TerminalDriver {
         pauseDisplay(scanner, "You have: \n" + String.join("\n", lines));
     }
 
-    
+
     /**
-     * 
-     * 
+     *
+     *
      * Provides progress bar for user to track their progress through the game
      * @param projection
      * @return
@@ -247,7 +244,7 @@ public class TerminalDriver {
     private String getProgressBar(GameProjection projection) {
         GameInfo gameInfo = GameInfo.instance();
         int totalFloors = gameInfo.building().size();
-    
+
        //finds flor
         int currentFloorIndex = IntStream.range(0, totalFloors)
             .filter(i -> gameInfo.building().get(i).id().equals(projection.currentFloor().id()))
@@ -255,70 +252,70 @@ public class TerminalDriver {
 
         // Progress is a simple fraction of floors completed
         int progressPercentage = (int) ( (float)(currentFloorIndex + 1) / totalFloors * 100);
-    
+
         // Define bar length (here it is arbitrarily 70)
         int barWidth = 70;
         int progressChars = (int) ( (float)(currentFloorIndex + 1) / totalFloors * barWidth);
-    
+
         String completed = "=".repeat(Math.max(0, progressChars));
         String remaining = ".".repeat(Math.max(0, barWidth - progressChars));
-    
+
         // FunString!!
         FunString bar = new FunString("[")
             .add(new FunString(completed).green())
             .add(new FunString(remaining).terminalColor(240)) // Light Gray
             .add(new FunString ("]"));
-        
+
         String progressText = String.format("Floor %d of %d (%d%%)", currentFloorIndex + 1, totalFloors, progressPercentage);
-    
-        return progressText + "\n" + bar.toString();
+
+        return progressText + "\n" + bar;
     }
 
     /**
     * Present the end of the game, record score, and display the leaderboard.
     *
-    * 
+    *
     * @param scanner    The scanner to request input on.
     * @param projection The source for data.
     */
     void menu_ending(Scanner scanner, GameProjection projection) {
-    
+
         //hint data
         GameInfo gameInfo = GameInfo.instance();
         List<String> hintsUsedList = gameInfo.usedHints();
         int totalHintsUsed = hintsUsedList.size();
-    
-        String hintsListDisplay = totalHintsUsed > 0 ? 
-            String.join(", ", hintsUsedList) : 
+
+        String hintsListDisplay = totalHintsUsed > 0 ?
+            String.join(", ", hintsUsedList) :
             "None";
-    
+
         List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> gameInfo.string("credits", "contributor_" + i)).toList());
         contributors = contributors.stream().map(it -> {
             var j = it.split("<");
             return j[0] + new FunString("<" + j[1]).italic().terminalColor(50);
         }).collect(Collectors.toList());
         Collections.shuffle(contributors);
-    
+
         String formattedTime = String.format("%02d:%02d", GameState.instance().time().toMinutesPart(), GameState.instance().time().toSecondsPart());
         String scoremsg = String.format(gameInfo.string("credits", "score"), formattedTime, GameState.instance().difficulty());
-    
+
         //num hints
         String hintmsg = String.format(gameInfo.string("credits", "hints"), totalHintsUsed);
-    
+
         // Each of the hints used
         String specificHintsMsg = "Specific hints used: " + hintsListDisplay;
 
         List<String> msg = new ArrayList<>();
         msg.add(new FunString(scoremsg).purple().toString());
         msg.add(new FunString(hintmsg).purple().toString());
-    
+
         // list of the strings
         msg.add(new FunString(specificHintsMsg).purple().toString());
-    
+
         // main credits
         msg.addAll(List.of(gameInfo.string("credits", "message").split("\n")));
         msg.add("Credits:");
-    
+
         // contributors (that's us lets gooo)
         msg.addAll(contributors);
 
@@ -345,24 +342,23 @@ public class TerminalDriver {
         projection.logout();
     }
 
-/**
+    /**
      * Provide the user with a summary of their current progress when the sign into a preexisting account.
      *
      * @param scanner    The scanner to request input on.
      * @param projection The source for data.
      */
-    void resume_summary(Scanner scanner, GameProjection projection) {
-			if (returningUser) {
-				var resumeAction = makeTuiActionMap(fs_r("Resume Game", () -> {}));
-				createActionInterface(scanner, resumeAction, String.format(GameInfo.instance().string("welcome", "welcome_back"), 
-				GameState.instance().account().username(),
-				((float) IntStream.range(0,GameInfo.instance().building().size())
-				.filter(floor_index -> GameInfo.instance().building().get(floor_index).id() == GameState.instance().currentFloor().id())
-				.findFirst().getAsInt())*100/GameInfo.instance().building().size(),
-				"%%",
-				"Insert puzzles completed and hits used list here."
-				));
-			};
+    void menu_summary(Scanner scanner, GameProjection projection) {
+        var resumeAction = makeTuiActionMap(fs_r("Resume Game", () -> {
+        }));
+        createActionInterface(scanner, resumeAction, String.format(GameInfo.instance().string("welcome", "welcome_back"),
+                GameState.instance().account().username(),
+                ((float) IntStream.range(0, GameInfo.instance().building().size())
+                                  .filter(floor_index -> GameInfo.instance().building().get(floor_index).id() == GameState.instance().currentFloor().id())
+                                  .findFirst().getAsInt()) * 100 / GameInfo.instance().building().size(),
+                "%%",
+                "Insert puzzles completed and hits used list here."
+        ));
     }
 
     /**
@@ -495,9 +491,9 @@ public class TerminalDriver {
     void menu_options(Scanner scanner, GameProjection projection) {
         var actions = makeTuiActionMap(
                 fs_r("Set difficulty", () -> menu_difficulty(scanner, projection)),
-				GameState.instance().account().ttsOn() ?
-				fs_r("Disable Text-To-Speech", () -> GameState.instance().account().SetTtsOn(false)):
-				fs_r("Enable Text-To-Speech", () -> GameState.instance().account().SetTtsOn(true)),
+                GameState.instance().account().ttsOn() ?
+                        fs_r("Disable Text-To-Speech", () -> GameState.instance().account().SetTtsOn(false)) :
+                        fs_r("Enable Text-To-Speech", () -> GameState.instance().account().SetTtsOn(true)),
                 fs_r("Nevermind", () -> {
                 })
         );
@@ -546,12 +542,22 @@ public class TerminalDriver {
         Scanner scanner = new Scanner(System.in);
         GameProjection projection = new GameProjection();
         // Ensure these are initialized
-        var actions = makeTuiActionMap(
-                fs_r("Login", () -> tryLogin(scanner, projection::login, 'l')),
-                fs_r("Create Account", () -> tryLogin(scanner, projection::createAccount, 'c'))
-        );
-		createActionInterface(scanner, actions, GameInfo.instance().string("welcome", "welcome"));
-		resume_summary(scanner, projection);
+        AtomicBoolean flag = new AtomicBoolean(false);
+        while (!flag.get()) {
+            var actions = makeTuiActionMap(
+                    fs_r("Login", () -> {
+                        flag.set(tryLogin(scanner, projection::login,
+                                AccountManager.instance()::getInvalidLoginInfo));
+                        if (flag.get()) menu_summary(scanner, projection);
+                    }),
+                    fs_r("Create Account", () -> flag.set(tryLogin(scanner, projection::createAccount,
+                            (_, _) -> "Username already exists.")))
+            );
+            createActionInterface(scanner, actions, GameInfo.instance().string("welcome", "welcome"));
+            if (!flag.get()) {
+
+            }
+        }
         gameLoop(scanner, projection);
     }
 

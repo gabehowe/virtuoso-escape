@@ -97,10 +97,9 @@ public class AccountManager {
 	 *
 	 * @param username the username to be checked.
 	 * @param password the password to be checked.
-	 * @param signal the signal, represented as a character, that tells whether it was an attempt to log in or create an account.
 	 * @return the respective string output based on which information was incorrect.
 	 */
-	public String getInvalidLoginInfo(String username, String password, char signal) {
+	public String getInvalidLoginInfo(String username, String password) {
 		int usernameCount = 0;
 		int passwordCount = 0;
 		String hashedPassword = Account.hashPassword(password);
@@ -111,11 +110,9 @@ public class AccountManager {
 			if (uName.equals(username)) usernameCount++;
 			else if (pWord.equals(hashedPassword)) passwordCount++;
 		}
-		if (Character.toLowerCase(signal) == 'l') {
 			if (usernameCount == 0 && passwordCount == 0) return "Both username and password input is invalid.";
 			else if (usernameCount > 0) return "Password input is invalid.";
 			else return "Username input is invalid.";
-		} else return "Username already exists.";
 	}
 
 	/**

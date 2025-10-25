@@ -144,8 +144,9 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
      *
      * @param fs the object to append.
      */
-    public void add(FunString fs) {
+    public FunString add(FunString fs) {
         this.content.add(fs);
+        return this;
     }
 
     /**
@@ -153,8 +154,9 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
      *
      * @param s The object to append.
      */
-    public void add(Character s) {
+    public FunString add(Character s) {
         this.content.add(s);
+        return this;
     }
 
     /**
@@ -162,8 +164,9 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
      *
      * @param s The object to append.
      */
-    public void add(String s) {
+    public FunString add(String s) {
         this.content.addAll(stringChars(s));
+        return this;
     }
 
     /**
