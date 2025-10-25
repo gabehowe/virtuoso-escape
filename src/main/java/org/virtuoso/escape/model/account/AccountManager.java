@@ -2,12 +2,15 @@ package org.virtuoso.escape.model.account;
 
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
+import org.virtuoso.escape.model.GameInfo;
+import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.data.DataLoader;
 import org.virtuoso.escape.model.data.DataWriter;
 
 import java.time.Duration;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.UUID;
 
 /**
@@ -56,6 +59,7 @@ public class AccountManager {
 		}
 		return Optional.empty();
 	}
+
 
 	/**
 	 * Attempts to create an {@link Account} with the indicated username and password.

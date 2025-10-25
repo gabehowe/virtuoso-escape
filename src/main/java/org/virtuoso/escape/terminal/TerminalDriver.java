@@ -512,6 +512,9 @@ public class TerminalDriver {
         System.exit(0);
     }
 
+    private void menu_prelude(Scanner scanner, GameProjection projection) {
+        pauseDisplay(scanner, GameInfo.instance().string("welcome", "prelude"));
+    }
     /**
      * Continuously ask the user for context-specific input.
      *
@@ -547,8 +550,9 @@ public class TerminalDriver {
                                 AccountManager.instance()::getInvalidLoginInfo));
                         if (flag.get()) menu_summary(scanner, projection);
                     }),
-                    fs_r("Create Account", () -> flag.set(tryLogin(scanner, projection::createAccount,
-                            (_, _) -> "Username already exists.")))
+                    fs_r("Create Account", () -> {flag.set(tryLogin(scanner, projection::createAccount,
+                            (_, _) -> "Username already exists."));
+                        if (flag.get()) menu_prelude(scanner, projection);})
             );
             createActionInterface(scanner, actions, GameInfo.instance().string("welcome", "welcome"));
             if (!flag.get()) {
