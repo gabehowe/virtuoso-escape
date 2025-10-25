@@ -166,7 +166,8 @@ public class TerminalDriver {
      */
     void display(String display, Object... args) {
         // wrapper function allows for flair
-        System.out.printf(display + "\n", args);
+	    if (args.length == 0) System.out.println(display);
+	    else System.out.printf(display + "\n", args);
     }
 
     /**
@@ -395,7 +396,7 @@ public class TerminalDriver {
         actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
         actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
         String progressBar=getProgressBar(projection);
-        String prompt = String.format("%02d:%02d\n%s", projection.time().toMinutesPart(), projection.time().toSecondsPart(), progressBar, projection.currentRoom()
+        String prompt = String.format("%02d:%02d\n%s\n%s", projection.time().toMinutesPart(), projection.time().toSecondsPart(), progressBar, projection.currentRoom()
                                                                                                                                        .introMessage());
         createActionInterface(scanner, actions, prompt);
 
