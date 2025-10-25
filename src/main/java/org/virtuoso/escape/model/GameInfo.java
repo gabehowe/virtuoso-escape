@@ -340,23 +340,31 @@ public class GameInfo {
                 "rotx.*", ttyStr.apply("man_rotx"),
                 "ls", ttyStr.apply("ls_tar"),
                 "cat code", ttyStr.apply("cat_code"),
-                "cat.*", ttyStr.apply("man_cat")
+                "cat.*", ttyStr.apply("man_cat"),
+                "tar xvf .*", ttyStr.apply( "no_file"),
+                "cd.*", ttyStr.apply( "no_file")
         ));
         var computtyTar = new EntityState("computty_tar", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyTarLogic);
         var computtyCdLogic = new TakeInput("", TakeInput.makeCases(
                 "tar xvf code.tar$", new Chain(new SetMessage("code"),new SwapEntities("computty", "computty_tar")),
-                "tar xvf c.*", ttyStr.apply( "no_file"),
+                "tar xvf .*", ttyStr.apply( "no_file"),
                 "tar.*", ttyStr.apply( "man_tar"),
                 "ls", ttyStr.apply("ls_cd"),
                 "cat code.tar", ttyStr.apply("cat_tar"),
-                "cat.*", ttyStr.apply("man_cat")
+                "cat.*", ttyStr.apply("man_cat"),
+                "cd.*", ttyStr.apply("no_file"),
+                "rotx \\d+.*", ttyStr.apply("no_file"),
+                "rotx.*", ttyStr.apply("man_rotx")
         ));
         var computtyCd = new EntityState("computty_cd", ttyStr.apply("attack"), ttyStr.apply("inspect"), ttyStr.apply("interact"), computtyCdLogic);
         var computtyDefault = new TakeInput("", TakeInput.makeCases(
                 "cd code", new Chain(new SwapEntities("computty", "computty_cd"), ttyStr.apply("input_cd")),
                 "cd.*", ttyStr.apply( "no_file"),
                 "ls", ttyStr.apply("ls_default"),
-                "cat.*", ttyStr.apply("man_cat")
+                "cat.*", ttyStr.apply("man_cat"),
+                "tar.*", ttyStr.apply("man_tar"),
+                "rotx \\d+.*", ttyStr.apply("no_file"),
+                "rotx.*", ttyStr.apply("man_rotx")
         ));
 		var computtyUnblocked = new EntityState("computty_unblocked", ttyStr.apply("attack"), ttyStr.apply("attack"), ttyStr.apply("interact"), computtyDefault);
 
