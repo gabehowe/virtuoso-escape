@@ -17,6 +17,14 @@ public class Entity {
 	private String currentState;
 
 	/**
+	 * Construct an actionless entity.
+	 * @param id The ID of the entity.
+	 */
+	public Entity(String id){
+		this(id, new EntityState(id));
+	}
+
+	/**
 	 * Construct an entity with multiple states.
 	 * @param id The ID of the entity to change.
 	 * @param entity_states The states the entity has,
