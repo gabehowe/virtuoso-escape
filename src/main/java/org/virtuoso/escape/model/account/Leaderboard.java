@@ -17,6 +17,12 @@ import java.util.stream.Collectors;
 
 public class Leaderboard {
 
+	/**
+	 * Check if the new score is better than the current score.
+	 * @param newScore The user's new score.
+	 * @param currentScore The user's current score.
+	 * @return Whether or not the user's new score is better.
+	 */
     private boolean isNewScoreBetter(Score newScore, Score currentScore) {
 		if (currentScore.timeRemaining() == null) return true;
         int timeComparison = newScore.timeRemaining().compareTo(currentScore.timeRemaining());
@@ -28,6 +34,10 @@ public class Leaderboard {
         return newScore.difficulty().ordinal() > currentScore.difficulty().ordinal();
     }
 
+	/**
+	 * Update the user's high score.
+	 * @param username The user's username.
+	 */
     public void recordSession(String username) {
         GameState state = GameState.instance();
         Account account = state.account();
@@ -43,6 +53,9 @@ public class Leaderboard {
         }
     }
 
+	/**
+	 * Print the leaderboard of scores and difficulties.
+	 */
     public void showLeaderboard() {
         JSONObject accountsJson = AccountManager.instance().getAccounts();
         List<ScoreEntry> allScores = new ArrayList<>();
@@ -53,7 +66,7 @@ public class Leaderboard {
                 String username = acct.get("username").toString();
                 Object highScoreObj = acct.get("highScore");
 
-                if (highScoreObj instanceof JSONObject scoreJson) {
+                if (highScoreObj instanceof JSONObject scoreJson && scoreJson.get("timeRemaining") != null) {
                     long timeRemainingSeconds = (long) scoreJson.get("timeRemaining");
                     String difficultyName = scoreJson.get("difficulty").toString();
 

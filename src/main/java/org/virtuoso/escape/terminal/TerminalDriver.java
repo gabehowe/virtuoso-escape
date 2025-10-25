@@ -451,7 +451,7 @@ public class TerminalDriver {
     void exit(Scanner scanner, GameProjection projection) {
         projection.logout();
         display("Logged out.\nThanks for playing!");
-        System.exit(1);
+        System.exit(0);
     }
 
     /**
