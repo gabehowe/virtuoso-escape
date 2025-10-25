@@ -190,6 +190,15 @@ public class GameProjection {
 	}
 
 	/**
+	 * The capabilities of the current entity -- whether it supports an action.
+	 *
+	 * @return The capabilities of the entity.
+	 */
+	public EntityState.Capabilities capabilities() {
+		return currentEntity().orElseThrow().state().capabilities();
+	}
+
+	/**
 	 * Whether the game is ended.
 	 * @return {@code true} if the game has ended, otherwise {@code false}.
 	 */

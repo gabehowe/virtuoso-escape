@@ -36,10 +36,10 @@ public record EntityState(String id, Action attackAction, Action inspectAction, 
      */
     public EntityState(String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
         Capabilities capabilities = new Capabilities(
-                attackAction == null,
-                inspectAction == null,
-                interactAction == null,
-                inputAction == null
+                attackAction != null,
+                inspectAction != null,
+                interactAction != null,
+                inputAction != null
         );
         this(id, attackAction, inspectAction, interactAction, inputAction, capabilities);
     }
@@ -137,8 +137,8 @@ public record EntityState(String id, Action attackAction, Action inspectAction, 
         }
     }
 
+    public record Capabilities(boolean attack, boolean inspect, boolean interact, boolean input) {
+
+    }
 }
 
-record Capabilities(boolean attack, boolean inspect, boolean interact, boolean input) {
-
-}
