@@ -262,10 +262,10 @@ public class GameState {
      */
     public void updateHighScore() {
         if (isEnded()) {
-            long currentTimeRemaining = this.time.getSeconds();
-            Duration oldTimeRemaining = this.account.highScore().timeRemaining();
-            if (oldTimeRemaining == null || currentTimeRemaining > oldTimeRemaining.getSeconds()) {
-                this.account.setHighScore(new Score(Duration.ofSeconds(currentTimeRemaining), this.difficulty));
+            Long currentScore = Score.calculateScore(this.time, this.difficulty);
+            Long oldScore = this.account.highScore().totalScore();
+            if (oldScore == null || currentScore > oldScore) {
+                this.account.setHighScore(new Score(this.time, this.difficulty, currentScore));
             }
         }
     }
