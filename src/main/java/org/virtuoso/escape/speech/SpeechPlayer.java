@@ -32,8 +32,8 @@ public class SpeechPlayer {
      * @param text The text to speak.
      */
     public void playSoundbite(String text) {
-		if (GameState.instance().account() != null && !GameState.instance().account().ttsOn())
-			return;
+        if (GameState.instance().account() != null
+                && !GameState.instance().account().ttsOn()) return;
         Thread newClip = new Soundbite(text);
         stopSoundbite();
         currentClip = newClip;

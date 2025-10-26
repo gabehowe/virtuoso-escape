@@ -42,7 +42,7 @@ public class Soundbite extends Thread {
      * Stop the soundbite from playing.
      */
     public void interrupt() {
-		voice.deallocate();
+        voice.deallocate();
         voice.getAudioPlayer().cancel();
         super.interrupt();
     }

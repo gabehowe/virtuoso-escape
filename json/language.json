@@ -318,10 +318,11 @@
     "contributor_3": "Bose Kaikini <bkaikini@email.sc.edu>",
     "message": "Thanks for playing Escape: A Storey!\nSpecial thanks to Joe Hardy for permission for his appearance and for his excellence in teaching assistance.",
     "score": "You had %s remaining on %s difficulty. Your score final score is: %s",
-	"hints": "You used %s hints."
+	"hints": "You used %s hints.",
+    "certificate": "**Escape: A Storey**\nYou finished the game and escaped M. Bert Storey Research and Innovation Center!\n%s\n%s\nThanks for playing!"
   },
   "narrator": {
-    "introduce": "A mearly transparent figure stands here, whispering secret stories.",
+    "introduce": "A nearly transparent figure stands here, whispering secret stories.",
     "inspect": "The narrator seems to be an extension of the building itself, offering silent, wise counsel.",
     "attack": "Your attack passes straight through the figure, leaving you questioning either your ability or sanity.",
     "hints_exhausted": "I have shared all my wisdom for this floor. You must proceed on your own now.",
