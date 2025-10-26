@@ -45,3 +45,4 @@ json/gamestates.json
 json/accounts.json
 
 *.class
+bin/
