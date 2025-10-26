@@ -228,11 +228,11 @@ public class TerminalDriver {
             return;
         }
         List<String> lines = new ArrayList<>();
-        int padwidth = (names.stream().map(String::length)).max(Integer::compare).get();
+        int padwidth = (names.stream().map(String::length)).max(Integer::compare).get()+1;
+        Function<String, String> formatString = (str) -> String.format("1✖ %-" + padwidth + "s", str);
         for (int i = 0; i < names.size(); i += 2) {
-            Function<String, String> j = (str) -> String.format("1✖ %-" + padwidth + "s", str);
-            String left = j.apply(names.get(i) + ((i + 1 == names.size()) ? "" : ","));
-            String right = (i + 1 == names.size()) ? "" : j.apply(names.get(i + 1));
+            String left = formatString.apply(names.get(i) + ((i + 1 == names.size()) ? "" : ","));
+            String right = (i + 1 == names.size()) ? "" : formatString.apply(names.get(i + 1));
             lines.add(left + " " + right);
         }
         pauseDisplay(scanner, "You have: \n" + String.join("\n", lines));

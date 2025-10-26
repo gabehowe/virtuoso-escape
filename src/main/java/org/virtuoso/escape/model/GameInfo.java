@@ -207,8 +207,9 @@ public class GameInfo {
                 new SwapEntities("almanac", "almanac_" + maxFlips);
 
         Action caseBreak = new Chain(new AddPenalty(Severity.MEDIUM), new SetMessage(this, "almanac", "break"));
-        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + (flips - 1) + this.string("almanac", "guesses_remaining"));
-        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + (flips - 1) + this.string("almanac", "guesses_remaining"));
+        var guesses_remaining = String.format(this.string("almanac", "guesses_remaining"), (flips-1), flips);
+        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " +guesses_remaining);
+        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " +guesses_remaining);
         Action caseFound = new Chain(
                 new SetMessage(this, "almanac", "correct_page"),
                 new GiveItem(Item.left_bread),
