@@ -65,15 +65,16 @@ public class Leaderboard {
                 }
             }
         }
+		allScores.add(new ScoreEntry(GameState.instance().account().username(), Score.calculateScore(GameState.instance().time(), GameState.instance().difficulty()), (Long) GameState.instance().time().toSeconds(), GameState.instance().difficulty().toString()));
 
         List<ScoreEntry> topScores = allScores.stream()
                                               .sorted(Comparator
-                                                      .comparing(ScoreEntry::scoreTimeSeconds)
+                                                      .comparing(ScoreEntry::totalScore)
                                                       .thenComparing((s1, s2) -> {
                                                           Difficulty d1 = Difficulty.valueOf(s1.difficulty());
                                                           Difficulty d2 = Difficulty.valueOf(s2.difficulty());
                                                           return Integer.compare(d2.ordinal(), d1.ordinal());
-                                                      })
+                                                      }).reversed()
                                               )
                                               .limit(5)
                                               .collect(Collectors.toList());
