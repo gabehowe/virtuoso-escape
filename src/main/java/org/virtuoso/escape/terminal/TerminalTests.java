@@ -1,8 +1,11 @@
 package org.virtuoso.escape.terminal;
 
 import org.virtuoso.escape.model.GameProjection;
+import org.virtuoso.escape.model.GameState;
+import org.virtuoso.escape.model.Item;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -19,6 +22,15 @@ public class TerminalTests {
      */
     public void testEnding() {
         new TerminalDriver().menu_ending(scanner, projection);
+    }
+
+    public void testItems() {
+        GameState.instance().clearItems();
+        GameState.instance().addItem(Item.sealed_clean_food_safe_hummus);
+        GameState.instance().addItem(Item.sunflower_seed_butter);
+        GameState.instance().addItem(Item.left_bread);
+        GameState.instance().addItem(Item.right_bread);
+        new TerminalDriver().displayItems(scanner,projection);
     }
 
     /**
@@ -59,8 +71,9 @@ public class TerminalTests {
         scanner = new Scanner(System.in);
         projection = new GameProjection();
         projection.login("j", "j");
-        testEnding();
-        //        testTypewriterText();
-        //        testFunStrings();
+        testItems();
+//        testEnding();
+//        testTypewriterText();
+//        testFunStrings();
     }
 }
