@@ -57,8 +57,8 @@ public class GameInfo {
         //No left
         EntityState hintsUsedUp = new EntityState (
                 "narrator_hint_2",
-                new Default(),
-                new Default(),
+                narratorMsg.apply("attack"),
+                narratorMsg.apply("inspect"),
                 narratorMsg.apply("hints_exhausted"),
                 null
         );
@@ -72,8 +72,8 @@ public class GameInfo {
         );
         EntityState hint1Given = new EntityState(
                 "narrator_hint_1",
-                new Default(),
-                new Default(),
+                narratorMsg.apply("attack"),
+                narratorMsg.apply("inspect"),
                 giveHint2, // Interact action: Give Hint 2 and move to final state
                 null
         );
@@ -87,8 +87,8 @@ public class GameInfo {
         );
         EntityState start = new EntityState(
                 "narrator_start",
-                new Default(),
-                new Default(),
+                narratorMsg.apply("attack"),
+                narratorMsg.apply("inspect"),
                 giveHint1, // Interact action: Give Hint 1 and move to next state
                 null
         );
