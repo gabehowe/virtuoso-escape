@@ -295,7 +295,7 @@ public class TerminalDriver {
         //hint data
         GameInfo gameInfo = GameInfo.instance();
         Map<String,Integer> hintsUsedMap = GameState.instance().hintsUsed();
-        int totalHintsUsed = hintsUsedMap.size();
+        int totalHintsUsed = hintsUsedMap.values().stream().reduce(0, Integer::sum);
 
         String hintsListDisplay = totalHintsUsed > 0 ?
                 String.join(", ", hintsUsedMap.entrySet().stream().map(entry -> entry.getKey() + ": " + entry.getValue()).collect(Collectors.joining("\n"))) :
