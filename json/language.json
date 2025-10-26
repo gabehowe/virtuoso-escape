@@ -1,7 +1,7 @@
 {
   "welcome": {
 	"welcome": "Welcome to Virtuoso Escape!", 
-  "prelude": "You choose to go to a beaver farm, because of beavers. A very conspicuous beaver approaches, stripping off a mask and hitting you over the head, grinning as you lose consciousness",
+  	"prelude": "You choose to go to a beaver farm, because of beavers. A very conspicuous beaver approaches, stripping off a mask and hitting you over the head, grinning as you lose consciousness",
 	"welcome_back": "Welcome back %s!\n%s\nYou have answered the following riddles: %s"
   },
   "acorn_grove_0": {
@@ -317,7 +317,7 @@
     "contributor_2": "Andrew Heuer <aheuer@email.sc.edu>",
     "contributor_3": "Bose Kaikini <bkaikini@email.sc.edu>",
     "message": "Thanks for playing Escape: A Storey!\nSpecial thanks to Joe Hardy for permission for his appearance and for his excellence in teaching assistance.",
-    "score": "You had %s remaining on %s difficulty.",
+    "score": "You had %s remaining on %s difficulty. Your score final score is: %s",
 	"hints": "You used %s hints."
   },
   "narrator": {

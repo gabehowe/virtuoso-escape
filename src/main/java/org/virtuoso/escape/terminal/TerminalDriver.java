@@ -4,6 +4,7 @@ import org.virtuoso.escape.model.*;
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
 import org.virtuoso.escape.model.account.Leaderboard;
+import org.virtuoso.escape.model.account.Score;
 import org.virtuoso.escape.speech.SpeechPlayer;
 
 import java.util.*;
@@ -289,11 +290,11 @@ public class TerminalDriver {
 
         //hint data
         GameInfo gameInfo = GameInfo.instance();
-        List<String> hintsUsedList = gameInfo.usedHints();
-        int totalHintsUsed = hintsUsedList.size();
+        Map<String,Integer> hintsUsedMap = GameState.instance().usedHints();
+        int totalHintsUsed = hintsUsedMap.size();
 
         String hintsListDisplay = totalHintsUsed > 0 ?
-            String.join(", ", hintsUsedList) :
+            String.join(", ", hintsUsedMap.entrySet().stream().map(entry -> entry.getKey() + ": " + entry.getValue()).collect(Collectors.joining("\n"))) :
             "None";
 
         List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> gameInfo.string("credits", "contributor_" + i)).toList());
@@ -304,7 +305,7 @@ public class TerminalDriver {
         Collections.shuffle(contributors);
 
         String formattedTime = String.format("%02d:%02d", GameState.instance().time().toMinutesPart(), GameState.instance().time().toSecondsPart());
-        String scoremsg = String.format(gameInfo.string("credits", "score"), formattedTime, GameState.instance().difficulty());
+        String scoremsg = String.format(gameInfo.string("credits", "score"), formattedTime, GameState.instance().difficulty(), Score.calculateScore(GameState.instance().time(), GameState.instance().difficulty()));
 
         //num hints
         String hintmsg = String.format(gameInfo.string("credits", "hints"), totalHintsUsed);

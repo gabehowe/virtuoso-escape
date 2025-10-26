@@ -2,9 +2,11 @@ package org.virtuoso.escape.model.account;
 
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
+import org.virtuoso.escape.model.GameState;
 
 import java.time.Duration;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Holds information about the users score.
@@ -26,7 +28,17 @@ public class Score {
 	public Score(Duration timeRemaining, Difficulty difficulty){
 		this.timeRemaining = timeRemaining;
 		this.difficulty = difficulty;
-		this.totalScore = timeRemaining != null ? (Long) timeRemaining.toSeconds() : null;
+		this.totalScore = calculateScore(timeRemaining, difficulty);
+	}
+
+	/**
+	 * Calculate a score from timeRemaining, difficulty, and GameState data.
+	 */
+	public static Long calculateScore(Duration timeRemaining, Difficulty difficulty) {
+		return timeRemaining != null ? 
+		(Long) (timeRemaining.toSeconds() - GameState.instance().penalty() - 
+		(GameState.instance().usedHints() != null ? GameState.instance().usedHints().values().stream().collect(Collectors.summingInt(Integer::intValue)) : 0)) 
+		: null;
 	}
 
 	/**

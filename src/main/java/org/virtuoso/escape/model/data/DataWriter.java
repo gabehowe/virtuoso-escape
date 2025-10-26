@@ -12,6 +12,7 @@ import org.virtuoso.escape.model.account.AccountManager;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Andrew
@@ -77,6 +78,8 @@ public class DataWriter {
         gameStateMap.put("currentEntityStates", entityStates(gameState.currentFloor().rooms()));
         gameStateMap.put("time", gameState.time().getSeconds());
         gameStateMap.put("difficulty", gameState.difficulty().toString());
+		gameStateMap.put("completedPuzzles", completedPuzzleIds(gameState.completedPuzzles().stream().toList()));
+		gameStateMap.put("hintsUsed", hintsUsedJSON(gameState.usedHints()));
         return gameStateMap;
     }
 
@@ -91,6 +94,30 @@ public class DataWriter {
         JSONArray itemJSON = new JSONArray();
         currentItems.stream().map(Item::id).forEach(itemJSON::add);
         return itemJSON;
+    }
+
+	/**
+     * Create a {@link JSONArray} from a {@link List<String>}.
+     *
+     * @param completedLevels Strings of the puzzles that have been completed.
+     * @return A {@link JSONArray} ready for writing.
+     */
+    @SuppressWarnings("unchecked")
+    private static JSONArray completedPuzzleIds(List<String> completedPuzzles) {
+        JSONArray levelJSON = new JSONArray();
+        completedPuzzles.stream().forEach(levelJSON::add);
+        return levelJSON;
+    }
+
+	/**
+     * Create a {@link JSONArray} from a {@link Map<String, Integer>}.
+     *
+     * @param completedLevels Strings of the levels that have been completed.
+     * @return A {@link JSONArray} ready for writing.
+     */
+    @SuppressWarnings("unchecked")
+    private static JSONObject hintsUsedJSON(Map<String, Integer> hintsUsed) {
+        return new JSONObject(hintsUsed);
     }
 
     /**

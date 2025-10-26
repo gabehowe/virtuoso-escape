@@ -27,7 +27,9 @@ public class GameState {
     private long startTime;
     private Account account;
     private boolean ended;
-
+	private int penalty;
+	private Map<String, Integer> usedHints;
+	private Set<String> completedPuzzles;
     private Difficulty difficulty;
     private String currentMessage;
 
@@ -67,12 +69,25 @@ public class GameState {
                                        .findFirst()
                                        .orElse(currentFloor.rooms().getFirst());
         this.currentEntity = currentRoom.entities().stream().filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentEntity"))).findFirst().orElse(null);
+
         this.currentItems = new HashSet<>();
         JSONArray items = (JSONArray) gameStateInfo.getOrDefault("currentItems", new JSONArray());
-        for (int i = 0; i < items.size(); i++) {
-            currentItems.add(Item.valueOf((String) items.get(i)));
-        }
+        for (int i = 0; i < items.size(); i++)
+            this.currentItems.add(Item.valueOf((String) items.get(i)));
+
+		this.completedPuzzles = new HashSet<String>();
+	    JSONArray completedPuzzles = (JSONArray) gameStateInfo.getOrDefault("completedPuzzels", new JSONArray());
+        for (int i = 0; i < completedPuzzles.size(); i++)
+            this.completedPuzzles.add((String) completedPuzzles.get(i));
+
+		this.usedHints = new HashMap<String, Integer>();
+		JSONObject usedHints = (JSONObject) gameStateInfo.getOrDefault("usedHints", new JSONObject());
+   	 	for (Object level : usedHints.keySet())
+			this.usedHints.put(String.valueOf(level),(Integer) usedHints.get(level));
+
+		
         this.time = Duration.ofSeconds((Long) gameStateInfo.getOrDefault("time", initialTime));
+		this.penalty = (int) gameStateInfo.getOrDefault("penalty", 0);
         this.account = account;
         this.difficulty = Difficulty.valueOf((String) gameStateInfo.getOrDefault(difficulty, "SUBSTANTIAL"));
         this.startTime = System.currentTimeMillis();
@@ -190,13 +205,22 @@ public class GameState {
         this.time = time;
     }
 
-    /**
-     * Add {@code time} to the countdown.
+	/**
+     * Get the current penalty score.
      *
-     * @param time The amount of time to add.
+     * @return The current penalty score.
      */
-    public void addTime(Duration time) {
-        this.time = this.time.plus(time);
+    public int penalty() {
+        return this.penalty;
+    }
+
+    /**
+     * Add a penalty to the score.
+     *
+     * @param time The amount of penalty to add.
+     */
+    public void addPenalty(int penalty) {
+        this.penalty += penalty;
     }
 
     /**
@@ -283,6 +307,45 @@ public class GameState {
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }
+
+	/**
+	 * Get the map of how many hints have been used on each level.
+	 * 
+	 * @return The map of hint totals.
+	 */
+	public Map<String,Integer> usedHints() {
+                return this.usedHints;
+    }
+
+	/**
+	 * Sets the quantity of hints used for a certain level
+	 * 
+	 * @param puzzle The name of the puzzle the hint was used on.
+	 * @param hintsUsed The amount of hints used on that puzzle.
+	 */
+	public void setUsedHints(String puzzle, int hintsUsed) {
+        this.usedHints().put(puzzle, hintsUsed);
+    }
+
+	/**
+	 * Get the list of completed puzzles.
+	 * 
+	 * @return The list of completed puzzles.
+	 */
+	public Set<String> completedPuzzles() {
+        return this.completedPuzzles;
+    }
+
+	/**
+	 * Adds a puzzle to the completed puzzles set.
+	 * 
+	 * @param puzzle The puzzle that was completed.
+	 */
+	public void addCompletedPuzzle(String puzzle) {
+        this.completedPuzzles.add(puzzle);
+    }
+
+
 
     /**
      * Whether the game is ended.

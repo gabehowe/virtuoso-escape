@@ -123,10 +123,16 @@ public class DataLoader {
                         if (sk.equals("currentItems")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
+						} else if (sk.equals("completedPuzzles")) {
+                            sval = innerObj.get(sk);
+                            map.put(sk, sval);
                         } else if (sk.equals("time")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
                         } else if (sk.equals("currentEntityStates")) {
+                            sval = innerObj.get(sk);
+                            map.put(sk, sval);
+						 } else if (sk.equals("usedHints")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
                         } else map.put(sk, String.valueOf(sval));
