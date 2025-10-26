@@ -76,7 +76,7 @@ public class GameState {
             this.currentItems.add(Item.valueOf((String) items.get(i)));
 
 		this.completedPuzzles = new HashSet<String>();
-	    JSONArray completedPuzzles = (JSONArray) gameStateInfo.getOrDefault("completedPuzzels", new JSONArray());
+	    JSONArray completedPuzzles = (JSONArray) gameStateInfo.getOrDefault("completedPuzzles", new JSONArray());
         for (int i = 0; i < completedPuzzles.size(); i++)
             this.completedPuzzles.add((String) completedPuzzles.get(i));
 
@@ -85,7 +85,7 @@ public class GameState {
    	 	for (Object level : usedHints.keySet())
 			this.usedHints.put(String.valueOf(level),(Integer) usedHints.get(level));
 
-		
+
         this.time = Duration.ofSeconds((Long) gameStateInfo.getOrDefault("time", initialTime));
 		this.penalty = (int) gameStateInfo.getOrDefault("penalty", 0);
         this.account = account;
@@ -217,7 +217,7 @@ public class GameState {
     /**
      * Add a penalty to the score.
      *
-     * @param time The amount of penalty to add.
+     * @param penalty The amount of penalty to add.
      */
     public void addPenalty(int penalty) {
         this.penalty += penalty;
@@ -310,7 +310,7 @@ public class GameState {
 
 	/**
 	 * Get the map of how many hints have been used on each level.
-	 * 
+	 *
 	 * @return The map of hint totals.
 	 */
 	public Map<String,Integer> usedHints() {
@@ -319,7 +319,7 @@ public class GameState {
 
 	/**
 	 * Sets the quantity of hints used for a certain level
-	 * 
+	 *
 	 * @param puzzle The name of the puzzle the hint was used on.
 	 * @param hintsUsed The amount of hints used on that puzzle.
 	 */
@@ -329,7 +329,7 @@ public class GameState {
 
 	/**
 	 * Get the list of completed puzzles.
-	 * 
+	 *
 	 * @return The list of completed puzzles.
 	 */
 	public Set<String> completedPuzzles() {
@@ -338,7 +338,7 @@ public class GameState {
 
 	/**
 	 * Adds a puzzle to the completed puzzles set.
-	 * 
+	 *
 	 * @param puzzle The puzzle that was completed.
 	 */
 	public void addCompletedPuzzle(String puzzle) {

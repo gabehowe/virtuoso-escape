@@ -99,7 +99,7 @@ public class DataWriter {
 	/**
      * Create a {@link JSONArray} from a {@link List<String>}.
      *
-     * @param completedLevels Strings of the puzzles that have been completed.
+     * @param completedPuzzles Strings of the puzzles that have been completed.
      * @return A {@link JSONArray} ready for writing.
      */
     @SuppressWarnings("unchecked")
@@ -112,7 +112,7 @@ public class DataWriter {
 	/**
      * Create a {@link JSONArray} from a {@link Map<String, Integer>}.
      *
-     * @param completedLevels Strings of the levels that have been completed.
+     * @param hintsUsed Strings of the levels that have been completed.
      * @return A {@link JSONArray} ready for writing.
      */
     @SuppressWarnings("unchecked")
