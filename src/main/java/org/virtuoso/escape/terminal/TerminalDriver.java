@@ -357,7 +357,7 @@ public class TerminalDriver {
         createActionInterface(scanner, resumeAction, String.format(GameInfo.instance().string("welcome", "welcome_back"),
                 GameState.instance().account().username(),
 				getProgressBar(projection),
-                "Insert puzzles completed and hits used list here."
+                GameState.instance().completedPuzzles().stream().collect(Collectors.joining(", "))
         ));
     }
 
@@ -515,6 +515,7 @@ public class TerminalDriver {
     }
 
     private void menu_prelude(Scanner scanner, GameProjection projection) {
+		SpeechPlayer.instance().playSoundbite(GameInfo.instance().string("welcome", "prelude"));
         pauseDisplay(scanner, GameInfo.instance().string("welcome", "prelude"));
     }
     /**
