@@ -117,7 +117,7 @@ public class DataWriter {
      */
     @SuppressWarnings("unchecked")
     private static JSONObject hintsUsedJSON(Map<String, Integer> hintsUsed) {
-        return new JSONObject(hintsUsed);
+        return hintsUsed.size() > 0 ? new JSONObject(hintsUsed) : new JSONObject();
     }
 
     /**
