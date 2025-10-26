@@ -7,6 +7,11 @@ import org.virtuoso.escape.model.account.Leaderboard;
 import org.virtuoso.escape.model.account.Score;
 import org.virtuoso.escape.speech.SpeechPlayer;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -29,7 +34,6 @@ public class TerminalDriver {
     private static String CLEAR_RESET = "H";
     private static String MOVE_LINE = "1A";
     private static String CLEAR_BELOW = "0J";
-	private boolean returningUser;
     private final Leaderboard leaderboard = new Leaderboard();
     private boolean DEBUG = true;
 
@@ -167,8 +171,8 @@ public class TerminalDriver {
      */
     void display(String display, Object... args) {
         // wrapper function allows for flair
-	    if (args.length == 0) System.out.println(display);
-	    else System.out.printf(display + "\n", args);
+        if (args.length == 0) System.out.println(display);
+        else System.out.printf(display + "\n", args);
     }
 
     /**
@@ -239,6 +243,7 @@ public class TerminalDriver {
      *
      *
      * Provides progress bar for user to track their progress through the game
+     *
      * @param projection
      * @return
      */
@@ -247,26 +252,26 @@ public class TerminalDriver {
         GameInfo gameInfo = GameInfo.instance();
         int totalFloors = gameInfo.building().size();
 
-       //finds flor
+        //finds floor
         int currentFloorIndex = IntStream.range(0, totalFloors)
-            .filter(i -> gameInfo.building().get(i).id().equals(projection.currentFloor().id()))
-            .findFirst().orElse(0);
+                                         .filter(i -> gameInfo.building().get(i).id().equals(projection.currentFloor().id()))
+                                         .findFirst().orElse(0);
 
         // Progress is a simple fraction of floors completed
-        int progressPercentage = (int) ( (float)(currentFloorIndex + 1) / totalFloors * 100);
+        int progressPercentage = (int) ((float) (currentFloorIndex + 1) / totalFloors * 100);
 
         // Define bar length (here it is arbitrarily 70)
         int barWidth = 70;
-        int progressChars = (int) ( (float)(currentFloorIndex + 1) / totalFloors * barWidth);
+        int progressChars = (int) ((float) (currentFloorIndex + 1) / totalFloors * barWidth);
 
         String completed = "=".repeat(Math.max(0, progressChars));
         String remaining = ".".repeat(Math.max(0, barWidth - progressChars));
 
         // FunString!!
         FunString bar = new FunString("[")
-            .add(new FunString(completed).green())
-            .add(new FunString(remaining).terminalColor(240)) // Light Gray
-            .add(new FunString ("]"));
+                .add(new FunString(completed).green())
+                .add(new FunString(remaining).terminalColor(240)) // Light Gray
+                .add(new FunString("]"));
 
         String progressText = String.format("Floor %d of %d (%d%%)", currentFloorIndex + 1, totalFloors, progressPercentage);
 
@@ -274,12 +279,11 @@ public class TerminalDriver {
     }
 
     /**
-    * Present the end of the game, record score, and display the leaderboard.
-    *
-    *
-    * @param scanner    The scanner to request input on.
-    * @param projection The source for data.
-    */
+     * Present the end of the game, record score, and display the leaderboard.
+     *
+     * @param scanner    The scanner to request input on.
+     * @param projection The source for data.
+     */
     void menu_ending(Scanner scanner, GameProjection projection) {
 
 		// leaderboard + logout
@@ -294,8 +298,8 @@ public class TerminalDriver {
         int totalHintsUsed = hintsUsedMap.size();
 
         String hintsListDisplay = totalHintsUsed > 0 ?
-            String.join(", ", hintsUsedMap.entrySet().stream().map(entry -> entry.getKey() + ": " + entry.getValue()).collect(Collectors.joining("\n"))) :
-            "None";
+                String.join(", ", hintsUsedMap.entrySet().stream().map(entry -> entry.getKey() + ": " + entry.getValue()).collect(Collectors.joining("\n"))) :
+                "None";
 
         List<String> contributors = new ArrayList<>(IntStream.range(0, 4).mapToObj(i -> gameInfo.string("credits", "contributor_" + i)).toList());
         contributors = contributors.stream().map(it -> {
@@ -316,7 +320,7 @@ public class TerminalDriver {
         List<String> msg = new ArrayList<>();
         msg.add(new FunString(scoremsg).purple().toString());
         msg.add(new FunString(hintmsg).purple().toString());
-		
+
 
         // list of the strings
         msg.add(new FunString(specificHintsMsg).purple().toString());
@@ -341,8 +345,26 @@ public class TerminalDriver {
 
         // Show
         leaderboard.showLeaderboard();
+        saveCertificate(scoremsg, hintmsg);
         pauseDisplay(scanner, "Press enter to logout");
         projection.logout();
+    }
+
+    public void saveCertificate(String scoremsg, String hintmsg) {
+        var outputString = GameInfo.instance().string("credits", "certificate");
+        outputString = String.format(outputString, scoremsg, hintmsg);
+        var strings = outputString.split("\n");
+        int maxwidth = (int) (Math.ceil(Arrays.stream(strings).map(String::length).max(Integer::compare).get() / 2.) * 2);
+        // Left and right pad
+        var strList = new ArrayList<>(Arrays.stream(strings)
+                        .map((i) -> String.format("%" + ((maxwidth + i.length()) / 2 + 1) + "s", i))
+                        .toList());
+        strList.add(1, "=".repeat(maxwidth));
+        try {
+            Files.write(Path.of("./certificate.md"), String.join("\n", strList).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -394,8 +416,10 @@ public class TerminalDriver {
         }
         actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
         actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
-        String prompt = String.format("%02d:%02d\n%s", projection.time().toMinutesPart(), projection.time().toSecondsPart(), projection.currentRoom()
-                                                                                                                                       .introMessage());
+        String progressBar = getProgressBar(projection);
+        String prompt = String.format("%02d:%02d\n%s\n%s", projection.time().toMinutesPart(), projection.time()
+                                                                                                        .toSecondsPart(), progressBar, projection.currentRoom()
+                                                                                                                                                 .introMessage());
         createActionInterface(scanner, actions, prompt);
 
     }
@@ -517,6 +541,7 @@ public class TerminalDriver {
     private void menu_prelude(Scanner scanner, GameProjection projection) {
         pauseDisplay(scanner, GameInfo.instance().string("welcome", "prelude"));
     }
+
     /**
      * Continuously ask the user for context-specific input.
      *
@@ -552,9 +577,11 @@ public class TerminalDriver {
                                 AccountManager.instance()::invalidLoginInfo));
                         if (flag.get()) menu_summary(scanner, projection);
                     }),
-                    fs_r("Create Account", () -> {flag.set(tryLogin(scanner, projection::createAccount,
-                            (_, _) -> "Username already exists."));
-                        if (flag.get()) menu_prelude(scanner, projection);})
+                    fs_r("Create Account", () -> {
+                        flag.set(tryLogin(scanner, projection::createAccount,
+                                (_, _) -> "Username already exists."));
+                        if (flag.get()) menu_prelude(scanner, projection);
+                    })
             );
             createActionInterface(scanner, actions, GameInfo.instance().string("welcome", "welcome"));
             if (!flag.get()) {

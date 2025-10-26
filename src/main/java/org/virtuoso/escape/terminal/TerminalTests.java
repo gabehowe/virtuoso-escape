@@ -25,7 +25,14 @@ public class TerminalTests {
      * Test typewriter text animation.
      */
     public void testTypewriterText() {
-        new TerminalDriver().typewriterDisplay(scanner, "Four score and seven years ago, our fathers set upon this continent a new nation, conceived in liberty and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are now met on a great battlefield of that war.");
+        new TerminalDriver()
+                .typewriterDisplay(
+                        scanner,
+                        "Four score and seven years ago, our fathers set upon this continent a new nation, conceived"
+                            + " in liberty and dedicated to the proposition that all men are created equal. Now we are"
+                            + " engaged in a great civil war, testing whether that nation, or any nation so conceived"
+                            + " and so dedicated, can long endure. We are now met on a great battlefield of that"
+                            + " war.");
     }
 
     /**
@@ -53,7 +60,7 @@ public class TerminalTests {
         projection = new GameProjection();
         projection.login("j", "j");
         testEnding();
-//        testTypewriterText();
-//        testFunStrings();
+        //        testTypewriterText();
+        //        testFunStrings();
     }
 }
