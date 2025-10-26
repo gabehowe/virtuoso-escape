@@ -2,7 +2,7 @@
   "welcome": {
 	"welcome": "Welcome to Virtuoso Escape!", 
   	"prelude": "You choose to go to a beaver farm, because of beavers. A very conspicuous beaver approaches, stripping off a mask and hitting you over the head, grinning as you lose consciousness",
-	"welcome_back": "Welcome back %s!\n%s\nYou have answered the following riddles: %s"
+	"welcome_back": "Welcome back %s!\n%s\nYou have answered the following riddles: %s\nYou have used the following hints: %s"
   },
   "acorn_grove_0": {
     "introduce": "You wake up in an acorn grove, seemingly smaller and...furrier...than usual."

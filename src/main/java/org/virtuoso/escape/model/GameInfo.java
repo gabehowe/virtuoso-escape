@@ -67,7 +67,7 @@ public class GameInfo {
         String hint2Id = floorId + "_hint_2";
         Action giveHint2 = new Chain(
         narratorMsg.apply(hint2Id), // Give the specific hint text
-                () -> GameState.instance().setUsedHints(floorId, 2), // Record the hint
+                () -> GameState.instance().setHintsUsed(floorId, 2), // Record the hint
                 new SwapEntities("narrator", "narrator_hint_2") // Swap to final state
         );
         EntityState hint1Given = new EntityState(
@@ -82,7 +82,7 @@ public class GameInfo {
         String hint1Id = floorId + "_hint_1";
         Action giveHint1 = new Chain(
                 narratorMsg.apply(hint1Id), // Give the specific hint text
-                () -> GameState.instance().setUsedHints(floorId, 1), // Record the hint
+                () -> GameState.instance().setHintsUsed(floorId, 1), // Record the hint
                 new SwapEntities("narrator", "narrator_hint_1") // Swap to hint1Given state
         );
         EntityState start = new EntityState(

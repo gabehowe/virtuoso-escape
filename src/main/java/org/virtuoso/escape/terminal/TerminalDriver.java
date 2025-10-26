@@ -294,7 +294,7 @@ public class TerminalDriver {
 
         //hint data
         GameInfo gameInfo = GameInfo.instance();
-        Map<String,Integer> hintsUsedMap = GameState.instance().usedHints();
+        Map<String,Integer> hintsUsedMap = GameState.instance().hintsUsed();
         int totalHintsUsed = hintsUsedMap.size();
 
         String hintsListDisplay = totalHintsUsed > 0 ?
@@ -379,7 +379,10 @@ public class TerminalDriver {
         createActionInterface(scanner, resumeAction, String.format(GameInfo.instance().string("welcome", "welcome_back"),
                 GameState.instance().account().username(),
 				getProgressBar(projection),
-                GameState.instance().completedPuzzles().stream().collect(Collectors.joining(", "))
+                GameState.instance().completedPuzzles().stream().collect(Collectors.joining(", ")),
+				GameState.instance().hintsUsed().entrySet().stream()
+				.map(entry -> (String) entry.getKey() + ": " + entry.getValue())
+				.collect(Collectors.joining("\n"))
         ));
     }
 
@@ -416,9 +419,8 @@ public class TerminalDriver {
         }
         actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
         actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
-        String progressBar = getProgressBar(projection);
-        String prompt = String.format("%02d:%02d\n%s\n%s", projection.time().toMinutesPart(), projection.time()
-                                                                                                        .toSecondsPart(), progressBar, projection.currentRoom()
+        String prompt = String.format("%02d:%02d\n%s", projection.time().toMinutesPart(), projection.time()
+                                                                                                        .toSecondsPart(), projection.currentRoom()
                                                                                                                                                  .introMessage());
         createActionInterface(scanner, actions, prompt);
 

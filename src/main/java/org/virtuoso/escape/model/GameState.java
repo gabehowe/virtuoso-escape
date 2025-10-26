@@ -28,7 +28,7 @@ public class GameState {
     private Account account;
     private boolean ended;
 	private int penalty;
-	private Map<String, Integer> usedHints;
+	private Map<String, Integer> hintsUsed;
 	private Set<String> completedPuzzles;
     private Difficulty difficulty;
     private String currentMessage;
@@ -76,14 +76,14 @@ public class GameState {
             this.currentItems.add(Item.valueOf((String) items.get(i)));
 
 		this.completedPuzzles = new HashSet<String>();
-	    JSONArray completedPuzzles = (JSONArray) gameStateInfo.getOrDefault("completedPuzzels", new JSONArray());
-        for (int i = 0; i < completedPuzzles.size(); i++)
-            this.completedPuzzles.add((String) completedPuzzles.get(i));
+	    JSONArray completedPuzzlesJSON = (JSONArray) gameStateInfo.getOrDefault("completedPuzzles", new JSONArray());
+        for (int i = 0; i < completedPuzzlesJSON.size(); i++)
+            this.completedPuzzles.add((String) completedPuzzlesJSON.get(i));
 
-		this.usedHints = new HashMap<String, Integer>();
-		JSONObject usedHints = (JSONObject) gameStateInfo.getOrDefault("usedHints", new JSONObject());
-   	 	for (Object level : usedHints.keySet())
-			this.usedHints.put(String.valueOf(level),(Integer) usedHints.get(level));
+		this.hintsUsed = new HashMap<String, Integer>();
+		JSONObject hintsUsed = (JSONObject) gameStateInfo.getOrDefault("hintsUsed", new JSONObject());
+   	 	for (Object level : hintsUsed.keySet())
+			this.hintsUsed.put(String.valueOf(level),((Long) hintsUsed.get(level)).intValue());
 
 		
         this.time = Duration.ofSeconds((Long) gameStateInfo.getOrDefault("time", initialTime));
@@ -313,8 +313,8 @@ public class GameState {
 	 * 
 	 * @return The map of hint totals.
 	 */
-	public Map<String,Integer> usedHints() {
-                return this.usedHints;
+	public Map<String,Integer> hintsUsed() {
+                return this.hintsUsed;
     }
 
 	/**
@@ -323,8 +323,8 @@ public class GameState {
 	 * @param puzzle The name of the puzzle the hint was used on.
 	 * @param hintsUsed The amount of hints used on that puzzle.
 	 */
-	public void setUsedHints(String puzzle, int hintsUsed) {
-        this.usedHints().put(puzzle, hintsUsed);
+	public void setHintsUsed(String puzzle, int hintsUsed) {
+        this.hintsUsed().put(puzzle, hintsUsed);
     }
 
 	/**

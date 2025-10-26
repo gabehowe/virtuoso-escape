@@ -37,7 +37,7 @@ public class Score {
 	public static Long calculateScore(Duration timeRemaining, Difficulty difficulty) {
 		return timeRemaining != null ? 
 		(Long) (timeRemaining.toSeconds() - GameState.instance().penalty() - 
-		(GameState.instance().usedHints() != null ? GameState.instance().usedHints().values().stream().collect(Collectors.summingInt(Integer::intValue)) : 0)) 
+		(GameState.instance().hintsUsed() != null ? GameState.instance().hintsUsed().values().stream().collect(Collectors.summingInt(Integer::intValue)) : 0)) 
 		: null;
 	}
 

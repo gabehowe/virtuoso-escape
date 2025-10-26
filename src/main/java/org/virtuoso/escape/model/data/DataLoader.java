@@ -132,7 +132,7 @@ public class DataLoader {
                         } else if (sk.equals("currentEntityStates")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
-						 } else if (sk.equals("usedHints")) {
+						 } else if (sk.equals("hintsUsed")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
                         } else map.put(sk, String.valueOf(sval));

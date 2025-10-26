@@ -79,7 +79,7 @@ public class DataWriter {
         gameStateMap.put("time", gameState.time().getSeconds());
         gameStateMap.put("difficulty", gameState.difficulty().toString());
 		gameStateMap.put("completedPuzzles", completedPuzzleIds(gameState.completedPuzzles().stream().toList()));
-		gameStateMap.put("hintsUsed", hintsUsedJSON(gameState.usedHints()));
+		gameStateMap.put("hintsUsed", hintsUsedJSON(gameState.hintsUsed()));
         return gameStateMap;
     }
 
