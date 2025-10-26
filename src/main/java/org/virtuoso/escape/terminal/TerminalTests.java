@@ -1,5 +1,6 @@
 package org.virtuoso.escape.terminal;
 
+import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.Item;
@@ -22,6 +23,16 @@ public class TerminalTests {
      */
     public void testEnding() {
         new TerminalDriver().menu_ending(scanner, projection);
+    }
+    public void testAlamanc() {
+        var storey_i = GameInfo.instance().building().get(1);
+        var sunflower_room = storey_i.rooms().get(1);
+        var almanac = sunflower_room.entities().getFirst();
+        GameState.instance().setCurrentFloor(storey_i);
+        GameState.instance().setCurrentRoom(sunflower_room);
+        GameState.instance().pickEntity(almanac);
+
+        new TerminalDriver().gameLoop(scanner, projection);
     }
 
     public void testItems() {
@@ -71,7 +82,8 @@ public class TerminalTests {
         scanner = new Scanner(System.in);
         projection = new GameProjection();
         projection.login("j", "j");
-        testItems();
+        testAlamanc();
+//        testItems();
 //        testEnding();
 //        testTypewriterText();
 //        testFunStrings();
