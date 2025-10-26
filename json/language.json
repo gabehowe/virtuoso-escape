@@ -321,6 +321,18 @@
 	"hints": "You used %s hints.",
     "certificate": "**Escape: A Storey**\nYou finished the game and escaped M. Bert Storey Research and Innovation Center!\n%s\n%s\nThanks for playing!"
   },
+  "narrator_start": {
+    "name": "Narrator",
+    "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old)."
+  },
+  "narrator_hint_1": {
+    "name": "Narrator",
+    "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old). He seems to be almost out of things to say."
+  },
+  "narrator_hint_2": {
+    "name": "Narrator",
+    "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old). He seems out of things to say."
+  },
   "narrator": {
     "introduce": "A nearly transparent figure stands here, whispering secret stories.",
     "inspect": "The narrator seems to be an extension of the building itself, offering silent, wise counsel.",
