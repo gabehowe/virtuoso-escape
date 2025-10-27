@@ -3,6 +3,7 @@ package org.virtuoso.escape.model;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.account.Account;
+import org.virtuoso.escape.model.account.AccountManager;
 import org.virtuoso.escape.model.account.Score;
 import org.virtuoso.escape.model.data.DataLoader;
 import org.virtuoso.escape.model.data.DataWriter;
@@ -258,7 +259,7 @@ public class GameState {
     }
 
     /**
-     * Recalculate the high score.
+     * Recalculate the high score and reset GameState.
      */
     public void updateHighScore() {
         if (isEnded()) {
@@ -268,6 +269,8 @@ public class GameState {
                 this.account.setHighScore(new Score(this.time, this.difficulty, currentScore));
             }
         }
+		AccountManager.instance().gameStates().remove(this.account().id());
+		this.begin(this.account());
     }
 
     /**

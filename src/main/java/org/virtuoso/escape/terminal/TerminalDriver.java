@@ -341,8 +341,6 @@ public class TerminalDriver {
                 throw new RuntimeException(e);
             }
         }
-        pauseDisplay(scanner, "");
-
         // Show
         leaderboard.showLeaderboard();
         saveCertificate(scoremsg, hintmsg);
