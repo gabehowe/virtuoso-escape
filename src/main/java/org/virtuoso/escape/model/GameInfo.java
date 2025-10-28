@@ -218,11 +218,11 @@ public class GameInfo {
                 new GiveItem(Item.left_bread),
                 new CompletePuzzle("almanac"),
                 new SwapEntities("almanac", "found_almanac"));
-        Action evaluatePage;
+        Action evaluatePage = null;
         if (currentPage > correctPage) evaluatePage = caseOvershoot;
         else if (currentPage < correctPage) evaluatePage = caseUndershoot;
-        else if (flips - 1 != 0) evaluatePage = caseFound;
-        else evaluatePage = caseBreak;
+        if (correctPage == currentPage) evaluatePage = caseFound;
+        else if (flips - 1 == 0 ) evaluatePage = caseBreak;
 
         return new Chain(swap, evaluatePage);
     }
