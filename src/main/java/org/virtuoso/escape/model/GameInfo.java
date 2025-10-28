@@ -47,15 +47,16 @@ public class GameInfo {
 
     /**
      * Making the narrator.
+     *
      * @param floorId, unique id per floor
      * @return the narrator
      */
-     private Entity makeNarrator(String floorId) {
+    private Entity makeNarrator(String floorId) {
         // Utility function to easily create the message setter
         Function<String, Action> narratorMsg = (stringId) -> new SetMessage(this, "narrator", stringId);
 
         //No left
-        EntityState hintsUsedUp = new EntityState (
+        EntityState hintsUsedUp = new EntityState(
                 "narrator_hint_2",
                 narratorMsg.apply("attack"),
                 narratorMsg.apply("inspect"),
@@ -66,7 +67,7 @@ public class GameInfo {
         // 1 hint given
         String hint2Id = floorId + "_hint_2";
         Action giveHint2 = new Chain(
-        narratorMsg.apply(hint2Id), // Give the specific hint text
+                narratorMsg.apply(hint2Id), // Give the specific hint text
                 () -> GameState.instance().setHintsUsed(floorId, 2), // Record the hint
                 new SwapEntities("narrator", "narrator_hint_2") // Swap to final state
         );
@@ -94,8 +95,10 @@ public class GameInfo {
         );
 
         //hi gabe
+
+        // hello
         return new Entity("narrator", start, hint1Given, hintsUsedUp);
-}
+    }
 
 
     //Acorn Grove//
@@ -122,7 +125,7 @@ public class GameInfo {
      */
     private Floor floor1() {
         Entity door = new Entity("first_door", new Default(), new Default(), new SetFloor(2), null);
-        Entity narrator= makeNarrator("storey_i");
+        Entity narrator = makeNarrator("storey_i");
         EntityState hummus_trash_can = new EntityState("trash_can", new Chain(new GiveItem(Item.sealed_clean_food_safe_hummus), new CompletePuzzle("trash"), new SwapEntities("trash_can", "sans_hummus_trash_can")), new Default(), new Default(), null);
         EntityState sans_hummus_trash_can = new EntityState("sans_hummus_trash_can", new Default(), new Default(), new Default(), null);
         Entity trash_can = new Entity("trash_can", hummus_trash_can, sans_hummus_trash_can);
@@ -136,7 +139,7 @@ public class GameInfo {
         Room room_1400 = new Room("storey_i_0", new ArrayList<>(List.of(joeHardy, trash_can, elephant, door, narrator)), this.string("storey_i_0", "introduce"));
 
         Entity almanac = makeAlmanacs(5);
-        Room janitor_closet = new Room(this,"storey_i_1", almanac);
+        Room janitor_closet = new Room(this, "storey_i_1", almanac);
 
         Entity securityBread = new Entity("security",
                 new Default(),
@@ -145,7 +148,7 @@ public class GameInfo {
                 new TakeInput("",
                         TakeInput.makeCases(".*(?<!w)right.*", new Chain(new SetMessage(this, "security", "right_answer"), new GiveItem(Item.right_bread), new CompletePuzzle("right")),
                                 ".*", new Chain(new AddPenalty(Severity.LOW), new SetMessage(this, "security", "non_right_answer")))));
-        Room hallway = new Room(this, "storey_i_2",securityBread);
+        Room hallway = new Room(this, "storey_i_2", securityBread);
 
 
         return new Floor("storey_i", List.of(room_1400, janitor_closet, hallway));
@@ -207,27 +210,20 @@ public class GameInfo {
                 new SwapEntities("almanac", "almanac_" + maxFlips);
 
         Action caseBreak = new Chain(new AddPenalty(Severity.MEDIUM), new SetMessage(this, "almanac", "break"));
-        var guesses_remaining = String.format(this.string("almanac", "guesses_remaining"), (flips-1), flips);
-        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " +guesses_remaining);
-        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " +guesses_remaining);
+        var guesses_remaining = String.format(this.string("almanac", "guesses_remaining"), (flips - 1), flips);
+        Action caseOvershoot = new SetMessage(this.string("almanac", "too_high") + " " + guesses_remaining);
+        Action caseUndershoot = new SetMessage(this.string("almanac", "too_low") + " " + guesses_remaining);
         Action caseFound = new Chain(
                 new SetMessage(this, "almanac", "correct_page"),
                 new GiveItem(Item.left_bread),
-				new CompletePuzzle("almanac"),
+                new CompletePuzzle("almanac"),
                 new SwapEntities("almanac", "found_almanac"));
+        Action evaluatePage;
+        if (currentPage > correctPage) evaluatePage = caseOvershoot;
+        else if (currentPage < correctPage) evaluatePage = caseUndershoot;
+        else if (flips - 1 != 0) evaluatePage = caseFound;
+        else evaluatePage = caseBreak;
 
-        Action evaluatePage = new Conditional(
-                () -> currentPage > correctPage,
-                caseOvershoot,
-                new Conditional(
-                        () -> currentPage < correctPage,
-                        new Conditional(
-                                () -> flips - 1 != 0,
-                                caseUndershoot,
-                                caseBreak
-                        ),
-                        caseFound
-                ));
         return new Chain(swap, evaluatePage);
     }
 
@@ -279,13 +275,14 @@ public class GameInfo {
     }
 
     //Floor Three//
+
     /**
      * Build M. Bert Storey floor 3.
      *
      * @return M. Bert Storey floor 3.
      */
     private Floor floor3() {
-        Entity narrator=makeNarrator("storey_iii");
+        Entity narrator = makeNarrator("storey_iii");
         //hi treasure
         Entity sparrowAmbassador = new Entity("sparrow_ambassador",
                 new Default(),
@@ -302,7 +299,7 @@ public class GameInfo {
                 new Chain(
                         puzzleMsg.apply("solved"),
                         new GiveItem(Item.keys),
-						new CompletePuzzle("boxes")
+                        new CompletePuzzle("boxes")
                 ), null);
 
         var boxLogicSuccess = new TakeInput("", TakeInput.makeCases(
@@ -364,7 +361,7 @@ public class GameInfo {
     private Floor floor4() {
         // Basic info entity -- provide logic by adding dialogue in language.json
         Entity man = man();
-        Entity narrator=makeNarrator("storey_iv");
+        Entity narrator = makeNarrator("storey_iv");
 
         Entity computty = makeComputtyLogic();
         Entity sock_squirrel = new Entity("sock_squirrel", new Chain(new CompletePuzzle("unblock"), new SwapEntities("computty", "computty_unblocked")), new Default(), new Default(), null);
