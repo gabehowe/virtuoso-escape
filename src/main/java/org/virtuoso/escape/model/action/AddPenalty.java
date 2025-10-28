@@ -27,7 +27,7 @@ public record AddPenalty(Severity severity) implements Action {
                     case SUBSTANTIAL -> points * 2;
                     case TRIVIAL -> points;
                 };
-        GameState.instance().addPenalty(points);
+        GameState.instance().addPenalty(-points);
     }
 }
 

@@ -18,11 +18,11 @@ import java.util.Map;
  * @author Andrew
  */
 public class DataWriter {
-    private static final String GAME_STATES_PATH = "json/gamestates.json";
-    private static final String ACCOUNTS_PATH = "json/accounts.json";
+    private static String GAMESTATES_PATH = "json/gamestates.json";
+    private static String ACCOUNTS_PATH = "json/accounts.json";
 
     /**
-     * Write {@link GameState#instance()} to a {@link DataWriter#GAME_STATES_PATH}.
+     * Write {@link GameState#instance()} to a {@link DataWriter#GAMESTATES_PATH}.
      */
     @SuppressWarnings("unchecked")
     public static void writeGameState() {
@@ -30,7 +30,7 @@ public class DataWriter {
         JSONObject currentGameStateMap = loadGameStateInfo(currentGameState);
         JSONObject allGameStatesMap = AccountManager.instance().gameStates();
         allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
-        writeToFile(GAME_STATES_PATH, allGameStatesMap);
+        writeToFile(GAMESTATES_PATH, allGameStatesMap);
     }
 
     /**
