@@ -57,8 +57,6 @@ public class GameInfoTests {
             throw new RuntimeException("couldn't write to file!");
         }
         proj.login("dummy", "dummy");
-        // TODO: Remove this! The tests should work without it!
-        GameState.instance().setCurrentFloor(GameInfo.instance().building().get(1));
     }
 
     @Test
