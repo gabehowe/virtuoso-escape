@@ -91,6 +91,7 @@ public class AccountManager {
 	 */
 	public void logout() {
 		DataWriter.writeAccount();
+		AccountManager.accountManager = null;
 	}
 
 	/**
@@ -159,7 +160,7 @@ public class AccountManager {
 	 * @param password the password to be checked.
 	 * @return the {@code Account} with the indicated username and password if .
 	 */
-	private Account accountExists(String username, String password) {
+	Account accountExists(String username, String password) {
 		String hashedPassword = Account.hashPassword(password);
 		for (Object id : this.accounts.keySet()) {
 			Object value = this.accounts.get(id);
@@ -173,8 +174,8 @@ public class AccountManager {
 						Long totalScore = (Long) score.getOrDefault("totalScore", null);
 						Duration timeRemaining = score.get("timeRemaining") == null ? null : Duration.ofSeconds((Long) score.get("timeRemaining"));
 						Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
-						return  new Account(username, password, UUID.fromString(id.toString()), 
-						totalScore != null ? new Score(timeRemaining, difficulty, totalScore) : new Score(timeRemaining, difficulty, totalScore), 
+						return  new Account(username, password, UUID.fromString(id.toString()),
+                                new Score(timeRemaining, difficulty, totalScore),
 						ttsStatus);
 					}
 				}
