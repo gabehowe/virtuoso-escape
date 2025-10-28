@@ -4,12 +4,18 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
+buildscript {
+    repositories {
+        maven {url = uri("https://jitpack.io")}
+    }
+    dependencies {
+        classpath("com.github.rcw3bb:gradle-modules-plugin:fit-gradle9-SNAPSHOT")
+    }
+}
 plugins {
-    `java-library`
-    `maven-publish`
     `application`
     id("org.openjfx.javafxplugin") version "0.1.0"
-    id("org.javamodularity.moduleplugin") version "1.8.12"
+    id("org.javamodularity.moduleplugin") version "1.8.15"
 }
 
 repositories {
@@ -37,8 +43,11 @@ dependencies {
     implementation("org.mobicents.external.freetts:cmulex:1.0")
     implementation("org.mobicents.external.freetts:cmudict04:1.0")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
-    testImplementation(libs.org.junit.jupiter.junit.jupiter.api)
-    testImplementation(libs.org.junit.jupiter.junit.jupiter.engine)
+    testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:6.0.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0")
+    testImplementation("org.junit.platform:junit-platform-launcher:6.0.0")
 }
 
 group = "org.virtuoso"
@@ -66,4 +75,7 @@ tasks.withType<JavaCompile>() {
 
 tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
+}
+tasks.named<Test>("test") {
+    useJUnitPlatform()
 }

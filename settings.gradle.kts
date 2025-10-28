@@ -5,3 +5,10 @@
  */
 
 rootProject.name = "virtuoso-escape"
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = uri("https://jitpack.io")}
+    }
+}
