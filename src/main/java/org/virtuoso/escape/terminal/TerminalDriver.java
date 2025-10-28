@@ -359,7 +359,7 @@ public class TerminalDriver {
                         .toList());
         strList.add(1, "=".repeat(maxwidth));
         try {
-            Files.write(Path.of("./certificate.md"), String.join("\n", strList).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
+            Files.write(Path.of("./certificate.md"), String.join("\n\n", strList).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

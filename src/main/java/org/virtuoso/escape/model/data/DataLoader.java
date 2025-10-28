@@ -22,6 +22,9 @@ import java.util.Map;
  * @author Andrew
  */
 public class DataLoader {
+    public static String ACCOUNTS_PATH = "accounts.json";
+    public static String LANGUAGE_PATH = "language.json";
+    public static String GAMESTATES_PATH = "gamestates.json";
     /**
      * Load all accounts from accounts.json
      *
@@ -29,7 +32,7 @@ public class DataLoader {
      */
     public static JSONObject loadAccounts() {
         JSONObject result = new JSONObject();
-        JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
+        JSONObject root = parseJsonFile(Path.of("json", DataLoader.ACCOUNTS_PATH));
         if (root == null) return result;
         for (Object key : root.keySet()) {
             String id = String.valueOf(key);
@@ -58,7 +61,7 @@ public class DataLoader {
      */
     public static Map<String, Map<String, String>> loadGameLanguage() {
         Map<String, Map<String, String>> result = new HashMap<String, Map<String, String>>();
-        JSONObject root = parseJsonFile(Path.of("json", "language.json"));
+        JSONObject root = parseJsonFile(Path.of("json", LANGUAGE_PATH));
         if (root == null) return result;
         for (Object key : root.keySet()) {
             String id = String.valueOf(key);
@@ -83,7 +86,7 @@ public class DataLoader {
      */
     public static Map<String, Score> loadHighScores() {
         Map<String, Score> result = new HashMap<>();
-        JSONObject root = parseJsonFile(Path.of("json", "accounts.json"));
+        JSONObject root = parseJsonFile(Path.of("json", ACCOUNTS_PATH));
         if (root == null) return result;
 
         for (Object key : root.keySet()) {
@@ -109,7 +112,7 @@ public class DataLoader {
      */
     public static JSONObject loadGameStates() {
         JSONObject result = new JSONObject();
-        JSONObject root = parseJsonFile(Path.of("json", "gamestates.json"));
+        JSONObject root = parseJsonFile(Path.of("json", GAMESTATES_PATH));
         if (root == null) return result;
         for (Object key : root.keySet()) {
             String id = String.valueOf(key);

@@ -1,8 +1,6 @@
-package org.virtuoso.escape.model.actions;
+package org.virtuoso.escape.model.action;
 
 import org.virtuoso.escape.model.GameState;
-
-import java.time.Duration;
 
 /**
  * Penalize the player by removing time.

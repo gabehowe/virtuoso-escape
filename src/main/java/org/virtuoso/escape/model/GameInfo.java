@@ -1,6 +1,6 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.actions.*;
+import org.virtuoso.escape.model.action.*;
 import org.virtuoso.escape.model.data.DataLoader;
 
 import java.util.*;

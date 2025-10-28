@@ -1,4 +1,4 @@
-package org.virtuoso.escape.model.actions;
+package org.virtuoso.escape.model.action;
 
 import java.util.function.BooleanSupplier;
 

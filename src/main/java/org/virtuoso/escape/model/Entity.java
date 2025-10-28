@@ -1,7 +1,7 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.actions.Action;
-import org.virtuoso.escape.model.actions.TakeInput;
+import org.virtuoso.escape.model.action.Action;
+import org.virtuoso.escape.model.action.TakeInput;
 
 import java.util.Arrays;
 import java.util.Map;

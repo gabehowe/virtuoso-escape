@@ -82,7 +82,7 @@ public class TerminalTests {
         scanner = new Scanner(System.in);
         projection = new GameProjection();
         projection.login("j", "j");
-        testAlamanc();
+//        testAlamanc();
 //        testItems();
 //        testEnding();
 //        testTypewriterText();
