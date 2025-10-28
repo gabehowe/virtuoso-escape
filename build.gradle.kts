@@ -45,9 +45,9 @@ dependencies {
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:6.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0")
     testImplementation("org.junit.platform:junit-platform-launcher:6.0.0")
+    testImplementation("org.junit.platform:junit-platform-commons:6.0.0")
 }
 
 group = "org.virtuoso"
