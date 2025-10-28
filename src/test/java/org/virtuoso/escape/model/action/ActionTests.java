@@ -110,13 +110,7 @@ public class ActionTests {
 
     @Test
     public void testNonEvenTakeInputMakeCasesArgumentLength() {
-        try {
-            new TakeInput("one").execute(); // no second!
-        } catch (AssertionError | IndexOutOfBoundsException e) {
-            // used the function wrong -- These errors SHOULD be thrown!
-            return;
-        }
-        fail();
+        assertThrows(Exception.class, () -> new TakeInput("one").execute());
     }
 
 

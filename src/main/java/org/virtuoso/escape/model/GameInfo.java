@@ -322,7 +322,6 @@ public class GameInfo {
 
         Entity puzzleBox = new Entity("box_riddle", box_start, box_step1, box_success, box_open);
         Function<String, Action> doorMsg = (string) -> new SetMessage(this, "exit_door", string);
-        Predicate<Item[]> hasKeys = (i) -> Arrays.stream(i).map(GameState.instance()::hasItem).reduce((a, b) -> a && b).get();
 
         Action goToFloor4 = new Chain(
                 doorMsg.apply("unlocked_success"),
@@ -336,7 +335,7 @@ public class GameInfo {
         );
 
         Action checkKeysAndSwap = new Conditional(
-                () -> hasKeys.test(new Item[]{Item.keys}),
+                () -> GameState.instance().hasItem(Item.keys),
                 new Chain(
                         doorMsg.apply("unlocked_msg"),
                         new SwapEntities("exit_door", "exit_door_unlocked")

@@ -2,6 +2,8 @@ package org.virtuoso.escape.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.virtuoso.escape.model.data.DataLoader;
 
 import java.nio.file.Files;
@@ -55,6 +57,8 @@ public class GameInfoTests {
             throw new RuntimeException("couldn't write to file!");
         }
         proj.login("dummy", "dummy");
+        // TODO: Remove this! The tests should work without it!
+        GameState.instance().setCurrentFloor(GameInfo.instance().building().get(1));
     }
 
     @Test
@@ -63,6 +67,12 @@ public class GameInfoTests {
         assertNotNull(GameInfo.instance());
         // get created
         assertNotNull(GameInfo.instance());
+    }
+
+    @Test
+    public void testWrongFloorStateChange() {
+        GameState.instance().setCurrentFloor(GameInfo.instance().building().getFirst());
+        testJoeHardyNoItems();
     }
 
     @Test
@@ -169,5 +179,60 @@ public class GameInfoTests {
         assertEquals(GameInfo.instance().string("almanac", "break"), msg);
     }
 
+    private void narratorTest(String expectedResource, String state) {
+        var floor = GameInfo.instance().building().get(1);
+        var room = floor.rooms().getFirst();
+        var maybeNarrator = room.entities().stream().filter(it -> it.id().contains("narrator")).findFirst();
+        assertTrue(maybeNarrator.isPresent());
+        var narrator = maybeNarrator.get();
+        narrator.swapState(state);
+        narrator.state().interact();
+        var msg = GameState.instance().currentMessage().orElse(null);
+        assertNotNull(msg);
+        assertEquals(msg, GameInfo.instance().string("narrator", expectedResource));
+    }
+
+    @Test
+    public void testFirstNarrator() {
+        narratorTest("storey_i_hint_1", "narrator_start");
+    }
+
+    @Test
+    public void testSecondNarrator() {
+        narratorTest("storey_i_hint_2", "narrator_hint_1");
+    }
+
+    @Test
+    public void testThirdNarrator() {
+        narratorTest("hints_exhausted", "narrator_hint_2");
+    }
+
+    @Test
+    public void testEnding() {
+        var floor4 = GameInfo.instance().building().get(4);
+        var finfoyer = floor4.rooms().getFirst();
+        var microwave = finfoyer.entities().stream().filter(i -> i.id().equals("microwave")).findFirst().get();
+        microwave.swapState("microwave_unblocked");
+        microwave.state().interact();
+    }
+
+    @Test
+    public void testInvalidLanguageKey() {
+        var inputId = "impossibly-never-ever-possible-exact-language-string";
+        var result = GameInfo.instance().string(inputId, "");
+        assertTrue(result.contains(inputId));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = { true,false })
+    public void floor3DoorKeyCheck(boolean has) {
+        if (has) GameState.instance().addItem(Item.keys);
+        var floor3 = GameInfo.instance().building().get(3);
+        var room = floor3.rooms().getFirst();
+        var exit_door = room.entities().stream().filter(i -> i.id().equals("exit_door")).findFirst().get();
+        exit_door.state().interact();
+        var msg = GameState.instance().currentMessage().get();
+        assertEquals(GameInfo.instance().string("exit_door", (has) ? "unlocked_msg" : "locked_msg") ,msg);
+    }
 
 }
