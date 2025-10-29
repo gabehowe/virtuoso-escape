@@ -90,9 +90,6 @@ tasks.withType<Javadoc>() {
 tasks.named<Test>("test") {
     useJUnitPlatform()
 }
-tasks.named("build") {
-    dependsOn("spotlessApply")
-}
 
 spotless {
     java {

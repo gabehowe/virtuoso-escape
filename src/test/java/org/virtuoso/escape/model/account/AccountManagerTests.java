@@ -125,7 +125,8 @@ public class AccountManagerTests {
 
     @Test
     public void testInvalidAccountData() {
-        // All these instanceofs are guaranteed to be true by accountloader -- It's impossible to test these branches.
+        // All these instanceofs are guaranteed to be true by accountloader -- It's impossible to test
+        // these branches.
         assertNull(AccountManager.instance().accountExists("a", "a"));
     }
 

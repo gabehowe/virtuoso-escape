@@ -54,6 +54,7 @@ public class ActionTests {
                 Arguments.of(Difficulty.TRIVIAL, Severity.MEDIUM, 5 * 1 * 2),
                 Arguments.of(Difficulty.TRIVIAL, Severity.LOW, 5 * 1 * 1));
     }
+
     // @formatter:on
 
     @Test
