@@ -1,12 +1,11 @@
 package org.virtuoso.escape.model.account;
 
-import org.virtuoso.escape.model.Difficulty;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.UUID;
+import org.virtuoso.escape.model.Difficulty;
 
 /**
  * A user account containing UUID, username, password, and high score.
@@ -19,7 +18,7 @@ public class Account {
     private String username;
     private UUID id;
     private Score highScore;
-	private boolean ttsOn;
+    private boolean ttsOn;
 
     /**
      * Create an {@code Account} with the indicated username and password.
@@ -32,23 +31,23 @@ public class Account {
         this.hashedPassword = hashPassword(password);
         this.highScore = new Score(null, Difficulty.TRIVIAL);
         this.id = UUID.randomUUID();
-		this.ttsOn = true;
+        this.ttsOn = true;
     }
 
     /**
      * Load an {@code Account} with the pre-existing UUID, username, password, and high score.
      *
-     * @param username  the username of the account.
-     * @param password  the password of the account
-     * @param id        the UUID of the account.
+     * @param username the username of the account.
+     * @param password the password of the account
+     * @param id the UUID of the account.
      * @param highScore the high score of the account.
-	 * @param ttsOn     whether of not text to speech is on for this account.
+     * @param ttsOn whether of not text to speech is on for this account.
      */
     public Account(String username, String password, UUID id, Score highScore, boolean ttsOn) {
         this(username, password);
         this.id = id;
         this.highScore = highScore;
-		this.ttsOn = ttsOn;
+        this.ttsOn = ttsOn;
     }
 
     /**
@@ -80,13 +79,14 @@ public class Account {
         this.highScore = score;
     }
 
-	/**
-	 * Set text to speech to either on or off
-	 * @param ttsOn Whether or not text to speech is enabled on this account.
-	 */
-	public void SetTtsOn(boolean ttsOn){
-		this.ttsOn = ttsOn;
-	}
+    /**
+     * Set text to speech to either on or off
+     *
+     * @param ttsOn Whether or not text to speech is enabled on this account.
+     */
+    public void SetTtsOn(boolean ttsOn) {
+        this.ttsOn = ttsOn;
+    }
 
     /**
      * Get the username of the account.
@@ -124,13 +124,14 @@ public class Account {
         return this.hashedPassword;
     }
 
-	/**
-	 * Get whether or not text to speech is enabled on this account.
-	 * @return Whether or not text to speech is enabled on this account.
-	 */
-	public boolean ttsOn(){
-		return this.ttsOn;
-	}
+    /**
+     * Get whether or not text to speech is enabled on this account.
+     *
+     * @return Whether or not text to speech is enabled on this account.
+     */
+    public boolean ttsOn() {
+        return this.ttsOn;
+    }
 
     /**
      * Print a string containing the UUID, the username, and the high score of the account.
@@ -139,6 +140,7 @@ public class Account {
      */
     @Override
     public String toString() {
-        return "Account: {" + "id='" + this.id + "', " + "username='" + this.username + "', " + this.highScore.toString();
+        return "Account: {" + "id='" + this.id + "', " + "username='" + this.username + "', "
+                + this.highScore.toString();
     }
 }

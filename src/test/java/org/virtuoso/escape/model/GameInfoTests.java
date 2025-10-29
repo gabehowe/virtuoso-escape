@@ -1,19 +1,19 @@
 package org.virtuoso.escape.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.virtuoso.escape.model.data.DataLoader;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class GameInfoTests {
     GameProjection proj;
-    private static String stateData = """
+    private static String stateData =
+            """
             {"7766f361-af7a-4da5-b741-6867d1768d45": {
               "currentItems": [],
               "difficulty": "SUBSTANTIAL",
@@ -31,7 +31,8 @@ public class GameInfoTests {
             }
             }
             """;
-    private static String accountData = """
+    private static String accountData =
+            """
             {
             "7766f361-af7a-4da5-b741-6867d1768d45": {
               "highScore": {
@@ -76,10 +77,14 @@ public class GameInfoTests {
     @Test
     public void testMoveToFloor1() {
         var introRoom = GameInfo.instance().building().getFirst().rooms().getFirst();
-        var gottfried = introRoom.entities().stream().filter(entity -> entity.id().equals("portal_squirrel")).toList().getFirst();
+        var gottfried = introRoom.entities().stream()
+                .filter(entity -> entity.id().equals("portal_squirrel"))
+                .toList()
+                .getFirst();
         gottfried.state().interact();
         try {
-            assertSame(GameInfo.instance().building().get(1), GameState.instance().currentFloor());
+            assertSame(
+                    GameInfo.instance().building().get(1), GameState.instance().currentFloor());
         } catch (NullPointerException e) {
             fail();
         }
@@ -89,7 +94,9 @@ public class GameInfoTests {
     public void testJoeHardyNoItems() {
         GameState.instance().clearItems();
         var hardyRoom = GameInfo.instance().building().get(1).rooms().getFirst();
-        var hardy = hardyRoom.entities().stream().filter(e -> e.id().equals("joe_hardy")).findFirst();
+        var hardy = hardyRoom.entities().stream()
+                .filter(e -> e.id().equals("joe_hardy"))
+                .findFirst();
         assertTrue(hardy.isPresent());
         var hardyPresent = hardy.get();
         hardyPresent.swapState("sans_sandwich_joe");
@@ -106,7 +113,9 @@ public class GameInfoTests {
         GameState.instance().addItem(Item.sunflower_seed_butter);
         GameState.instance().addItem(Item.sealed_clean_food_safe_hummus);
         var hardyRoom = GameInfo.instance().building().get(1).rooms().getFirst();
-        var hardy = hardyRoom.entities().stream().filter(e -> e.id().equals("joe_hardy")).findFirst();
+        var hardy = hardyRoom.entities().stream()
+                .filter(e -> e.id().equals("joe_hardy"))
+                .findFirst();
         assertTrue(hardy.isPresent());
         var hardyPresent = hardy.get();
         hardyPresent.swapState("sans_sandwich_joe");
@@ -115,7 +124,6 @@ public class GameInfoTests {
         // Should be sandwich joe.
         assertEquals("sandwich_joe", hardyPresent.state().id());
     }
-
 
     @Test
     public void testAlmanacFind() {
@@ -155,7 +163,8 @@ public class GameInfoTests {
         firstState.takeInput("31");
         firstState.takeInput("30");
         var msg = GameState.instance().currentMessage().get();
-        assertTrue(msg.equals(GameInfo.instance().string("almanac", "too_high")) || msg.equals(GameInfo.instance().string("almanac", "too_low")));
+        assertTrue(msg.equals(GameInfo.instance().string("almanac", "too_high"))
+                || msg.equals(GameInfo.instance().string("almanac", "too_low")));
     }
 
     @Test
@@ -166,7 +175,10 @@ public class GameInfoTests {
         var guess = "31";
         firstState.takeInput(guess);
         // Ensure incorrect guess;
-        if (GameState.instance().currentMessage().get().equals(GameInfo.instance().string("almanac", "correct_page"))) {
+        if (GameState.instance()
+                .currentMessage()
+                .get()
+                .equals(GameInfo.instance().string("almanac", "correct_page"))) {
             almanac.swapState("almanac_5");
             guess = "30";
         }
@@ -180,7 +192,9 @@ public class GameInfoTests {
     private void narratorTest(String expectedResource, String state) {
         var floor = GameInfo.instance().building().get(1);
         var room = floor.rooms().getFirst();
-        var maybeNarrator = room.entities().stream().filter(it -> it.id().contains("narrator")).findFirst();
+        var maybeNarrator = room.entities().stream()
+                .filter(it -> it.id().contains("narrator"))
+                .findFirst();
         assertTrue(maybeNarrator.isPresent());
         var narrator = maybeNarrator.get();
         narrator.swapState(state);
@@ -209,7 +223,10 @@ public class GameInfoTests {
     public void testEnding() {
         var floor4 = GameInfo.instance().building().get(4);
         var finfoyer = floor4.rooms().getFirst();
-        var microwave = finfoyer.entities().stream().filter(i -> i.id().equals("microwave")).findFirst().get();
+        var microwave = finfoyer.entities().stream()
+                .filter(i -> i.id().equals("microwave"))
+                .findFirst()
+                .get();
         microwave.swapState("microwave_unblocked");
         microwave.state().interact();
     }
@@ -222,15 +239,17 @@ public class GameInfoTests {
     }
 
     @ParameterizedTest
-    @ValueSource(booleans = { true,false })
+    @ValueSource(booleans = {true, false})
     public void floor3DoorKeyCheck(boolean has) {
         if (has) GameState.instance().addItem(Item.keys);
         var floor3 = GameInfo.instance().building().get(3);
         var room = floor3.rooms().getFirst();
-        var exit_door = room.entities().stream().filter(i -> i.id().equals("exit_door")).findFirst().get();
+        var exit_door = room.entities().stream()
+                .filter(i -> i.id().equals("exit_door"))
+                .findFirst()
+                .get();
         exit_door.state().interact();
         var msg = GameState.instance().currentMessage().get();
-        assertEquals(GameInfo.instance().string("exit_door", (has) ? "unlocked_msg" : "locked_msg") ,msg);
+        assertEquals(GameInfo.instance().string("exit_door", (has) ? "unlocked_msg" : "locked_msg"), msg);
     }
-
 }

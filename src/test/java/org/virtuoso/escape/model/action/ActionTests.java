@@ -1,5 +1,9 @@
 package org.virtuoso.escape.model.action;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.LinkedHashMap;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,14 +16,8 @@ import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.data.DataLoader;
 
-import java.util.LinkedHashMap;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class ActionTests {
     GameProjection proj;
-
 
     @BeforeEach
     public void pre() {
@@ -31,7 +29,7 @@ public class ActionTests {
 
     @AfterEach
     public void post() {
-//        proj.logout();
+        //        proj.logout();
     }
 
     @ParameterizedTest
@@ -54,10 +52,9 @@ public class ActionTests {
                 Arguments.of(Difficulty.SUBSTANTIAL, Severity.LOW, 5 * 2 * 1),
                 Arguments.of(Difficulty.TRIVIAL, Severity.HIGH, 5 * 1 * 3),
                 Arguments.of(Difficulty.TRIVIAL, Severity.MEDIUM, 5 * 1 * 2),
-                Arguments.of(Difficulty.TRIVIAL, Severity.LOW, 5 * 1 * 1)
-        );
+                Arguments.of(Difficulty.TRIVIAL, Severity.LOW, 5 * 1 * 1));
     }
-    //@formatter:on
+    // @formatter:on
 
     @Test
     public void chainTest() {
@@ -68,8 +65,10 @@ public class ActionTests {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     public void conditionalTest(boolean value) {
-        new Conditional(() -> value, new SetMessage(String.valueOf(true)), new SetMessage(String.valueOf(false))).execute();
-        assertEquals(String.valueOf(value), GameState.instance().currentMessage().get());
+        new Conditional(() -> value, new SetMessage(String.valueOf(true)), new SetMessage(String.valueOf(false)))
+                .execute();
+        assertEquals(
+                String.valueOf(value), GameState.instance().currentMessage().get());
     }
 
     @Test
@@ -87,7 +86,9 @@ public class ActionTests {
     @ParameterizedTest
     @ValueSource(strings = {"one", "two", "three"})
     public void testTakeInput(String input) {
-        new TakeInput("one", new SetMessage("one"), "two", new SetMessage("two"), "three", new SetMessage("three")).withInput(input).execute();
+        new TakeInput("one", new SetMessage("one"), "two", new SetMessage("two"), "three", new SetMessage("three"))
+                .withInput(input)
+                .execute();
         var msg = GameState.instance().currentMessage();
         assertTrue(msg.isPresent());
         assertEquals(input, msg.get());
@@ -95,7 +96,9 @@ public class ActionTests {
 
     @Test
     public void testDefaultTakeInput() {
-        new TakeInput("", new LinkedHashMap<>(), new SetMessage("default")).withInput(null).execute();
+        new TakeInput("", new LinkedHashMap<>(), new SetMessage("default"))
+                .withInput(null)
+                .execute();
         var msg = GameState.instance().currentMessage();
         assertTrue(msg.isPresent());
         assertEquals("default", msg.get());
@@ -112,6 +115,4 @@ public class ActionTests {
     public void testNonEvenTakeInputMakeCasesArgumentLength() {
         assertThrows(Exception.class, () -> new TakeInput("one").execute());
     }
-
-
 }

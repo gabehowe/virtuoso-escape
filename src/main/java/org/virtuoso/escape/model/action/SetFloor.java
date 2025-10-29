@@ -10,9 +10,7 @@ import org.virtuoso.escape.model.GameState;
  * @author Andrew
  */
 public record SetFloor(int floor) implements Action {
-    /**
-     * Perform the floor change.
-     */
+    /** Perform the floor change. */
     @Override
     public void execute() {
         GameState.instance().setCurrentFloor(GameInfo.instance().building().get(floor));

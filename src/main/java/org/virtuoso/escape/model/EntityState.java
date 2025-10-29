@@ -7,12 +7,12 @@ import org.virtuoso.escape.model.action.TakeInput;
 /**
  * An entity state that holds the state's behavior.
  *
- * @param id             The entity state id.
- * @param attackAction   The entity state attack behavior.
- * @param inspectAction  The entity state inspect behavior.
+ * @param id The entity state id.
+ * @param attackAction The entity state attack behavior.
+ * @param inspectAction The entity state inspect behavior.
  * @param interactAction The entity state interact behavior.
- * @param inputAction    The entity state input behavior.
- * @param capabilities   What this entity will perform an action for.
+ * @param inputAction The entity state input behavior.
+ * @param capabilities What this entity will perform an action for.
  * @author Andrew
  */
 public record EntityState(
@@ -34,11 +34,11 @@ public record EntityState(
     /**
      * Create the entity with default capabilities
      *
-     * @param id             The entity state id.
-     * @param attackAction   The entity state attack behavior.
-     * @param inspectAction  The entity state inspect behavior.
+     * @param id The entity state id.
+     * @param attackAction The entity state attack behavior.
+     * @param inspectAction The entity state inspect behavior.
      * @param interactAction The entity state interact behavior.
-     * @param inputAction    The entity state input behavior.
+     * @param inputAction The entity state input behavior.
      */
     public EntityState(
             String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
@@ -61,26 +61,20 @@ public record EntityState(
         }
     }
 
-    /**
-     * Run the interact {@link Action}.
-     */
+    /** Run the interact {@link Action}. */
     public void interact() {
         GameState.instance().setCurrentMessage(getText("interact"));
 
         if (interactAction != null) interactAction.execute();
     }
 
-    /**
-     * Run the attack {@link Action}.
-     */
+    /** Run the attack {@link Action}. */
     public void attack() {
         GameState.instance().setCurrentMessage(getText("attack"));
         if (attackAction != null) attackAction.execute();
     }
 
-    /**
-     * Run the inspect {@link Action}.
-     */
+    /** Run the inspect {@link Action}. */
     public void inspect() {
         GameState.instance().setCurrentMessage(getText("inspect"));
         if (inspectAction != null) inspectAction.execute();
@@ -95,9 +89,7 @@ public record EntityState(
         return GameInfo.instance().string(this.id, "name");
     }
 
-    /**
-     * Display the introductory message.
-     */
+    /** Display the introductory message. */
     public void introduce() {
         GameState.instance().setCurrentMessage(getText("introduce"));
     }
@@ -144,10 +136,10 @@ public record EntityState(
     /**
      * The action capabilities of the entity -- Can it be spoken to?
      *
-     * @param attack   If the entity can be attacked to.
-     * @param inspect  If the entity can be inspected.
+     * @param attack If the entity can be attacked to.
+     * @param inspect If the entity can be inspected.
      * @param interact If the entity can be interacted with.
-     * @param input    If the entity can be spoken with.
+     * @param input If the entity can be spoken with.
      */
     public record Capabilities(boolean attack, boolean inspect, boolean interact, boolean input) {}
 }

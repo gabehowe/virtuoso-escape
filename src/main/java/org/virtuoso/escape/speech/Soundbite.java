@@ -22,9 +22,7 @@ public class Soundbite extends Thread {
         this.text = text;
     }
 
-    /**
-     * Play the soundbite.
-     */
+    /** Play the soundbite. */
     public void run() {
         System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         VoiceManager voiceManger = VoiceManager.getInstance();
@@ -38,9 +36,7 @@ public class Soundbite extends Thread {
         voice.deallocate();
     }
 
-    /**
-     * Stop the soundbite from playing.
-     */
+    /** Stop the soundbite from playing. */
     public void interrupt() {
         voice.deallocate();
         voice.getAudioPlayer().cancel();

@@ -1,14 +1,12 @@
 package org.virtuoso.escape.speech;
 
 import com.sun.speech.freetts.FreeTTSSpeakable;
+import java.io.InputStream;
 import org.w3c.dom.Document;
 
-import java.io.InputStream;
-
 /**
- * An implementation of FreeTTS Speakable similar to
- * {@link com.sun.speech.freetts.FreeTTSSpeakableImpl},
- * but that won't print an error when canceled.
+ * An implementation of FreeTTS Speakable similar to {@link com.sun.speech.freetts.FreeTTSSpeakableImpl}, but that won't
+ * print an error when canceled.
  *
  * @author Andrew
  */
@@ -46,24 +44,16 @@ public class CancelableSpeakable implements FreeTTSSpeakable {
         this.inputStream = is;
     }
 
-    /**
-     * Must be implemented to implement
-     * {@link com.sun.speech.freetts.FreeTTSSpeakable}.
-     */
-    public void started() {
-    }
+    /** Must be implemented to implement {@link com.sun.speech.freetts.FreeTTSSpeakable}. */
+    public void started() {}
 
-    /**
-     * Set completed to true.
-     */
+    /** Set completed to true. */
     public synchronized void completed() {
         this.completed = true;
         this.notifyAll();
     }
 
-    /**
-     * Set cancelled to true.
-     */
+    /** Set cancelled to true. */
     public synchronized void cancelled() {
         this.completed = true;
         this.cancelled = true;

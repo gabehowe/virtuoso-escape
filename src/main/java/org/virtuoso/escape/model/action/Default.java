@@ -6,9 +6,7 @@ package org.virtuoso.escape.model.action;
  * @author gabri
  */
 public class Default implements Action {
-    /**
-     * Do nothing.
-     */
+    /** Do nothing. */
     @Override
     public void execute() {}
 }

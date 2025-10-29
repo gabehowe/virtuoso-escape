@@ -6,8 +6,6 @@ package org.virtuoso.escape.model.action;
  * @author gabri
  */
 public interface Action {
-    /**
-     * Run the action.
-     */
+    /** Run the action. */
     void execute();
 }

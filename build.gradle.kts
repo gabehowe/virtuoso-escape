@@ -7,23 +7,34 @@
 buildscript {
     repositories {
         maven {url = uri("https://jitpack.io")}
+        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath("com.github.rcw3bb:gradle-modules-plugin:fit-gradle9-SNAPSHOT")
+        classpath("com.palantir.baseline:gradle-baseline-java:6.66.0") // ofc palantir would have version 666
+        classpath("com.palantir.javaformat:gradle-palantir-java-format:2.81.0")
+        classpath("gradle.plugin.org.inferred:gradle-processors:2.1.0")
     }
-}
-plugins {
-    `application`
-    id("org.openjfx.javafxplugin") version "0.1.0"
-    id("org.javamodularity.moduleplugin") version "1.8.15"
 }
 
 repositories {
     mavenLocal()
+    mavenCentral()
     maven {
         url = uri("https://repo.maven.apache.org/maven2/")
     }
 }
+
+plugins {
+    application
+    id("org.openjfx.javafxplugin") version "0.1.0"
+    id("org.javamodularity.moduleplugin") version "1.8.15"
+//    id("com.palantir.baseline-config") version "6.66.0"
+//    id("com.palantir.java-format") version "2.81.0"
+    id("com.diffplug.spotless") version "8.0.0"
+}
+
 
 javafx {
     modules = listOf("javafx.controls", "javafx.fxml")
@@ -78,4 +89,13 @@ tasks.withType<Javadoc>() {
 }
 tasks.named<Test>("test") {
     useJUnitPlatform()
+}
+tasks.named("build") {
+    dependsOn("spotlessApply")
+}
+
+spotless {
+    java {
+        palantirJavaFormat().formatJavadoc(true)
+    }
 }

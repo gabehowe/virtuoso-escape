@@ -1,11 +1,5 @@
 package org.virtuoso.escape.model.data;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.virtuoso.escape.model.Difficulty;
-import org.virtuoso.escape.model.account.Score;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +7,11 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.virtuoso.escape.model.Difficulty;
+import org.virtuoso.escape.model.account.Score;
 
 /**
  * Loads data from JSON files.
@@ -41,14 +40,19 @@ public class DataLoader {
                 String username = acct.get("username").toString();
                 String hashed = acct.get("hashedPassword").toString();
                 Object highScore = acct.get("highScore");
-				Object ttsOn = acct.getOrDefault("ttsOn", true);
+                Object ttsOn = acct.getOrDefault("ttsOn", true);
                 if (highScore instanceof JSONObject)
-                    result.put(id, new JSONObject(Map.of(
-                            "username", username,
-                            "hashedPassword", hashed,
-                            "highScore", highScore,
-							"ttsOn", ttsOn
-                    )));
+                    result.put(
+                            id,
+                            new JSONObject(Map.of(
+                                    "username",
+                                    username,
+                                    "hashedPassword",
+                                    hashed,
+                                    "highScore",
+                                    highScore,
+                                    "ttsOn",
+                                    ttsOn)));
             }
         }
         return result;
@@ -61,7 +65,7 @@ public class DataLoader {
      */
     public static Map<String, Map<String, String>> loadGameLanguage() {
         Map<String, Map<String, String>> result = new HashMap<String, Map<String, String>>();
-        JSONObject root = parseJsonFile(Path.of( LANGUAGE_PATH));
+        JSONObject root = parseJsonFile(Path.of(LANGUAGE_PATH));
         if (root == null) return result;
         for (Object key : root.keySet()) {
             String id = String.valueOf(key);
@@ -86,7 +90,7 @@ public class DataLoader {
      */
     public static Map<String, Score> loadHighScores() {
         Map<String, Score> result = new HashMap<>();
-        JSONObject root = parseJsonFile(Path.of( ACCOUNTS_PATH));
+        JSONObject root = parseJsonFile(Path.of(ACCOUNTS_PATH));
         if (root == null) return result;
 
         for (Object key : root.keySet()) {
@@ -96,7 +100,8 @@ public class DataLoader {
                 Object high = acct.get("highScore");
                 if (high instanceof JSONObject score) {
                     long seconds = (long) score.get("timeRemaining");
-                    Difficulty difficulty = Difficulty.valueOf(score.get("difficulty").toString());
+                    Difficulty difficulty =
+                            Difficulty.valueOf(score.get("difficulty").toString());
                     Score highScore = new Score(Duration.ofSeconds(seconds), difficulty);
                     result.put(id, highScore);
                 }
@@ -112,7 +117,7 @@ public class DataLoader {
      */
     public static JSONObject loadGameStates() {
         JSONObject result = new JSONObject();
-        JSONObject root = parseJsonFile(Path.of( GAMESTATES_PATH));
+        JSONObject root = parseJsonFile(Path.of(GAMESTATES_PATH));
         if (root == null) return result;
         for (Object key : root.keySet()) {
             String id = String.valueOf(key);
@@ -126,7 +131,7 @@ public class DataLoader {
                         if (sk.equals("currentItems")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
-						} else if (sk.equals("completedPuzzles")) {
+                        } else if (sk.equals("completedPuzzles")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
                         } else if (sk.equals("time")) {
@@ -135,7 +140,7 @@ public class DataLoader {
                         } else if (sk.equals("currentEntityStates")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
-						 } else if (sk.equals("hintsUsed")) {
+                        } else if (sk.equals("hintsUsed")) {
                             sval = innerObj.get(sk);
                             map.put(sk, sval);
                         } else map.put(sk, String.valueOf(sval));

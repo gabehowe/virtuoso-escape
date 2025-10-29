@@ -1,5 +1,9 @@
 package org.virtuoso.escape.model.data;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Entity;
@@ -9,21 +13,12 @@ import org.virtuoso.escape.model.Room;
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-/**
- * @author Andrew
- */
+/** @author Andrew */
 public class DataWriter {
     private static String GAMESTATES_PATH = "json/gamestates.json";
     private static String ACCOUNTS_PATH = "json/accounts.json";
 
-    /**
-     * Write {@link GameState#instance()} to a {@link DataWriter#GAMESTATES_PATH}.
-     */
+    /** Write {@link GameState#instance()} to a {@link DataWriter#GAMESTATES_PATH}. */
     @SuppressWarnings("unchecked")
     public static void writeGameState() {
         GameState currentGameState = GameState.instance();
@@ -33,9 +28,7 @@ public class DataWriter {
         writeToFile(GAMESTATES_PATH, allGameStatesMap);
     }
 
-    /**
-     * Write the current account ({@link GameState#instance()#account()}) to {@link DataWriter#ACCOUNTS_PATH}.
-     */
+    /** Write the current account ({@link GameState#instance()#account()}) to {@link DataWriter#ACCOUNTS_PATH}. */
     @SuppressWarnings("unchecked")
     public static void writeAccount() {
         Account currentAccount = GameState.instance().account();
@@ -49,7 +42,7 @@ public class DataWriter {
      * Write a {@link JSONObject} to a file.
      *
      * @param filepath The file to write to.
-     * @param json     The object to write.
+     * @param json The object to write.
      */
     private static void writeToFile(String filepath, JSONObject json) {
         try (FileWriter file = new FileWriter(filepath)) {
@@ -73,13 +66,20 @@ public class DataWriter {
         JSONObject gameStateMap = new JSONObject();
         gameStateMap.put("currentFloor", gameState.currentFloor().id());
         gameStateMap.put("currentRoom", gameState.currentRoom().id());
-        gameStateMap.put("currentEntity", gameState.currentEntity().isPresent() ? gameState.currentEntity().get().id() : null);
+        gameStateMap.put(
+                "currentEntity",
+                gameState.currentEntity().isPresent()
+                        ? gameState.currentEntity().get().id()
+                        : null);
         gameStateMap.put("currentItems", itemIds(gameState.currentItems()));
-        gameStateMap.put("currentEntityStates", entityStates(gameState.currentFloor().rooms()));
+        gameStateMap.put(
+                "currentEntityStates", entityStates(gameState.currentFloor().rooms()));
         gameStateMap.put("time", gameState.time().getSeconds());
         gameStateMap.put("difficulty", gameState.difficulty().toString());
-		gameStateMap.put("completedPuzzles", completedPuzzleIds(gameState.completedPuzzles().stream().toList()));
-		gameStateMap.put("hintsUsed", hintsUsedJSON(gameState.hintsUsed()));
+        gameStateMap.put(
+                "completedPuzzles",
+                completedPuzzleIds(gameState.completedPuzzles().stream().toList()));
+        gameStateMap.put("hintsUsed", hintsUsedJSON(gameState.hintsUsed()));
         return gameStateMap;
     }
 
@@ -96,7 +96,7 @@ public class DataWriter {
         return itemJSON;
     }
 
-	/**
+    /**
      * Create a {@link JSONArray} from a {@link List<String>}.
      *
      * @param completedPuzzles Strings of the puzzles that have been completed.
@@ -109,7 +109,7 @@ public class DataWriter {
         return levelJSON;
     }
 
-	/**
+    /**
      * Create a {@link JSONArray} from a {@link Map<String, Integer>}.
      *
      * @param hintsUsed Strings of the levels that have been completed.
@@ -129,9 +129,11 @@ public class DataWriter {
     @SuppressWarnings("unchecked")
     private static JSONObject entityStates(List<Room> currentRooms) {
         JSONObject entityJSON = new JSONObject();
-        currentRooms.stream().map(Room::entities)
-                    .flatMap(list -> list.stream()).map(Entity::write)
-                    .forEach(pair -> entityJSON.put(pair[0], pair[1]));
+        currentRooms.stream()
+                .map(Room::entities)
+                .flatMap(list -> list.stream())
+                .map(Entity::write)
+                .forEach(pair -> entityJSON.put(pair[0], pair[1]));
         return entityJSON;
     }
 
@@ -147,7 +149,7 @@ public class DataWriter {
         accountMap.put("username", account.username());
         accountMap.put("hashedPassword", account.hashedPassword());
         accountMap.put("highScore", account.highScore().toJSON());
-		accountMap.put("ttsOn", account.ttsOn());
+        accountMap.put("ttsOn", account.ttsOn());
         return accountMap;
     }
 }

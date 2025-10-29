@@ -10,9 +10,7 @@ import org.virtuoso.escape.model.Item;
  * @author gabri
  */
 public record GiveItem(Item item) implements Action {
-    /**
-     * Give the item.
-     */
+    /** Give the item. */
     @Override
     public void execute() {
         GameState.instance().addItem(item);

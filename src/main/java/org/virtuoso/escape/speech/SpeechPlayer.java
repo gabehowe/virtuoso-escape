@@ -11,9 +11,7 @@ public class SpeechPlayer {
     private static SpeechPlayer instance;
     private Thread currentClip;
 
-    /**
-     * Prevents SoundPlayer from being constructed.
-     */
+    /** Prevents SoundPlayer from being constructed. */
     private SpeechPlayer() {}
 
     /**
@@ -40,9 +38,7 @@ public class SpeechPlayer {
         currentClip.start();
     }
 
-    /**
-     * Stop the currently playing soundbite.
-     */
+    /** Stop the currently playing soundbite. */
     public void stopSoundbite() {
         if (currentClip != null && currentClip.isAlive()) {
             currentClip.interrupt();

@@ -1,27 +1,23 @@
 package org.virtuoso.escape.model.account;
 
-import org.json.simple.JSONObject;
-import org.virtuoso.escape.model.Difficulty;
-import org.virtuoso.escape.model.GameState;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.json.simple.JSONObject;
+import org.virtuoso.escape.model.Difficulty;
+import org.virtuoso.escape.model.GameState;
 
-/**
- * Leaderboard
- * Displays high scores per user accounts
- */
-
+/** Leaderboard Displays high scores per user accounts */
 public class Leaderboard {
 
-	/**
-	 * Update the user's high score.
-	 * @param username The user's username.
-	 */
+    /**
+     * Update the user's high score.
+     *
+     * @param username The user's username.
+     */
     public void recordSession(String username) {
         GameState state = GameState.instance();
         Account account = state.account();
@@ -30,16 +26,16 @@ public class Leaderboard {
             Score newScore = new Score(state.time(), state.difficulty());
             Score currentHighScore = account.highScore();
 
-            if (Objects.nonNull(newScore.totalScore()) && Objects.nonNull(currentHighScore.totalScore()) && newScore.totalScore() > currentHighScore.totalScore()) {
+            if (Objects.nonNull(newScore.totalScore())
+                    && Objects.nonNull(currentHighScore.totalScore())
+                    && newScore.totalScore() > currentHighScore.totalScore()) {
                 account.setHighScore(newScore);
                 System.out.println("Score updated");
             }
         }
     }
 
-	/**
-	 * Print the leaderboard of scores and difficulties.
-	 */
+    /** Print the leaderboard of scores and difficulties. */
     public void showLeaderboard() {
         JSONObject accountsJson = AccountManager.instance().accounts();
         List<ScoreEntry> allScores = new ArrayList<>();
@@ -49,35 +45,36 @@ public class Leaderboard {
             if (value instanceof JSONObject acct) {
                 String username = acct.get("username").toString();
                 Object highScoreObj = acct.get("highScore");
-                if (highScoreObj instanceof JSONObject scoreJson && scoreJson.get("timeRemaining") != null && scoreJson.get("totalScore") != null) {
+                if (highScoreObj instanceof JSONObject scoreJson
+                        && scoreJson.get("timeRemaining") != null
+                        && scoreJson.get("totalScore") != null) {
                     Long timeRemainingSeconds = (Long) scoreJson.get("timeRemaining");
                     String difficultyName = scoreJson.get("difficulty").toString();
-					Long totalScore = (Long) scoreJson.get("totalScore");
+                    Long totalScore = (Long) scoreJson.get("totalScore");
 
                     if (timeRemainingSeconds > 0) {
-                        allScores.add(new ScoreEntry(
-                                username,
-								totalScore,
-                                timeRemainingSeconds,
-                                difficultyName
-                        ));
+                        allScores.add(new ScoreEntry(username, totalScore, timeRemainingSeconds, difficultyName));
                     }
                 }
             }
         }
-		allScores.add(new ScoreEntry(GameState.instance().account().username(), Score.calculateScore(GameState.instance().time(), GameState.instance().difficulty()), (Long) GameState.instance().time().toSeconds(), GameState.instance().difficulty().toString()));
+        allScores.add(new ScoreEntry(
+                GameState.instance().account().username(),
+                Score.calculateScore(
+                        GameState.instance().time(), GameState.instance().difficulty()),
+                (Long) GameState.instance().time().toSeconds(),
+                GameState.instance().difficulty().toString()));
 
         List<ScoreEntry> topScores = allScores.stream()
-                                              .sorted(Comparator
-                                                      .comparing(ScoreEntry::totalScore)
-                                                      .thenComparing((s1, s2) -> {
-                                                          Difficulty d1 = Difficulty.valueOf(s1.difficulty());
-                                                          Difficulty d2 = Difficulty.valueOf(s2.difficulty());
-                                                          return Integer.compare(d2.ordinal(), d1.ordinal());
-                                                      }).reversed()
-                                              )
-                                              .limit(5)
-                                              .collect(Collectors.toList());
+                .sorted(Comparator.comparing(ScoreEntry::totalScore)
+                        .thenComparing((s1, s2) -> {
+                            Difficulty d1 = Difficulty.valueOf(s1.difficulty());
+                            Difficulty d2 = Difficulty.valueOf(s2.difficulty());
+                            return Integer.compare(d2.ordinal(), d1.ordinal());
+                        })
+                        .reversed())
+                .limit(5)
+                .collect(Collectors.toList());
 
         System.out.println("\nTop 5 Leaderboard");
         if (topScores.isEmpty()) {
@@ -92,12 +89,7 @@ public class Leaderboard {
             ScoreEntry entry = topScores.get(i);
             System.out.printf(
                     "%-6d %-10s %-10s %-12s %s%n",
-                    i + 1,
-					entry.totalScore(),
-                    entry.getFormattedTime(),
-                    entry.difficulty(),
-                    entry.username()
-            );
+                    i + 1, entry.totalScore(), entry.getFormattedTime(), entry.difficulty(), entry.username());
         }
         System.out.println("==========================================================");
     }

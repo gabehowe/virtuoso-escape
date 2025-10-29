@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Holder for decorated strings for terminal output.
  *
- * @param content    The child nodes to output, FunString or char
+ * @param content The child nodes to output, FunString or char
  * @param styleCodes The console style codes to prefix to the string.
  * @param resetCodes The console style reset codes to suffix to the string.
  * @author gabri
@@ -68,10 +68,9 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
     }
 
     /**
-     * Join {@link Iterable<FunString>} by a delimiter.
-     * Similar to {@link String#join(CharSequence, CharSequence...)}
+     * Join {@link Iterable<FunString>} by a delimiter. Similar to {@link String#join(CharSequence, CharSequence...)}
      *
-     * @param delimiter  The string to delimit by.
+     * @param delimiter The string to delimit by.
      * @param funStrings The FunStrings to join
      * @return the joined object.
      */
@@ -172,8 +171,8 @@ public record FunString(List<Object /*FunString, char*/> content, List<String> s
     /**
      * Replaces part of this object with {@code toReplace}
      *
-     * @param start     The index to start replacing at.
-     * @param end       The index to stop replacing before.
+     * @param start The index to start replacing at.
+     * @param end The index to stop replacing before.
      * @param toReplace The {@link FunString} to replace the substring with.
      * @apiNote The behavior when {@link FunString}s collide is unknown.
      */

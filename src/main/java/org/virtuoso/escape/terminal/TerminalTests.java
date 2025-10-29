@@ -1,13 +1,11 @@
 package org.virtuoso.escape.terminal;
 
+import java.util.ArrayList;
+import java.util.Scanner;
 import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.Item;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Human-verified tests for the terminal interface.
@@ -18,12 +16,11 @@ public class TerminalTests {
     GameProjection projection;
     Scanner scanner;
 
-    /**
-     * Test game ending.
-     */
+    /** Test game ending. */
     public void testEnding() {
         new TerminalDriver().menu_ending(scanner, projection);
     }
+
     public void testAlamanc() {
         var storey_i = GameInfo.instance().building().get(1);
         var sunflower_room = storey_i.rooms().get(1);
@@ -41,26 +38,22 @@ public class TerminalTests {
         GameState.instance().addItem(Item.sunflower_seed_butter);
         GameState.instance().addItem(Item.left_bread);
         GameState.instance().addItem(Item.right_bread);
-        new TerminalDriver().displayItems(scanner,projection);
+        new TerminalDriver().displayItems(scanner, projection);
     }
 
-    /**
-     * Test typewriter text animation.
-     */
+    /** Test typewriter text animation. */
     public void testTypewriterText() {
         new TerminalDriver()
                 .typewriterDisplay(
                         scanner,
                         "Four score and seven years ago, our fathers set upon this continent a new nation, conceived"
-                            + " in liberty and dedicated to the proposition that all men are created equal. Now we are"
-                            + " engaged in a great civil war, testing whether that nation, or any nation so conceived"
-                            + " and so dedicated, can long endure. We are now met on a great battlefield of that"
-                            + " war.");
+                                + " in liberty and dedicated to the proposition that all men are created equal. Now we are"
+                                + " engaged in a great civil war, testing whether that nation, or any nation so conceived"
+                                + " and so dedicated, can long endure. We are now met on a great battlefield of that"
+                                + " war.");
     }
 
-    /**
-     * Test {@link FunString}.
-     */
+    /** Test {@link FunString}. */
     public void testFunStrings() {
         var strings = new ArrayList<String>();
         var fs = new FunString("Basic text");
@@ -82,10 +75,10 @@ public class TerminalTests {
         scanner = new Scanner(System.in);
         projection = new GameProjection();
         projection.login("j", "j");
-//        testAlamanc();
-//        testItems();
-//        testEnding();
-//        testTypewriterText();
-//        testFunStrings();
+        //        testAlamanc();
+        //        testItems();
+        //        testEnding();
+        //        testTypewriterText();
+        //        testFunStrings();
     }
 }

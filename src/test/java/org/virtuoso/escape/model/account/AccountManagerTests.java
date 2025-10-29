@@ -1,6 +1,9 @@
 package org.virtuoso.escape.model.account;
 
-import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,14 +11,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.data.DataLoader;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class AccountManagerTests {
     GameProjection proj;
-    private static String stateData = """
+    private static String stateData =
+            """
             {"7766f361-af7a-4da5-b741-6867d1768d45": {
               "currentItems": [],
               "difficulty": "SUBSTANTIAL",
@@ -33,7 +32,8 @@ public class AccountManagerTests {
             }
             }
             """;
-    private static String accountData = """
+    private static String accountData =
+            """
             {
             "7766f361-af7a-4da5-b741-6867d1768d45": {
               "highScore": {
@@ -48,7 +48,6 @@ public class AccountManagerTests {
             "d32ad7e6-570f-43cb-b447-82d4c8be293e": "explicitly NOT a JSONObject"
             }""";
 
-
     @BeforeEach
     public void pre() {
         proj = new GameProjection();
@@ -61,7 +60,6 @@ public class AccountManagerTests {
             throw new RuntimeException("couldn't write to file!");
         }
     }
-
 
     public boolean login() {
         return proj.login("dummy", "dummy");
@@ -117,20 +115,19 @@ public class AccountManagerTests {
 
     @ParameterizedTest
     @CsvSource({
-            "dummy,wrong,Password input is invalid.",
-            "wrong,wrong,Both username and password input is invalid.",
-            "wrong,dummy,Username input is invalid.",
+        "dummy,wrong,Password input is invalid.",
+        "wrong,wrong,Both username and password input is invalid.",
+        "wrong,dummy,Username input is invalid.",
     })
     public void testInvalidLoginInfo(String username, String password, String expected) {
         assertEquals(expected, AccountManager.instance().invalidLoginInfo(username, password));
     }
 
     @Test
-    public void testInvalidAccountData(){
+    public void testInvalidAccountData() {
         // All these instanceofs are guaranteed to be true by accountloader -- It's impossible to test these branches.
-        assertNull(AccountManager.instance().accountExists("a","a"));
+        assertNull(AccountManager.instance().accountExists("a", "a"));
     }
-
 
     @Test
     public void testData() {
@@ -150,7 +147,4 @@ public class AccountManagerTests {
     public void testGameStates() {
         assertNotNull(AccountManager.instance().gameStates());
     }
-
-
-
 }

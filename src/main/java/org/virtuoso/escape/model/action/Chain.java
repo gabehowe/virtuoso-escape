@@ -9,9 +9,7 @@ import java.util.Arrays;
  * @author gabri
  */
 public record Chain(Action... actions) implements Action {
-    /**
-     * Execute the actions in the order they were declared.
-     */
+    /** Execute the actions in the order they were declared. */
     @Override
     public void execute() {
         Arrays.stream(actions).forEach(Action::execute);

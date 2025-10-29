@@ -17,8 +17,8 @@ public class TakeInput implements Action {
     /**
      * Create an action with a default input.
      *
-     * @param input    A default input to try on execution.
-     * @param cases    The input-action mapping.
+     * @param input A default input to try on execution.
+     * @param cases The input-action mapping.
      * @param default_ The default action to run if no other input matches.
      */
     public TakeInput(String input, SequencedMap<String, Action> cases, Action default_) {
@@ -61,9 +61,7 @@ public class TakeInput implements Action {
         return map;
     }
 
-    /**
-     * Run the current input against the mapping.
-     */
+    /** Run the current input against the mapping. */
     @Override
     public void execute() {
         for (Map.Entry<String, Action> tuple : cases.entrySet()) {

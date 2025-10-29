@@ -1,12 +1,11 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.account.Account;
-import org.virtuoso.escape.model.account.AccountManager;
-import org.virtuoso.escape.speech.SpeechPlayer;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+import org.virtuoso.escape.model.account.Account;
+import org.virtuoso.escape.model.account.AccountManager;
+import org.virtuoso.escape.speech.SpeechPlayer;
 
 /**
  * The game facade.
@@ -17,9 +16,7 @@ public class GameProjection {
     private GameState gameState;
     private AccountManager accountManager;
 
-    /**
-     * Create the default projection without state.
-     */
+    /** Create the default projection without state. */
     public GameProjection() {
         this.accountManager = AccountManager.instance();
         this.gameState = GameState.instance();
@@ -49,9 +46,7 @@ public class GameProjection {
         return currentAccount.isPresent();
     }
 
-    /**
-     * Log the current user out and write data.
-     */
+    /** Log the current user out and write data. */
     public void logout() {
         SpeechPlayer.instance().stopSoundbite();
         this.gameState.write();
@@ -130,9 +125,7 @@ public class GameProjection {
         this.gameState.pickEntity(entity);
     }
 
-    /**
-     * Unfocus the current entity.
-     */
+    /** Unfocus the current entity. */
     public void leaveEntity() {
         this.gameState.leaveEntity();
     }
@@ -146,9 +139,7 @@ public class GameProjection {
         return this.gameState.time();
     }
 
-    /**
-     * Increments the {@code initialTime} by 1 minute if it is less than 2 hours.
-     */
+    /** Increments the {@code initialTime} by 1 minute if it is less than 2 hours. */
     public void incrementInitialTime() {
         this.gameState.incrementInitialTime();
     }
