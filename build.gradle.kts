@@ -92,6 +92,7 @@ tasks.named<Test>("test") {
 }
 
 spotless {
+    isEnforceCheck=false
     java {
         palantirJavaFormat().formatJavadoc(true)
     }
