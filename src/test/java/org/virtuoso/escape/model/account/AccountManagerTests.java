@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -67,54 +68,63 @@ public class AccountManagerTests {
         return proj.login("dummy", "dummy");
     }
 
+    @DisplayName("Should successfully login with valid credentials")
     @Test
     public void testLogin() {
         assertTrue(login());
         AccountManager.instance().logout();
     }
 
+    @DisplayName("Should fail login with invalid credentials")
     @Test
     public void testBadLogin() {
         var account = AccountManager.instance().login("fake", "fake");
         assertFalse(account.isPresent());
     }
 
+    @DisplayName("Should handle logout without login")
     @Test
     public void testBadLogout() {
         var account = AccountManager.instance().login("fake", "fake");
         AccountManager.instance().logout();
     }
 
+    @DisplayName("Should create new account with unique username")
     @Test
     public void testNewAccount() {
         var account = AccountManager.instance().newAccount("novel", "novel");
         assertTrue(account.isPresent());
     }
 
+    @DisplayName("Should successfully re-authenticate with existing account credentials")
     @Test
     public void testTryCreateExistingAccount() {
         var account = AccountManager.instance().newAccount("dummy", "dummy");
         assertTrue(account.isPresent());
     }
 
+    @DisplayName("Should fail to create account with existing username")
     @Test
     public void testTryCreateCollidingAccount() {
         var account = AccountManager.instance().newAccount("dummy", "novel");
         assertFalse(account.isPresent());
     }
 
+    @DisplayName("Should fail to create account with username exceeding maximum length")
     @Test
     public void testTryCreateLargeUsernameAccount() {
         var account = AccountManager.instance().newAccount("a".repeat(33), "novel");
         assertFalse(account.isPresent());
     }
 
+    @DisplayName("Should fail to create account with password exceeding maximum length")
     @Test
     public void testTryCreateLargePasswordAccount() {
         var account = AccountManager.instance().newAccount("novel", "a".repeat(33));
         assertFalse(account.isPresent());
     }
 
+    @DisplayName("Should return appropriate error message for invalid login information")
     @ParameterizedTest
     @CsvSource({
         "dummy,wrong,Password input is invalid.",
@@ -125,6 +135,7 @@ public class AccountManagerTests {
         assertEquals(expected, AccountManager.instance().invalidLoginInfo(username, password));
     }
 
+    @DisplayName("Should return null for invalid account data")
     @Test
     public void testInvalidAccountData() {
         // All these instanceofs are guaranteed to be true by accountloader -- It's impossible to test
@@ -132,6 +143,7 @@ public class AccountManagerTests {
         assertNull(AccountManager.instance().accountExists("a", "a"));
     }
 
+    @DisplayName("Should load game data after successful login")
     @Test
     public void testData() {
         login();
@@ -140,12 +152,14 @@ public class AccountManagerTests {
         AccountManager.instance().logout();
     }
 
+    @DisplayName("Should return non-null AccountManager instance")
     @Test
     public void testInstance() {
         assertNotNull(AccountManager.instance());
         AccountManager.instance().logout();
     }
 
+    @DisplayName("Should return non-null game states map")
     @Test
     public void testGameStates() {
         assertNotNull(AccountManager.instance().gameStates());

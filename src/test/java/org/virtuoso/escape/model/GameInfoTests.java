@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -63,6 +64,7 @@ public class GameInfoTests {
         proj.login("dummy", "dummy");
     }
 
+    @DisplayName("Should return non-null GameInfo instance")
     @Test
     public void testGameInfo() {
         // Test both cases -- create
@@ -71,12 +73,14 @@ public class GameInfoTests {
         assertNotNull(GameInfo.instance());
     }
 
+    @DisplayName("Should handle state change on wrong floor")
     @Test
     public void testWrongFloorStateChange() {
         GameState.instance().setCurrentFloor(GameInfo.instance().building().getFirst());
         testJoeHardyNoItems();
     }
 
+    @DisplayName("Should move to floor 1 after portal squirrel interaction")
     @Test
     public void testMoveToFloor1() {
         var introRoom = GameInfo.instance().building().getFirst().rooms().getFirst();
@@ -93,6 +97,7 @@ public class GameInfoTests {
         }
     }
 
+    @DisplayName("Should keep Joe Hardy in same state when no items present")
     @Test
     public void testJoeHardyNoItems() {
         GameState.instance().clearItems();
@@ -109,6 +114,7 @@ public class GameInfoTests {
         assertEquals("sans_sandwich_joe", hardyPresent.state().id());
     }
 
+    @DisplayName("Should change Joe Hardy to sandwich state when all items present")
     @Test
     public void testJoeHardyWithItems() {
         GameState.instance().addItem(Item.left_bread);
@@ -128,6 +134,7 @@ public class GameInfoTests {
         assertEquals("sandwich_joe", hardyPresent.state().id());
     }
 
+    @DisplayName("Should find correct almanac page using binary search")
     @Test
     public void testAlmanacFind() {
         var almanacRoom = GameInfo.instance().building().get(1).rooms().get(1);
@@ -157,6 +164,7 @@ public class GameInfoTests {
         System.out.println(correct);
     }
 
+    @DisplayName("Should return 'too high' or 'too low' message for incorrect almanac guess")
     @Test
     public void testAlmanacWrong() {
         var almanacRoom = GameInfo.instance().building().get(1).rooms().get(1);
@@ -170,6 +178,7 @@ public class GameInfoTests {
                 || msg.equals(GameInfo.instance().string("almanac", "too_low")));
     }
 
+    @DisplayName("Should break almanac after too many incorrect guesses")
     @Test
     public void testAlmanacBreak() {
         var almanacRoom = GameInfo.instance().building().get(1).rooms().get(1);
@@ -207,21 +216,25 @@ public class GameInfoTests {
         assertEquals(msg, GameInfo.instance().string("narrator", expectedResource));
     }
 
+    @DisplayName("Should display first narrator hint message")
     @Test
     public void testFirstNarrator() {
         narratorTest("storey_i_hint_1", "narrator_start");
     }
 
+    @DisplayName("Should display second narrator hint message")
     @Test
     public void testSecondNarrator() {
         narratorTest("storey_i_hint_2", "narrator_hint_1");
     }
 
+    @DisplayName("Should display hints exhausted message on third narrator interaction")
     @Test
     public void testThirdNarrator() {
         narratorTest("hints_exhausted", "narrator_hint_2");
     }
 
+    @DisplayName("Should trigger game ending when interacting with unblocked microwave")
     @Test
     public void testEnding() {
         var floor4 = GameInfo.instance().building().get(4);
@@ -234,6 +247,7 @@ public class GameInfoTests {
         microwave.state().interact();
     }
 
+    @DisplayName("Should return key in result when language key is invalid")
     @Test
     public void testInvalidLanguageKey() {
         var inputId = "impossibly-never-ever-possible-exact-language-string";
@@ -241,6 +255,7 @@ public class GameInfoTests {
         assertTrue(result.contains(inputId));
     }
 
+    @DisplayName("Should display appropriate message based on whether player has keys for floor 3 door")
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     public void floor3DoorKeyCheck(boolean has) {

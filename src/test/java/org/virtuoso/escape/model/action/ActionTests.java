@@ -2,6 +2,7 @@ package org.virtuoso.escape.model.action;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,6 +37,7 @@ public class ActionTests {
         //        proj.logout();
     }
 
+    @DisplayName("Should apply penalty based on difficulty and severity")
     @ParameterizedTest
     @MethodSource
     public void addPenaltyTest(Difficulty difficulty, Severity severity, int expectedDifference) {
@@ -61,12 +63,14 @@ public class ActionTests {
 
     // @formatter:on
 
+    @DisplayName("Should execute actions in sequence and use the last action's result")
     @Test
     public void chainTest() {
         new Chain(new SetMessage("initial"), new SetMessage("expected")).execute();
         assertEquals("expected", GameState.instance().currentMessage().get());
     }
 
+    @DisplayName("Should execute correct action branch based on condition")
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     public void conditionalTest(boolean value) {
@@ -76,18 +80,21 @@ public class ActionTests {
                 String.valueOf(value), GameState.instance().currentMessage().get());
     }
 
+    @DisplayName("Should handle null action branch when condition is false")
     @Test
     public void nullConditionalTest() {
         new Conditional(() -> false, new SetMessage(String.valueOf(true)), null).execute();
         assertFalse(GameState.instance().currentMessage().isPresent());
     }
 
+    @DisplayName("Should execute default action without errors")
     @Test
     public void defaultTest() {
         new Default().execute();
         // Expect no error?
     }
 
+    @DisplayName("Should execute action based on matching input case")
     @ParameterizedTest
     @ValueSource(strings = {"one", "two", "three"})
     public void testTakeInput(String input) {
@@ -99,6 +106,7 @@ public class ActionTests {
         assertEquals(input, msg.get());
     }
 
+    @DisplayName("Should execute default action when input does not match any case")
     @Test
     public void testDefaultTakeInput() {
         new TakeInput("", new LinkedHashMap<>(), new SetMessage("default"))
@@ -109,6 +117,7 @@ public class ActionTests {
         assertEquals("default", msg.get());
     }
 
+    @DisplayName("Should handle null default action when input does not match any case")
     @Test
     public void testNullDefaultTakeInput() {
         new TakeInput("", new LinkedHashMap<>(), null).withInput(null).execute();
@@ -116,6 +125,7 @@ public class ActionTests {
         assertFalse(msg.isPresent());
     }
 
+    @DisplayName("Should throw error for non-even TakeInput arguments")
     @Test
     public void testNonEvenTakeInputMakeCasesArgumentLength() {
         try {
