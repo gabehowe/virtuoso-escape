@@ -10,7 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.data.DataLoader;
-
+/**
+ * @author gabri
+ */
 public class AccountManagerTests {
     GameProjection proj;
     private static String stateData =

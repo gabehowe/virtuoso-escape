@@ -16,6 +16,9 @@ import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.data.DataLoader;
 
+/**
+ * @author gabri
+ */
 public class ActionTests {
     GameProjection proj;
 

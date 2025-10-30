@@ -10,6 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.virtuoso.escape.model.data.DataLoader;
 
+/**
+ * @author gabri
+ */
 public class GameInfoTests {
     GameProjection proj;
     private static String stateData =
