@@ -1,9 +1,5 @@
 package org.virtuoso.escape.model.action;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.LinkedHashMap;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +11,11 @@ import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.data.DataLoader;
+
+import java.util.LinkedHashMap;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author gabri
@@ -117,6 +118,11 @@ public class ActionTests {
 
     @Test
     public void testNonEvenTakeInputMakeCasesArgumentLength() {
-        assertThrows(Exception.class, () -> new TakeInput("one").execute());
+        try {
+            new TakeInput("one").execute();
+        } catch (AssertionError | IndexOutOfBoundsException e) {
+            return; // Passed!
+        }
+        fail("Error should have been thrown!");
     }
 }
