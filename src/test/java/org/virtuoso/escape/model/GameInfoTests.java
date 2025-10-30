@@ -4,9 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.virtuoso.escape.model.data.DataLoader;
@@ -63,6 +62,10 @@ public class GameInfoTests {
         }
         proj.login("dummy", "dummy");
     }
+    @AfterEach
+    public void post() {
+        proj.logout();
+    }
 
     @DisplayName("Should return non-null GameInfo instance")
     @Test
@@ -101,7 +104,10 @@ public class GameInfoTests {
     @Test
     public void testJoeHardyNoItems() {
         GameState.instance().clearItems();
-        var hardyRoom = GameInfo.instance().building().get(1).rooms().getFirst();
+        var floor = GameInfo.instance().building().get(1);
+        var hardyRoom = floor.rooms().getFirst();
+        GameState.instance().setCurrentFloor(floor);
+        GameState.instance().setCurrentRoom(hardyRoom);
         var hardy = hardyRoom.entities().stream()
                 .filter(e -> e.id().equals("joe_hardy"))
                 .findFirst();
@@ -121,7 +127,10 @@ public class GameInfoTests {
         GameState.instance().addItem(Item.right_bread);
         GameState.instance().addItem(Item.sunflower_seed_butter);
         GameState.instance().addItem(Item.sealed_clean_food_safe_hummus);
-        var hardyRoom = GameInfo.instance().building().get(1).rooms().getFirst();
+        var floor = GameInfo.instance().building().get(1);
+        var hardyRoom = floor.rooms().getFirst();
+        GameState.instance().setCurrentFloor(floor);
+        GameState.instance().setCurrentRoom(hardyRoom);
         var hardy = hardyRoom.entities().stream()
                 .filter(e -> e.id().equals("joe_hardy"))
                 .findFirst();
@@ -134,72 +143,7 @@ public class GameInfoTests {
         assertEquals("sandwich_joe", hardyPresent.state().id());
     }
 
-    @DisplayName("Should find correct almanac page using binary search")
-    @Test
-    public void testAlmanacFind() {
-        var almanacRoom = GameInfo.instance().building().get(1).rooms().get(1);
-        var almanac = almanacRoom.entities().getFirst();
-        int low = 0, high = 32;
-        Integer correct = null;
-        for (int i = 0; i < 5; i++) {
-            var guess = (high + low) / 2;
-            almanac.state().takeInput(String.valueOf(guess));
-            var msg = GameState.instance().currentMessage();
-            assertTrue(msg.isPresent());
-            if (msg.get().equals(GameInfo.instance().string("almanac", "too_low"))) {
-                low = guess;
-                continue;
-            }
-            if (msg.get().equals(GameInfo.instance().string("almanac", "too_high"))) {
-                high = guess;
-                continue;
-            }
-            if (msg.get().equals(GameInfo.instance().string("almanac", "correct_page"))) {
-                correct = guess;
-                break;
-            }
-            fail("Failed to find correct almanac page with binary search.");
-        }
-        assertNotNull(correct);
-        System.out.println(correct);
-    }
 
-    @DisplayName("Should return 'too high' or 'too low' message for incorrect almanac guess")
-    @Test
-    public void testAlmanacWrong() {
-        var almanacRoom = GameInfo.instance().building().get(1).rooms().get(1);
-        var almanac = almanacRoom.entities().getFirst();
-        var firstState = almanac.state();
-        // Correct value cannot be multiple inputs, ergo one must be wrong.
-        firstState.takeInput("31");
-        firstState.takeInput("30");
-        var msg = GameState.instance().currentMessage().get();
-        assertTrue(msg.equals(GameInfo.instance().string("almanac", "too_high"))
-                || msg.equals(GameInfo.instance().string("almanac", "too_low")));
-    }
-
-    @DisplayName("Should break almanac after too many incorrect guesses")
-    @Test
-    public void testAlmanacBreak() {
-        var almanacRoom = GameInfo.instance().building().get(1).rooms().get(1);
-        var almanac = almanacRoom.entities().getFirst();
-        var firstState = almanac.state();
-        var guess = "31";
-        firstState.takeInput(guess);
-        // Ensure incorrect guess;
-        if (GameState.instance()
-                .currentMessage()
-                .get()
-                .equals(GameInfo.instance().string("almanac", "correct_page"))) {
-            almanac.swapState("almanac_5");
-            guess = "30";
-        }
-        for (int i = 0; i < 6; i++) {
-            almanac.state().takeInput(guess);
-        }
-        var msg = GameState.instance().currentMessage().get();
-        assertEquals(GameInfo.instance().string("almanac", "break"), msg);
-    }
 
     private void narratorTest(String expectedResource, String state) {
         var floor = GameInfo.instance().building().get(1);
@@ -269,5 +213,80 @@ public class GameInfoTests {
         exit_door.state().interact();
         var msg = GameState.instance().currentMessage().get();
         assertEquals(GameInfo.instance().string("exit_door", (has) ? "unlocked_msg" : "locked_msg"), msg);
+    }
+
+    @Nested
+    class AlmanacTests {
+        Entity almanac;
+        @BeforeEach
+        public void pre() {
+            var floor = GameInfo.instance().building().get(1);
+            var almanacRoom = floor.rooms().get(1);
+            GameState.instance().setCurrentFloor(floor);
+            GameState.instance().setCurrentRoom(almanacRoom);
+            almanac = almanacRoom.entities().getFirst();
+            almanac.swapState("almanac_5");
+        }
+
+        @DisplayName("Should find correct almanac page using binary search")
+        @Test
+        public void testAlmanacFind() {
+            int low = 0, high = 32;
+            Integer correct = null;
+            for (int i = 0; i < 5; i++) {
+                var guess = (high + low) / 2;
+                almanac.state().takeInput(String.valueOf(guess));
+                var msg = GameState.instance().currentMessage();
+                assertTrue(msg.isPresent());
+                if (msg.get().contains(GameInfo.instance().string("almanac", "too_low"))) {
+                    low = guess;
+                    continue;
+                }
+                if (msg.get().contains(GameInfo.instance().string("almanac", "too_high"))) {
+                    high = guess;
+                    continue;
+                }
+                if (msg.get().contains(GameInfo.instance().string("almanac", "correct_page"))) {
+                    correct = guess;
+                    break;
+                }
+                fail("Failed to find correct almanac page with binary search.");
+            }
+            assertNotNull(correct);
+            System.out.println(correct);
+        }
+
+        @DisplayName("Should return 'too high' or 'too low' message for incorrect almanac guess")
+        @Test
+        public void testAlmanacWrong() {
+            var firstState = almanac.state();
+            // Correct value cannot be multiple inputs, ergo one must be wrong.
+            firstState.takeInput("31");
+            firstState.takeInput("30");
+            var msg = GameState.instance().currentMessage().get();
+            assertTrue(msg.contains(GameInfo.instance().string("almanac", "too_high"))
+                    || msg.contains(GameInfo.instance().string("almanac", "too_low")));
+        }
+
+        @DisplayName("Should break almanac after too many incorrect guesses")
+        @Test
+        public void testAlmanacBreak() {
+            var firstState = almanac.state();
+            var guess = "31";
+            firstState.takeInput(guess);
+            // Ensure incorrect guess;
+            if (GameState.instance()
+                         .currentMessage()
+                         .get()
+                         .contains(GameInfo.instance().string("almanac", "correct_page"))) {
+                guess = "30";
+            }
+            almanac.swapState("almanac_5");
+            for (int i = 0; i < 5; i++) {
+                almanac.state().takeInput(guess);
+            }
+            var msg = GameState.instance().currentMessage().get();
+            assertTrue(msg.contains(GameInfo.instance().string("almanac", "break")), "Invalid:" + msg);
+        }
     }
 }

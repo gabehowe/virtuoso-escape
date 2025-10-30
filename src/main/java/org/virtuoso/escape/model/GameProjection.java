@@ -1,11 +1,12 @@
 package org.virtuoso.escape.model;
 
-import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.AccountManager;
 import org.virtuoso.escape.speech.SpeechPlayer;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * The game facade.
