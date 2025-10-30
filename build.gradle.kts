@@ -30,9 +30,8 @@ plugins {
     application
     id("org.openjfx.javafxplugin") version "0.1.0"
     id("org.javamodularity.moduleplugin") version "1.8.15"
-//    id("com.palantir.baseline-config") version "6.66.0"
-//    id("com.palantir.java-format") version "2.81.0"
     id("com.diffplug.spotless") version "8.0.0"
+    jacoco
 }
 
 
