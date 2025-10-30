@@ -14,15 +14,12 @@ import org.virtuoso.escape.model.data.DataWriter;
  *
  * @author Treasure
  */
-public class AccountManager {
+public record AccountManager(JSONObject accounts, JSONObject gameStates) {
     private static AccountManager accountManager;
-    private JSONObject accounts;
-    private JSONObject gameStates;
 
     /** Loads all user accounts and gamestates. */
     private AccountManager() {
-        this.accounts = loadAccounts();
-        this.gameStates = loadGameStates();
+        this(loadAccounts(), loadGameStates());
     }
 
     /**
@@ -136,7 +133,7 @@ public class AccountManager {
      *
      * @return a JSONObject of all the user accounts.
      */
-    private JSONObject loadAccounts() {
+    private static JSONObject loadAccounts() {
         return DataLoader.loadAccounts();
     }
 
@@ -145,7 +142,7 @@ public class AccountManager {
      *
      * @return a JSONObject of the gamestates.
      */
-    private JSONObject loadGameStates() {
+    private static JSONObject loadGameStates() {
         return DataLoader.loadGameStates();
     }
 

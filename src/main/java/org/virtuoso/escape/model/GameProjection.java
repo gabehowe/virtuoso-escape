@@ -12,14 +12,11 @@ import org.virtuoso.escape.speech.SpeechPlayer;
  *
  * @author Treasure
  */
-public class GameProjection {
-    private GameState gameState;
-    private AccountManager accountManager;
+public record GameProjection(GameState gameState, AccountManager accountManager) {
 
     /** Create the default projection without state. */
     public GameProjection() {
-        this.accountManager = AccountManager.instance();
-        this.gameState = GameState.instance();
+        this(GameState.instance(),AccountManager.instance());
     }
 
     /**

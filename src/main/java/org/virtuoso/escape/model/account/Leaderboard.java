@@ -18,7 +18,7 @@ public class Leaderboard {
      *
      * @param username The user's username.
      */
-    public void recordSession(String username) {
+    public static void recordSession(String username) {
         GameState state = GameState.instance();
         Account account = state.account();
 
@@ -36,7 +36,7 @@ public class Leaderboard {
     }
 
     /** Print the leaderboard of scores and difficulties. */
-    public void showLeaderboard() {
+    public static void showLeaderboard() {
         JSONObject accountsJson = AccountManager.instance().accounts();
         List<ScoreEntry> allScores = new ArrayList<>();
 

@@ -13,14 +13,12 @@ import org.virtuoso.escape.model.data.DataLoader;
  * @author Bose
  * @author gabri
  */
-public class GameInfo {
+public record GameInfo(Map<String, Map<String, String>> language, List<Floor> building) {
     private static GameInfo instance;
-    private Map<String, Map<String, String>> language = Map.of();
-    private List<Floor> building = new ArrayList<Floor>();
 
     /** Construct this singleton. */
     private GameInfo() {
-        this.language = DataLoader.loadGameLanguage();
+        this(DataLoader.loadGameLanguage(), new ArrayList<>());
         // todo: add other floors
 
         this.building.add(acornGrove());

@@ -68,7 +68,7 @@ public class AccountManagerTests {
         return proj.login("dummy", "dummy");
     }
 
-    @DisplayName("Should successfully login with valid credentials")
+    @DisplayName("Should successfully log in with valid credentials")
     @Test
     public void testLogin() {
         assertTrue(login());

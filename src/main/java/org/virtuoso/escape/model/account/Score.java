@@ -10,13 +10,14 @@ import org.virtuoso.escape.model.GameState;
 /**
  * Holds information about the users score.
  *
+ * @param timeRemaining The time remaining when the user finished the game.
+ * @param difficulty The difficulty the user was playing on when they finished the game.
+ * @param totalScore The overall high score of a user.
+ *
  * @author gabri
  * @author Andrew
  */
-public class Score {
-    private Duration timeRemaining;
-    private Difficulty difficulty;
-    private Long totalScore;
+public record Score(Duration timeRemaining, Difficulty difficulty, Long totalScore) {
 
     /**
      * Construct a score object an calculate score.
@@ -25,9 +26,7 @@ public class Score {
      * @param difficulty The difficulty the user was playing on when they finished the game.
      */
     public Score(Duration timeRemaining, Difficulty difficulty) {
-        this.timeRemaining = timeRemaining;
-        this.difficulty = difficulty;
-        this.totalScore = calculateScore(timeRemaining, difficulty);
+        this(timeRemaining, difficulty, calculateScore(timeRemaining, difficulty));
     }
 
     /** Calculate a score from timeRemaining, difficulty, and GameState data. */
@@ -40,20 +39,6 @@ public class Score {
                                         .collect(Collectors.summingInt(Integer::intValue))
                                 : 0))
                 : null;
-    }
-
-    /**
-     * Construct a score object with a set score.
-     *
-     * @param timeRemaining The time remaining when the user finished the game.
-     * @param difficulty The difficulty the user was playing on when they finished the game.
-     * @param totalScore The overall high score of a user.
-     */
-    public Score(Duration timeRemaining, Difficulty difficulty, Long totalScore) {
-        if (!Objects.nonNull(totalScore)) new Score(timeRemaining, difficulty);
-        this.timeRemaining = timeRemaining;
-        this.difficulty = difficulty;
-        this.totalScore = totalScore;
     }
 
     /**

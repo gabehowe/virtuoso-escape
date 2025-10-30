@@ -7,25 +7,12 @@ import java.util.SequencedMap;
 /**
  * Perform actions based on input-action mappings.
  *
+ * @param input A default input to try on execution.
+ * @param cases The input-action mapping.
+ * @param default_ The default action to run if no other input matches.
  * @author gabri
  */
-public class TakeInput implements Action {
-    private final Map<String, Action> cases;
-    private final Action default_;
-    String input;
-
-    /**
-     * Create an action with a default input.
-     *
-     * @param input A default input to try on execution.
-     * @param cases The input-action mapping.
-     * @param default_ The default action to run if no other input matches.
-     */
-    public TakeInput(String input, SequencedMap<String, Action> cases, Action default_) {
-        this.input = input;
-        this.cases = cases;
-        this.default_ = default_;
-    }
+public record TakeInput(String input, SequencedMap<String, Action> cases, Action default_) implements Action {
 
     /**
      * Create an action without a default action.
@@ -79,7 +66,6 @@ public class TakeInput implements Action {
      * @return this, but with the input.
      */
     public Action withInput(String input) {
-        this.input = input;
-        return this;
+        return new TakeInput(input, this.cases, this.default_);
     }
 }
