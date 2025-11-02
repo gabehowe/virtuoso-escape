@@ -562,7 +562,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     }
 
     /**
-     * The language parent-(id-resource) mapping..
+     * The language parent-(id-resource) mapping.
      *
      * @return The language mapping.
      */
