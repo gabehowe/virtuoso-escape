@@ -13,8 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
@@ -39,6 +37,7 @@ import org.virtuoso.escape.model.data.DataLoader;
 
 /**
  * @author gabri
+ * @author Andrew
  */
 public class ActionTests {
     GameProjection proj;
@@ -115,7 +114,7 @@ public class ActionTests {
 
 	@DisplayName("Should give do nothing if the user is given a null item")
 	@Test
-	public void giveNullItem() {
+	public void giveNullItemTest() {
 		new GiveItem(null).execute();
 		assertFalse(GameState.instance().currentItems().contains(null));
 	}
@@ -124,7 +123,7 @@ public class ActionTests {
 	@ParameterizedTest
 	@EnumSource(Item.class)
 	// Runs once for every possible item, kind of overkill but cool nonetheless.
-	public void giveAllItems(Item item){
+	public void giveAllItemsTest(Item item){
 		assertNotNull(item);
 		new GiveItem(item).execute();
 		assertTrue(GameState.instance().currentItems().contains(item));
@@ -132,7 +131,7 @@ public class ActionTests {
 
 	@DisplayName("Should not add the same item twice")
 	@Test
-	public void giveDoubleItem() {
+	public void giveDoubleItemTest() {
 		new GiveItem(Item.keys).execute();
 		new GiveItem(Item.keys).execute();
 		assertTrue(Collections.frequency(GameState.instance().currentItems(), Item.keys) == 1);
@@ -140,7 +139,7 @@ public class ActionTests {
 
 	@DisplayName("Should add multiple different items")
 	@Test
-	public void giveDifferentItems() {
+	public void giveDifferentItemsTest() {
 		new GiveItem(Item.left_bread).execute();
 		new GiveItem(Item.sealed_clean_food_safe_hummus).execute();
 		assertTrue(GameState.instance().currentItems().size() == 2);
@@ -150,8 +149,8 @@ public class ActionTests {
 	@DisplayName("Should change entity state")
 	@ParameterizedTest
 	@MethodSource
-	public void swapEntityState(Entity entity) throws NoSuchFieldException, IllegalAccessException{
-		setFloor(TEST_FLOOR);
+	public void swapEntityStateTest(Entity entity) throws NoSuchFieldException, IllegalAccessException{
+		new SetFloor(TEST_FLOOR).execute();
 		Map<String, EntityState> stateMap = getStateMap(entity);
 		// Tests setting the state for each entity on a floor
 		for (String stateString: stateMap.keySet()) {
@@ -171,8 +170,8 @@ public class ActionTests {
 		}
 	}
 
-	private static Stream<Entity> swapEntityState() throws NoSuchFieldException, IllegalAccessException {
-		setFloor(TEST_FLOOR);
+	private static Stream<Entity> swapEntityStateTest() throws NoSuchFieldException, IllegalAccessException {
+		new SetFloor(TEST_FLOOR).execute();
 
 		List<Entity> entities = GameState.instance().currentFloor().rooms().stream().map(Room::entities).flatMap(List::stream).toList();
 
@@ -191,13 +190,6 @@ public class ActionTests {
 		return (Map<String, EntityState>) stateField.get(entity);
 	}
 
-	private static void setFloor(int floor) throws NoSuchFieldException, IllegalAccessException{
-		Field floorField = GameState.class.getDeclaredField("currentFloor");
-		floorField.setAccessible(true);
-		Floor newFloor  = GameInfo.instance().building().get(floor);
-		floorField.set(GameState.instance(), newFloor);
-	}
-
 	private static Entity multiStateEntity(List<Entity> entities){
 		return entities.stream().filter(entity -> {
 			try {
@@ -212,16 +204,16 @@ public class ActionTests {
 	@DisplayName("Should throw errors on null or missing entity or entity state arguments.")
 	@ParameterizedTest
 	@MethodSource
-	public void invalidEntityStateSwap(String entity, String entityState) throws NoSuchFieldException, IllegalAccessException {
-		setFloor(TEST_FLOOR);
+	public void invalidEntityStateSwapTest(String entity, String entityState) throws NoSuchFieldException, IllegalAccessException {
+		new SetFloor(TEST_FLOOR).execute();
 		assertThrows(
 			IllegalArgumentException.class,() -> new SwapEntities(entity, entityState).execute(),
 			"Expected SwapEntities to throw an exception, but it did not!"
     	);
 	}
 
-	private static Stream<Arguments> invalidEntityStateSwap() throws NoSuchFieldException, IllegalAccessException {
-		setFloor(TEST_FLOOR);
+	private static Stream<Arguments> invalidEntityStateSwapTest() throws NoSuchFieldException, IllegalAccessException {
+		new SetFloor(TEST_FLOOR).execute();
 		Entity testEntity = GameState.instance().currentFloor().rooms().stream().map(Room::entities).flatMap(List::stream).findFirst()
 		.orElseThrow(() -> new IllegalStateException("No entities found in the current floor!"));
 		return Stream.of(

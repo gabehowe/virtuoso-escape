@@ -1,5 +1,7 @@
 package org.virtuoso.escape.model;
 
+import java.util.Objects;
+
 import org.virtuoso.escape.model.action.Action;
 import org.virtuoso.escape.model.action.Default;
 import org.virtuoso.escape.model.action.TakeInput;
@@ -23,12 +25,12 @@ public record EntityState(
         TakeInput inputAction,
         Capabilities capabilities) {
     /**
-     * Default constructor
+     * Construct an entity state with an id and default actions.
      *
      * @param id The id of this entity.
      */
     public EntityState(String id) {
-        this(id, new Default(), new Default(), new Default(), null);
+        this(Objects.requireNonNull(id, "id cannot be null"), new Default(), new Default(), new Default(), null);
     }
 
     /**
@@ -135,6 +137,7 @@ public record EntityState(
 
     /**
      * The action capabilities of the entity -- Can it be spoken to?
+	 * Used to only show relevant actions to the user.
      *
      * @param attack If the entity can be attacked to.
      * @param inspect If the entity can be inspected.
