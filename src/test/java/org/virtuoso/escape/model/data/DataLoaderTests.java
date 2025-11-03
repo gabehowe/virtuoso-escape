@@ -1,7 +1,5 @@
 package org.virtuoso.escape.model.data;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * @author Treasure
+ */
 public class DataLoaderTests {
 	private static String stateData =
             """

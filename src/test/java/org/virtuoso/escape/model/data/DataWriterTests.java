@@ -1,7 +1,5 @@
 package org.virtuoso.escape.model.data;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,16 +13,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * @author Treasure
+ */
 public class DataWriterTests {
+	private static String stateData = """
+			{}
+			""";
+	private static String accountData = """
+			{}
+			""";
 	GameProjection projection;
-	private static String stateData =
-			"""
-			{}
-			""";
-	private static String accountData =
-			"""
-			{}
-			""";
 
 	@BeforeEach
 	void pre() throws URISyntaxException {
@@ -42,7 +43,7 @@ public class DataWriterTests {
 
 	@DisplayName("Should successfully write valid account and find current account's username upon load")
 	@Test
-	void testWritingValidAccount(){
+	void testWritingValidAccount() {
 		boolean isDummy = projection.createAccount("dummy", "dummy");
 		DataWriter.writeAccount();
 		assertTrue(isDummy);
@@ -54,7 +55,7 @@ public class DataWriterTests {
 
 	@DisplayName("Should fail to write null account and throw a NullPointerException")
 	@Test
-	void testWritingNullAccount(){
+	void testWritingNullAccount() {
 		boolean isNullDummy = projection.createAccount(null, null);
 		assertFalse(isNullDummy);
 		assertThrows(NullPointerException.class, DataWriter::writeAccount);
@@ -62,7 +63,7 @@ public class DataWriterTests {
 
 	@DisplayName("Should write account with empty username and password, and find it's empty username upon load")
 	@Test
-	void testWritingEmptyAccount(){
+	void testWritingEmptyAccount() {
 		projection.createAccount("", "");
 		DataWriter.writeAccount();
 		assertTrue(DataLoader.loadAccounts().containsKey(GameState.instance().account().id().toString()));
@@ -72,7 +73,7 @@ public class DataWriterTests {
 
 	@DisplayName("Should write multiple valid accounts and find current account's password upon load")
 	@Test
-	void testWritingMultipleValidAccounts(){
+	void testWritingMultipleValidAccounts() {
 		projection.createAccount("dummy", "dummy");
 		DataWriter.writeAccount();
 		projection.createAccount("nulldummy", "nulldummy");
@@ -87,14 +88,14 @@ public class DataWriterTests {
 
 	@DisplayName("Should not write any accounts and confirm accounts.json remains empty")
 	@Test
-	void testWritingZeroAccounts(){
+	void testWritingZeroAccounts() {
 		DataWriter.writeAccount();
 		assertTrue(DataLoader.loadAccounts().isEmpty());
 	}
 
 	@DisplayName("Should write valid game state and find changed difficulty upon load")
 	@Test
-	void testWritingValidGameState(){
+	void testWritingValidGameState() {
 		projection.createAccount("mrsdummy", "mrsdummy");
 		GameState.instance().setDifficulty(Difficulty.TRIVIAL);
 		DataWriter.writeGameState();
@@ -105,7 +106,7 @@ public class DataWriterTests {
 
 	@DisplayName("Should fail to write game state with null account and throw a NullPointerException")
 	@Test
-	void testWritingNullGameState(){
+	void testWritingNullGameState() {
 		projection.createAccount(null, null);
 		assertThrows(NullPointerException.class, DataWriter::writeGameState);
 	}

@@ -1,20 +1,18 @@
 package org.virtuoso.escape.model.account;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.virtuoso.escape.model.Difficulty;
-import org.virtuoso.escape.model.GameProjection;
 
 import java.time.Duration;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Treasure
  */
 class AccountTests {
-	GameProjection proj;
 
 	@DisplayName("Should return non-null account given valid username and password")
 	@Test
