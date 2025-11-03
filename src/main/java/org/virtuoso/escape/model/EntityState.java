@@ -122,10 +122,7 @@ public record EntityState(
                 || GameInfo.instance().language().get(id).get("input_" + input) == null)
             message = "I couldn't understand '" + input + "'";
         else message = GameInfo.instance().string(id, "input_" + input);
-        if (message != null) {
-            GameState.instance().setCurrentMessage(message);
-        }
-
+        GameState.instance().setCurrentMessage(message);
         if (inputAction != null) {
             inputAction.withInput(input).execute();
         }

@@ -176,11 +176,17 @@ public class EntityStateTests {
 	}
 
 	// -- Action Tests -- //
-    @ParameterizedTest(name = "Will call actions through interact, attack and inspect : Test {index} => method: {0}, key: {1}, hasAction: {2}")
+    @ParameterizedTest(name = "Will call actions through interact, attack and inspect : Test {index} => method: {0}, key: {1}, hasAction: {2}, nullAction: {3}")
     @MethodSource
-    void actionCallTest(String methodName, String key, boolean hasAction) throws Exception {
+    void actionCallTest(String methodName, String key, boolean hasAction, boolean nullAction) throws Exception {
+		Action mockAction;
 		AtomicBoolean executed = new AtomicBoolean(false);
-		Action mockAction = () -> executed.set(true);
+
+		if (!nullAction) {
+			mockAction = () -> executed.set(true);
+		} else {
+			mockAction = null;
+		}
 
 		EntityState testState = switch (methodName) {
 			case "interact" -> new EntityState("testState", null, null, mockAction, null, 
@@ -201,7 +207,7 @@ public class EntityStateTests {
 
         assertEquals(expectedMessage, GameState.instance().currentMessage().get());
 
-		if (hasAction) {
+		if (hasAction && !nullAction) {
 			assertTrue(executed.get());
 		} else {
 			assertFalse(executed.get());
@@ -210,12 +216,18 @@ public class EntityStateTests {
 
     private static Stream<Arguments> actionCallTest() {
         return Stream.of(
-                Arguments.of("interact", "interact", true),
-                Arguments.of("interact", "interact", false),
-                Arguments.of("attack", "attack", true),
-                Arguments.of("attack", "attack", false),
-                Arguments.of("inspect", "inspect", true),
-                Arguments.of("inspect", "inspect", false)
+                Arguments.of("interact", "interact", true, false),
+                Arguments.of("interact", "interact", false, false),
+                Arguments.of("attack", "attack", true, false),
+                Arguments.of("attack", "attack", false, false),
+                Arguments.of("inspect", "inspect", true, false),
+                Arguments.of("inspect", "inspect", false, false),
+               	Arguments.of("interact", "interact", true, true),
+                Arguments.of("interact", "interact", false, true),
+                Arguments.of("attack", "attack", true, true),
+                Arguments.of("attack", "attack", false, true),
+                Arguments.of("inspect", "inspect", true, true),
+                Arguments.of("inspect", "inspect", false, true)
         );
 	}
 
