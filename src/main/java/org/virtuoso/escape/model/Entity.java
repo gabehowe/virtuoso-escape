@@ -73,6 +73,7 @@ public class Entity {
                 "Entity '" + this.id + "' cannot be swapped to non-existent state: '" + newState + "'"
             );
         }
+		this.currentState = newState;
     }
 
     /**
