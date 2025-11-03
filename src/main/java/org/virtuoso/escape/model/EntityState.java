@@ -56,11 +56,7 @@ public record EntityState(
      * @return A resource string.
      */
     private String getText(String key) {
-        try {
-            return GameInfo.instance().string(this.id, key);
-        } catch (Exception e) {
-            return "[Missing text: " + key + "]";
-        }
+        return GameInfo.instance().string(this.id, key);
     }
 
     /** Run the interact {@link Action}. */
