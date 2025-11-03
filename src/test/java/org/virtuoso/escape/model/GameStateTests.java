@@ -10,6 +10,8 @@ import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.account.*;
+import org.virtuoso.escape.model.data.DataLoader;
+import org.virtuoso.escape.model.data.DataWriter;
 
 /**
  * Tests for GameState.java
@@ -95,12 +97,12 @@ public class GameStateTests {
 
     @Test
     void testPickAndSetEntity() {
-        Entity e1 = new Entity("id1", "door", "desc", new ArrayList<>());
+        Entity e1 = new Entity("id1");
         state.pickEntity(e1);
         assertTrue(state.currentEntity().isPresent());
         assertEquals(e1, state.currentEntity().get());
 
-        Entity e2 = new Entity("id2", "chest", "desc", new ArrayList<>());
+        Entity e2 = new Entity("id2");
         state.setCurrentEntity(e2);
         assertEquals(e2, state.currentEntity().get());
 
@@ -140,8 +142,8 @@ public class GameStateTests {
     }
     @Test
     void testSetAndGetDifficulty() {
-        state.setDifficulty(Difficulty.CRITICAL);
-        assertEquals(Difficulty.CRITICAL, state.difficulty());
+        state.setDifficulty(Difficulty.VIRTUOSIC);
+        assertEquals(Difficulty.VIRTUOSIC, state.difficulty());
     }
 
     @Test
@@ -207,9 +209,9 @@ public class GameStateTests {
         Floor floor1 = new Floor("F1", new LinkedList<>());
         Floor floor2 = new Floor("F2", new LinkedList<>());
         injectPrivateField(state, "currentFloor", floor1);
-        Room r1 = new Room("R1", new ArrayList<>());
+        Room r1 = new Room("R1", new ArrayList<>(), "");
         floor1.rooms().add(r1);
-        Room r2 = new Room("R2", new ArrayList<>());
+        Room r2 = new Room("R2", new ArrayList<>(), "");
         floor2.rooms().add(r2);
 
         state.setCurrentFloor(floor2);
@@ -221,8 +223,8 @@ public class GameStateTests {
     @Test
     void testSetCurrentRoomDoesNotChangeFloor() throws Exception {
         Floor floor = new Floor("F", new LinkedList<>());
-        Room r1 = new Room("R1", new ArrayList<>());
-        Room r2 = new Room("R2", new ArrayList<>());
+        Room r1 = new Room("R1", new ArrayList<>(), "");
+        Room r2 = new Room("R2", new ArrayList<>(), "");
         floor.rooms().add(r1);
         floor.rooms().add(r2);
         injectPrivateField(state, "currentFloor", floor);
