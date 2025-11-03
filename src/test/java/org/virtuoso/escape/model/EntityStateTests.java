@@ -21,8 +21,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.virtuoso.escape.model.action.Action;
 import org.virtuoso.escape.model.action.AddPenalty;
-import org.virtuoso.escape.model.action.CompletePuzzle;
-import org.virtuoso.escape.model.action.Default;
 import org.virtuoso.escape.model.action.SetFloor;
 import org.virtuoso.escape.model.action.SetMessage;
 import org.virtuoso.escape.model.action.Severity;

@@ -146,31 +146,40 @@ public class ActionTests {
 	}
 
 	private static int TEST_FLOOR = 1;
-	@DisplayName("Should change entity state")
-	@ParameterizedTest
+	@ParameterizedTest(name="Should change entity state to all possible options for each entity. {index}")
 	@MethodSource
-	public void swapEntityStateTest(Entity entity) throws NoSuchFieldException, IllegalAccessException{
+	public void swapEntityStateTest(String entityId) throws NoSuchFieldException, IllegalAccessException{
 		new SetFloor(TEST_FLOOR).execute();
+		Entity entity = GameState.instance().currentFloor().rooms().stream()
+            .flatMap(room -> room.entities().stream())
+            .filter(e -> Objects.equals(e.id(), entityId))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("Entity with id " + entityId + " not found in GameState!"));
+
 		Map<String, EntityState> stateMap = getStateMap(entity);
 		// Tests setting the state for each entity on a floor
 		for (String stateString: stateMap.keySet()) {
-			String originalState = entity.state().id();
+			Entity currentEntity = GameState.instance().currentFloor().rooms().stream()
+                .flatMap(room -> room.entities().stream())
+                .filter(e -> Objects.equals(e.id(), entityId)).findFirst()
+                .orElseThrow(() -> new AssertionError("Entity with id " + entityId + " not found during loop!"));
+			String originalState = currentEntity.state().id();
 			new SwapEntities(entity.id(), stateString).execute();
 			Entity updated = GameState.instance().currentFloor().rooms().stream().flatMap(room -> room.entities().stream())
 				.filter(e -> Objects.equals(e.id(), entity.id())).findFirst()
 				.orElseThrow(() -> new AssertionError("Entity with id " + entity.id() + " not found in GameState!"));
-				assertEquals(
-					stateMap.get(stateString),
-					updated.state(),
-					"\nEntity id: " + entity.id()
-					+ "\nFailed for state: " + stateString
-					+ "\nOriginal state was: " + originalState
-					+ "\nCurrent state is: " + updated.state().id() + "\n"
-				);
+			assertEquals(
+				stateMap.get(stateString),
+				updated.state(),
+				"\nEntity id: " + entity.id()
+				+ "\nFailed for state: " + stateString
+				+ "\nOriginal state was: " + originalState
+				+ "\nCurrent state is: " + updated.state().id() + "\n"
+			);
 		}
 	}
 
-	private static Stream<Entity> swapEntityStateTest() throws NoSuchFieldException, IllegalAccessException {
+	private static Stream<String> swapEntityStateTest() throws NoSuchFieldException, IllegalAccessException {
 		new SetFloor(TEST_FLOOR).execute();
 
 		List<Entity> entities = GameState.instance().currentFloor().rooms().stream().map(Room::entities).flatMap(List::stream).toList();
@@ -181,7 +190,7 @@ public class ActionTests {
 
 		multiStateEntity(entities);
 		
-		return entities.stream();
+		return entities.stream().map(Entity::id);
 	}
 
 	private static Map<String, EntityState> getStateMap(Entity entity) throws NoSuchFieldException, IllegalAccessException {

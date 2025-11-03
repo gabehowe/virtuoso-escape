@@ -1,11 +1,8 @@
 package org.virtuoso.escape.model.action;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import org.virtuoso.escape.model.Entity;
 import org.virtuoso.escape.model.GameState;
-import org.virtuoso.escape.model.Room;
 
 /**
  * Changes the state of an entity
@@ -18,13 +15,13 @@ import org.virtuoso.escape.model.Room;
 public record SwapEntities(String entity, String state) implements Action {
     @Override
     public void execute() {
-        List<Room> rooms = GameState.instance().currentFloor().rooms();
-        for (var room : rooms) {
-            List<Entity> ents = room.entities();
-            Optional<Entity> entityFSM = ents.stream()
-                    .filter(entity -> Objects.equals(entity.id(), entity()))
-                    .findFirst();
-            entityFSM.ifPresent(e -> e.swapState(state));
+		if (entity == null) {
+            throw new IllegalArgumentException("Entity ID to swap cannot be null");
         }
+		Entity entityToSwap = GameState.instance().currentFloor().rooms().stream()
+                .flatMap(room -> room.entities().stream()).filter(e -> Objects.equals(e.id(), entity())).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Entity with id '" + entity + "' not found in current floor."));
+
+        entityToSwap.swapState(state);
     }
 }

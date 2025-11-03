@@ -68,7 +68,11 @@ public class Entity {
      * @param newState The name of the state to swap to.
      */
     public void swapState(String newState) {
-        this.currentState = newState;
+		if (newState == null || !states.containsKey(newState)) {
+            throw new IllegalArgumentException(
+                "Entity '" + this.id + "' cannot be swapped to non-existent state: '" + newState + "'"
+            );
+        }
     }
 
     /**

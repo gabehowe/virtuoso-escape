@@ -46,7 +46,7 @@ public record EntityState(
             String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
         Capabilities capabilities = new Capabilities(
                 attackAction != null, inspectAction != null, interactAction != null, inputAction != null);
-        this(id, attackAction, inspectAction, interactAction, inputAction, capabilities);
+        this(Objects.requireNonNull(id, "id cannot be null"), attackAction, inspectAction, interactAction, inputAction, capabilities);
     }
 
     /**
