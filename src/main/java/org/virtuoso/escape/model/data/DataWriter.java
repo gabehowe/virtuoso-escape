@@ -15,8 +15,8 @@ import org.virtuoso.escape.model.account.AccountManager;
 
 /** @author Andrew */
 public class DataWriter {
-    private static String GAMESTATES_PATH = "json/gamestates.json";
-    private static String ACCOUNTS_PATH = "json/accounts.json";
+    public static String GAMESTATES_PATH = "json/gamestates.json";
+    public static String ACCOUNTS_PATH = "json/accounts.json";
 
     /** Write {@link GameState#instance()} to a {@link DataWriter#GAMESTATES_PATH}. */
     @SuppressWarnings("unchecked")

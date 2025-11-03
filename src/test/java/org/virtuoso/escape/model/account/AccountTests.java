@@ -23,12 +23,17 @@ class AccountTests {
 		assertNotNull(dummyJr);
 	}
 
+	@DisplayName("Should return empty username")
+	@Test
+	void testEmptyFirstConstructor(){
+		Account emptyDummy = new Account("", "");
+		assertEquals("", emptyDummy.username());
+	}
+
 	@DisplayName("Should throw an IllegalArgumentException on attempt to create account with null username and password")
 	@Test
 	void testNullFirstConstructor(){
-		assertThrows(IllegalArgumentException.class, () -> {
-			Account nullDummy = new Account(null, null);
-		});
+		assertThrows(IllegalArgumentException.class, () -> new Account(null, null));
 	}
 
 	@DisplayName("Should return non-null account given valid parameters")
@@ -41,10 +46,9 @@ class AccountTests {
 	@DisplayName("Should throw an IllegalArgumentException on attempt to create account with null parameters")
 	@Test
 	void testNullSecondConstructor(){
-		assertThrows(IllegalArgumentException.class, () -> {
-			Account nullDummy = new Account(null, null, null, null, false);
-		});
+		assertThrows(IllegalArgumentException.class, () -> new Account(null, null, null, null, false));
 	}
+
 	@DisplayName("Should successfully hash a valid password")
 	@Test
 	void testValidHashPassword(){
@@ -56,9 +60,7 @@ class AccountTests {
 	@DisplayName("Should throw an IllegalArgumentException on attempt to hash a null password")
 	@Test
 	void testNullHashPassword(){
-		assertThrows(IllegalArgumentException.class, () -> {
-			String hashPassword = Account.hashPassword(null);
-		});
+		assertThrows(IllegalArgumentException.class, () -> Account.hashPassword(null));
 	}
 
 	@DisplayName("Should successfully update TTS setting to true")

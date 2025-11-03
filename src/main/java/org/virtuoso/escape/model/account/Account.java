@@ -29,7 +29,7 @@ public class Account {
     public Account(String username, String password) {
         this.username = username;
         this.hashedPassword = hashPassword(password);
-        this.highScore = new Score(null, Difficulty.TRIVIAL);
+        this.highScore = new Score(null, Difficulty.SUBSTANTIAL);
         this.id = UUID.randomUUID();
         this.ttsOn = true;
     }

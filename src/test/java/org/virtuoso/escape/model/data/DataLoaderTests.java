@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.virtuoso.escape.model.Item;
 
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -108,14 +107,14 @@ public class DataLoaderTests {
 		}
 	}
 
-	@DisplayName("Should correctly load accounts and find existing account with correct TTS setting")
+	@DisplayName("Should successfully load accounts and find existing account with correct TTS setting")
 	@Test
 	void testValidAccountLoad(){
 		JSONObject accounts = DataLoader.loadAccounts();
 		assertNotNull(accounts);
 		assertTrue(accounts.containsKey("d32ad7e6-570f-43cb-b447-82d4c8be293e"));
 		JSONObject mrsdummyJSON = (JSONObject) accounts.get("d32ad7e6-570f-43cb-b447-82d4c8be293e");
-		assertFalse((Boolean) mrsdummyJSON.get("ttsOn"));
+		assertFalse((boolean) mrsdummyJSON.get("ttsOn"));
 	}
 
 	@DisplayName("Should not find invalid account key")
@@ -132,13 +131,13 @@ public class DataLoaderTests {
 		assertNull(accounts.get("2381cd7e-980b-4dc2-bf8c-29d0a39047d3"));
 	}
 
-	@DisplayName("Should correctly load game language and find existing entity with correct name")
+	@DisplayName("Should successfully load game language and find existing entity with correct name")
 	@Test
 	void testValidLanguageLoad(){
 		Map<String, Map<String, String>> language = DataLoader.loadGameLanguage();
 		assertNotNull(language);
 		assertTrue(language.containsKey("dummyJr"));
-		assertNotEquals("dummyjr", language.get("dummyJr").get("name"));
+		assertEquals("dummyJr", language.get("dummyJr").get("name"));
 	}
 
 	@DisplayName("Should return null when accessing invalid language key for an entity")
@@ -155,7 +154,7 @@ public class DataLoaderTests {
 		assertTrue(language.get("emptyDummy").isEmpty());
 	}
 
-	@DisplayName("Should correctly load items from game state for a specific account")
+	@DisplayName("Should successfully load items from game state for a specific account")
 	@ParameterizedTest
     @CsvSource({
         "sealed_clean_food_safe_hummus, 0",
