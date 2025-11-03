@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.util.UUID;
 
@@ -49,7 +50,7 @@ public class LeaderboardTests {
         fakeAccountsJson.putAll(buildAccountJson("dummy", "TRIVIAL", 100L, 100L));
 
         mockAccountManager = AccountManager.instance();
-        injectPrivateField(AccountManager.class, "accounts", mockAccountManager, fakeAccountsJson);
+        mockAccountManager.accounts().putAll(fakeAccountsJson);
     }
 
     @AfterEach
@@ -61,6 +62,7 @@ public class LeaderboardTests {
             throws Exception {
         Field f = clazz.getDeclaredField(fieldName);
         f.setAccessible(true);
+
         f.set(instance, value);
     }
 
@@ -118,7 +120,7 @@ public class LeaderboardTests {
     @Test
     @DisplayName("Leaderboard should handle empty AccountManager gracefully")
     void testShowLeaderboardEmpty() throws Exception {
-        injectPrivateField(AccountManager.class, "accounts", mockAccountManager, new JSONObject());
+        mockAccountManager.accounts().putAll(new JSONObject());
         assertDoesNotThrow(Leaderboard::showLeaderboard);
     }
 
@@ -128,11 +130,11 @@ public class LeaderboardTests {
         JSONObject multiple = new JSONObject();
         multiple.putAll(buildAccountJson("low", "TRIVIAL", 50L, 50L));
         multiple.putAll(buildAccountJson("mid", "SUBSTANTIAL", 120L, 200L));
-        multiple.putAll(buildAccountJson("high", "CRITICAL", 300L, 1000L));
+        multiple.putAll(buildAccountJson("high", "VIRTUOSIC", 300L, 1000L));
         multiple.putAll(buildAccountJson("tieA", "SUBSTANTIAL", 60L, 500L));
-        multiple.putAll(buildAccountJson("tieB", "CRITICAL", 90L, 500L));
+        multiple.putAll(buildAccountJson("tieB", "VIRTUOSIC", 90L, 500L));
 
-        injectPrivateField(AccountManager.class, "accounts", mockAccountManager, multiple);
+        mockAccountManager.accounts().putAll(multiple);
 
         Leaderboard.showLeaderboard();
         String output = outContent.toString();
@@ -156,7 +158,7 @@ public class LeaderboardTests {
         // Missing highscore and missing timeremain
         incomplete.put(UUID.randomUUID().toString(), user);
 
-        injectPrivateField(AccountManager.class, "accounts", mockAccountManager, incomplete);
+        mockAccountManager.accounts().putAll(incomplete);
 
         assertDoesNotThrow(Leaderboard::showLeaderboard);
         String out = outContent.toString();
@@ -177,7 +179,7 @@ public class LeaderboardTests {
         acct.put("highScore", hs);
         corrupted.put(UUID.randomUUID().toString(), acct);
 
-        injectPrivateField(AccountManager.class, "accounts", mockAccountManager, corrupted);
+        mockAccountManager.accounts().putAll(corrupted);
         assertDoesNotThrow(Leaderboard::showLeaderboard);
     }
 }

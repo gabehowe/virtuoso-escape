@@ -143,6 +143,7 @@ public class AccountManagerTests {
         assertNull(AccountManager.instance().accountExists("a", "a"));
     }
 
+
     @DisplayName("Should load game data after successful login")
     @Test
     public void testData() {
