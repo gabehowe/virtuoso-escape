@@ -46,3 +46,5 @@ json/accounts.json
 
 *.class
 bin/
+*.nix
+*.lock

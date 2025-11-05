@@ -36,11 +36,12 @@ plugins {
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(25))
+		languageVersion.set(JavaLanguageVersion.of(23))
 	}
 }
 
 javafx {
+    version= "25"
     modules = listOf("javafx.controls", "javafx.fxml")
     configurations = arrayOf("implementation");
 }
@@ -68,7 +69,7 @@ dependencies {
 group = "org.virtuoso"
 version = "0.1.0"
 description = "escape"
-java.sourceCompatibility = JavaVersion.VERSION_25
+java.sourceCompatibility = JavaVersion.VERSION_23
 java.modularity.inferModulePath.set(false)
 
 application {
@@ -85,6 +86,7 @@ tasks.register<JavaExec>("tui") {
 }
 
 tasks.withType<JavaCompile>() {
+    options.compilerArgs.add("--enable-preview")
     options.encoding = "UTF-8"
 }
 
@@ -92,12 +94,16 @@ tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
 tasks.named<Test>("test") {
+    jvmArgs("--enable-preview")
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showStandardStreams = true
     }
+}
+tasks.withType<JavaExec>().configureEach {
+    jvmArgs("--enable-preview")
 }
 
 spotless {
