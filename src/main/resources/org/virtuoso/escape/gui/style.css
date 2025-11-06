@@ -1,0 +1,21 @@
+.root {
+    -fx-font-family: monospace;
+}
+.box {
+    -fx-text-fill: white;
+    -fx-padding: 3px 6px;
+    -fx-alignment: center;
+    -fx-font-family: "JetBrains Mono", Monospaced, monospace;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 6px;
+	-fx-background-inset:0;
+    -fx-border-width: 2px;
+    -fx-border-color: #000;
+    -fx-background-color: #4E4E4E;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);
+}
+.innerButton {
+    -fx-text-fill: white;
+    -fx-font-family: "JetBrains Mono", Monospaced, monospace;
+	-fx-background-color: none;
+}
