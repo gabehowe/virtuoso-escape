@@ -14,16 +14,16 @@
                         <HBox id="action-bar" alignment="CENTER" fillHeight="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="32.0" spacing="6.0"
                               style="-fx-padding: 6px 8px;" styleClass="box" HBox.hgrow="SOMETIMES">
                             <children>
-                                <Label fx:id="welcomeText1" minHeight="-Infinity" minWidth="-Infinity" styleClass="innerButton" text="[Interact]"/>
-                                <Label fx:id="welcomeText11" minWidth="-Infinity" styleClass="innerButton" text="[Inspect]"/>
-                                <Label fx:id="welcomeText12" minWidth="-Infinity" styleClass="innerButton" text="[Attack]"/>
-                                <Label fx:id="welcomeText13" minWidth="-Infinity" prefHeight="16.0" styleClass="innerButton" text="[Speak]"
+                                <Label fx:id="welcomeText1" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact"/>
+                                <Label fx:id="welcomeText11" minWidth="-Infinity" styleClass="logical-button" text="Inspect"/>
+                                <Label fx:id="welcomeText12" minWidth="-Infinity" styleClass="logical-button" text="Attack"/>
+                                <Label fx:id="welcomeText13" minWidth="-Infinity" prefHeight="16.0" styleClass="logical-button" text="Speak"
                                        HBox.hgrow="ALWAYS"/>
                             </children>
                         </HBox>
                     </children>
                 </HBox>
-                <VBox id="text-output" maxHeight="1.7976931348623157E308" prefHeight="1000.0" style="-fx-alignment: left; -fx-padding: 12px 16px;"
+                <VBox id="text-output" maxHeight="1.7976931348623157E308" prefHeight="1000.0" style="-fx-alignment: center-left; -fx-padding: 12px 16px;"
                       styleClass="box" VBox.vgrow="NEVER">
                     <children>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Person Title" textAlignment="CENTER"/>
@@ -46,14 +46,14 @@
                 <Button minWidth="-Infinity" onAction="#onHelloButtonClick" styleClass="box" text="Settings"/>
                 <VBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" styleClass="box">
                     <children>
-                        <Label fx:id="welcomeText14" minHeight="-Infinity" minWidth="-Infinity" styleClass="innerButton" text="[Change Difficulty"/>
-                        <Label fx:id="welcomeText141" minHeight="-Infinity" minWidth="-Infinity" styleClass="innerButton" text="[TTS On]"/>
+                        <Label fx:id="welcomeText14" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="[Change Difficulty"/>
+                        <Label fx:id="welcomeText141" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="TTS On"/>
                     </children>
                 </VBox>
                 <VBox maxWidth="-Infinity" styleClass="box">
                     <children>
-                        <Label fx:id="welcomeText1411" minHeight="-Infinity" minWidth="-Infinity" styleClass="innerButton" text="[Interact]"/>
-                        <Label fx:id="welcomeText14111" minHeight="-Infinity" minWidth="-Infinity" styleClass="innerButton" text="[Interact]"/>
+                        <Label fx:id="welcomeText1411" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact"/>
+                        <Label fx:id="welcomeText14111" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact"/>
                     </children>
                 </VBox>
             </children>

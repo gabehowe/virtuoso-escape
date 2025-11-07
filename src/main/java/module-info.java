@@ -4,6 +4,7 @@ module org.virtuoso.escape {
     requires json.simple;
     requires java.sql;
     requires freetts;
+    requires javafx.graphics;
 
     opens org.virtuoso.escape.model to
             javafx.fxml;

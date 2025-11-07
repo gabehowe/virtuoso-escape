@@ -12,14 +12,15 @@ import java.io.IOException;
 public class EscapeApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        System.out.print(Font.getFamilies());
         GameProjection projection = new GameProjection();
-        FXMLLoader fxmlLoader = new FXMLLoader(EscapeApplication.class.getResource("game-view.fxml"));
         FXMLLoader loginLoader = new FXMLLoader(EscapeApplication.class.getResource("login-view.fxml"));
+        loginLoader.setController(new LoginController(projection, stage));
         Scene scene = new Scene(loginLoader.load(), 700, 475);
-        LoginController controller = loginLoader.getController();
-        controller.projection = projection;
         stage.setTitle("Virtuoso Escape");
         stage.setScene(scene);
         stage.show();
     }
+
+
 }

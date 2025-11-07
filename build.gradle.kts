@@ -36,7 +36,7 @@ plugins {
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(23))
+		languageVersion.set(JavaLanguageVersion.of(25))
 	}
 }
 
@@ -69,7 +69,7 @@ dependencies {
 group = "org.virtuoso"
 version = "0.1.0"
 description = "escape"
-java.sourceCompatibility = JavaVersion.VERSION_23
+java.sourceCompatibility = JavaVersion.VERSION_25
 java.modularity.inferModulePath.set(false)
 
 application {
