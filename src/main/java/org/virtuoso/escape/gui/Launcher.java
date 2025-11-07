@@ -4,6 +4,8 @@ import javafx.application.Application;
 
 public class Launcher {
     static void main(String[] args) {
-        Application.launch(HelloApplication.class, args);
+
+        Application.launch(EscapeApplication.class, args);
+        System.out.println("Hello");
     }
 }
