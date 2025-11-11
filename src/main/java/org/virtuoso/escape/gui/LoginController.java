@@ -1,5 +1,6 @@
 package org.virtuoso.escape.gui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,15 +13,14 @@ import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.account.AccountManager;
 
+
 import java.io.IOException;
 
 public class LoginController {
-    LoginController(GameProjection projection, Stage stage) {
+    LoginController(GameProjection projection) {
         this.proj = projection;
-        this.stage = stage;
     }
 
-    private final Stage stage;
     @FXML
     public TextField usernameEntry;
     @FXML
@@ -43,12 +43,8 @@ public class LoginController {
     private Pane root;
 
     void switchToGame() {
-        FXMLLoader fxmlLoader = new FXMLLoader(EscapeApplication.class.getResource("game-view.fxml"));
-
         try {
-            Scene scene = new Scene(fxmlLoader.load(), 700, 475);
-            stage.setScene(scene);
-            stage.show();
+			EscapeApplication.setRoot("game-view");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

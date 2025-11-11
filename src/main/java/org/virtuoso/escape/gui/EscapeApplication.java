@@ -4,22 +4,47 @@ package org.virtuoso.escape.gui;
 
 import module javafx.fxml;
 import module javafx.graphics;
+import javafx.event.EventHandler;
 
 import org.virtuoso.escape.model.GameProjection;
 
 import java.io.IOException;
 
 public class EscapeApplication extends Application {
+
+	private static Scene scene;
+
     @Override
     public void start(Stage stage) throws IOException {
-        System.out.print(Font.getFamilies());
         GameProjection projection = new GameProjection();
         FXMLLoader loginLoader = new FXMLLoader(EscapeApplication.class.getResource("login-view.fxml"));
-        loginLoader.setController(new LoginController(projection, stage));
-        Scene scene = new Scene(loginLoader.load(), 700, 475);
+        loginLoader.setController(new LoginController(projection));
+        scene = new Scene(loginLoader.load(), 700, 475);
         stage.setTitle("Virtuoso Escape");
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+				// TODO Logout
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+    }
+	    
+	public static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
+    }
+
+	private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(EscapeApplication.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 
 
