@@ -1,3 +1,8 @@
+# Require explicit add
+json/gamestates.json
+json/accounts.json
+*.json
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -40,9 +45,6 @@ build/
 
 .gradle/
 
-# Require explicit add
-json/gamestates.json
-json/accounts.json
 
 *.class
 bin/
