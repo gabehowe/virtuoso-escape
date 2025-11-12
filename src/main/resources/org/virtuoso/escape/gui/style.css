@@ -39,3 +39,14 @@
     -fx-font-size: 48px;
     -fx-font-family: 'JetBrains Mono SemiBold Italic';
 }
+#corner-flair {
+	-fx-background-color: linear-gradient(to right, 
+		#7F7F7F 0%, #7F7F7F 12.5%, 
+		#4E4E4E 12.5%, #4E4E4E 25%, 
+		#383838 25%, #383838 37.5%, 
+		#5C7D7F 37.5%, #5C7D7F 50%, 
+		#7F7B5B 50%, #7F7B5B 62.5%, 
+		#7F4F4F 62.5%, #7F4F4F 75%, 
+		#7F5C71 75%, #7F5C71 87.5%, 
+		#7F7F7F 87.5%, #7F7F7F 100%);
+}
