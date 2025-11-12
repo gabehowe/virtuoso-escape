@@ -348,5 +348,11 @@
     "storey_iii_hint_2": "The exit door requires a key, which you receive upon successfully opening the box. The box must be opened in the sequence: START, CONTINUE, OPEN.",
     "storey_iv_hint_1": "You need to unlock the Demetamorphinator. The blocked terminal (CompuTTY) needs to be unblocked by the squirrel with one sock.",
     "storey_iv_hint_2": "The terminal puzzle involves common Linux commands: cd, tar, and others. The final solution is the password in the good_rotx message."
+  },
+  "ui": {
+    "switch_login": "Have an account?",
+    "switch_create": "New?",
+    "prompt_login": "Login",
+    "prompt_create": "Create an account"
   }
 }
