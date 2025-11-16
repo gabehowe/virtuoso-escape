@@ -7,24 +7,23 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/21.0.3-internal" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="475.0" prefWidth="750.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox fx:id="root" layoutX="9.0" layoutY="9.0" prefHeight="475.0" prefWidth="750.0" spacing="59.0" style="-fx-border-radius: 0; -fx-border-width: 0; -fx-background-radius: 0;" styleClass="box" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-          <Text fx:id="title" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Escape: A Storey" textAlignment="CENTER">
-    </Text>
-          <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" spacing="20.0">
-              <Label fx:id="welcomeText" style="-fx-font-style: italic; -fx-font-weight: 700; -fx-font-size: 14px;" text="Login">
+      <VBox fx:id="root" layoutX="9.0" layoutY="9.0" prefHeight="475.0" style="-fx-border-radius: 0; -fx-border-width: 0; -fx-background-radius: 0; -fx-alignment: center-left; -fx-padding: 24; -fx-spacing: 6;" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <Label id="title" style="-fx-font-size: 44px;" styleClass="bold-italic" text="Escape: A Storey" />
+          <VBox alignment="CENTER_LEFT" maxWidth="-Infinity" minWidth="-Infinity" spacing="12.0" style="-fx-padding: 12 0;">
+              <Label fx:id="welcomeText" style="-fx-font-size: 22px;" styleClass="bold-italic" text="Login">
         </Label>
-              <AnchorPane maxHeight="78.0" maxWidth="250.0" minWidth="250.0" prefHeight="161.0">
-                  <TextField fx:id="usernameEntry" layoutY="9.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="160.0" promptText="Username" style="-fx-alignment: center-left;" styleClass="box" stylesheets="@style.css" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="0.0" />
-                  <PasswordField fx:id="passwordEntry" layoutY="37.0" maxWidth="-Infinity" onAction="#tryAuth" prefHeight="35.0" prefWidth="160.0" promptText="Password" style="-fx-alignment: center-left;" styleClass="box" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
-                  <Button layoutX="216.0" layoutY="44.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0" styleClass="box, logical-button" text="→" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-              </AnchorPane>
+               <TextField fx:id="usernameEntry" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" promptText="Username" style="-fx-alignment: center-left;" styleClass="box" stylesheets="@style.css" />
+            <HBox alignment="CENTER_LEFT" style="-fx-spacing: 12; -fx-alignment: center-left;">
+               <children>
+                     <PasswordField fx:id="passwordEntry" maxWidth="-Infinity" onAction="#tryAuth" prefHeight="40.0" prefWidth="200.0" promptText="Password" style="-fx-alignment: center-left; -fx-spacing: 12;" styleClass="box" stylesheets="@style.css" />
+                     <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="box, logical-button" text="→" />
+               </children>
+            </HBox>
               <HBox maxWidth="-Infinity" style="-fx-spacing: 0.4em; -fx-alignment: center; -fx-font-weight: 400; -fx-font-size: 10px">
-                  <Label fx:id="promptAuthMode" style="-fx-font-style: italic">
+                  <Label fx:id="promptAuthMode" style="-fx-font-style: italic;" text="New?">
                 New?
             </Label>
                   <Label fx:id="toggleAuthMode" onMouseClicked="#toggleAuthMode" styleClass="logical-button">Create an account</Label>
@@ -32,7 +31,6 @@
               <Label styleClass="error" />
           </VBox>
       </VBox>
-      <HBox id="corner-flair" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.0" prefWidth="120.0" stylesheets="@style.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <HBox id="corner-flair" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="15.0" prefWidth="120.0" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <HBox id="corner-flair" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="475.0" prefWidth="165.0" styleClass="corner-flair" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>
