@@ -1,22 +1,32 @@
+@font-face {
+    src: url("../../../../fonts/JetBrainsMono-Regular.ttf");
+}
+
+@font-face {
+    src: url("../../../../fonts/JetBrainsMono-Italic.ttf");
+}
+
+@font-face {
+    src: url("../../../../fonts/JetBrainsMono-BoldItalic.ttf");
+}
 
 .root {
-    -fx-font-family: "JetBrains Mono", Monospaced, monospace;
-    src: url("JetBrainsMono-Regular.ttf");
+    -fx-font-family: "JetBrains Mono";
     -fx-text-background-color: white;
-    -fx-font-weight: 200;
-	-fx-background-color: bg;
-	-fx-font-size: 14;
-	fg: #FFFFFF;
-	bg: #323232;
-	stroke: #535353;
-	cyan-1: #82F6FF;
-	yellow-1: #FFEE7D;
-	red-1: #FF5151;
-	pink-1: #FE82CC;
+    /*-fx-font-weight: 200;*/
+    -fx-background-color: bg;
+    -fx-font-size: 14;
+    fg: #FFFFFF;
+    bg: #323232;
+    stroke: #535353;
+    cyan-1: #82F6FF;
+    yellow-1: #FFEE7D;
+    red-1: #FF5151;
+    pink-1: #FE82CC;
 }
+
 .bold-italic {
-    -fx-font-family:  'JetBrains Mono SemiBold Italic';
-    src: url('JetBrainsMono-SemiBold.ttf');
+    -fx-font-family: "JetBrains Mono Bold Italic";
 }
 
 .box {
@@ -24,12 +34,9 @@
     -fx-text-fill: white;
     -fx-padding: 3px 12px;
     -fx-alignment: center;
-    -fx-border-radius: 2px;
-    -fx-background-radius: 2px;
     -fx-background-inset: 0;
     -fx-border-width: 1px;
     -fx-border-color: stroke;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
 }
 
 .logical-button {
@@ -39,7 +46,7 @@
 }
 
 .label {
-	-fx-font-size: 14;
+    -fx-font-size: 14;
     -fx-text-fill: white;
     -fx-text-background-color: white;
 }
@@ -52,14 +59,15 @@
 #title {
     -fx-font-size: 48px;
 }
+
 .corner-flair {
-	-fx-opacity: .5;
-	-fx-background-color: linear-gradient(to right, 
-		fg 0%, fg 14.28%, 
-		bg 14.28%, bg 28.57%, 
-		stroke 28.57%, stroke 42.8%, 
-		cyan-1 42.8%, cyan-1 57.1%, 
-		yellow-1 57.1%, yellow-1 71.4%, 
-		red-1 71.4%, red-1 85.7%, 
-		pink-1 85.7%, pink-1 100%);
+    -fx-opacity: .5;
+    -fx-background-color: linear-gradient(to right,
+    fg 0%, fg 14.28%,
+    bg 14.28%, bg 28.57%,
+    stroke 28.57%, stroke 42.8%,
+    cyan-1 42.8%, cyan-1 57.1%,
+    yellow-1 57.1%, yellow-1 71.4%,
+    red-1 71.4%, red-1 85.7%,
+    pink-1 85.7%, pink-1 100%);
 }

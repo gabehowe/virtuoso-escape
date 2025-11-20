@@ -1,62 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="475.0" prefWidth="750.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21.0.3-internal"
-            fx:controller="org.virtuoso.escape.gui.GameViewController">
-    <children>
-        <VBox alignment="BOTTOM_CENTER" layoutX="224.0" layoutY="275.0" prefHeight="200.0" prefWidth="276.0" spacing="5.0" AnchorPane.bottomAnchor="10.0"
-              AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
-            <children>
-                <HBox alignment="CENTER_LEFT" fillHeight="false" VBox.vgrow="NEVER">
-                    <children>
-                        <HBox id="action-bar" alignment="CENTER" fillHeight="false" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="32.0" spacing="6.0"
-                              style="-fx-padding: 6px 8px;" styleClass="box" HBox.hgrow="SOMETIMES">
-                            <children>
-                                <Label fx:id="welcomeText1" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact"/>
-                                <Label fx:id="welcomeText11" minWidth="-Infinity" styleClass="logical-button" text="Inspect"/>
-                                <Label fx:id="welcomeText12" minWidth="-Infinity" styleClass="logical-button" text="Attack"/>
-                                <Label fx:id="welcomeText13" minWidth="-Infinity" prefHeight="16.0" styleClass="logical-button" text="Speak"
-                                       HBox.hgrow="ALWAYS"/>
-                            </children>
-                        </HBox>
-                    </children>
-                </HBox>
-                <VBox id="text-output" maxHeight="1.7976931348623157E308" prefHeight="1000.0" style="-fx-alignment: center-left; -fx-padding: 12px 16px;"
-                      styleClass="box" VBox.vgrow="NEVER">
-                    <children>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Person Title" textAlignment="CENTER"/>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Person Text" textAlignment="CENTER"/>
-                    </children>
-                </VBox>
-            </children>
-        </VBox>
-        <VBox layoutX="3.0" layoutY="3.0" spacing="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="12.0">
-            <children>
-                <Button minWidth="-Infinity" onAction="#onHelloButtonClick" styleClass="box" text="Map"/>
-                <VBox minHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" spacing="12.0" styleClass="box"/>
-                <VBox prefHeight="66.0" prefWidth="100.0" styleClass="box"/>
-            </children>
-        </VBox>
 
-        <Label fx:id="welcomeText" layoutX="348.0" layoutY="13.0" minWidth="-Infinity" styleClass="box" text="00:00" AnchorPane.topAnchor="12.0"/>
-        <VBox alignment="TOP_RIGHT" layoutX="13.0" layoutY="13.0" spacing="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="12.0">
+<AnchorPane prefHeight="475.0" prefWidth="750.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.virtuoso.escape.gui.GameViewController">
+    <children>
+        <VBox alignment="BOTTOM_CENTER" layoutX="224.0" layoutY="275.0" prefHeight="200.0" prefWidth="276.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <Button minWidth="-Infinity" onAction="#onHelloButtonClick" styleClass="box" text="Settings"/>
-                <VBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" styleClass="box">
-                    <children>
-                        <Label fx:id="welcomeText14" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="[Change Difficulty"/>
-                        <Label fx:id="welcomeText141" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="TTS On"/>
-                    </children>
-                </VBox>
-                <VBox maxWidth="-Infinity" styleClass="box">
-                    <children>
-                        <Label fx:id="welcomeText1411" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact"/>
-                        <Label fx:id="welcomeText14111" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact"/>
-                    </children>
-                </VBox>
+            <HBox VBox.vgrow="NEVER">
+               <children>
+                      <VBox id="text-output" maxHeight="1.7976931348623157E308" prefHeight="1000.0" style="-fx-alignment: center-left; -fx-padding: 12p0x 16px;" styleClass="box" HBox.hgrow="ALWAYS">
+                          <children>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Person Title" textAlignment="CENTER" />
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Person Text" textAlignment="CENTER" />
+                          </children>
+                      </VBox>
+                  <VBox alignment="CENTER_LEFT" HBox.hgrow="NEVER">
+                     <children>
+                                <Label fx:id="welcomeText1" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact" />
+                                <Label fx:id="welcomeText11" minWidth="-Infinity" styleClass="logical-button" text="Inspect" />
+                                <Label fx:id="welcomeText12" minWidth="-Infinity" styleClass="logical-button" text="Attack" />
+                                <Label fx:id="welcomeText13" minWidth="-Infinity" prefHeight="16.0" styleClass="logical-button" text="Speak" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             </children>
         </VBox>
+      <HBox alignment="CENTER" style="-fx-padding: 3 12; -fx-border-width: 0 0 1 0;" styleClass="box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+      
+              <Label fx:id="welcomeText" minWidth="-Infinity" styleClass="logical-button" text="00:00" />
+            <Label fx:id="welcomeText2" minWidth="-Infinity" styleClass="logical-button" text="Settings" />
+         </children>
+      </HBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="27.0">
+         <children>
+            <HBox maxWidth="120.0" minWidth="120.0">
+               <children>
+                  <Region maxWidth="70.0" minWidth="70.0" prefHeight="10.0" prefWidth="70.0" styleClass="corner-flair" />
+                  <Region maxWidth="70.0" minWidth="70.0" prefHeight="10.0" prefWidth="70.0" styleClass="corner-flair" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>

@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import org.virtuoso.escape.model.GameProjection;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 public class EscapeApplication extends Application {
 
@@ -24,13 +25,10 @@ public class EscapeApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-				// TODO Logout
-                Platform.exit();
-                System.exit(0);
-            }
+        stage.setOnCloseRequest(t -> {
+            // TODO Logout
+            Platform.exit();
+            System.exit(0);
         });
     }
 	    
