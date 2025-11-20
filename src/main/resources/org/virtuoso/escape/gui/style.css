@@ -1,6 +1,7 @@
 
 .root {
     -fx-font-family: "JetBrains Mono", Monospaced, monospace;
+    src: url("JetBrainsMono-Regular.ttf");
     -fx-text-background-color: white;
     -fx-font-weight: 200;
 	-fx-background-color: bg;
@@ -14,7 +15,8 @@
 	pink-1: #FE82CC;
 }
 .bold-italic {
-    -fx-font-family: 'JetBrains Mono SemiBold Italic';
+    -fx-font-family:  'JetBrains Mono SemiBold Italic';
+    src: url('JetBrainsMono-SemiBold.ttf');
 }
 
 .box {
