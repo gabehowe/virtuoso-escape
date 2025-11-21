@@ -13,9 +13,8 @@
 .root {
     -fx-font-family: "JetBrains Mono";
     -fx-text-background-color: white;
-    /*-fx-font-weight: 200;*/
     -fx-background-color: bg;
-    -fx-font-size: 14;
+    -fx-font-size: 12px;
     fg: #FFFFFF;
     bg: #323232;
     stroke: #535353;
@@ -27,6 +26,12 @@
 
 .bold-italic {
     -fx-font-family: "JetBrains Mono Bold Italic";
+}
+
+.rounded {
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+
 }
 
 .box {
@@ -41,12 +46,12 @@
 
 .logical-button {
     -fx-cursor: hand;
-    -fx-fill: white;
+    /*-fx-fill: white;*/
     -fx-text-background-color: white;
 }
 
 .label {
-    -fx-font-size: 14;
+    -fx-font-size: 12px;
     -fx-text-fill: white;
     -fx-text-background-color: white;
 }
@@ -70,4 +75,59 @@
     yellow-1 57.1%, yellow-1 71.4%,
     red-1 71.4%, red-1 85.7%,
     pink-1 85.7%, pink-1 100%);
+}
+.line {
+    -fx-stroke: stroke;
+    -fx-end-margin: 6px 4px;
+    -fx-start-margin: 6px 4px;
+    -fx-padding: 6px 4px;
+}
+.itty-decorations {
+    -fx-opacity: 0.5;
+    -fx-background-color: linear-gradient(from 0px 5px  to 70px 5px,
+    fg 0%, fg 14.28%,
+    bg 14.28%, bg 28.57%,
+    stroke 28.57%, stroke 42.8%,
+    cyan-1 42.8%, cyan-1 57.1%,
+    yellow-1 57.1%, yellow-1 71.4%,
+    red-1 71.4%, red-1 85.7%,
+    pink-1 85.7%, pink-1 100%);
+}
+
+.rule-pane {
+    -fx-alignment: center;
+    -fx-padding: 6px 4px;
+}
+.left-submenu {
+    -fx-padding: 12px;
+}
+#left-nav {
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: stroke;
+}
+#action-box {
+    -fx-border-width: 1px 0 0 0;
+    -fx-border-color: stroke;
+    -fx-padding: 12px;
+    -fx-spacing: 6px;
+}
+#text-output {
+    -fx-border-width: 1px 1px 0 0;
+    -fx-border-color: stroke;
+    -fx-padding: 12px;
+}
+#text-output#entity-title {
+    -fx-font-family: "JetBrains Mono Italic";
+}
+#action-box#interact {
+    -fx-text-fill: yellow-1;
+}
+#action-box#inspect {
+    -fx-text-fill: cyan-1;
+}
+#action-box#attack {
+    -fx-text-fill: red-1;
+}
+#action-box#speak {
+    -fx-text-fill: pink-1;
 }
