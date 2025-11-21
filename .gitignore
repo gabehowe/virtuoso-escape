@@ -49,4 +49,5 @@ build/
 *.class
 bin/
 *.nix
-*.lock
+*.lock.direnv/
+.envrc/

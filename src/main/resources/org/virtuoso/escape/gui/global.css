@@ -1,0 +1,27 @@
+:root {
+    font: 400 italic 16px "JetBrains Mono";
+    background: var(--Background);
+    color: var(--Foreground);
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    overflow:hidden;
+
+    --padding: 12px;
+    --stroke_width: 1px;
+    --radius: 3px;
+    --Foreground: #FFFFFF;
+    --Background: #323232;
+    --Stroke: #535353;
+    --cyan-1: #82F6FF;
+    --yellow-1: #FFEE7D;
+    --red-1: #FF5151;
+    --pink-1: #FE82CC;
+    cursor: default;
+}
+
+.logical-button {
+    cursor: pointer;
+    font-weight: normal;
+}

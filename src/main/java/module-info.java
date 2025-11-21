@@ -5,6 +5,8 @@ module org.virtuoso.escape {
     requires java.sql;
     requires freetts;
     requires javafx.graphics;
+    requires javafx.web;
+    requires jdk.jsobject;
 
     opens org.virtuoso.escape.model to
             javafx.fxml;

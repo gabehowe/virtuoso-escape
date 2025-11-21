@@ -4,11 +4,11 @@
 
 @font-face {
     font-family: "Jetbrains Mono Italic";
-    src: url("../../../../fonts/JetBrainsMono-Italic.ttf");
+    src: url("./fonts/JetBrainsMono-Italic.ttf");
 }
 
 @font-face {
-    src: url("../../../../fonts/JetBrainsMono-BoldItalic.ttf");
+    src: url("/fonts/JetBrainsMono-BoldItalic.ttf");
 }
 
 @font-face {

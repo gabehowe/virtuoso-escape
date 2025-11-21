@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <link href="fonts.css" rel="stylesheet">
+    <link href="login.css" rel="stylesheet">
+    <link href="global.css" rel="stylesheet">
+    <title>Jimbo</title>
+</head>
+<body>
+<div style="display:flex; flex-direction: column;">
+    <div style="display:none;" id="app"></div>
+    <a id="title" class="header">Escape: A Storey</a>
+    <form onsubmit="trySubmit()" id="center-box">
+        <a id="welcome-text" class="header" style="font-size: 22px">Login</a>
+            <input type="text" id="username" class="entry-box floating-box" placeholder="Username">
+            <div id="password-enter-container">
+                <input type="password" id="password" class="entry-box floating-box" placeholder="Password" onsubmit="trySubmit()">
+                <button id="enter-box" class="floating-box"
+                        onclick="trySubmit()">
+                    &rarr;
+                </button>
+            </div>
+        <a id="auth-error"></a>
+        <div id="auth-change-container">
+            <a id="auth-prompt">New?</a>
+            <a id="auth-change" class="logical-button" style="font-style: normal;" onclick="app.toggleAuthMode()">Create an account</a>
+        </div>
+    </form>
+    <div class="corner-flair"></div>
+</div>
+
+<script>
+    addEventListener('submit', ev => ev.preventDefault())
+    function trySubmit() {
+        document.getElementById('auth-error').innerText = app.tryAuth(document.getElementById('username').value, document.getElementById('password').value)
+    }
+</script>
+</body>
+
+</html>

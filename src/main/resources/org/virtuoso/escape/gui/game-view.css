@@ -1,0 +1,126 @@
+body {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    align-items: start;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+#left-bar {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    /*position: absolute;*/
+    /*top: 22px;*/
+    left: 0;
+    border-right: var(--stroke_width, 1px) solid var(--Stroke, #535353);
+    border-left: var(--stroke_width, 1px) solid var(--Stroke, #535353);
+    background: var(--Background, #323232);
+
+
+    .side-box {
+        display: flex;
+        padding: var(--padding, 12px);
+        flex-direction: column;
+        align-items: flex-start;
+        align-self: stretch;
+
+        .box-title {
+            align-self: stretch;
+            color: var(--Foreground, #FFF);
+            text-align: center;
+            font-weight: 700;
+        }
+    }
+
+    hr {
+        margin: 4px 6px;
+        height: var(--stroke_width);
+        width: 108px;
+        border: none;
+        background: var(--Stroke, #535353);
+    }
+}
+
+#bottom-bar {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    bottom: 0;
+    border-radius: var(--radius, 3px);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: var(--stroke_width, 1px) solid var(--Stroke, #535353);
+    height: 25%;
+    font-style:normal;
+
+    #dialogue {
+        display: flex;
+        height: 111px;
+        padding: var(--padding, 12px);
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 0 0;
+        #entity-title {
+            font-style: italic;
+        }
+    }
+
+    #action-box {
+        display: flex;
+        padding: var(--padding, 12px);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        align-self: stretch;
+        border-left: var(--stroke_width, 1px) solid var(--Stroke, #535353);
+        font-style: normal;
+
+        #interact {
+            color: var(--yellow-1);
+        }
+
+        #inspect {
+            color: var(--cyan-1);
+        }
+
+        #attack {
+            color: var(--red-1);
+        }
+
+        #speak {
+            color: var(--pink-1);
+        }
+    }
+}
+
+
+#top-bar {
+    display: flex;
+    width: 100%;
+    height: 23px;
+    padding: 3px 12px;
+    justify-content: space-between;
+    align-items: center;
+    /*position: absolute;*/
+    border-bottom: var(--stroke_width, 1px) solid var(--Stroke, #535353);
+    background: var(--Background, #323232);
+
+}
+
+#rainbow {
+    opacity: 0.7;
+    width: 120px;
+    height: 10px;
+    background-image: repeating-linear-gradient(to right,
+    var(--Foreground) 0, var(--Foreground) 10px,
+    var(--Background) 10px, var(--Background) 20px,
+    var(--Stroke) 20px, var(--Stroke) 30px,
+    var(--cyan-1) 30px, var(--cyan-1) 40px,
+    var(--yellow-1) 40px, var(--yellow-1) 50px,
+    var(--red-1) 50px, var(--red-1) 60px,
+    var(--pink-1) 60px, var(--pink-1) 70px);
+}
+

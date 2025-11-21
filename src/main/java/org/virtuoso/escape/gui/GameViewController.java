@@ -2,8 +2,8 @@ package org.virtuoso.escape.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebView;
 import org.virtuoso.escape.model.GameProjection;
 
 import java.net.URL;
@@ -14,15 +14,12 @@ public class GameViewController implements Initializable {
     @FXML
     private Pane root;
     @FXML
-    private Label welcomeText;
+    private WebView webView;
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        KeyboardProcessor.addKeyboardBindings(this.root);
+        webView.getEngine().load(getClass().getResource("game-view.html").toExternalForm());
+        EscapeApplication.setApp(webView.getEngine(), this);
     }
 }
