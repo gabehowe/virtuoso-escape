@@ -3,6 +3,7 @@ package org.virtuoso.escape.gui;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,8 +16,10 @@ import org.virtuoso.escape.model.account.AccountManager;
 
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
     LoginController(GameProjection projection) {
         this.proj = projection;
     }
@@ -26,6 +29,12 @@ public class LoginController {
     @FXML
     public PasswordField passwordEntry;
     GameProjection proj;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        KeyboardProcessor.addKeyboardBindings(root);
+    }
 
     enum AuthMode {
         LOGIN,
@@ -78,11 +87,6 @@ public class LoginController {
         } else {
             displayErrorMessage(AccountManager.instance().invalidLoginInfo(usernameEntry.getText(), passwordEntry.getText()));
         }
-    }
-
-    @FXML
-    void initialize() {
-        KeyboardProcessor.addKeyboardBindings(root);
     }
 
     @FXML

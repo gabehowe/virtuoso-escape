@@ -1,82 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
-
-<AnchorPane prefHeight="475.0" prefWidth="750.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.virtuoso.escape.gui.GameViewController">
-    <children>
-        <VBox alignment="BOTTOM_CENTER" layoutX="224.0" layoutY="275.0" prefHeight="200.0" prefWidth="276.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <children>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="475.0" prefWidth="750.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.virtuoso.escape.gui.GameViewController" fx:id="root">
+    <VBox alignment="BOTTOM_CENTER" layoutX="224.0" layoutY="275.0" prefHeight="200.0" prefWidth="276.0" spacing="5.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <children>
             <HBox VBox.vgrow="NEVER">
-               <children>
-                      <VBox id="text-output" maxHeight="1.7976931348623157E308" prefHeight="120.0" HBox.hgrow="ALWAYS">
-                          <children>
-                        <Label id="entity-title" text="Entity Title" />
-                        <Label id="entity-text" text="Entity Text" />
-                          </children>
-                      </VBox>
-                  <VBox id="action-box" HBox.hgrow="NEVER">
-                     <children>
-                                <Label id="interact" fx:id="welcomeText1" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button" text="Interact" />
-                                <Label id="inspect" fx:id="welcomeText11" minWidth="-Infinity" styleClass="logical-button" text="Inspect" />
-                                <Label id="attack" fx:id="welcomeText12" minWidth="-Infinity" styleClass="logical-button" text="Attack" />
-                                <Label id="speak" fx:id="welcomeText13" minWidth="-Infinity" prefHeight="16.0" styleClass="logical-button" text="Speak" />
-                     </children>
-                  </VBox>
-               </children>
+                <children>
+                    <VBox id="text-output" maxHeight="1.7976931348623157E308" prefHeight="120.0" HBox.hgrow="ALWAYS">
+                        <children>
+                            <Label id="entity-title" text="Entity Title">
+                                <font>
+                                    <Font name="JetBrains Mono Bold" size="13.0"/>
+                                </font>
+                            </Label>
+                            <Label id="entity-text" text="Entity Text"/>
+                        </children>
+                    </VBox>
+                    <VBox id="action-box" HBox.hgrow="NEVER">
+                        <children>
+                            <Label fx:id="interact" minHeight="-Infinity" minWidth="-Infinity" styleClass="logical-button, interact" text="Interact"/>
+                            <Label fx:id="inspect" minWidth="-Infinity" styleClass="logical-button, inspect" text="Inspect"/>
+                            <Label fx:id="attack" minWidth="-Infinity" styleClass="logical-button, attack" text="Attack"/>
+                            <Label fx:id="speak" minWidth="-Infinity" prefHeight="16.0" styleClass="logical-button, speak" text="Speak"/>
+                        </children>
+                    </VBox>
+                </children>
             </HBox>
-            </children>
-        </VBox>
-      <HBox alignment="CENTER" style="-fx-padding: 3 12; -fx-border-width: 0 0 1 0;" styleClass="box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-      
-              <Label fx:id="welcomeText" minWidth="-Infinity" styleClass="logical-button" text="00:00" />
-            <Region prefHeight="0.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Label fx:id="welcomeText2" minWidth="-Infinity" styleClass="logical-button" text="Settings" />
-         </children>
-      </HBox>
-      <VBox id="left-nav" alignment="TOP_CENTER" maxWidth="120.0" minWidth="120.0" prefHeight="328.0" prefWidth="120.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="24.0">
-         <children>
+        </children>
+    </VBox>
+    <HBox alignment="CENTER" style="-fx-padding: 3 12; -fx-border-width: 0 0 1 0;" styleClass="box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+        <children>
+
+            <Label fx:id="welcomeText" minWidth="-Infinity" styleClass="logical-button" text="00:00"/>
+            <Region prefHeight="0.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+            <Label fx:id="welcomeText2" minWidth="-Infinity" styleClass="logical-button" text="Settings"/>
+        </children>
+    </HBox>
+    <VBox id="left-nav" alignment="TOP_CENTER" layoutY="29.0" maxWidth="120.0" minWidth="120.0" prefHeight="326.0" prefWidth="120.0"
+          AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="29.0">
+        <children>
             <HBox maxWidth="120.0" minWidth="120.0">
-               <children>
-                  <Region maxWidth="70.0" minHeight="10.0" minWidth="70.0" prefHeight="10.0" prefWidth="70.0" styleClass="itty-decorations" />
-                  <Region maxWidth="50.0" minHeight="10.0" minWidth="50.0" prefHeight="10.0" prefWidth="70.0" styleClass="itty-decorations" />
-               </children>
+                <children>
+                    <Region maxWidth="70.0" minHeight="10.0" minWidth="70.0" prefHeight="10.0" prefWidth="70.0" styleClass="itty-decorations"/>
+                    <Region maxWidth="50.0" minHeight="10.0" minWidth="50.0" prefHeight="10.0" prefWidth="70.0" styleClass="itty-decorations"/>
+                </children>
             </HBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" styleClass="left-submenu">
-               <children>
-                  <Label text="Map" />
-               </children>
+            <VBox prefWidth="100.0" styleClass="left-submenu">
+                <children>
+                    <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="108.0" minHeight="-Infinity" minWidth="108.0" prefWidth="108.0"
+                           styleClass="menu-header" text="~Map~" textAlignment="CENTER" VBox.vgrow="NEVER"/>
+                </children>
             </VBox>
-            <VBox styleClass="rule-pane" VBox.vgrow="ALWAYS">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <children>
-                  <Line endX="108.0" styleClass="line" />
-               </children>
+            <VBox styleClass="rule-pane" VBox.vgrow="NEVER">
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+                <children>
+                    <Line endX="108.0" styleClass="line"/>
+                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" styleClass="left-submenu">
-               <children>
-                  <Label text="Map" />
-               </children>
+            <VBox styleClass="left-submenu">
+                <children>
+                    <Label minWidth="120.0" styleClass="menu-header" text="~Entities~" textAlignment="CENTER"/>
+                </children>
             </VBox>
             <VBox styleClass="rule-pane">
-               <children>
-                  <Line startX="108.0" styleClass="line" />
-               </children>
+                <children>
+                    <Line startX="108.0" styleClass="line"/>
+                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="120.0" styleClass="left-submenu">
-               <children>
-                  <Label text="Map" />
-               </children>
+            <VBox styleClass="left-submenu">
+                <children>
+                    <Label minWidth="120.0" styleClass="menu-header" text="~Items~" textAlignment="CENTER"/>
+                </children>
             </VBox>
-         </children>
-      </VBox>
-    </children>
+        </children>
+    </VBox>
 </AnchorPane>

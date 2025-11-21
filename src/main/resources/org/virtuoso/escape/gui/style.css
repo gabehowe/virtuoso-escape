@@ -3,6 +3,7 @@
 }
 
 @font-face {
+    font-family: "Jetbrains Mono Italic";
     src: url("../../../../fonts/JetBrainsMono-Italic.ttf");
 }
 
@@ -10,11 +11,15 @@
     src: url("../../../../fonts/JetBrainsMono-BoldItalic.ttf");
 }
 
+@font-face {
+    src: url("../../../../fonts/JetBrainsMono-Bold.ttf");
+}
+
 .root {
     -fx-font-family: "JetBrains Mono";
     -fx-text-background-color: white;
     -fx-background-color: bg;
-    -fx-font-size: 12px;
+    -fx-font-size: 16px;
     fg: #FFFFFF;
     bg: #323232;
     stroke: #535353;
@@ -31,7 +36,6 @@
 .rounded {
     -fx-border-radius: 3px;
     -fx-background-radius: 3px;
-
 }
 
 .box {
@@ -47,11 +51,10 @@
 .logical-button {
     -fx-cursor: hand;
     /*-fx-fill: white;*/
-    -fx-text-background-color: white;
+    /*-fx-text-background-color: white;*/
 }
 
 .label {
-    -fx-font-size: 12px;
     -fx-text-fill: white;
     -fx-text-background-color: white;
 }
@@ -96,7 +99,7 @@
 
 .rule-pane {
     -fx-alignment: center;
-    -fx-padding: 6px 4px;
+    -fx-padding: 3px 6px;
 }
 .left-submenu {
     -fx-padding: 12px;
@@ -118,16 +121,21 @@
 }
 #text-output#entity-title {
     -fx-font-family: "JetBrains Mono Italic";
+    /*-fx-font-style: italic;*/
 }
-#action-box#interact {
+.interact {
     -fx-text-fill: yellow-1;
 }
-#action-box#inspect {
+.inspect {
     -fx-text-fill: cyan-1;
 }
-#action-box#attack {
+.attack {
     -fx-text-fill: red-1;
 }
-#action-box#speak {
+.speak {
     -fx-text-fill: pink-1;
+}
+.menu-header {
+    -fx-alignment: center;
+    -fx-font-family: "JetBrains Mono Bold Italic";
 }
