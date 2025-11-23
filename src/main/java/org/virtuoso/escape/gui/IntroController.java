@@ -29,13 +29,15 @@ public class IntroController {
 	@FXML
 	private Pane blackScreen;
 	@FXML
-	private Button nextToGame;
+	private Button continueToGame;
 	@FXML
 	private Label introLabel;
 	@FXML
 	private Label barnLabel;
 	@FXML
 	private Label beaverLabel;
+	@FXML
+	private Label pressToSkip;
 
 	private PauseTransition typewriter;
 	private boolean isBarnOpen;
@@ -58,8 +60,8 @@ public class IntroController {
 		blackScreen.setVisible(true);
 		blackScreen.setMouseTransparent(true);
 
-		nextToGame.setVisible(false);
-		nextToGame.setDisable(true);
+		continueToGame.setVisible(false);
+		continueToGame.setDisable(true);
 
 		introLabel.getParent().setMouseTransparent(true);
 		introLabel.setVisible(false);
@@ -67,12 +69,16 @@ public class IntroController {
 
 		barnLabel.setVisible(false);
 		beaverLabel.setVisible(false);
+
+		pressToSkip.setOpacity(0);
+		pressToSkip.setVisible(true);
 	}
 
 	@FXML
-	void onNextButtonClick() {
+	void onContinueButtonClick() {
 		try {
 			EscapeApplication.setRoot("game-view");
+			SpeechPlayer.instance().stopSoundbite();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -108,7 +114,7 @@ public class IntroController {
 
 		FadeTransition fadeInBeaver = new FadeTransition(Duration.seconds(0.3), beaver);
 		fadeInBeaver.setToValue(1);
-		PauseTransition pause = new PauseTransition(Duration.seconds(1.75));
+		PauseTransition pause = new PauseTransition(Duration.seconds(1.73));
 		pause.setOnFinished(event -> {
 			beaver.setDisable(false);
 			fadeInBeaver.play();
@@ -147,6 +153,7 @@ public class IntroController {
 			openedBarn.setVisible(false);
 			blackScreen.setMouseTransparent(false);
 			introLabel.setVisible(true);
+			fadeInPauseFadeOut(0.5, 0.4);
 		});
 		fadeIn.play();
 	}
@@ -170,17 +177,35 @@ public class IntroController {
 	}
 
 	@FXML
-	void onNextButtonEnter() {
-		nextToGame.setStyle("-fx-font-size: 18.5px;");
-		nextToGame.setScaleX(1.03);
-		nextToGame.setScaleY(1.03);
+	void onContinueButtonEnter() {
+		continueToGame.setStyle("-fx-font-size: 17.5px;");
+		continueToGame.setScaleX(1.03);
+		continueToGame.setScaleY(1.03);
 	}
 
 	@FXML
-	void onNextButtonExit() {
-		nextToGame.setStyle("-fx-font-size: 18px;");
-		nextToGame.setScaleX(1);
-		nextToGame.setScaleY(1);
+	void onContinueButtonExit() {
+		continueToGame.setStyle("-fx-font-size: 17px;");
+		continueToGame.setScaleX(1);
+		continueToGame.setScaleY(1);
+	}
+
+	void fadeInPauseFadeOut(double fadeTime, double pauseTime) {
+		FadeTransition fadeInPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
+		fadeInPTS.setToValue(1);
+
+		FadeTransition fadeOutPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
+		fadeOutPTS.setToValue(0);
+
+		PauseTransition pausePTS1 = new PauseTransition(Duration.seconds(pauseTime));
+		PauseTransition pausePTS2 = new PauseTransition(Duration.seconds(pauseTime));
+
+		fadeInPTS.setOnFinished(event -> pausePTS1.play());
+		pausePTS1.setOnFinished(event -> fadeOutPTS.play());
+		fadeOutPTS.setOnFinished(event -> pausePTS2.play());
+		pausePTS2.setOnFinished(event -> fadeInPTS.play());
+
+		fadeInPTS.play();
 	}
 
 	void startTypewriteAnimation(Label label, String text, double delay) {
@@ -190,7 +215,7 @@ public class IntroController {
 	}
 
 	@FXML
-	void stopTypewriteAnimation() {
+	void skipTypewriteAnimation() {
 		if (wasScreenClicked) return;
 		wasScreenClicked = true;
 
@@ -199,14 +224,16 @@ public class IntroController {
 			SpeechPlayer.instance().stopSoundbite();
 		}
 		introLabel.setText(introLabelText);
-		nextToGame.setDisable(false);
-		nextToGame.setVisible(true);
+		pressToSkip.setVisible(false);
+		continueToGame.setDisable(false);
+		continueToGame.setVisible(true);
 	}
 
 	private void typewriter(Label label, String text, int index, double delay) {
 		if (index == text.length()) {
-			nextToGame.setDisable(false);
-			nextToGame.setVisible(true);
+			pressToSkip.setVisible(false);
+			continueToGame.setDisable(false);
+			continueToGame.setVisible(true);
 			return;
 		}
 		label.setText(label.getText() + text.charAt(index));
