@@ -18,15 +18,24 @@ import java.io.IOException;
 
 public class IntroController {
 
-	@FXML private ImageView barn;
-	@FXML private ImageView hoveredBarn;
-	@FXML private ImageView openedBarn;
-	@FXML private ImageView beaver;
-	@FXML private Pane blackScreen;
-	@FXML private Button nextToGame;
-	@FXML private Label introLabel;
-	@FXML private Label barnLabel;
-	@FXML private Label beaverLabel;
+	@FXML
+	private ImageView barn;
+	@FXML
+	private ImageView hoveredBarn;
+	@FXML
+	private ImageView openedBarn;
+	@FXML
+	private ImageView beaver;
+	@FXML
+	private Pane blackScreen;
+	@FXML
+	private Button nextToGame;
+	@FXML
+	private Label introLabel;
+	@FXML
+	private Label barnLabel;
+	@FXML
+	private Label beaverLabel;
 
 	private PauseTransition typewriter;
 	private boolean isBarnOpen;
@@ -34,7 +43,7 @@ public class IntroController {
 	private String introLabelText;
 
 	@FXML
-	void initialize(){
+	void initialize() {
 		hoveredBarn.setVisible(false);
 		barn.setVisible(true);
 
@@ -70,14 +79,14 @@ public class IntroController {
 	}
 
 	@FXML
-	void onBarnEnter(){
+	void onBarnEnter() {
 		barn.setVisible(false);
 		hoveredBarn.setVisible(true);
 		barnLabel.setVisible(true);
 	}
 
 	@FXML
-	void onHBarnClick(){
+	void onHBarnClick() {
 		isBarnOpen = true;
 
 		barn.setDisable(true);
@@ -112,13 +121,13 @@ public class IntroController {
 	}
 
 	@FXML
-	void onHBarnPressed(){
+	void onHBarnPressed() {
 		hoveredBarn.setScaleX(openedBarn.getScaleX());
 		hoveredBarn.setScaleY(openedBarn.getScaleY());
 	}
 
 	@FXML
-	void onHBarnExit(){
+	void onHBarnExit() {
 		if (isBarnOpen) return;
 		hoveredBarn.setVisible(false);
 		barnLabel.setVisible(false);
@@ -126,7 +135,7 @@ public class IntroController {
 	}
 
 	@FXML
-	void onBeaverClick(){
+	void onBeaverClick() {
 		beaver.setVisible(false);
 		beaver.setDisable(true);
 
@@ -143,7 +152,7 @@ public class IntroController {
 	}
 
 	@FXML
-	void onBeaverEnter(){
+	void onBeaverEnter() {
 		beaver.setEffect(new DropShadow(BlurType.THREE_PASS_BOX, Color.BLACK, 10, 0, 0, 0));
 		beaver.setRotate(6);
 		beaver.setOpacity(0.98);
@@ -153,7 +162,7 @@ public class IntroController {
 	}
 
 	@FXML
-	void onBeaverExit(){
+	void onBeaverExit() {
 		beaver.setEffect(new InnerShadow(BlurType.TWO_PASS_BOX, Color.BLACK, 10, 0, 0, 0));
 		beaver.setRotate(0);
 		beaver.setOpacity(1);
@@ -161,27 +170,27 @@ public class IntroController {
 	}
 
 	@FXML
-	void onNextButtonEnter(){
+	void onNextButtonEnter() {
 		nextToGame.setStyle("-fx-font-size: 18.5px;");
 		nextToGame.setScaleX(1.03);
 		nextToGame.setScaleY(1.03);
 	}
 
 	@FXML
-	void onNextButtonExit(){
+	void onNextButtonExit() {
 		nextToGame.setStyle("-fx-font-size: 18px;");
 		nextToGame.setScaleX(1);
 		nextToGame.setScaleY(1);
 	}
 
-	void startTypewriteAnimation(Label label, String text, double delay){
+	void startTypewriteAnimation(Label label, String text, double delay) {
 		label.setText("");
 		typewriter(label, text, 0, delay);
 		SpeechPlayer.instance().playSoundbite(text);
 	}
 
 	@FXML
-	void stopTypewriteAnimation(){
+	void stopTypewriteAnimation() {
 		if (wasScreenClicked) return;
 		wasScreenClicked = true;
 

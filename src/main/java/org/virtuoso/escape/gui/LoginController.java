@@ -51,9 +51,9 @@ public class LoginController implements Initializable {
     @FXML
     private Pane root;
 
-    void switchToIntro() {
+	void switchToIntro() {
         try {
-			EscapeApplication.setRoot("intro-view");
+	        EscapeApplication.setRoot("intro-view");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,7 +83,7 @@ public class LoginController implements Initializable {
         };
         if (flag) {
             // Move to next screen
-            switchToIntro();
+	        switchToIntro();
         } else {
             displayErrorMessage(AccountManager.instance().invalidLoginInfo(usernameEntry.getText(), passwordEntry.getText()));
         }
