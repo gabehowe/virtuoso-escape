@@ -15,14 +15,16 @@
         <div id="rainbow"></div>
         <div id="map-box" class="side-box">
             <a class="box-title">~Map~</a>
+            <a class="box-element">[Wall]</a>
         </div>
-        <hr>
+        <!--        <hr>-->
         <div id="entity-box" class="side-box">
             <a class="box-title">~Entities~</a>
         </div>
-        <hr>
+        <!--        <hr>-->
         <div id="item-box" class="side-box">
             <a class="box-title">~Items~</a>
+            <a class="box-element selected">Gym</a>
         </div>
     </div>
     <div id="viewport">
@@ -35,12 +37,28 @@
         <a id="message">Entity Message</a>
     </div>
     <div id="action-box">
-        <a id="interact" class="logical-button">Interact</a>
-        <a id="inspect" class="logical-button">Inspect</a>
-        <a id="attack" class="logical-button">Attack</a>
-        <a id="speak" class="logical-button">Speak</a>
+        <a id="interact" class="logical-button" onclick="app.interact()">Interact</a>
+        <a id="inspect" class="logical-button" onclick="app.inspect()">Inspect</a>
+        <a id="attack" class="logical-button" onclick="app.attack()">Attack</a>
+        <a id="speak" class="logical-button" onclick="app.create_input()">Speak</a>
     </div>
 </div>
-
+<script>
+    console.log =  i => {document.getElementById('message').innerText = i}
+    window.onerror = e => {console.log(e); logger.log(e)}
+    function updateBox(name, current, rooms) {
+        let mapBox = document.getElementById(name)
+        mapBox.querySelectorAll('.box-element').forEach(it => it.remove())
+        for (let i of rooms) {
+            let elem = document.createElement('a')
+            elem.innerText = i[0];
+            elem.classList.add('box-element', 'logical-button')
+            elem.id=i[1];
+            if (i[0] == current) elem.classList.add('selected')
+            mapBox.append(elem)
+        }
+    }
+    document.updateBox = updateBox
+</script>
 </body>
 </html>

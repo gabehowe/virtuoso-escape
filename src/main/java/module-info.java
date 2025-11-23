@@ -7,6 +7,8 @@ module org.virtuoso.escape {
     requires javafx.graphics;
     requires javafx.web;
     requires jdk.jsobject;
+    requires jdk.xml.dom;
+    requires java.xml;
 
     opens org.virtuoso.escape.model to
             javafx.fxml;

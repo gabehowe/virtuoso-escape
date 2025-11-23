@@ -74,7 +74,7 @@ java.modularity.inferModulePath.set(false)
 
 application {
     mainModule = "org.virtuoso.escape"
-    mainClass = "org.virtuoso.escape.gui.EscapeApplication"
+    mainClass = "org.virtuoso.escape.gui.App"
 }
 
 tasks.register<JavaExec>("tui") {

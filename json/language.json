@@ -5,13 +5,14 @@
 	"welcome_back": "Welcome back %s!\n%s\nYou have answered the following riddles: %s\nYou have used the following hints: %s"
   },
   "acorn_grove_0": {
-    "introduce": "You wake up in an acorn grove, seemingly smaller and...furrier...than usual."
+    "introduce": "You wake up in an acorn grove, seemingly smaller and...furrier...than usual.",
+    "name": "Acorn Grove"
   },
   "intro_squirrel": {
     "name": "Eckard",
     "introduce": "You see the well-mannered Eckard.",
     "attack": "You try to throw a punch, but Eckard uses his squirrimobilizer on you.",
-    "interact": "\"Hello fellow squirrel, sit stil. You just came out of the metamorphinator. A new member of the squirrel empire!\"",
+    "interact": "\"Hello fellow squirrel, sit still. You just came out of the metamorphinator. A new member of the squirrel empire!\"",
     "inspect": "Eckard's large bushy tail sways in the bustling acorn grove wind, acting not only aesthetically but also as an effective barometer."
   },
   "portal_squirrel": {
@@ -334,6 +335,7 @@
     "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old). He seems out of things to say."
   },
   "narrator": {
+    "name": "Narrator",
     "introduce": "A nearly transparent figure stands here, whispering secret stories.",
     "inspect": "The narrator seems to be an extension of the building itself, offering silent, wise counsel.",
     "attack": "Your attack passes straight through the figure, leaving you questioning either your ability or sanity.",

@@ -8,7 +8,6 @@ import javafx.scene.web.WebView;
 import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.account.AccountManager;
-import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,8 +29,9 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 //        KeyboardProcessor.addKeyboardBindings(root);
+        webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("login.html").toExternalForm());
-        EscapeApplication.setApp(webView.getEngine(), this);
+        App.setApp(webView.getEngine(), this, () -> {});
     }
 
     enum AuthMode {
@@ -43,7 +43,7 @@ public class LoginController implements Initializable {
 
     void switchToGame() {
         try {
-            EscapeApplication.setRoot("game-view");
+            App.setRoot("game-view");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -68,15 +68,15 @@ public class LoginController implements Initializable {
     public void toggleAuthMode() {
         switch (this.authMode) {
             case LOGIN -> {
-                EscapeApplication.setText(webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_login"));
-                EscapeApplication.setText(webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_login"));
-                EscapeApplication.setText(webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_create"));
+                App.setText(webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_login"));
+                App.setText(webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_login"));
+                App.setText(webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_create"));
                 this.authMode = AuthMode.CREATE;
             }
             case CREATE -> {
-                EscapeApplication.setText(webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_create"));
-                EscapeApplication.setText(webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_create"));
-                EscapeApplication.setText(webView.getEngine(), "welcome-text",GameInfo.instance().string("ui", "prompt_login"));
+                App.setText(webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_create"));
+                App.setText(webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_create"));
+                App.setText(webView.getEngine(), "welcome-text",GameInfo.instance().string("ui", "prompt_login"));
                 this.authMode = AuthMode.LOGIN;
             }
         }

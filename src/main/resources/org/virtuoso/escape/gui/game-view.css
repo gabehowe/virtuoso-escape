@@ -9,6 +9,7 @@ body {
 }
 
 #left-bar {
+    width: round(down, 20% ,10px);
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -34,6 +35,24 @@ body {
             text-align: center;
             font-weight: 700;
         }
+
+        .box-element {
+            color: var(--Foreground, #FFF);
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        .box-element.selected {
+            border: var(--stroke_width) solid var(--Foreground);
+            border-radius: var(--radius);
+            margin-left: 0.2em;
+            padding: 0 0.25em;
+        }
+    }
+
+    .side-box:has(> :nth-child(1):last-child), #map-box:has(> :nth-child(2):last-child) {
+        display: none;
     }
 
     hr {
@@ -42,6 +61,15 @@ body {
         width: 108px;
         border: none;
         background: var(--Stroke, #535353);
+    }
+
+    .side-box:not(:last-child)::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: var(--Stroke);
+        margin: 12px auto -12px;
     }
 }
 
@@ -54,7 +82,7 @@ body {
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     border: var(--stroke_width, 1px) solid var(--Stroke, #535353);
     height: 25%;
-    font-style:normal;
+    font-style: normal;
 
     #dialogue {
         display: flex;
@@ -63,6 +91,7 @@ body {
         flex-direction: column;
         align-items: flex-start;
         flex: 1 0 0;
+
         #entity-title {
             font-style: italic;
         }
@@ -95,11 +124,13 @@ body {
         }
     }
 }
+
 #center {
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: row;
+
     #viewport {
         display: flex;
         align-items: end;
@@ -107,6 +138,7 @@ body {
         height: 100%;
         width: 100%;
         background: repeating-radial-gradient(pink, pink 5px, black 5px, black 20px);
+
         #entity {
             position: relative;
             /*left: 90%;*/
@@ -133,7 +165,7 @@ body {
 
 #rainbow {
     opacity: 0.7;
-    width: 120px;
+    width: 100%;
     height: 10px;
     background-image: repeating-linear-gradient(to right,
     var(--Foreground) 0, var(--Foreground) 10px,
