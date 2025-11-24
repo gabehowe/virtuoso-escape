@@ -77,7 +77,7 @@ public class IntroController {
 	@FXML
 	void onContinueButtonClick() {
 		try {
-			EscapeApplication.setRoot("game-view");
+			App.setRoot("game-view");
 			SpeechPlayer.instance().stopSoundbite();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
