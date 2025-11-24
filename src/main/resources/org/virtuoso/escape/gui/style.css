@@ -1,0 +1,141 @@
+@font-face {
+    src: url("../../../../fonts/JetBrainsMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Jetbrains Mono Italic";
+    src: url("../../../../fonts/JetBrainsMono-Italic.ttf");
+}
+
+@font-face {
+    src: url("../../../../fonts/JetBrainsMono-BoldItalic.ttf");
+}
+
+@font-face {
+    src: url("../../../../fonts/JetBrainsMono-Bold.ttf");
+}
+
+.root {
+    -fx-font-family: "JetBrains Mono";
+    -fx-text-background-color: white;
+    -fx-background-color: bg;
+    -fx-font-size: 16px;
+    fg: #FFFFFF;
+    bg: #323232;
+    stroke: #535353;
+    cyan-1: #82F6FF;
+    yellow-1: #FFEE7D;
+    red-1: #FF5151;
+    pink-1: #FE82CC;
+}
+
+.bold-italic {
+    -fx-font-family: "JetBrains Mono Bold Italic";
+}
+
+.rounded {
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.box {
+    -fx-background-color: bg;
+    -fx-text-fill: white;
+    -fx-padding: 3px 12px;
+    -fx-alignment: center;
+    -fx-background-inset: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: stroke;
+}
+
+.logical-button {
+    -fx-cursor: hand;
+    /*-fx-fill: white;*/
+    /*-fx-text-background-color: white;*/
+}
+
+.label {
+    -fx-text-fill: white;
+    -fx-text-background-color: white;
+}
+
+.error {
+    -fx-text-fill: #fb899b;
+    -fx-alignment: center;
+}
+
+#title {
+    -fx-font-size: 48px;
+}
+
+#foreground {
+    -fx-background-image: url(../../../../images/grassy-background.png);
+    -fx-background-repeat: none;
+    -fx-background-size: cover;
+}
+
+#beaver {
+    -fx-effect: dropshadow(two-pass-box, black, 10, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+#beaver:hover {
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
+    -fx-rotate: 6;
+    -fx-opacity: 0.98;
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
+}
+
+#blackScreen {
+    -fx-background-color: bg;
+    -fx-padding: 24px;
+}
+
+#pressToSkip {
+    -fx-text-fill: white;
+    -fx-text: inherit;
+    -fx-font-size: 20px;
+}
+
+#introLabel {
+    -fx-font-size: 20px;
+    -fx-text-alignment: left;
+    -fx-padding: 24px;
+}
+
+#hoveredBarn {
+    -fx-cursor: hand;
+}
+
+.barn {
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0, 0.25), 11, 0, 23, 11);*/
+}
+
+.barn:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 11, 0, 23, 11);
+}
+
+#continueToGame {
+    -fx-font-size: 17px;
+    -fx-text-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
+}
+
+#continueToGame:hover {
+    -fx-font-size: 18px;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+#continueToGame:pressed {
+    -fx-font-size: 17px;
+    -fx-scale-x: 1.00;
+    -fx-scale-y: 1.00;
+    -fx-effect: none;
+    -fx-translate-y: 4px;
+}
+
+#pressToSkip {
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, .25), 4.5, 0, 5, 5);
+}

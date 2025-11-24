@@ -5,15 +5,13 @@ package org.virtuoso.escape.gui;
 import module javafx.fxml;
 import module javafx.graphics;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 import org.virtuoso.escape.model.GameProjection;
 import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class App extends Application {
@@ -55,7 +53,7 @@ public class App extends Application {
         launch();
     }
 
-    private static final Logger logger = new Logger();
+    public static final Logger logger = new Logger();
 
     public static void setApp(WebEngine engine, Object app, Runnable callback) {
         engine.documentProperty().addListener((_, _, _) -> {
@@ -75,19 +73,18 @@ public class App extends Application {
     public static class Logger {
         private static final boolean LOGJSCALLS = true;
 
-        public static void logJSCall(String msg) {
+        public void logJSCall(String msg) {
             if (LOGJSCALLS) log("[JS Call]: " + msg);
         }
 
-        public static void log(Object msg) {
+        public void log(Object msg) {
             System.out.println(msg);
         }
-
-        public void log_(Object msg) {
-            log(msg);
+        public void error(String msg){
+            System.err.println(msg);
         }
 
-        public void error(Object msg) {
+        public void logJSError(Object msg) {
             System.err.print("JSError: " + msg);
         }
     }
@@ -109,7 +106,7 @@ public class App extends Application {
             return it;
         }).map(Object::toString).collect(Collectors.joining(","));
         var cmd = String.format("%s(%s);", function, jsArgs);
-        Logger.logJSCall(cmd);
+        logger.logJSCall(cmd);
         return engine.executeScript(cmd);
     }
 

@@ -187,8 +187,8 @@ function setRoomImage(url) {
 }
 
 function init() {
-    console.error = i => logger.error(i)
-    console.log = i => logger.log_(i)
+    console.error = i => logger.logJSError(i)
+    console.log = i => logger.log(i)
     window.onerror = e => console.error(e);
     clearSettings()
     document.updateBox = updateBox

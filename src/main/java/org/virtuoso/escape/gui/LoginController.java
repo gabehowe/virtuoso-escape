@@ -31,7 +31,8 @@ public class LoginController implements Initializable {
 //        KeyboardProcessor.addKeyboardBindings(root);
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("login.html").toExternalForm());
-        App.setApp(webView.getEngine(), this, () -> {});
+        App.setApp(webView.getEngine(), this, () -> {
+        });
     }
 
     enum AuthMode {
@@ -41,7 +42,7 @@ public class LoginController implements Initializable {
 
     private AuthMode authMode = AuthMode.LOGIN;
 
-	void switchToIntro() {
+    void switchToIntro() {
         try {
             App.setRoot("intro-view");
         } catch (IOException e) {
@@ -51,15 +52,21 @@ public class LoginController implements Initializable {
     }
 
     public String tryAuth(String user, String pass) {
-        var flag = switch (authMode) {
-            case LOGIN -> proj.login(user, pass);
-            case CREATE -> proj.createAccount(user, pass);
-        };
-        if (flag) {
-            // Move to next screen
-	        switchToIntro();
-        } else {
-            return AccountManager.instance().invalidLoginInfo(user, pass);
+        try {
+            var flag = switch (authMode) {
+                case LOGIN -> proj.login(user, pass);
+                case CREATE -> proj.createAccount(user, pass);
+            };
+
+            if (flag) {
+                // Move to next screen
+                switchToIntro();
+            } else {
+                return AccountManager.instance().invalidLoginInfo(user, pass);
+            }
+        } catch (Exception e) {
+            App.logger.error(e.toString());
+            throw new RuntimeException(e);
         }
         return "";
     }
@@ -75,7 +82,7 @@ public class LoginController implements Initializable {
             case CREATE -> {
                 App.setText(webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_create"));
                 App.setText(webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_create"));
-                App.setText(webView.getEngine(), "welcome-text",GameInfo.instance().string("ui", "prompt_login"));
+                App.setText(webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_login"));
                 this.authMode = AuthMode.LOGIN;
             }
         }
