@@ -1,11 +1,3 @@
-console.log = i => {
-    logger.log_(i)
-}
-window.onerror = e => {
-    console.log(e);
-    logger.log_(e)
-}
-
 function makeElement(id, text, button) {
     let elem = document.createElement('span')
     if (button) elem.classList.add('logical-button')
@@ -40,10 +32,7 @@ function createInputBox() {
 }
 
 const Settings = Object.freeze({
-    SETTINGS: "SETTINGS",
-    DEBUG: "DEBUG",
-    DIFFICULTY: "DIFFICULTY",
-    CHANGE_FLOOR: "CHANGE_FLOOR"
+    SETTINGS: "SETTINGS", DEBUG: "DEBUG", DIFFICULTY: "DIFFICULTY", CHANGE_FLOOR: "CHANGE_FLOOR"
 })
 
 function clearSettings() {
@@ -113,9 +102,45 @@ function setTextOnElement(id, text) {
     document.getElementById(id).innerHTML = text
 }
 
-const typewriterDelay = 16;
+let keyMap = {};
+
+function createKeys() {
+    var actions = document.querySelectorAll('#action-box > .logical-button')
+    var buttons = document.querySelectorAll('.logical-button')
+    var selected = document.querySelectorAll('.selected')
+    keyMap = {}
+    let fixed = Array.from(buttons).filter(it => it.hasAttribute('keyboard'))
+
+    let findValidKey = (sourceKey, elem) => {
+        if (Object.values(keyMap).includes(elem)) {
+            let key = Object.keys(keyMap).filter(it => keyMap[it].id === elem.id)[0]
+            return elem.textContent.charAt(elem.textContent.toLowerCase().indexOf(key)).toString()
+        }
+        for (let c of Array.from(sourceKey)) {
+            if (c.match(/\w+$/) != null && !Object.keys(keyMap).includes(c.toLowerCase())) {
+                keyMap[c.toLowerCase()] = elem;
+                return c;
+            }
+        }
+        return null;
+    }
+    actions.forEach(it => findValidKey(it.textContent, it))
+    fixed.forEach(it => findValidKey(it.textContent, it))
+    for (let elem of buttons) {
+        console.assert(elem.id.length !== 0)
+        let sourceKey = elem.textContent;
+        let key = findValidKey(sourceKey, elem)
+        if (!elem.hasAttribute('keyboard') && key !== null && !Array.from(selected).includes(elem)) {
+            let index = sourceKey.toLowerCase().indexOf(key.toLowerCase())
+            elem.innerHTML = ""
+            elem.append("[", sourceKey.substring(0, index), new DOMParser().parseFromString(`<u><b>${key}</b></u>`, 'text/html').body.firstElementChild, sourceKey.substring(index + 1), "]")
+            elem.setAttribute('keyboard', "true")
+        }
+    }
+}
 
 function setDialogue(text) {
+    const typewriterDelay = 16;
     let messageBox = document.getElementById('message')
     messageBox.innerHTML = text;
     let count = 0;
@@ -131,7 +156,18 @@ function setDialogue(text) {
     }
 }
 
+function setEntityImage(url) {
+    document.getElementById('entity').src = `../../../../images/${url}.png`
+}
+
+function setRoomImage(url) {
+    document.getElementById('viewport').style.backgroundImage = `url('../../../../images/${url}.png')`
+}
+
 function init() {
+    console.error = i => logger.error(i)
+    console.log = i => logger.log_(i)
+    window.onerror = e => console.error(e);
     clearSettings()
     document.updateBox = updateBox
     document.addEventListener('keydown', ev => {
@@ -139,4 +175,14 @@ function init() {
     })
     addEventListener('submit', ev => ev.preventDefault())
 
+    let keyboardHandler = (event) => {
+        let tagName = document.activeElement.tagName
+        if (tagName === "INPUT") return;
+        let eventKey = (event.keyIdentifier === undefined) ? event.key : String.fromCodePoint('0x' + event.keyIdentifier.substring(2)).toLowerCase()
+        for (let key of Object.keys(keyMap)) {
+            if (eventKey !== key) continue;
+            keyMap[key].click()
+        }
+    }
+    addEventListener('keydown', keyboardHandler)
 }

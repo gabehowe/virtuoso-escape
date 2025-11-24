@@ -51,7 +51,6 @@ public class LoginController implements Initializable {
     }
 
     public String tryAuth(String user, String pass) {
-        System.out.println(this.authMode);
         var flag = switch (authMode) {
             case LOGIN -> proj.login(user, pass);
             case CREATE -> proj.createAccount(user, pass);

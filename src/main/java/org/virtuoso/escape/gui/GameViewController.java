@@ -18,6 +18,11 @@ public class GameViewController implements Initializable {
     @FXML
     public WebView webView;
 
+    public void updateImage() {
+        projection.currentEntity().ifPresent(e -> App.callJSFunction(webView.getEngine(), "setEntityImage", e.id()));
+        App.callJSFunction(webView.getEngine(), "setRoomImage", projection.currentRoom().id());
+    }
+
     public void updateDialogue() {
         setDialogue(projection.currentMessage()
                               .orElse(projection.currentEntity()
@@ -96,10 +101,12 @@ public class GameViewController implements Initializable {
         updateCapabilities();
         updateDialogue();
         updateButtons();
+        updateImage();
     }
 
     public void updateButtons() {
-        App.addKeyboardBindings(webView.getEngine(), webView);
+//        App.addKeyboardBindings(webView.getEngine(), webView);
+        webView.getEngine().executeScript("createKeys()");
     }
 
     public void pickEntity(Entity ent) {
