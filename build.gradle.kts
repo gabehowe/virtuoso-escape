@@ -42,7 +42,7 @@ java {
 
 javafx {
     version= "25"
-    modules = listOf("javafx.controls", "javafx.fxml")
+    modules = listOf("javafx.controls", "javafx.fxml", "javafx.web")
     configurations = arrayOf("implementation");
 }
 configurations.all {
@@ -74,7 +74,7 @@ java.modularity.inferModulePath.set(false)
 
 application {
     mainModule = "org.virtuoso.escape"
-    mainClass = "org.virtuoso.escape.gui.EscapeApplication"
+    mainClass = "org.virtuoso.escape.gui.App"
 }
 
 tasks.register<JavaExec>("tui") {

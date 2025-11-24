@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="game-view.css">
+    <link rel="stylesheet" href="global.css">
+
+    <meta charset="UTF-8">
+    <title>Game View</title>
+</head>
+<body>
+<div id="settings-box" style="display:none">
+
+</div>
+<div id="top-bar">
+    <span id="timer">{Time!}</span>
+    <span id="settings" class="logical-button" onclick="displaySettings(Settings.SETTINGS)">Settings</span>
+</div>
+<a style="position:absolute; left:50%; top:50%" id="error"></a>
+<div id="center">
+    <div id="left-bar">
+        <div id="rainbow"></div>
+        <div id="map-box" class="side-box">
+            <span class="box-title">~Map~</span>
+            <span class="box-element">[Wall]</span>
+        </div>
+        <!--        <hr>-->
+        <div id="entity-box" class="side-box">
+            <span class="box-title">~Entities~</span>
+        </div>
+        <!--        <hr>-->
+        <div id="item-box" class="side-box">
+            <span class="box-title">~Items~</span>
+            <span class="box-element selected">Gym</span>
+        </div>
+    </div>
+    <div id="viewport">
+        <div id="background-entities"></div>
+        <img id="entity">
+    </div>
+</div>
+<div id="bottom-bar">
+    <div id="dialogue">
+        <span id="entity-title">Entity Title</span>
+        <span id="message">Entity Message</span>
+    </div>
+    <div id="action-box">
+        <span id="interact" class="logical-button" onclick="app.interact()">Interact</span>
+        <span id="inspect" class="logical-button" onclick="app.inspect()">Inspect</span>
+        <span id="attack" class="logical-button" onclick="app.attack()">Attack</span>
+        <span id="speak" class="logical-button" onclick="createInputBox()">Speak</span>
+    </div>
+</div>
+<form onsubmit="tryInput()" id="input-box" class="entry-box floating-box" style="display:none">
+    <span>?:</span>
+    <input id="input" placeholder="_________________" maxlength="17">
+</form>
+
+<script src="game-view.js"></script>
+</body>
+
+</html>

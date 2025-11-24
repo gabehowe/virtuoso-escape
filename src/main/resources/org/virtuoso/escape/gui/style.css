@@ -68,74 +68,74 @@
     -fx-font-size: 48px;
 }
 
-.corner-flair {
-    -fx-opacity: .5;
-    -fx-background-color: linear-gradient(to right,
-    fg 0%, fg 14.28%,
-    bg 14.28%, bg 28.57%,
-    stroke 28.57%, stroke 42.8%,
-    cyan-1 42.8%, cyan-1 57.1%,
-    yellow-1 57.1%, yellow-1 71.4%,
-    red-1 71.4%, red-1 85.7%,
-    pink-1 85.7%, pink-1 100%);
-}
-.line {
-    -fx-stroke: stroke;
-    -fx-end-margin: 6px 4px;
-    -fx-start-margin: 6px 4px;
-    -fx-padding: 6px 4px;
-}
-.itty-decorations {
-    -fx-opacity: 0.5;
-    -fx-background-color: linear-gradient(from 0px 5px  to 70px 5px,
-    fg 0%, fg 14.28%,
-    bg 14.28%, bg 28.57%,
-    stroke 28.57%, stroke 42.8%,
-    cyan-1 42.8%, cyan-1 57.1%,
-    yellow-1 57.1%, yellow-1 71.4%,
-    red-1 71.4%, red-1 85.7%,
-    pink-1 85.7%, pink-1 100%);
+#foreground {
+    -fx-background-image: url(../../../../images/grassy-background.png);
+    -fx-background-repeat: none;
+    -fx-background-size: cover;
 }
 
-.rule-pane {
-    -fx-alignment: center;
-    -fx-padding: 3px 6px;
+#beaver {
+    -fx-effect: dropshadow(two-pass-box, black, 10, 0, 0, 0);
+    -fx-cursor: hand;
 }
-.left-submenu {
-    -fx-padding: 12px;
+
+#beaver:hover {
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
+    -fx-rotate: 6;
+    -fx-opacity: 0.98;
+    -fx-scale-x: 1.01;
+    -fx-scale-y: 1.01;
 }
-#left-nav {
-    -fx-border-width: 0 1px 0 0;
-    -fx-border-color: stroke;
+
+#blackScreen {
+    -fx-background-color: bg;
+    -fx-padding: 24px;
 }
-#action-box {
-    -fx-border-width: 1px 0 0 0;
-    -fx-border-color: stroke;
-    -fx-padding: 12px;
-    -fx-spacing: 6px;
+
+#pressToSkip {
+    -fx-text-fill: white;
+    -fx-text: inherit;
+    -fx-font-size: 20px;
 }
-#text-output {
-    -fx-border-width: 1px 1px 0 0;
-    -fx-border-color: stroke;
-    -fx-padding: 12px;
+
+#introLabel {
+    -fx-font-size: 20px;
+    -fx-text-alignment: left;
+    -fx-padding: 24px;
 }
-#text-output#entity-title {
-    -fx-font-family: "JetBrains Mono Italic";
-    /*-fx-font-style: italic;*/
+
+#hoveredBarn {
+    -fx-cursor: hand;
 }
-.interact {
-    -fx-text-fill: yellow-1;
+
+.barn {
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0, 0.25), 11, 0, 23, 11);*/
 }
-.inspect {
-    -fx-text-fill: cyan-1;
+
+.barn:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 11, 0, 23, 11);
 }
-.attack {
-    -fx-text-fill: red-1;
+
+#continueToGame {
+    -fx-font-size: 17px;
+    -fx-text-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
 }
-.speak {
-    -fx-text-fill: pink-1;
+
+#continueToGame:hover {
+    -fx-font-size: 18px;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }
-.menu-header {
-    -fx-alignment: center;
-    -fx-font-family: "JetBrains Mono Bold Italic";
+
+#continueToGame:pressed {
+    -fx-font-size: 17px;
+    -fx-scale-x: 1.00;
+    -fx-scale-y: 1.00;
+    -fx-effect: none;
+    -fx-translate-y: 4px;
+}
+
+#pressToSkip {
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, .25), 4.5, 0, 5, 5);
 }

@@ -39,6 +39,7 @@ public class DataWriterTests {
 		} catch (Exception e) {
 			throw new RuntimeException("Couldn't write to file.");
 		}
+		projection = new GameProjection();
 	}
 
 	@DisplayName("Should successfully write valid account and find current account's username upon load")

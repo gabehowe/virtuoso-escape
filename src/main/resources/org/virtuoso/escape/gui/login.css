@@ -1,0 +1,92 @@
+body {
+    display: flex;
+    width: 761px;
+    height: 100vh;
+    padding: 0 24px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
+    overflow: hidden;
+}
+.header {
+    color: var(--Foreground, #FFF);
+    text-align: center;
+    font: 700 italic 12px "JetBrains Mono";
+    line-height: normal;
+    cursor: default;
+}
+#title {
+    font-size: 44px;
+}
+#center-box {
+    display: flex;
+    height: 218px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 12px;
+    flex-shrink: 0;
+}
+#password-enter-container {
+    display: flex;
+    width: 200px;
+    height: 40px;
+    align-items: flex-start;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+#enter-box {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    padding: 9px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.corner-flair {
+    position: absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    height: 100%;
+    width: 20%;
+    opacity: .5;
+    background: linear-gradient(to right,
+    var(--Foreground) 0%, var(--Foreground) 14.28%,
+    var(--Background) 14.28%, var(--Background) 28.57%,
+    var(--Stroke) 28.57%, var(--Stroke) 42.8%,
+    var(--cyan-1) 42.8%, var(--cyan-1) 57.1%,
+    var(--yellow-1) 57.1%, var(--yellow-1) 71.4%,
+    var(--red-1) 71.4%, var(--red-1) 85.7%,
+    var(--pink-1) 85.7%, var(--pink-1) 100%);
+}
+
+#auth-error {
+    color: var(--red-1, #FF5151);
+}
+#auth-change-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: var(--Foreground, #FFF);
+    text-align: center;
+    font-family: "JetBrains Mono";
+    font-size: 14px;
+}
+hr {
+    display: flex;
+    padding: 4px 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    background: var(--Stroke, #535353);
+    width: 100%;
+}
