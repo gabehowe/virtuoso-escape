@@ -9,10 +9,7 @@ import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.virtuoso.escape.speech.SpeechPlayer;
@@ -21,8 +18,8 @@ import java.io.IOException;
 
 public class IntroController {
 
-	public StackPane foreground;
-	public VBox beaverBox;
+	@FXML
+	private ImageView barn;
 	@FXML
 	private ImageView hoveredBarn;
 	@FXML
@@ -30,7 +27,9 @@ public class IntroController {
 	@FXML
 	private ImageView beaver;
 	@FXML
-	private AnchorPane blackScreen;
+	private ImageView background;
+	@FXML
+	private Pane blackScreen;
 	@FXML
 	private Button continueToGame;
 	@FXML
@@ -46,12 +45,25 @@ public class IntroController {
 	private boolean isBarnOpen;
 	private boolean wasScreenClicked;
 	private String introLabelText;
-	private double typewriteDelay = 1.0/60;
 
 	@FXML
 	void initialize() {
-//		hoveredBarn.setVisible(false);
-//		barn.setVisible(true);
+		barn.setVisible(true);
+		barn.setDisable(true);
+
+		FadeTransition fadeInBarn = new FadeTransition(Duration.seconds(0.3), barn);
+		fadeInBarn.setFromValue(0);
+		fadeInBarn.setToValue(1);
+		fadeInBarn.setOnFinished(event -> barn.setDisable(false));
+
+		FadeTransition fadeInBG = new FadeTransition(Duration.seconds(0.3), background);
+		fadeInBG.setFromValue(0);
+		fadeInBG.setToValue(1);
+
+		fadeInBG.play();
+		fadeInBarn.play();
+
+		hoveredBarn.setVisible(false);
 
 		openedBarn.setVisible(false);
 		openedBarn.setDisable(true);
@@ -63,7 +75,6 @@ public class IntroController {
 		blackScreen.setOpacity(0);
 		blackScreen.setVisible(true);
 		blackScreen.setMouseTransparent(true);
-
 
 		continueToGame.setVisible(false);
 		continueToGame.setDisable(true);
@@ -91,6 +102,8 @@ public class IntroController {
 
 	@FXML
 	void onBarnEnter() {
+		barn.setVisible(false);
+		hoveredBarn.setVisible(true);
 		barnLabel.setVisible(true);
 	}
 
@@ -98,6 +111,7 @@ public class IntroController {
 	void onHBarnClick() {
 		isBarnOpen = true;
 
+		barn.setDisable(true);
 		barnLabel.setVisible(false);
 
 		hoveredBarn.setVisible(false);
@@ -109,10 +123,8 @@ public class IntroController {
 		PauseTransition pause = new PauseTransition(Duration.seconds(1.73));
 		pause.setOnFinished(event -> {
 			beaver.setDisable(false);
-			beaverBox.setMouseTransparent(false);
 			fadeInBeaver.play();
 		});
-
 		pause.play();
 	}
 
@@ -125,7 +137,9 @@ public class IntroController {
 	@FXML
 	void onHBarnExit() {
 		if (isBarnOpen) return;
+		hoveredBarn.setVisible(false);
 		barnLabel.setVisible(false);
+		barn.setVisible(true);
 	}
 
 	@FXML
@@ -137,7 +151,7 @@ public class IntroController {
 		fadeIn.setToValue(1);
 
 		fadeIn.setOnFinished(event -> {
-			startTypewriteAnimation(introLabel, introLabel.getText() );
+			startTypewriteAnimation(introLabel, introLabel.getText(), 0.045);
 			openedBarn.setVisible(false);
 			blackScreen.setMouseTransparent(false);
 			introLabel.setVisible(true);
@@ -149,6 +163,10 @@ public class IntroController {
 	@FXML
 	void onBeaverEnter() {
 		beaver.setEffect(new DropShadow(BlurType.THREE_PASS_BOX, Color.BLACK, 10, 0, 0, 0));
+		beaver.setRotate(6);
+		beaver.setOpacity(0.98);
+		beaver.setScaleX(1.01);
+		beaver.setScaleY(1.01);
 		beaverLabel.setVisible(true);
 	}
 
@@ -159,20 +177,18 @@ public class IntroController {
 		beaver.setOpacity(1);
 		beaverLabel.setVisible(false);
 	}
-//
-//	@FXML
-//	void onContinueButtonEnter() {
-//		continueToGame.setStyle("-fx-font-size: 17.5px;");
-//		continueToGame.setScaleX(1.03);
-//		continueToGame.setScaleY(1.03);
-//	}
-//
-//	@FXML
-//	void onContinueButtonExit() {
-//		continueToGame.setStyle("-fx-font-size: 17px;");
-//		continueToGame.setScaleX(1);
-//		continueToGame.setScaleY(1);
-//	}
+
+	@FXML
+	void onContinueButtonEnter() {
+		continueToGame.setScaleX(1.03);
+		continueToGame.setScaleY(1.03);
+	}
+
+	@FXML
+	void onContinueButtonExit() {
+		continueToGame.setScaleX(1);
+		continueToGame.setScaleY(1);
+	}
 
 	void fadeInPauseFadeOut(double fadeTime, double pauseTime) {
 		FadeTransition fadeInPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
@@ -192,9 +208,9 @@ public class IntroController {
 		fadeInPTS.play();
 	}
 
-	void startTypewriteAnimation(Label label, String text) {
+	void startTypewriteAnimation(Label label, String text, double delay) {
 		label.setText("");
-		typewriter(label, text, 0);
+		typewriter(label, text, 0, delay);
 		SpeechPlayer.instance().playSoundbite(text);
 	}
 
@@ -204,15 +220,16 @@ public class IntroController {
 		wasScreenClicked = true;
 
 		if (typewriter != null) {
+			typewriter.stop();
 			SpeechPlayer.instance().stopSoundbite();
 		}
-		typewriteDelay /= 200;
+		introLabel.setText(introLabelText);
 		pressToSkip.setVisible(false);
 		continueToGame.setDisable(false);
 		continueToGame.setVisible(true);
 	}
 
-	private void typewriter(Label label, String text, int index) {
+	private void typewriter(Label label, String text, int index, double delay) {
 		if (index == text.length()) {
 			pressToSkip.setVisible(false);
 			continueToGame.setDisable(false);
@@ -221,8 +238,8 @@ public class IntroController {
 		}
 		label.setText(label.getText() + text.charAt(index));
 
-		typewriter = new PauseTransition(Duration.seconds(typewriteDelay));
-		typewriter.setOnFinished(_ -> typewriter(label, text, index + 1));
+		typewriter = new PauseTransition(Duration.seconds(delay));
+		typewriter.setOnFinished(event -> typewriter(label, text, index + 1, delay));
 		typewriter.play();
 	}
 }
