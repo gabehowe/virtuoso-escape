@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.virtuoso.escape.gui.IntroController">
+    <children>
+        <ImageView fx:id="background" fitHeight="475.0" fitWidth="700.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <image>
+                <Image url="@../../../../images/grassy-background.png" />
+            </image>
+            <rotationAxis>
+                <Point3D y="1.0" />
+            </rotationAxis>
+        </ImageView>
+        <StackPane fx:id="foreground" layoutX="235.0" layoutY="143.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="257.0" prefWidth="240.0">
+            <children>
+                <ImageView fx:id="openedBarn" fitHeight="255.0" fitWidth="240.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../images/opened-beaver-barn.png" />
+                    </image>
+                    <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                    </cursor>
+                    <effect>
+                        <DropShadow height="23.0" radius="11.0" width="23.0" />
+                    </effect>
+                </ImageView>
+                <ImageView fx:id="hoveredBarn" fitHeight="255.0" fitWidth="240.0" onMouseClicked="#onHBarnClick" onMouseExited="#onHBarnExit" onMousePressed="#onHBarnPressed" opacity="0.96" pickOnBounds="true" preserveRatio="true" scaleX="1.01" scaleY="1.01" visible="false">
+                    <image>
+                        <Image url="@../../../../images/beaver-barn.png" />
+                    </image>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <effect>
+                        <DropShadow height="23.0" radius="11.0" width="23.0" />
+                    </effect>
+                </ImageView>
+                <ImageView fx:id="barn" fitHeight="255.0" fitWidth="240.0" onMouseEntered="#onBarnEnter" pickOnBounds="true" preserveRatio="true" visible="false">
+                    <image>
+                        <Image url="@../../../../images/beaver-barn.png" />
+                    </image>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </ImageView>
+            </children>
+        </StackPane>
+        <Label fx:id="barnLabel" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="494.0" layoutY="231.5" prefHeight="30.0" prefWidth="113.0" style="-fx-text-fill: black; -fx-background-color: white;" stylesheets="@style.css" text="Beaver Barn" textAlignment="CENTER" visible="false">
+            <font>
+                <Font size="15.0" />
+            </font>
+            <effect>
+                <DropShadow />
+            </effect>
+            <styleClass>
+                <String fx:value="bold-italic" />
+                <String fx:value="rounded" />
+            </styleClass>
+        </Label>
+        <ImageView fx:id="beaver" fitHeight="100.0" fitWidth="80.0" layoutX="312.0" layoutY="323.0" onMouseClicked="#onBeaverClick" onMouseEntered="#onBeaverEnter" onMouseExited="#onBeaverExit" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../../images/beaver.png" />
+            </image>
+            <effect>
+                <InnerShadow blurType="TWO_PASS_BOX" />
+            </effect>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+        </ImageView>
+        <Label fx:id="beaverLabel" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="487.0" layoutY="318.0" prefHeight="30.0" prefWidth="95.0" style="-fx-text-fill: black; -fx-background-color: white;" stylesheets="@style.css" text="Interact" textAlignment="CENTER" visible="false">
+            <font>
+                <Font size="15.0" />
+            </font>
+            <effect>
+                <DropShadow />
+            </effect>
+            <styleClass>
+                <String fx:value="bold-italic" />
+                <String fx:value="rounded" />
+            </styleClass>
+        </Label>
+        <Pane fx:id="blackScreen" mouseTransparent="true" onMouseClicked="#skipTypewriteAnimation" prefHeight="475.0" prefWidth="700.0" style="-fx-background-color: #323232;">
+            <children>
+                <HBox layoutX="74.0" layoutY="90.0" mouseTransparent="true" onMouseClicked="#skipTypewriteAnimation" prefHeight="295.0" prefWidth="552.0">
+                    <children>
+                        <Label fx:id="introLabel" alignment="CENTER" lineSpacing="0.1" prefHeight="295.0" prefWidth="601.0" style="-fx-font-size: 22px; -fx-font-family: 'JetBrains Mono';" text="You have been attacked by a beaver at a pick-your-own beaver farm and knocked into the fridge half of a micro-fridge. It turns out that the fridge was a metamorphosis engine, transforming you into a squirrel. You need to get to the top of the M Bert Storey Innovation Center, find the matching microwave half, and use it to become human again!" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                            <effect>
+                                <Blend />
+                            </effect>
+                        </Label>
+                    </children>
+                </HBox>
+            <Label fx:id="pressToSkip" alignment="CENTER" contentDisplay="CENTER" layoutX="440.0" layoutY="428.0" prefHeight="30.0" prefWidth="240.0" text="Press Anywhere To Skip →" textAlignment="CENTER" textFill="WHITE" underline="true">
+               <font>
+                  <Font name="Calibri Bold Italic" size="20.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" height="10.0" radius="4.5" width="10.0" />
+               </effect>
+            </Label>
+                <Button fx:id="continueToGame" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="567.0" layoutY="425.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onContinueButtonClick" onMouseEntered="#onContinueButtonEnter" onMouseExited="#onContinueButtonExit" onMousePressed="#onContinueButtonExit" onMouseReleased="#onContinueButtonEnter" prefHeight="36.0" prefWidth="119.0" style="-fx-font-size: 17;" stylesheets="@style.css" text="Continue" textAlignment="CENTER" visible="false">
+                    <styleClass>
+                        <String fx:value="logical-button" />
+                        <String fx:value="rounded" />
+                        <String fx:value="bold-italic" />
+                    </styleClass>
+                </Button>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

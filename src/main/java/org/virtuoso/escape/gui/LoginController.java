@@ -41,9 +41,9 @@ public class LoginController implements Initializable {
 
     private AuthMode authMode = AuthMode.LOGIN;
 
-    void switchToGame() {
+	void switchToIntro() {
         try {
-            App.setRoot("game-view");
+            App.setRoot("intro-view");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,7 +57,7 @@ public class LoginController implements Initializable {
         };
         if (flag) {
             // Move to next screen
-            switchToGame();
+	        switchToIntro();
         } else {
             return AccountManager.instance().invalidLoginInfo(user, pass);
         }

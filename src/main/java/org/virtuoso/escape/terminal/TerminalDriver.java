@@ -447,7 +447,7 @@ public class TerminalDriver {
           fs_r(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection)));
     }
     for (Entity e : projection.currentRoom().entities()) {
-      actions.add(fs_r(new FunString(e.state().name()).italic(), () -> projection.pickEntity(e)));
+      actions.add(fs_r(new FunString(e.name()).italic(), () -> projection.pickEntity(e)));
     }
     actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
     actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
