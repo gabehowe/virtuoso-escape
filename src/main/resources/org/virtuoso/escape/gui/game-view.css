@@ -1,15 +1,21 @@
+:root {
+    --top-height: 23px;
+}
+
 body {
     display: flex;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     flex-direction: column;
     align-items: start;
     flex-shrink: 0;
+
     margin: 0;
 }
 
+
 #left-bar {
-    width: round(down, 20% ,10px);
+    width: fit-content;
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -85,16 +91,22 @@ body {
     font-style: normal;
 
     #dialogue {
+        overflow: scroll;
         display: flex;
-        height: 111px;
+        height: 100%;
         padding: var(--padding, 12px);
         flex-direction: column;
         align-items: flex-start;
         flex: 1 0 0;
+        -ms-overflow-style: none;
 
         #entity-title {
             font-style: italic;
         }
+    }
+
+    #dialogue::-webkit-scrollbar {
+        display: none;
     }
 
     #action-box {
@@ -151,13 +163,15 @@ body {
 }
 
 #top-bar {
+    font-style: normal;
     display: flex;
-    width: 100%;
-    height: 23px;
+    width: calc(100% - 24px);
+    height: var(--top-height);
     padding: 3px 12px;
     justify-content: space-between;
+    flex-direction: row;
     align-items: center;
-    /*position: absolute;*/
+    position: relative;
     border-bottom: var(--stroke_width, 1px) solid var(--Stroke, #535353);
     background: var(--Background, #323232);
 
@@ -190,6 +204,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--Background);
+
     input {
         background: transparent;
         border: none;
@@ -198,8 +213,36 @@ body {
         height: 100%;
         font: inherit;
     }
-    input:focus{
-        outline:none;
+
+    input:focus {
+        outline: none;
         border-bottom: none;
+    }
+}
+
+#settings-box {
+    position: absolute;
+    right: 0;
+    top: calc(var(--top-height) + 6px - 2px);
+    display: flex;
+    padding: 6px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    border-radius: var(--radius, 3px);
+    border: var(--stroke_width, 1px) solid var(--Stroke, #535353);
+    background: var(--Background, #323232);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    99% {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
     }
 }

@@ -33,9 +33,13 @@ public class App extends Application {
         stage.show();
 
         stage.setOnCloseRequest(t -> {
-            Platform.exit();
-            System.exit(0);
+            exit();
         });
+    }
+
+    public static void exit() {
+        Platform.exit();
+        System.exit(0);
     }
 
     public static void setRoot(String fxml) throws IOException {
@@ -51,29 +55,32 @@ public class App extends Application {
         launch();
     }
 
+    private static final Logger logger = new Logger();
+
     public static void setApp(WebEngine engine, Object app, Runnable callback) {
-        engine.documentProperty().addListener((obs, old, newDoc) -> {
+        engine.documentProperty().addListener((_, _, _) -> {
             System.out.println("Succeded!");
             var window = (JSObject) engine.executeScript("window");
             window.setMember("app", app);
-            window.setMember("logger", new Logger());
+            window.setMember("logger", logger);
             engine.executeScript("window.onerror = logger.log;" + "console.error = function(message) { app.error(message); };");
             callback.run();
         });
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {
-        var cmd = String.format("document.getElementById('%s').textContent=\"%s\";", elementId,
-                text.replace("\"", "\\\"")
-                    .replace("\n", "<br>"))
-                .replace("\t", "\\t");
-        Logger.log(cmd);
-        engine.executeScript(cmd);
+        var sanitized = text.replace("\"", "\\\"")
+                            .replace("\n", "<br>").replace("\t", "<span class='tab'></span>");
+        callJSFunction(engine, "setTextOnElement", elementId, sanitized);
     }
 
     public static class Logger {
         public static void log(Object msg) {
             System.out.println(msg);
+        }
+
+        public void log_(Object msg) {
+            log(msg);
         }
     }
 
@@ -99,7 +106,6 @@ public class App extends Application {
     }
 
     public static EventHandler<KeyEvent> keyboardHandler;
-    public static EventHandler<KeyEvent> keyboardReleaseHandler;
 
     public static void addKeyboardBindings(WebEngine engine, WebView view) {
         var actions = querySelectorAll(engine, "#action-box > .logical-button");
@@ -159,13 +165,14 @@ public class App extends Application {
             var tagName = engine.executeScript("document.activeElement.tagName").toString();
             var pressed = event.getText().toLowerCase();
             if (!Objects.equals(tagName, "INPUT")) {
-                event.consume();
                 for (String key : keyMap.keySet()) {
                     if (pressed.equals(key)) {
                         var id = keyMap.get(key).getAttribute("id");
                         var jObj = (JSObject) callJSFunction(engine, "document.getElementById", id);
                         try {
                             jObj.call("click");
+//                            event.consume();
+                            return;
                         } catch (NullPointerException e) {
                             System.err.println("with id " + id);
                             throw e;
@@ -173,10 +180,6 @@ public class App extends Application {
                     }
                 }
             }
-        };
-        keyboardReleaseHandler = event -> {
-            var tagName = engine.executeScript("document.activeElement.tagName").toString();
-            event.consume();
         };
         view.addEventFilter(KeyEvent.KEY_RELEASED, keyboardHandler);
     }

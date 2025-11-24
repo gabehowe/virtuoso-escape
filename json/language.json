@@ -200,6 +200,7 @@
     "introduce": "You see a door so closed that Rome must be at peace."
   },
   "storey_iii_0": {
+    "name": "Chambre du Corbeau",
     "introduce": "The room is bare except for a pedestal in the center holding an intricately designed wooden box. A small, but well-dressed, sparrow sits atop it, looking expectantly at you."
   },
   "sparrow_ambassador": {
@@ -250,12 +251,12 @@
     "introduce": "What manual page do you want?\nFor example, try 'man help'.",
     "interact": "There's nothing to interact with, only a mere wish to know more...",
     "inspect": "You don't see anything, but you feel millimeters away from endless knowledge.",
-    "input_help": "HELP(1)          List of all commands      HELP(1)\n\nLIST\n\tman\tls\tcd\ttar\trotx\n\nTry asking man for information on these!",
-    "input_man": "MAN(1)            Manual pager utils        MAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS man [man options]\n\nDESCRIPTION     Provide information about a utility.",
-    "input_ls": "LS(1)                                         User Commands                                         LS(1)\n\nNAME\n       ls - list directory contents\n\nSYNOPSIS\n       ls [OPTION]... [FILE]...\n\nDESCRIPTION\n       List  information about the FILEs (the current directory by default). ",
-    "input_cd": "cd: cd [dir]\n    Change the shell working directory.\n    \n    Change the current directory to DIR.",
-    "input_tar": "TAR(1)                                        TAR                                       TAR(1)\n\nNAME\n       tar - an archiving utility\n\nSYNOPSIS\n     tar xvf [file]",
-    "input_rotx": "ROTX(1)                                        ROTX                                       TAR(1)\n\nNAME\n       rotx - A ceaser cipher decrypter\n\nSYNOPSIS\n   rotx [amount to rotate] [file]"
+    "input_help": "HELP(1)\t\t\tList of all commands\t\t\tHELP(1)\n\nLIST\n\tman\tls\tcd\ttar\trotx\n\nTry asking man for information on these!",
+    "input_man": "MAN(1)\t\t\tManual pager utils\t\t\tMAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS man [man options]\n\nDESCRIPTION\tProvide information about a utility.",
+    "input_ls": "LS(1)\t\t\tUser Commands\t\t\tLS(1)\n\nNAME\n\tls - list directory contents\n\nSYNOPSIS\n\tls [OPTION]... [FILE]...\n\nDESCRIPTION\n\tList information about the FILEs (the current directory by default). ",
+    "input_cd": "cd: cd [dir]\n\tChange the shell working directory.\n\t\n\tChange the current directory to DIR.",
+    "input_tar": "TAR(1)\t\t\tTAR\t\t\tTAR(1)\n\nNAME\n\ttar - an archiving utility\n\nSYNOPSIS\n\ttar xvf [file]",
+    "input_rotx": "ROTX(1)\t\t\tROTX\t\t\tROTX(1)\n\nNAME\n\trotx - A ceaser cipher decrypter\n\nSYNOPSIS\n   rotx [amount to rotate] [file]"
   },
   "computty_blocked": {
     "name": "CompuTTY",

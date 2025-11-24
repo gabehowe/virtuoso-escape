@@ -9,23 +9,29 @@
     <title>Game View</title>
 </head>
 <body>
-<div id="top-bar"></div>
+<div id="settings-box" style="display:none">
+
+</div>
+<div id="top-bar">
+    <span id="timer">{Time!}</span>
+    <span id="settings" class="logical-button" onclick="displaySettings(Settings.SETTINGS)">Settings</span>
+</div>
 <a style="position:absolute; left:50%; top:50%" id="error"></a>
 <div id="center">
     <div id="left-bar">
         <div id="rainbow"></div>
         <div id="map-box" class="side-box">
-            <a class="box-title">~Map~</a>
-            <a class="box-element">[Wall]</a>
+            <span class="box-title">~Map~</span>
+            <span class="box-element">[Wall]</span>
         </div>
         <!--        <hr>-->
         <div id="entity-box" class="side-box">
-            <a class="box-title">~Entities~</a>
+            <span class="box-title">~Entities~</span>
         </div>
         <!--        <hr>-->
         <div id="item-box" class="side-box">
-            <a class="box-title">~Items~</a>
-            <a class="box-element selected">Gym</a>
+            <span class="box-title">~Items~</span>
+            <span class="box-element selected">Gym</span>
         </div>
     </div>
     <div id="viewport">
@@ -34,59 +40,22 @@
 </div>
 <div id="bottom-bar">
     <div id="dialogue">
-        <a id="entity-title">Entity Title</a>
-        <a id="message">Entity Message</a>
+        <span id="entity-title">Entity Title</span>
+        <span id="message">Entity Message</span>
     </div>
     <div id="action-box">
-        <a id="interact" class="logical-button" onclick="app.interact()">Interact</a>
-        <a id="inspect" class="logical-button" onclick="app.inspect()">Inspect</a>
-        <a id="attack" class="logical-button" onclick="app.attack()">Attack</a>
-        <a id="speak" class="logical-button" onclick="createInputBox()">Speak</a>
+        <span id="interact" class="logical-button" onclick="app.interact()">Interact</span>
+        <span id="inspect" class="logical-button" onclick="app.inspect()">Inspect</span>
+        <span id="attack" class="logical-button" onclick="app.attack()">Attack</span>
+        <span id="speak" class="logical-button" onclick="createInputBox()">Speak</span>
     </div>
 </div>
 <form onsubmit="tryInput()" id="input-box" class="entry-box floating-box" style="display:none">
     <span>?:</span>
     <input id="input" placeholder="_________________" maxlength="17">
 </form>
-<script>
-    console.log = i => {
-        document.getElementById('error').innerText = i
-    }
-    window.onerror = e => {
-        console.log(e);
-        logger.log(e)
-    }
 
-    function updateBox(name, current, rooms, button) {
-        let mapBox = document.getElementById(name)
-        mapBox.querySelectorAll('.box-element').forEach(it => it.remove())
-        for (let i of rooms) {
-            let elem = document.createElement('a')
-            elem.innerText = i[0];
-            elem.classList.add('box-element')
-            if (button) elem.classList.add('logical-button')
-            elem.id = i[1];
-            if (i[1] == current) elem.classList.add('selected')
-            mapBox.append(elem)
-        }
-    }
-
-    function tryInput() {
-        document.getElementById('input-box').style.display = "none";
-        app.input(document.getElementById('input').value)
-    }
-
-    function createInputBox() {
-        if (document.getElementById('speak').style.display === "none") return
-        let box = document.getElementById('input-box');
-        box.style.display = "";
-        let input = document.getElementById('input');
-        input.focus()
-        input.value = ""
-    }
-
-    document.updateBox = updateBox
-    addEventListener('submit', ev => ev.preventDefault())
-</script>
+<script src="game-view.js"></script>
 </body>
+
 </html>
