@@ -26,15 +26,15 @@ public class GameViewController implements Initializable {
         projection.currentEntity().ifPresent(s -> App.setText(webView.getEngine(), "entity-title", GameInfo.instance().string(s.state().id(), "name")));
     }
 
-    public void updateBox(String name, String current, List<List<String>> names) {
+    public void updateBox(String name, String current, List<List<String>> names, boolean button) {
         var mapped = new JSONArray();
         mapped.addAll(names);
-        App.callJSFunction(webView.getEngine(), "updateBox", name, current, mapped);
+        App.callJSFunction(webView.getEngine(), "updateBox", name, current, mapped, button);
     }
 
     public void updateLeftBar() {
         var roomNames = new ArrayList<>(projection.currentFloor().rooms().stream().map(rm -> List.of(rm.name(), rm.id())).toList());
-        updateBox("map-box", projection.currentRoom().name(), roomNames);
+        updateBox("map-box", projection.currentRoom().id(), roomNames, true);
         var mapElements = App.querySelectorAll(webView.getEngine(), "#map-box > .box-element");
         mapElements.forEach(it -> {
             var theRoom = projection.currentFloor().rooms().stream().filter(rm -> Objects.equals(rm.id(), it.getAttribute("id"))).findFirst();
@@ -42,8 +42,8 @@ public class GameViewController implements Initializable {
         });
 
         var entityNames = projection.currentRoom().entities().stream().map(it -> List.of(GameInfo.instance().string(it.state().id(), "name"), it.state().id())).toList();
-        var currentEntity = projection.currentEntity().map(e -> GameInfo.instance().string(e.state().id(), "name")).orElse("undefined");
-        updateBox("entity-box", currentEntity, entityNames);
+        var currentEntity = projection.currentEntity().map(Entity::id).orElse("undefined");
+        updateBox("entity-box", currentEntity, entityNames, true);
 
         var entities = App.querySelectorAll(webView.getEngine(), "#entity-box > .box-element");
         entities.forEach(it -> {
@@ -54,7 +54,7 @@ public class GameViewController implements Initializable {
         });
 
         var itemNames = projection.currentItems().stream().map(it -> List.of(it.itemName(), it.id())).toList();
-        updateBox("item-box", "undefined", itemNames);
+        updateBox("item-box", "undefined", itemNames, false);
     }
 
     public void updateCapabilities() {
@@ -116,10 +116,9 @@ public class GameViewController implements Initializable {
         updateAll();
     }
 
-    public void create_input() {
+    public void input(Object input) {
         System.out.println("Create input!");
-        // TODO: actually create input box.
-        projection.inspect();
+        projection.input(input.toString());
         updateAll();
     }
 

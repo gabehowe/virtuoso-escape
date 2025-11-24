@@ -12,10 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -66,7 +63,7 @@ public class App extends Application {
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {
-        var cmd = String.format("document.getElementById('%s').textContent=\"%s\";", elementId, text.replace("\"", "\\\""));
+        var cmd = String.format("document.getElementById('%s').textContent=\"%s\";", elementId, text.replace("\"", "\\\"").replace("\n","\\n"));
         Logger.log(cmd);
         engine.executeScript(cmd);
     }
@@ -99,9 +96,9 @@ public class App extends Application {
     }
 
     public static EventHandler<KeyEvent> keyboardHandler;
+    public static EventHandler<KeyEvent> keyboardReleaseHandler;
 
     public static void addKeyboardBindings(WebEngine engine, WebView view) {
-        if (keyboardHandler != null) view.removeEventHandler(KeyEvent.KEY_PRESSED, keyboardHandler);
         var actions = querySelectorAll(engine, "#action-box > .logical-button");
         var buttons = querySelectorAll(engine, ".logical-button");
         var selected = querySelectorAll(engine, ".selected");
@@ -152,16 +149,27 @@ public class App extends Application {
             }
         }
 
+        if (keyboardHandler != null) {
+            view.removeEventFilter(KeyEvent.KEY_RELEASED, keyboardHandler);
+        }
         keyboardHandler = event -> {
+            var tagName = engine.executeScript("document.activeElement.tagName").toString();
             var pressed = event.getText().toLowerCase();
-            for (String key : keyMap.keySet()) {
-                if (pressed.equals(key)) {
-                    var jObj = (JSObject) callJSFunction(engine, "document.getElementById", keyMap.get(key).getAttribute("id"));
-                    jObj.call("click");
+            if (!Objects.equals(tagName, "INPUT")) {
+                event.consume();
+                for (String key : keyMap.keySet()) {
+                    if (pressed.equals(key)) {
+                        var jObj = (JSObject) callJSFunction(engine, "document.getElementById", keyMap.get(key).getAttribute("id"));
+                        jObj.call("click");
+                    }
                 }
             }
         };
-        view.addEventHandler(KeyEvent.KEY_PRESSED, keyboardHandler);
+        keyboardReleaseHandler = event -> {
+            var tagName = engine.executeScript("document.activeElement.tagName").toString();
+            event.consume();
+        };
+        view.addEventFilter(KeyEvent.KEY_RELEASED, keyboardHandler);
     }
 
 }

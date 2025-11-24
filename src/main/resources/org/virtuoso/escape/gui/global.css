@@ -25,3 +25,24 @@
     cursor: pointer;
     font-weight: normal;
 }
+.floating-box {
+    border-radius: var(--radius, 3px);
+    border: var(--stroke_width, 1px) solid var(--Stroke, #535353);
+    background: var(--Background, #323232);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    color: inherit;
+    font: inherit;
+    font-style: normal;
+}
+.entry-box {
+    display: flex;
+    width: 200px;
+    height: 40px;
+    padding: 9px 12px;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.entry-box:focus {
+    outline: none;
+}

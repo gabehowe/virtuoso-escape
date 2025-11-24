@@ -177,3 +177,29 @@ body {
     var(--pink-1) 60px, var(--pink-1) 70px);
 }
 
+#input-box {
+    display: flex;
+    height: 29px;
+    /*width: 14em;*/
+    padding: 6px var(--padding, 12px);
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--Background);
+    input {
+        background: transparent;
+        border: none;
+        color: inherit;
+        width: 100%;
+        height: 100%;
+        font: inherit;
+    }
+    input:focus{
+        outline:none;
+        border-bottom: none;
+    }
+}
