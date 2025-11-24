@@ -172,5 +172,9 @@ public class GameViewController implements Initializable {
         GameState.instance().end();
     }
 
+    public String getTime() {
+        return "{" + projection.time().toMinutes() + ":" + projection.time().toSecondsPart() + "}";
+    }
+
 
 }

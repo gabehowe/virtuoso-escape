@@ -185,4 +185,9 @@ function init() {
         }
     }
     addEventListener('keydown', keyboardHandler)
+    timeAnimator()
+}
+function timeAnimator() {
+    setTimeout(timeAnimator, 500)
+    document.getElementById('timer').innerText = app.getTime()
 }
