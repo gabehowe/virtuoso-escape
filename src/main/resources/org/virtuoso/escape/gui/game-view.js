@@ -156,8 +156,30 @@ function setDialogue(text) {
     }
 }
 
-function setEntityImage(url) {
-    document.getElementById('entity').src = `../../../../images/${url}.png`
+function populateBackground(current, others) {
+    // if (document.getElementById('entity').src.includes(current)) return
+    let findCurrent = document.querySelector('#background-entities > img.selected')
+    if (findCurrent?.src.includes(current)) return
+    let predefined = document.querySelectorAll('#background-entities > img');
+    if (predefined.length > 0 && Array.from(predefined).map(it => it.src).every(it => Array.from(others).some(key => it.includes(key)))) {
+        selectEntity(current)
+        return
+    }
+    let flow = document.getElementById('background-entities')
+    flow.innerHTML = ""
+    for (const url of others) {
+        let picture = document.createElement('img')
+        if (url === current) picture.classList.add('selected')
+        picture.onload = () => picture.width *= 0.7;
+        picture.src = `../../../../images/${url}.png`
+        picture.style.animationDelay = -2 * Math.random() + "s"
+        flow.append(picture)
+    }
+}
+
+function selectEntity(id) {
+    document.querySelectorAll('#background-entities > img.selected').forEach(it => it.classList.remove('selected'))
+    document.querySelector(`#background-entities > img[src*="${id}"]`).classList.add('selected')
 }
 
 function setRoomImage(url) {
@@ -187,6 +209,7 @@ function init() {
     addEventListener('keydown', keyboardHandler)
     timeAnimator()
 }
+
 function timeAnimator() {
     setTimeout(timeAnimator, 500)
     document.getElementById('timer').innerText = app.getTime()

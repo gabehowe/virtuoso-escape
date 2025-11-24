@@ -19,7 +19,12 @@ public class GameViewController implements Initializable {
     public WebView webView;
 
     public void updateImage() {
-        projection.currentEntity().ifPresent(e -> App.callJSFunction(webView.getEngine(), "setEntityImage", e.id()));
+        var entities = projection.currentRoom().entities().stream().map(Entity::id).toList();
+        var arr = new JSONArray();
+        arr.addAll(entities);
+        App.callJSFunction(webView.getEngine(), "populateBackground", projection.currentEntity()
+                                                                                .map(Entity::id)
+                                                                                .orElse("undefined"), arr);
         App.callJSFunction(webView.getEngine(), "setRoomImage", projection.currentRoom().id());
     }
 

@@ -73,7 +73,7 @@ public class App extends Application {
     }
 
     public static class Logger {
-        private static final boolean LOGJSCALLS = false;
+        private static final boolean LOGJSCALLS = true;
 
         public static void logJSCall(String msg) {
             if (LOGJSCALLS) log("[JS Call]: " + msg);
