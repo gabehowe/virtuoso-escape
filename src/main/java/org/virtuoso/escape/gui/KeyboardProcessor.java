@@ -1,15 +1,14 @@
 package org.virtuoso.escape.gui;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.text.TextFlow;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 
 public class KeyboardProcessor {
     public static void addKeyboardBindings(Node root) {
@@ -35,8 +34,9 @@ public class KeyboardProcessor {
                     var preKey = new Label(sourceKey.substring(0, index));
                     var postKey = new Label(sourceKey.substring(index + 1));
                     var keyText = new Label(key);
-                    keyText.setStyle("-fx-underline:true;-fx-font-family: 'JetBrains Mono Bold'; -fx-text-fill: inherit;");
-//                    preKey.getStyleClass().addAll(node.getStyleClass());
+                    keyText.setStyle(
+                            "-fx-underline:true;-fx-font-family: 'JetBrains Mono Bold'; -fx-text-fill: inherit;");
+                    //                    preKey.getStyleClass().addAll(node.getStyleClass());
 
                     var flow = new TextFlow(leftDelimiter, preKey, keyText, postKey, rightDelimiter);
                     flow.getChildren().forEach(it -> it.setStyle("-fx-text-fill: inherit;" + it.getStyle()));

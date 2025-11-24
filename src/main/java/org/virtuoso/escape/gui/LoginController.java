@@ -1,5 +1,8 @@
 package org.virtuoso.escape.gui;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
@@ -9,10 +12,6 @@ import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.account.AccountManager;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class LoginController implements Initializable {
     LoginController(GameProjection projection) {
         this.proj = projection;
@@ -20,19 +19,21 @@ public class LoginController implements Initializable {
 
     @FXML
     public TextField usernameEntry;
+
     @FXML
     public PasswordField passwordEntry;
+
     GameProjection proj;
+
     @FXML
     public WebView webView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        KeyboardProcessor.addKeyboardBindings(root);
+        //        KeyboardProcessor.addKeyboardBindings(root);
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("login.html").toExternalForm());
-        App.setApp(webView.getEngine(), this, () -> {
-        });
+        App.setApp(webView.getEngine(), this, () -> {});
     }
 
     enum AuthMode {
@@ -48,15 +49,15 @@ public class LoginController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public String tryAuth(String user, String pass) {
         try {
-            var flag = switch (authMode) {
-                case LOGIN -> proj.login(user, pass);
-                case CREATE -> proj.createAccount(user, pass);
-            };
+            var flag =
+                    switch (authMode) {
+                        case LOGIN -> proj.login(user, pass);
+                        case CREATE -> proj.createAccount(user, pass);
+                    };
 
             if (flag) {
                 // Move to next screen
@@ -74,19 +75,24 @@ public class LoginController implements Initializable {
     public void toggleAuthMode() {
         switch (this.authMode) {
             case LOGIN -> {
-                App.setText(webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_login"));
-                App.setText(webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_login"));
-                App.setText(webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_create"));
+                App.setText(
+                        webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_login"));
+                App.setText(
+                        webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_login"));
+                App.setText(
+                        webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_create"));
                 this.authMode = AuthMode.CREATE;
             }
             case CREATE -> {
-                App.setText(webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_create"));
-                App.setText(webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_create"));
-                App.setText(webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_login"));
+                App.setText(
+                        webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_create"));
+                App.setText(
+                        webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_create"));
+                App.setText(
+                        webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_login"));
                 this.authMode = AuthMode.LOGIN;
             }
         }
-//        KeyboardProcessor.addKeyboardBindings(root);
+        //        KeyboardProcessor.addKeyboardBindings(root);
     }
-
 }

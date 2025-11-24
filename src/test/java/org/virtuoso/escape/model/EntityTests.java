@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,11 +15,9 @@ import org.virtuoso.escape.model.action.SetMessage;
 import org.virtuoso.escape.model.action.TakeInput;
 import org.virtuoso.escape.model.data.DataLoader;
 
-/**
- * @author Andrew Heuer
- */
+/** @author Andrew Heuer */
 public class EntityTests {
-	GameProjection proj;
+    GameProjection proj;
 
     @BeforeEach
     public void pre() {
@@ -28,7 +25,7 @@ public class EntityTests {
         DataLoader.ACCOUNTS_PATH = getClass().getResource("accounts.json").getPath();
         DataLoader.GAMESTATES_PATH = getClass().getResource("gamestates.json").getPath();
         assertTrue(proj.login("dummy", "dummy"));
-	    GameState.instance().setCurrentMessage(null);
+        GameState.instance().setCurrentMessage(null);
     }
 
     // -- Constructor Tests -- //
@@ -88,17 +85,16 @@ public class EntityTests {
         assertTrue(attackExecuted.get());
     }
 
-
-	@DisplayName("Constructing an entity with a null id should throw NullPointerException")
-	@Test
-	void constructWithNullIdTest() {
-		assertThrows(NullPointerException.class, () -> {
-			new Entity(null);
-		});
-	}
+    @DisplayName("Constructing an entity with a null id should throw NullPointerException")
+    @Test
+    void constructWithNullIdTest() {
+        assertThrows(NullPointerException.class, () -> {
+            new Entity(null);
+        });
+    }
 
     // -- State Swap Tests -- //
-	@DisplayName("Should swap states correctly for multiple scenarios")
+    @DisplayName("Should swap states correctly for multiple scenarios")
     @ParameterizedTest(name = "Swap from {0} to {1}")
     @MethodSource
     void swapStateTests(String initialState, String newState, String expected) {
@@ -111,22 +107,19 @@ public class EntityTests {
     }
 
     private static Stream<Arguments> swapStateTests() {
-        return Stream.of(
-            Arguments.of("state1", "state2", "state2"),
-            Arguments.of("state1", "state1", "state1")
-        );
+        return Stream.of(Arguments.of("state1", "state2", "state2"), Arguments.of("state1", "state1", "state1"));
     }
 
-	@DisplayName("Swapping to a nonexistent state should throw an exception")
-	@Test
-	void swapNonExistentState() {
-		EntityState state1 = new EntityState("state1");
-		Entity entity = new Entity("myEntity", state1);
+    @DisplayName("Swapping to a nonexistent state should throw an exception")
+    @Test
+    void swapNonExistentState() {
+        EntityState state1 = new EntityState("state1");
+        Entity entity = new Entity("myEntity", state1);
 
-		assertThrows(RuntimeException.class, () -> {
-			entity.swapState("nonexistent");
-		});
-	}
+        assertThrows(RuntimeException.class, () -> {
+            entity.swapState("nonexistent");
+        });
+    }
 
     // -- Write Method Tests -- //
     @DisplayName("Should return id and current state in write()")
@@ -144,8 +137,8 @@ public class EntityTests {
         assertEquals("state2", result[1]);
     }
 
-	// -- id Tests -- //
-	@DisplayName("Should return the correct id")
+    // -- id Tests -- //
+    @DisplayName("Should return the correct id")
     @Test
     void idMethodTest() {
         Entity entity = new Entity("testState");

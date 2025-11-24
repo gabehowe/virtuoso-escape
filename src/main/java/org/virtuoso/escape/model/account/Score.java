@@ -1,7 +1,6 @@
 package org.virtuoso.escape.model.account;
 
 import java.time.Duration;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
@@ -13,7 +12,6 @@ import org.virtuoso.escape.model.GameState;
  * @param timeRemaining The time remaining when the user finished the game.
  * @param difficulty The difficulty the user was playing on when they finished the game.
  * @param totalScore The overall high score of a user.
- *
  * @author gabri
  * @author Andrew
  */

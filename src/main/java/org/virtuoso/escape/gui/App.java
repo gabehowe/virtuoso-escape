@@ -110,6 +110,4 @@ public class App extends Application {
         return engine.executeScript(cmd);
     }
 
-    public static EventHandler<KeyEvent> keyboardHandler;
-
 }

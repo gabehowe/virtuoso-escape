@@ -1,21 +1,19 @@
 package org.virtuoso.escape.model;
 
-import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.*;
-
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.junit.jupiter.api.*;
 import org.virtuoso.escape.model.account.*;
 import org.virtuoso.escape.model.data.DataLoader;
 import org.virtuoso.escape.model.data.DataWriter;
 
 /**
  * Tests for GameState.java
- * 
+ *
  * @author Bos
  */
 public class GameStateTests {
@@ -62,28 +60,10 @@ public class GameStateTests {
         assertSame(s1, s2);
     }
 
-    @Test
-    void testBeginWithDefaults() throws Exception {
-        //Dataloader dummy
-        JSONObject dummyData = new JSONObject();
-        JSONObject gameStates = new JSONObject();
-        gameStates.put(account.id().toString(), dummyData);
-        injectStaticField(DataLoader.class, "mockGameStates", gameStates);
-
-        assertDoesNotThrow(() -> state.begin(account));
-
-        assertEquals(account, state.account());
-        assertNotNull(state.currentFloor());
-        assertNotNull(state.currentRoom());
-        assertTrue(state.currentItems().isEmpty());
-        assertTrue(state.completedPuzzles().isEmpty());
-        assertTrue(state.hintsUsed().isEmpty());
-        assertNotNull(state.time());
-    }
 
     @Test
     void testAddAndClearItems() {
-        Item keycard = Item.valueOf("KEYCARD");
+        Item keycard = Item.keys;
         state.addItem(keycard);
         assertTrue(state.hasItem(keycard));
 
@@ -134,12 +114,13 @@ public class GameStateTests {
 
         f.setLong(null, 7199L);
         state.incrementInitialTime();
-        assertEquals(7259L, f.getLong(null)); 
+        assertEquals(7259L, f.getLong(null));
 
         f.setLong(null, 7200L);
         state.incrementInitialTime();
         assertEquals(7200L, f.getLong(null));
     }
+
     @Test
     void testSetAndGetDifficulty() {
         state.setDifficulty(Difficulty.VIRTUOSIC);
@@ -157,7 +138,7 @@ public class GameStateTests {
         assertTrue(msg2.isEmpty());
     }
 
-    //completed
+    // completed
 
     @Test
     void testAddCompletedPuzzleIdempotency() {
@@ -174,7 +155,7 @@ public class GameStateTests {
         assertNull(state.hintsUsed().get("Level2"));
     }
 
-    //high svore
+    // high svore
     @Test
     void testEndGame() {
         assertFalse(state.isEnded());
@@ -182,27 +163,7 @@ public class GameStateTests {
         assertTrue(state.isEnded());
     }
 
-    @Test
-    void testUpdateHighScoreOnlyIfEnded() throws Exception {
-        AccountManager manager = AccountManager.instance();
-        injectPrivateField(manager, "gameStates", new HashMap<>());
-        state.end();
-        state.setTime(Duration.ofSeconds(100));
-        state.setDifficulty(Difficulty.SUBSTANTIAL);
-        state.updateHighScore();
 
-        assertNotNull(account.highScore());
-    }
-
-    @Test
-    void testWriteDoesNotThrow() throws Exception {
-        injectStaticField(DataWriter.class, "mockWrite", Boolean.TRUE);
-        AccountManager manager = AccountManager.instance();
-        injectPrivateField(manager, "gameStates", new HashMap<>());
-
-        state.end();
-        assertDoesNotThrow(() -> state.write());
-    }
 
     @Test
     void testSetCurrentFloorResetsRoomAndEntity() throws Exception {

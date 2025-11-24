@@ -4,15 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.virtuoso.escape.model.data.DataLoader;
 
-/**
- * @author gabri
- */
+/** @author gabri */
 public class GameInfoTests {
     GameProjection proj;
     private static String stateData =
@@ -50,8 +47,10 @@ public class GameInfoTests {
             }""";
 
     @BeforeEach
-    public void pre() {
+    public void pre() throws Exception {
         proj = new GameProjection();
+        Util.rebuildSingleton(GameInfo.class);
+        Util.rebuildSingleton(GameState.class);
         DataLoader.ACCOUNTS_PATH = getClass().getResource("accounts.json").getPath();
         DataLoader.GAMESTATES_PATH = getClass().getResource("gamestates.json").getPath();
         try {
@@ -62,6 +61,7 @@ public class GameInfoTests {
         }
         proj.login("dummy", "dummy");
     }
+
     @AfterEach
     public void post() {
         proj.logout();
@@ -143,8 +143,6 @@ public class GameInfoTests {
         assertEquals("sandwich_joe", hardyPresent.state().id());
     }
 
-
-
     private void narratorTest(String expectedResource, String state) {
         var floor = GameInfo.instance().building().get(1);
         var room = floor.rooms().getFirst();
@@ -205,6 +203,7 @@ public class GameInfoTests {
     public void floor3DoorKeyCheck(boolean has) {
         if (has) GameState.instance().addItem(Item.keys);
         var floor3 = GameInfo.instance().building().get(3);
+        GameState.instance().setCurrentFloor(floor3);
         var room = floor3.rooms().getFirst();
         var exit_door = room.entities().stream()
                 .filter(i -> i.id().equals("exit_door"))
@@ -212,12 +211,13 @@ public class GameInfoTests {
                 .get();
         exit_door.state().interact();
         var msg = GameState.instance().currentMessage().get();
-        assertEquals(GameInfo.instance().string("exit_door", (has) ? "unlocked_msg" : "locked_msg"), msg);
+        assertEquals(GameInfo.instance().string("exit_door", has ? "unlocked_msg" : "locked_msg"), msg);
     }
 
     @Nested
     class AlmanacTests {
         Entity almanac;
+
         @BeforeEach
         public void pre() {
             var floor = GameInfo.instance().building().get(1);
@@ -276,9 +276,9 @@ public class GameInfoTests {
             firstState.takeInput(guess);
             // Ensure incorrect guess;
             if (GameState.instance()
-                         .currentMessage()
-                         .get()
-                         .contains(GameInfo.instance().string("almanac", "correct_page"))) {
+                    .currentMessage()
+                    .get()
+                    .contains(GameInfo.instance().string("almanac", "correct_page"))) {
                 guess = "30";
             }
             almanac.swapState("almanac_5");

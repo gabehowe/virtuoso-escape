@@ -1,12 +1,11 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.account.Account;
-import org.virtuoso.escape.model.account.AccountManager;
-import org.virtuoso.escape.speech.SpeechPlayer;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+import org.virtuoso.escape.model.account.Account;
+import org.virtuoso.escape.model.account.AccountManager;
+import org.virtuoso.escape.speech.SpeechPlayer;
 
 /**
  * The game facade.
@@ -17,7 +16,7 @@ public record GameProjection(GameState gameState, AccountManager accountManager)
 
     /** Create the default projection without state. */
     public GameProjection() {
-        this(GameState.instance(),AccountManager.instance());
+        this(GameState.instance(), AccountManager.instance());
     }
 
     /**

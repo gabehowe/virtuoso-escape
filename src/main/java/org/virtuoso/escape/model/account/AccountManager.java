@@ -15,7 +15,7 @@ import org.virtuoso.escape.model.data.DataWriter;
  * @author Treasure
  */
 public record AccountManager(JSONObject accounts, JSONObject gameStates) {
-    private static AccountManager accountManager;
+    private static AccountManager instance;
 
     /** Loads all user accounts and gamestates. */
     private AccountManager() {
@@ -28,10 +28,10 @@ public record AccountManager(JSONObject accounts, JSONObject gameStates) {
      * @return the singleton of {@code AccountManager}
      */
     public static AccountManager instance() {
-        if (accountManager == null) {
-            accountManager = new AccountManager();
+        if (instance == null) {
+            instance = new AccountManager();
         }
-        return accountManager;
+        return instance;
     }
 
     /**
@@ -84,7 +84,7 @@ public record AccountManager(JSONObject accounts, JSONObject gameStates) {
     /** Logs the current user account out and writes its data. */
     public void logout() {
         DataWriter.writeAccount();
-        AccountManager.accountManager = null;
+        AccountManager.instance = null;
     }
 
     /**

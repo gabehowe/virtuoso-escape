@@ -12,13 +12,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.virtuoso.escape.model.action.Action;
 import org.virtuoso.escape.model.action.AddPenalty;
 import org.virtuoso.escape.model.action.SetFloor;
@@ -27,11 +26,9 @@ import org.virtuoso.escape.model.action.Severity;
 import org.virtuoso.escape.model.action.TakeInput;
 import org.virtuoso.escape.model.data.DataLoader;
 
-/**
- * @author Andrew
- */
+/** @author Andrew */
 public class EntityStateTests {
-	GameProjection proj;
+    GameProjection proj;
 
     @BeforeEach
     public void pre() {
@@ -41,8 +38,8 @@ public class EntityStateTests {
         assertTrue(proj.login("dummy", "dummy"));
     }
 
-	// -- Constructor Tests -- //
-	@DisplayName("Should construct and actionless entity state from an id")
+    // -- Constructor Tests -- //
+    @DisplayName("Should construct and actionless entity state from an id")
     @Test
     public void constructActionlessStateTest() {
         EntityState state = new EntityState("testState");
@@ -59,15 +56,15 @@ public class EntityStateTests {
         assertNull(state.inputAction(), "Input action should be null");
     }
 
-	@DisplayName("Should throw an error when constructed with a null id")
+    @DisplayName("Should throw an error when constructed with a null id")
     @Test
     public void constructStateNullIdTest() {
-		assertThrows(NullPointerException.class, () -> {
+        assertThrows(NullPointerException.class, () -> {
             new EntityState(null);
         });
     }
 
-	@DisplayName("Should construct an entity state with 5 parameters")
+    @DisplayName("Should construct an entity state with 5 parameters")
     @Test
     void constructState5Param() {
         Action attack = new AddPenalty(Severity.HIGH);
@@ -89,7 +86,7 @@ public class EntityStateTests {
         assertTrue(state.capabilities().input());
     }
 
-	@DisplayName("Should construct an entity state with some null parameters")
+    @DisplayName("Should construct an entity state with some null parameters")
     @Test
     void constructStateSomeNullParam() {
         Action attack = new AddPenalty(Severity.HIGH);
@@ -109,7 +106,7 @@ public class EntityStateTests {
         assertFalse(state.capabilities().input());
     }
 
-	@DisplayName("Should construct an entity state with all null parameters")
+    @DisplayName("Should construct an entity state with all null parameters")
     @Test
     void constructStateAllNullParam() {
         EntityState state = new EntityState("testState", null, null, null, null);
@@ -126,32 +123,32 @@ public class EntityStateTests {
         assertFalse(state.capabilities().input());
     }
 
-	@DisplayName("Should construct an entity state using the 6-parameter canonical constructor")
-	@Test
-	void constructState6Param() {
-		Action attack = new AddPenalty(Severity.HIGH);
-		Action inspect = new SetFloor(2);
-		Action interact = new SetMessage("InteractMessage");
-		TakeInput input = new TakeInput();
-		EntityState.Capabilities capabilities = new EntityState.Capabilities(true, false, false, true);
+    @DisplayName("Should construct an entity state using the 6-parameter canonical constructor")
+    @Test
+    void constructState6Param() {
+        Action attack = new AddPenalty(Severity.HIGH);
+        Action inspect = new SetFloor(2);
+        Action interact = new SetMessage("InteractMessage");
+        TakeInput input = new TakeInput();
+        EntityState.Capabilities capabilities = new EntityState.Capabilities(true, false, false, true);
 
-		EntityState state = new EntityState("testState", attack, inspect, interact, input, capabilities);
+        EntityState state = new EntityState("testState", attack, inspect, interact, input, capabilities);
 
-		assertEquals("testState", state.id());
-		assertSame(attack, state.attackAction());
-		assertSame(inspect, state.inspectAction());
-		assertSame(interact, state.interactAction());
-		assertSame(input, state.inputAction());
-		assertSame(capabilities, state.capabilities());
+        assertEquals("testState", state.id());
+        assertSame(attack, state.attackAction());
+        assertSame(inspect, state.inspectAction());
+        assertSame(interact, state.interactAction());
+        assertSame(input, state.inputAction());
+        assertSame(capabilities, state.capabilities());
 
-		assertTrue(state.capabilities().attack());
-		assertFalse(state.capabilities().inspect());
-		assertFalse(state.capabilities().interact());
-		assertTrue(state.capabilities().input());
-	}
+        assertTrue(state.capabilities().attack());
+        assertFalse(state.capabilities().inspect());
+        assertFalse(state.capabilities().interact());
+        assertTrue(state.capabilities().input());
+    }
 
-	// -- Get Text Tests -- //
-	@ParameterizedTest(name = "Will get text from entity state: Test {index} => key: {0}, expected: {1}")
+    // -- Get Text Tests -- //
+    @ParameterizedTest(name = "Will get text from entity state: Test {index} => key: {0}, expected: {1}")
     @MethodSource
     public void getTextTest(String key, String expected) throws Exception {
         EntityState state = new EntityState("welcome");
@@ -163,40 +160,61 @@ public class EntityStateTests {
 
     private static Stream<Arguments> getTextTest() {
         return Stream.of(
-            Arguments.of("welcome", "Welcome to Virtuoso Escape!"),
-            Arguments.of("missingText", "[welcome/missingText]"),
-            Arguments.of(null, "[welcome/null]")   
-        );
+                Arguments.of("welcome", "Welcome to Virtuoso Escape!"),
+                Arguments.of("missingText", "<welcome/missingText>"),
+                Arguments.of(null, "<welcome/null>"));
     }
 
-	private static String getText(EntityState state, String key) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException{
-		Method getTextMethod = EntityState.class.getDeclaredMethod("getText", String.class);
+    private static String getText(EntityState state, String key)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Method getTextMethod = EntityState.class.getDeclaredMethod("getText", String.class);
         getTextMethod.setAccessible(true);
         return (String) getTextMethod.invoke(state, key);
-	}
+    }
 
-	// -- Action Tests -- //
-    @ParameterizedTest(name = "Will call actions through interact, attack and inspect : Test {index} => method: {0}, key: {1}, hasAction: {2}, nullAction: {3}")
+    // -- Action Tests -- //
+    @ParameterizedTest(
+            name =
+                    "Will call actions through interact, attack and inspect : Test {index} => method: {0}, key: {1}, hasAction: {2}, nullAction: {3}")
     @MethodSource
     void actionCallTest(String methodName, String key, boolean hasAction, boolean nullAction) throws Exception {
-		Action mockAction;
-		AtomicBoolean executed = new AtomicBoolean(false);
+        Action mockAction;
+        AtomicBoolean executed = new AtomicBoolean(false);
 
-		if (!nullAction) {
-			mockAction = () -> executed.set(true);
-		} else {
-			mockAction = null;
-		}
+        if (!nullAction) {
+            mockAction = () -> executed.set(true);
+        } else {
+            mockAction = null;
+        }
 
-		EntityState testState = switch (methodName) {
-			case "interact" -> new EntityState("testState", null, null, mockAction, null, 
-			new EntityState.Capabilities(false, false, hasAction, false));
-			case "attack" -> new EntityState("testState", mockAction, null, null, null, 
-			new EntityState.Capabilities(hasAction, false, false, false));
-			case "inspect" -> new EntityState("testState", null , mockAction, null, null, 
-			new EntityState.Capabilities(false, hasAction, false, false));
-			default -> throw new IllegalArgumentException("Unknown method: " + methodName);
-		};
+        EntityState testState =
+                switch (methodName) {
+                    case "interact" ->
+                        new EntityState(
+                                "testState",
+                                null,
+                                null,
+                                mockAction,
+                                null,
+                                new EntityState.Capabilities(false, false, hasAction, false));
+                    case "attack" ->
+                        new EntityState(
+                                "testState",
+                                mockAction,
+                                null,
+                                null,
+                                null,
+                                new EntityState.Capabilities(hasAction, false, false, false));
+                    case "inspect" ->
+                        new EntityState(
+                                "testState",
+                                null,
+                                mockAction,
+                                null,
+                                null,
+                                new EntityState.Capabilities(false, hasAction, false, false));
+                    default -> throw new IllegalArgumentException("Unknown method: " + methodName);
+                };
 
         GameState.instance().setCurrentMessage(null);
 
@@ -207,11 +225,11 @@ public class EntityStateTests {
 
         assertEquals(expectedMessage, GameState.instance().currentMessage().get());
 
-		if (hasAction && !nullAction) {
-			assertTrue(executed.get());
-		} else {
-			assertFalse(executed.get());
-		}
+        if (hasAction && !nullAction) {
+            assertTrue(executed.get());
+        } else {
+            assertFalse(executed.get());
+        }
     }
 
     private static Stream<Arguments> actionCallTest() {
@@ -222,35 +240,34 @@ public class EntityStateTests {
                 Arguments.of("attack", "attack", false, false),
                 Arguments.of("inspect", "inspect", true, false),
                 Arguments.of("inspect", "inspect", false, false),
-               	Arguments.of("interact", "interact", true, true),
+                Arguments.of("interact", "interact", true, true),
                 Arguments.of("interact", "interact", false, true),
                 Arguments.of("attack", "attack", true, true),
                 Arguments.of("attack", "attack", false, true),
                 Arguments.of("inspect", "inspect", true, true),
-                Arguments.of("inspect", "inspect", false, true)
-        );
-	}
+                Arguments.of("inspect", "inspect", false, true));
+    }
 
-	// -- Name Tests -- //
-	@DisplayName("Should return the entity's name")
+    // -- Name Tests -- //
+    @DisplayName("Should return the entity's name")
     @Test
     void nameMethodTest() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         EntityState state = new EntityState("intro_squirrel");
         String name = state.name();
-		String expectedName = getText(state, "name");
+        String expectedName = getText(state, "name");
         assertEquals(expectedName, name);
     }
 
-	@DisplayName("Should return fallback for name if missing")
+    @DisplayName("Should return fallback for name if missing")
     @Test
     void nameMethodMissingTest() {
         EntityState state = new EntityState("missingName");
         String name = state.name();
-        assertEquals("[missingName/name]", name);
+        assertEquals("<missingName/name>", name);
     }
 
-	// -- Introduce Tests -- //
-	@DisplayName("Should display the introductory message")
+    // -- Introduce Tests -- //
+    @DisplayName("Should display the introductory message")
     @Test
     void introduceMethodTest() throws Exception {
         EntityState state = new EntityState("intro_squirrel");
@@ -259,17 +276,17 @@ public class EntityStateTests {
         assertEquals(expectedMessage, GameState.instance().currentMessage().get());
     }
 
-	@DisplayName("Should handle introduce with missing text gracefully")
+    @DisplayName("Should handle introduce with missing text gracefully")
     @Test
     void introduceMethodMissingTest() {
         EntityState state = new EntityState("missingIntroduce");
         state.introduce();
         String message = GameState.instance().currentMessage().get();
-        assertEquals("[missingIntroduce/introduce]", message);
+        assertEquals("<missingIntroduce/introduce>", message);
     }
 
-	// -- Equals Tests -- //
-	@DisplayName("Should correctly compare equality of two entity states by id")
+    // -- Equals Tests -- //
+    @DisplayName("Should correctly compare equality of two entity states by id")
     @Test
     void equalsMethodTest() {
         EntityState state1 = new EntityState("testState");
@@ -277,12 +294,12 @@ public class EntityStateTests {
         EntityState state3 = new EntityState("otherState");
 
         assertTrue(state1.equals(state2));
-		assertTrue(state1.equals(state1));
+        assertTrue(state1.equals(state1));
         assertFalse(state1.equals(state3));
     }
 
-	// -- id Tests -- //
-	@DisplayName("Should return the correct id")
+    // -- id Tests -- //
+    @DisplayName("Should return the correct id")
     @Test
     void idMethodTest() {
         EntityState state = new EntityState("testState");
@@ -290,15 +307,12 @@ public class EntityStateTests {
         assertEquals("testState", result);
     }
 
-	// -- Take Input Tests -- //
-	@DisplayName("Should handle takeInput correctly when input action exists")
+    // -- Take Input Tests -- //
+    @DisplayName("Should handle takeInput correctly when input action exists")
     @Test
     void takeInputActionExistsTest() {
         AtomicBoolean executed = new AtomicBoolean(false);
-		TakeInput inputAction = new TakeInput(
-			"",
-			TakeInput.makeCases("cd", (Action) () -> executed.set(true))
-		);
+        TakeInput inputAction = new TakeInput("", TakeInput.makeCases("cd", (Action) () -> executed.set(true)));
 
         EntityState state = new EntityState("computty_unblocked", null, null, null, inputAction);
         state.takeInput("cd");
@@ -307,7 +321,7 @@ public class EntityStateTests {
         assertTrue(GameState.instance().currentMessage().get().equals(""));
     }
 
-	@DisplayName("Should handle takeInput correctly when input action is null")
+    @DisplayName("Should handle takeInput correctly when input action is null")
     @Test
     void takeInputActionNullTest() {
         EntityState state = new EntityState("testState");
@@ -316,7 +330,7 @@ public class EntityStateTests {
         assertTrue(message.contains("I couldn't understand 'unknownInput'"));
     }
 
-	@DisplayName("Should handle takeInput when input action is null and key exists")
+    @DisplayName("Should handle takeInput when input action is null and key exists")
     @Test
     void takeInputNullActionKeyExistsTest() {
         EntityState state = new EntityState("computty_unblocked");
@@ -324,5 +338,4 @@ public class EntityStateTests {
         String message = GameState.instance().currentMessage().get();
         assertEquals(GameInfo.instance().string("computty_unblocked", "input_cd"), message);
     }
-
 }

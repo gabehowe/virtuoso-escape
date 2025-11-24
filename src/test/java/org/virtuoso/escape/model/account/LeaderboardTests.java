@@ -1,22 +1,20 @@
 package org.virtuoso.escape.model.account;
 
-import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.util.UUID;
-
 import org.json.simple.JSONObject;
+import org.junit.jupiter.api.*;
 import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameState;
 
 /**
  * tests for Leaderboard.java
- * 
+ *
  * @author Bose
  */
 public class LeaderboardTests {
@@ -36,8 +34,11 @@ public class LeaderboardTests {
         System.setOut(new PrintStream(outContent));
 
         mockAccount = new Account(
-                "dummy", "dummy", UUID.randomUUID(),
-                new Score(Duration.ofSeconds(100), Difficulty.TRIVIAL, 100L), false);
+                "dummy",
+                "dummy",
+                UUID.randomUUID(),
+                new Score(Duration.ofSeconds(100), Difficulty.TRIVIAL, 100L),
+                false);
 
         mockGameState = GameState.instance();
 
@@ -102,8 +103,7 @@ public class LeaderboardTests {
     @Test
     @DisplayName("Leaderboard should format time correctly as MM:SS")
     void testFormattedTime() {
-        Leaderboard.ScoreEntry entry =
-                new Leaderboard.ScoreEntry("user", 999L, 125L, "TRIVIAL");
+        Leaderboard.ScoreEntry entry = new Leaderboard.ScoreEntry("user", 999L, 125L, "TRIVIAL");
         assertEquals("02:05", entry.getFormattedTime());
     }
 
@@ -172,7 +172,7 @@ public class LeaderboardTests {
         JSONObject hs = new JSONObject();
         hs.put("difficulty", "TRIVIAL");
         hs.put("timeRemaining", 100L);
-        hs.put("totalScore", null); 
+        hs.put("totalScore", null);
 
         JSONObject acct = new JSONObject();
         acct.put("username", "nullscore");

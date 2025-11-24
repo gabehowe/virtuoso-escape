@@ -1,13 +1,12 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.action.*;
-import org.virtuoso.escape.model.data.DataLoader;
-
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.virtuoso.escape.model.action.*;
+import org.virtuoso.escape.model.data.DataLoader;
 
 /**
  * @author Andrew
@@ -17,9 +16,7 @@ import java.util.stream.IntStream;
 public record GameInfo(Map<String, Map<String, String>> language, List<Floor> building) {
     private static GameInfo instance;
 
-    /**
-     * Construct this singleton.
-     */
+    /** Construct this singleton. */
     private GameInfo() {
         this(DataLoader.loadGameLanguage(), new ArrayList<>());
         // todo: add other floors
@@ -65,7 +62,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 narratorMsg.apply(hint2Id), // Give the specific hint text
                 () -> GameState.instance().setHintsUsed(floorId, 2), // Record the hint
                 new SwapEntities("narrator", "narrator_hint_2") // Swap to final state
-        );
+                );
         EntityState hint1Given = new EntityState(
                 "narrator_hint_1",
                 narratorMsg.apply("attack"),
@@ -79,7 +76,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 narratorMsg.apply(hint1Id), // Give the specific hint text
                 () -> GameState.instance().setHintsUsed(floorId, 1), // Record the hint
                 new SwapEntities("narrator", "narrator_hint_1") // Swap to hint1Given state
-        );
+                );
         EntityState start = new EntityState(
                 "narrator_start",
                 narratorMsg.apply("attack"),
@@ -191,20 +188,20 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
      */
     private Entity joeHardy() {
         Predicate<Item[]> hasItems = (i) -> Arrays.stream(i)
-                                                  .map(GameState.instance()::hasItem)
-                                                  .reduce((a, b) -> a && b)
-                                                  .get();
+                .map(GameState.instance()::hasItem)
+                .reduce((a, b) -> a && b)
+                .get();
         EntityState sandwichJoe = new EntityState("sandwich_joe", new Default(), new Default(), new Default(), null);
         EntityState sansSandwichJoe = new EntityState(
                 "sans_sandwich_joe",
                 new Default(),
                 new Default(),
                 new Conditional(
-                        () -> hasItems.test(new Item[]{
-                                Item.left_bread,
-                                Item.right_bread,
-                                Item.sunflower_seed_butter,
-                                Item.sealed_clean_food_safe_hummus
+                        () -> hasItems.test(new Item[] {
+                            Item.left_bread,
+                            Item.right_bread,
+                            Item.sunflower_seed_butter,
+                            Item.sealed_clean_food_safe_hummus
                         }),
                         new Chain(
                                 new SetMessage(this, "sans_sandwich_joe", "interact_sandwich"),
@@ -233,9 +230,9 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
         for (int i = 0; i < length; i++) {
             int current_i = i;
             Map<String, Action> map = IntStream.range(1, PAGES)
-                                               .boxed()
-                                               .collect(Collectors.toMap(
-                                                       j -> String.valueOf(j), j -> turnPage(length - current_i, j, length, CORRECT_PAGE)));
+                    .boxed()
+                    .collect(Collectors.toMap(
+                            j -> String.valueOf(j), j -> turnPage(length - current_i, j, length, CORRECT_PAGE)));
             LinkedHashMap<String, Action> linkedMap = new LinkedHashMap<String, Action>(map);
             Function<String, Action> alm = (stringId) -> new SetMessage(this, "almanac", stringId);
             almanacStates.add(new EntityState(
@@ -252,9 +249,9 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     /**
      * Test the user input page.
      *
-     * @param flips       Attempts remaining
+     * @param flips Attempts remaining
      * @param currentPage The page attempted.
-     * @param maxFlips    The total number of attemptable flips.
+     * @param maxFlips The total number of attemptable flips.
      * @param correctPage The correct, desired page
      * @return An Action to be run later.
      */
@@ -311,7 +308,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     /**
      * Create a linked list of proper doors.
      *
-     * @param length  The number of doors in the linked list.
+     * @param length The number of doors in the linked list.
      * @param shuffle The function to shuffle doors.
      * @return A single door with an internal link to the next door.
      */
@@ -374,16 +371,17 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 TakeInput.makeCases(
                         "(?:box )?open",
                         new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
-                        ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))));
+                        ".*",
+                        new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))));
         EntityState box_success = new EntityState("box_success", new Default(), new Default(), null, boxLogicSuccess);
 
         var boxLogicFollow = new TakeInput(
                 "",
                 TakeInput.makeCases(
                         "(?:box )?follow",
-                        new Chain(
-                                new SwapEntities("box_riddle", "box_success"), puzzleMsg.apply("step_follow")),
-                        ".*", new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))));
+                        new Chain(new SwapEntities("box_riddle", "box_success"), puzzleMsg.apply("step_follow")),
+                        ".*",
+                        new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))));
         EntityState box_step1 =
                 new EntityState("box_step1", new Default(), new Default(), new Default(), boxLogicFollow);
 
@@ -410,7 +408,8 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
 
         Action checkKeysAndSwap = new Conditional(
                 () -> GameState.instance().hasItem(Item.keys),
-                new Chain(doorMsg.apply("unlocked_msg"), new SwapEntities("exit_door", "exit_door_unlocked")),
+                new Chain(doorMsg.apply("unlocked_msg"),
+                        new SwapEntities("exit_door", "exit_door_unlocked")),
                 doorMsg.apply("locked_msg"));
         EntityState doorLocked = new EntityState(
                 "exit_door_locked", new Default(), doorMsg.apply("inspect_locked"), checkKeysAndSwap, null);
@@ -489,14 +488,22 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                                 ttyStr.apply("good_rotx"),
                                 new CompletePuzzle("CompuTTY"),
                                 new SwapEntities("microwave", "microwave_unblocked")),
-                        "rotx 16 .*", ttyStr.apply("no_file"),
-                        "rotx \\d+.*", ttyStr.apply("failed_rotx"),
-                        "rotx.*", ttyStr.apply("man_rotx"),
-                        "ls", ttyStr.apply("ls_tar"),
-                        "cat code", ttyStr.apply("cat_code"),
-                        "cat.*", ttyStr.apply("man_cat"),
-                        "tar xvf .*", ttyStr.apply("no_file"),
-                        "cd.*", ttyStr.apply("no_file")));
+                        "rotx 16 .*",
+                        ttyStr.apply("no_file"),
+                        "rotx \\d+.*",
+                        ttyStr.apply("failed_rotx"),
+                        "rotx.*",
+                        ttyStr.apply("man_rotx"),
+                        "ls",
+                        ttyStr.apply("ls_tar"),
+                        "cat code",
+                        ttyStr.apply("cat_code"),
+                        "cat.*",
+                        ttyStr.apply("man_cat"),
+                        "tar xvf .*",
+                        ttyStr.apply("no_file"),
+                        "cd.*",
+                        ttyStr.apply("no_file")));
         var computtyTar = new EntityState(
                 "computty_tar",
                 ttyStr.apply("attack"),
@@ -508,14 +515,22 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 TakeInput.makeCases(
                         "tar xvf code.tar$",
                         new Chain(new SetMessage("code"), new SwapEntities("computty", "computty_tar")),
-                        "tar xvf .*", ttyStr.apply("no_file"),
-                        "tar.*", ttyStr.apply("man_tar"),
-                        "ls", ttyStr.apply("ls_cd"),
-                        "cat code.tar", ttyStr.apply("cat_tar"),
-                        "cat.*", ttyStr.apply("man_cat"),
-                        "cd.*", ttyStr.apply("no_file"),
-                        "rotx \\d+.*", ttyStr.apply("no_file"),
-                        "rotx.*", ttyStr.apply("man_rotx")));
+                        "tar xvf .*",
+                        ttyStr.apply("no_file"),
+                        "tar.*",
+                        ttyStr.apply("man_tar"),
+                        "ls",
+                        ttyStr.apply("ls_cd"),
+                        "cat code.tar",
+                        ttyStr.apply("cat_tar"),
+                        "cat.*",
+                        ttyStr.apply("man_cat"),
+                        "cd.*",
+                        ttyStr.apply("no_file"),
+                        "rotx \\d+.*",
+                        ttyStr.apply("no_file"),
+                        "rotx.*",
+                        ttyStr.apply("man_rotx")));
         var computtyCd = new EntityState(
                 "computty_cd",
                 ttyStr.apply("attack"),
@@ -544,9 +559,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
 
     // Ending//
 
-    /**
-     * End the game.
-     */
+    /** End the game. */
     private void gameEnding() {
         GameState.instance().end();
     }
@@ -556,12 +569,14 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     /**
      * Get a string resource from {@link GameInfo#language()} safely.
      *
-     * @param id       The parent of the string resource.
+     * @param id The parent of the string resource.
      * @param stringId The id of the string resource.
      * @return A string resource.
      */
     public String string(String id, String stringId) {
-        return Optional.ofNullable(language.get(id)).map(it -> it.get(stringId)).orElse("<" + id + "/" + stringId + ">");
+        return Optional.ofNullable(language.get(id))
+                .map(it -> it.get(stringId))
+                .orElse("<" + id + "/" + stringId + ">");
     }
 
     /**
@@ -581,4 +596,5 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     public List<Floor> building() {
         return this.building;
     }
+
 }

@@ -11,9 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.data.DataLoader;
-/**
- * @author gabri
- */
+
+/** @author gabri */
 public class AccountManagerTests {
     GameProjection proj;
     private static String stateData =
@@ -142,7 +141,6 @@ public class AccountManagerTests {
         // these branches.
         assertNull(AccountManager.instance().accountExists("a", "a"));
     }
-
 
     @DisplayName("Should load game data after successful login")
     @Test
