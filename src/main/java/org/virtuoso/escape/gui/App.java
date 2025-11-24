@@ -63,7 +63,10 @@ public class App extends Application {
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {
-        var cmd = String.format("document.getElementById('%s').textContent=\"%s\";", elementId, text.replace("\"", "\\\"").replace("\n","\\n"));
+        var cmd = String.format("document.getElementById('%s').textContent=\"%s\";", elementId,
+                text.replace("\"", "\\\"")
+                    .replace("\n", "<br>"))
+                .replace("\t", "\\t");
         Logger.log(cmd);
         engine.executeScript(cmd);
     }
@@ -159,8 +162,14 @@ public class App extends Application {
                 event.consume();
                 for (String key : keyMap.keySet()) {
                     if (pressed.equals(key)) {
-                        var jObj = (JSObject) callJSFunction(engine, "document.getElementById", keyMap.get(key).getAttribute("id"));
-                        jObj.call("click");
+                        var id = keyMap.get(key).getAttribute("id");
+                        var jObj = (JSObject) callJSFunction(engine, "document.getElementById", id);
+                        try {
+                            jObj.call("click");
+                        } catch (NullPointerException e) {
+                            System.err.println("with id " + id);
+                            throw e;
+                        }
                     }
                 }
             }

@@ -42,7 +42,7 @@ public class GameViewController implements Initializable {
         });
 
         var entityNames = projection.currentRoom().entities().stream().map(it -> List.of(GameInfo.instance().string(it.state().id(), "name"), it.state().id())).toList();
-        var currentEntity = projection.currentEntity().map(Entity::id).orElse("undefined");
+        var currentEntity = projection.currentEntity().map(e-> e.state().id()).orElse("undefined");
         updateBox("entity-box", currentEntity, entityNames, true);
 
         var entities = App.querySelectorAll(webView.getEngine(), "#entity-box > .box-element");
