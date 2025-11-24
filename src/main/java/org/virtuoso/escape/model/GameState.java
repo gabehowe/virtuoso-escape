@@ -1,7 +1,5 @@
 package org.virtuoso.escape.model;
 
-import java.time.Duration;
-import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.account.Account;
@@ -9,6 +7,9 @@ import org.virtuoso.escape.model.account.AccountManager;
 import org.virtuoso.escape.model.account.Score;
 import org.virtuoso.escape.model.data.DataLoader;
 import org.virtuoso.escape.model.data.DataWriter;
+
+import java.time.Duration;
+import java.util.*;
 
 /**
  * The current state of the game. Holds most mutable data.
@@ -32,8 +33,11 @@ public class GameState {
     private Difficulty difficulty;
     private String currentMessage;
 
-    /** Prevents GameState from being constructed. */
-    private GameState() {}
+    /**
+     * Prevents GameState from being constructed.
+     */
+    private GameState() {
+    }
 
     /**
      * The global singleton.
@@ -54,31 +58,29 @@ public class GameState {
         JSONObject gameStateInfo = (JSONObject)
                 DataLoader.loadGameStates().getOrDefault(account.id().toString(), new JSONObject());
         this.currentFloor = GameInfo.instance().building().stream()
-                .filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentFloor")))
-                .findFirst()
-                .orElse(GameInfo.instance().building().getFirst());
+                                    .filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentFloor")))
+                                    .findFirst()
+                                    .orElse(GameInfo.instance().building().getFirst());
         this.currentRoom = currentFloor.rooms().stream()
-                .filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentRoom")))
-                .findFirst()
-                .orElse(currentFloor.rooms().getFirst());
+                                       .filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentRoom")))
+                                       .findFirst()
+                                       .orElse(currentFloor.rooms().getFirst());
         this.currentEntity = currentRoom.entities().stream()
-                .filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentEntity")))
-                .findFirst()
-                .orElse(null);
+                                        .filter(i -> Objects.equals(i.id(), gameStateInfo.get("currentEntity")))
+                                        .findFirst()
+                                        .orElse(null);
 
         this.currentItems = new HashSet<>();
         JSONArray items = (JSONArray) gameStateInfo.getOrDefault("currentItems", new JSONArray());
-        for (int i = 0; i < items.size(); i++) this.currentItems.add(Item.valueOf((String) items.get(i)));
+        for (Object item : items) this.currentItems.add(Item.valueOf((String) item));
 
-        this.completedPuzzles = new HashSet<String>();
+        this.completedPuzzles = new HashSet<>();
         JSONArray completedPuzzlesJSON = (JSONArray) gameStateInfo.getOrDefault("completedPuzzles", new JSONArray());
-        for (int i = 0; i < completedPuzzlesJSON.size(); i++)
-            this.completedPuzzles.add((String) completedPuzzlesJSON.get(i));
+        for (Object o : completedPuzzlesJSON) this.completedPuzzles.add((String) o);
 
-        this.hintsUsed = new HashMap<String, Integer>();
+        this.hintsUsed = new HashMap<>();
         JSONObject hintsUsed = (JSONObject) gameStateInfo.getOrDefault("hintsUsed", new JSONObject());
-        for (Object level : hintsUsed.keySet())
-            this.hintsUsed.put(String.valueOf(level), ((Long) hintsUsed.get(level)).intValue());
+        for (Object level : hintsUsed.keySet()) this.hintsUsed.put(String.valueOf(level), ((Long) hintsUsed.get(level)).intValue());
 
         this.time = Duration.ofSeconds((Long) gameStateInfo.getOrDefault("time", initialTime));
         this.penalty = (int) gameStateInfo.getOrDefault("penalty", 0);
@@ -100,7 +102,9 @@ public class GameState {
         this.currentEntity = entity;
     }
 
-    /** Unfocus the current entity. */
+    /**
+     * Unfocus the current entity.
+     */
     public void leaveEntity() {
         this.currentEntity = null;
     }
@@ -121,7 +125,7 @@ public class GameState {
      * @param item The {@link Item} to add.
      */
     public void addItem(Item item) {
-        currentItems.add(item);
+        if (item != null) currentItems.add(item);
     }
 
     /**
@@ -171,7 +175,9 @@ public class GameState {
         return currentItems.stream().toList();
     }
 
-    /** Remove all items. */
+    /**
+     * Remove all items.
+     */
     public void clearItems() {
         currentItems.clear();
     }
@@ -186,7 +192,9 @@ public class GameState {
         return time.minusMillis(delta);
     }
 
-    /** Set the time remaining. */
+    /**
+     * Set the time remaining.
+     */
     public void setTime(Duration time) {
         this.time = time;
     }
@@ -209,7 +217,9 @@ public class GameState {
         this.penalty += penalty;
     }
 
-    /** Increments the {@code initialTime} by 1 minute if it is less than 2 hours. */
+    /**
+     * Increments the {@code initialTime} by 1 minute if it is less than 2 hours.
+     */
     public void incrementInitialTime() {
         if (initialTime < 7200) initialTime += 60;
     }
@@ -241,7 +251,9 @@ public class GameState {
         this.difficulty = diff;
     }
 
-    /** Recalculate the high score and reset GameState. */
+    /**
+     * Recalculate the high score and reset GameState.
+     */
     public void updateHighScore() {
         if (isEnded()) {
             Long currentScore = Score.calculateScore(this.time, this.difficulty);
@@ -305,7 +317,7 @@ public class GameState {
     /**
      * Sets the quantity of hints used for a certain level
      *
-     * @param puzzle The name of the puzzle the hint was used on.
+     * @param puzzle    The name of the puzzle the hint was used on.
      * @param hintsUsed The amount of hints used on that puzzle.
      */
     public void setHintsUsed(String puzzle, int hintsUsed) {
@@ -339,12 +351,16 @@ public class GameState {
         return this.ended;
     }
 
-    /** End the game. */
+    /**
+     * End the game.
+     */
     public void end() {
         this.ended = true;
     }
 
-    /** Write current state to a file. */
+    /**
+     * Write current state to a file.
+     */
     public void write() {
         var delta = System.currentTimeMillis() - this.startTime;
         this.time = this.time.minusMillis(delta);

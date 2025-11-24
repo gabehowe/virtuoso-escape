@@ -1,15 +1,21 @@
 package org.virtuoso.escape.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.virtuoso.escape.model.account.AccountManager;
+import org.virtuoso.escape.model.account.Score;
+import org.virtuoso.escape.model.data.DataLoader;
 
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
-import org.json.simple.JSONObject;
-import org.junit.jupiter.api.*;
-import org.virtuoso.escape.model.account.*;
-import org.virtuoso.escape.model.data.DataLoader;
-import org.virtuoso.escape.model.data.DataWriter;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for GameState.java
@@ -19,23 +25,94 @@ import org.virtuoso.escape.model.data.DataWriter;
 public class GameStateTests {
 
     private GameState state;
-    private Account account;
+    private GameProjection proj;
+
+    private static String stateData =
+            """
+                      {"7766f361-af7a-4da5-b741-6867d1768d45": {
+                        "currentItems": [],
+                        "difficulty": "SUBSTANTIAL",
+                        "currentRoom": "acorn_grove_0",
+                        "currentEntity": null,
+                        "currentFloor": "acorn_grove",
+                        "completedPuzzles": [],
+                        "time": 2698,
+                        "currentEntityStates": {
+                          "narrator": "narrator_start",
+                          "portal_squirrel": "portal_squirrel",
+                          "intro_squirrel": "intro_squirrel"
+                        },
+                        "hintsUsed": {}
+                      },
+                    "d32ad7e6-570f-43cb-b447-82d4c8be293e": {
+                      "currentItems": ["keys"],
+                      "difficulty": "SUBSTANTIAL",
+                      "currentRoom": "acorn_grove_0",
+                      "currentFloor": "acorn_grove",
+                      "completedPuzzles": ["joe_hardy"],
+                      "time": 2680,
+                      "currentEntityStates": {
+                        "narrator": "narrator_hint_1",
+                        "portal_squirrel": "portal_squirrel",
+                        "intro_squirrel": "intro_squirrel"
+                      },
+                      "hintsUsed": {
+                        "acorn_grove": 1
+                      }
+                    },
+                      }
+                    """;
+    private static String accountData =
+            """
+                      {
+                      "7766f361-af7a-4da5-b741-6867d1768d45": {
+                        "highScore": {
+                          "difficulty": "TRIVIAL",
+                          "timeRemaining": null,
+                          "totalScore": null
+                        },
+                        "hashedPassword": "829c3804401b0727f70f73d4415e162400cbe57b",
+                        "ttsOn": true,
+                        "username": "dummy"
+                      }
+                    "d32ad7e6-570f-43cb-b447-82d4c8be293e": {
+                      "highScore": {
+                        "difficulty": "TRIVIAL",
+                        "timeRemaining": null,
+                        "totalScore": null
+                      },
+                      "ttsOn": true,
+                      "hashedPassword": "829c3804401b0727f70f73d4415e162400cbe57b",
+                      "username": "dummy_loaded"
+                    },
+                      }
+                    """;
 
     @BeforeEach
     void setup() throws Exception {
+        DataLoader.ACCOUNTS_PATH = getClass().getResource("accounts.json").getPath();
+        DataLoader.GAMESTATES_PATH = getClass().getResource("gamestates.json").getPath();
+        try {
+            Files.writeString(Path.of(DataLoader.ACCOUNTS_PATH), accountData);
+            Files.writeString(Path.of(DataLoader.GAMESTATES_PATH), stateData);
+        } catch (Exception e) {
+            throw new RuntimeException("couldn't write to file!");
+        }
+        proj = new GameProjection();
         // Reset the singleton
         Field instanceField = GameState.class.getDeclaredField("instance");
         instanceField.setAccessible(true);
         instanceField.set(null, null);
         state = GameState.instance();
-        account = new Account("dummy", "dummy");
-        injectPrivateField(state, "account", account);
+        proj.login("dummy", "dummy");
+
+//        injectPrivateField(state, "account", account);
         injectPrivateField(state, "time", Duration.ofSeconds(1000));
         injectPrivateField(state, "penalty", 0);
         injectPrivateField(state, "ended", false);
         injectPrivateField(state, "hintsUsed", new HashMap<>());
         injectPrivateField(state, "completedPuzzles", new HashSet<>());
-        injectPrivateField(state, "currentItems", new HashSet<>());
+        injectPrivateField(state, "currentItems", new HashSet<>(Set.of()));
         injectPrivateField(state, "difficulty", Difficulty.SUBSTANTIAL);
         injectPrivateField(state, "startTime", System.currentTimeMillis());
         injectPrivateField(state, "currentEntity", null);
@@ -47,10 +124,14 @@ public class GameStateTests {
         f.set(instance, value);
     }
 
-    private static void injectStaticField(Class<?> clazz, String fieldName, Object value) throws Exception {
-        Field f = clazz.getDeclaredField(fieldName);
-        f.setAccessible(true);
-        f.set(null, value);
+    @Test
+    void startWithLoadedData() throws Exception {
+        Util.rebuildSingleton(GameState.class);
+        Util.rebuildSingleton(AccountManager.class);
+        var projection = new GameProjection();
+        assertTrue(projection.login("dummy_loaded", "dummy"));
+        assertTrue(projection.currentItems().contains(Item.keys));
+        assertTrue(GameState.instance().completedPuzzles().contains("joe_hardy"));
     }
 
     @Test
@@ -58,6 +139,21 @@ public class GameStateTests {
         GameState s1 = GameState.instance();
         GameState s2 = GameState.instance();
         assertSame(s1, s2);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "50, 100",
+            "150, 150",
+            "100, 100"
+    })
+    void testUpdateHighScore(int value, int expected) {
+        GameState.instance().end();
+        GameState.instance().account().setHighScore(new Score(null, null, 100L));
+        GameState.instance().setTime(Duration.ofSeconds(value));
+        GameState.instance().updateHighScore();
+        assertEquals(expected, GameState.instance().account().highScore().totalScore());
+
     }
 
 
@@ -162,7 +258,6 @@ public class GameStateTests {
         state.end();
         assertTrue(state.isEnded());
     }
-
 
 
     @Test

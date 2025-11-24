@@ -66,6 +66,7 @@ public record EntityState(
 
     /** Run the interact {@link Action}. */
     public void interact() {
+        if (!this.capabilities.interact()) throw new IllegalStateException();
         GameState.instance().setCurrentMessage(getText("interact"));
 
         if (interactAction != null) interactAction.execute();
@@ -73,12 +74,14 @@ public record EntityState(
 
     /** Run the attack {@link Action}. */
     public void attack() {
+        if (!this.capabilities.attack()) throw new IllegalStateException();
         GameState.instance().setCurrentMessage(getText("attack"));
         if (attackAction != null) attackAction.execute();
     }
 
     /** Run the inspect {@link Action}. */
     public void inspect() {
+        if (!this.capabilities.inspect()) throw new IllegalStateException();
         GameState.instance().setCurrentMessage(getText("inspect"));
         if (inspectAction != null) inspectAction.execute();
     }
@@ -122,6 +125,7 @@ public record EntityState(
      * @param input The input string to compare against.
      */
     public void takeInput(String input) {
+        if (!this.capabilities.input) throw new IllegalStateException();
         String message;
         if (GameInfo.instance().language().get(id) == null
                 || GameInfo.instance().language().get(id).get("input_" + input) == null)

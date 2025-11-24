@@ -6,11 +6,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.*;
-import org.virtuoso.escape.model.Difficulty;
-import org.virtuoso.escape.model.GameState;
+import org.virtuoso.escape.model.*;
 
 /**
  * tests for Leaderboard.java
@@ -30,6 +30,9 @@ public class LeaderboardTests {
 
     @BeforeEach
     void setup() throws Exception {
+        Util.rebuildSingleton(GameState.class);
+        Util.rebuildSingleton(GameInfo.class);
+        Util.rebuildSingleton(AccountManager.class);
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
@@ -133,16 +136,17 @@ public class LeaderboardTests {
         multiple.putAll(buildAccountJson("high", "VIRTUOSIC", 300L, 1000L));
         multiple.putAll(buildAccountJson("tieA", "SUBSTANTIAL", 60L, 500L));
         multiple.putAll(buildAccountJson("tieB", "VIRTUOSIC", 90L, 500L));
-
+        mockAccountManager.accounts().clear();
         mockAccountManager.accounts().putAll(multiple);
 
         Leaderboard.showLeaderboard();
         String output = outContent.toString();
+        var lines = List.of(output.split("\n"));
 
         // checking order
-        int idxHigh = output.indexOf("high");
-        int idxTieA = output.indexOf("tieA");
-        int idxLow = output.indexOf("low");
+        int idxHigh = lines.indexOf(lines.stream().filter(it->it.contains("high")).findFirst().get());
+        int idxTieA = output.indexOf(lines.stream().filter(it->it.contains("tieA")).findFirst().get());
+        int idxLow = output.indexOf(lines.stream().filter(it->it.contains("low")).findFirst().get());
 
         assertTrue(idxHigh < idxLow, "High scorer should appear before low scorer");
         assertTrue(idxTieA < idxLow, "Tie players should appear before low scorer");

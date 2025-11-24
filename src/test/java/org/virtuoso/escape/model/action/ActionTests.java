@@ -33,11 +33,6 @@ public class ActionTests {
     GameProjection proj;
     @BeforeAll
     public static void setup() throws Exception {
-//        Field f = AccountManager.class.getDeclaredField("accountManager");
-//        var constructor = AccountManager.class.getDeclaredConstructor();
-//        constructor.setAccessible(true);
-//        f.setAccessible(true);
-//        f.set(AccountManager.instance(), constructor.newInstance());
         Util.rebuildSingleton(AccountManager.class);
     }
 

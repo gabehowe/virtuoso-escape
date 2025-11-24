@@ -22,6 +22,7 @@ public class DataWriter {
     @SuppressWarnings("unchecked")
     public static void writeGameState() {
         GameState currentGameState = GameState.instance();
+        if (GameState.instance().account() == null) throw new NullPointerException();
         JSONObject currentGameStateMap = loadGameStateInfo(currentGameState);
         JSONObject allGameStatesMap = AccountManager.instance().gameStates();
         allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
@@ -31,6 +32,7 @@ public class DataWriter {
     /** Write the current account ({@link GameState#instance()#account()}) to {@link DataWriter#ACCOUNTS_PATH}. */
     @SuppressWarnings("unchecked")
     public static void writeAccount() {
+        if (GameState.instance().account() == null) throw new NullPointerException();
         Account currentAccount = GameState.instance().account();
         JSONObject currentAccountMap = loadAccountInfo(currentAccount);
         JSONObject allAccountsMap = AccountManager.instance().accounts();

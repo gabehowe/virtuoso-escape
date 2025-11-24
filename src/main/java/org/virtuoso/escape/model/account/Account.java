@@ -27,6 +27,7 @@ public class Account {
      * @param password the password to be assigned.
      */
     public Account(String username, String password) {
+        if (username == null || password == null) throw new IllegalArgumentException("Username and password must not be null!");
         this.username = username;
         this.hashedPassword = hashPassword(password);
         this.highScore = new Score(null, Difficulty.SUBSTANTIAL);
@@ -57,6 +58,7 @@ public class Account {
      * @return a string representation of the {@code hashedPassword}.
      */
     public static String hashPassword(String password) {
+        if (password == null) throw new IllegalArgumentException("Password should not be null!");
         try {
             SecureRandom random = new SecureRandom();
             MessageDigest md = MessageDigest.getInstance("SHA-1");

@@ -1,11 +1,5 @@
 package org.virtuoso.escape.model.data;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,35 +7,48 @@ import org.junit.jupiter.api.Test;
 import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
+import org.virtuoso.escape.model.Util;
+import org.virtuoso.escape.model.account.AccountManager;
 
-/** @author Treasure */
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * @author Treasure
+ */
 public class DataWriterTests {
     private static String stateData = """
-			{}
-			""";
+            {}
+            """;
     private static String accountData = """
-			{}
-			""";
+            {}
+            """;
     GameProjection projection;
 
     @BeforeEach
-    void pre() throws URISyntaxException {
+    void pre() throws Exception {
+        Util.rebuildSingleton(GameState.class);
+        Util.rebuildSingleton(AccountManager.class);
         DataWriter.ACCOUNTS_PATH = Paths.get(getClass()
-                        .getResource("/org/virtuoso/escape/model/data/accounts.json")
-                        .toURI())
-                .toString();
+                                                .getResource("/org/virtuoso/escape/model/data/accounts.json")
+                                                .toURI())
+                                        .toString();
         DataWriter.GAMESTATES_PATH = Paths.get(getClass()
-                        .getResource("/org/virtuoso/escape/model/data/gamestates.json")
-                        .toURI())
-                .toString();
+                                                  .getResource("/org/virtuoso/escape/model/data/gamestates.json")
+                                                  .toURI())
+                                          .toString();
         DataLoader.ACCOUNTS_PATH = Paths.get(getClass()
-                        .getResource("/org/virtuoso/escape/model/data/accounts.json")
-                        .toURI())
-                .toString();
+                                                .getResource("/org/virtuoso/escape/model/data/accounts.json")
+                                                .toURI())
+                                        .toString();
         DataLoader.GAMESTATES_PATH = Paths.get(getClass()
-                        .getResource("/org/virtuoso/escape/model/data/gamestates.json")
-                        .toURI())
-                .toString();
+                                                  .getResource("/org/virtuoso/escape/model/data/gamestates.json")
+                                                  .toURI())
+                                          .toString();
         try {
             Files.writeString(Path.of(DataWriter.ACCOUNTS_PATH), accountData);
             Files.writeString(Path.of(DataWriter.GAMESTATES_PATH), stateData);
@@ -67,8 +74,7 @@ public class DataWriterTests {
     @DisplayName("Should fail to write null account and throw a NullPointerException")
     @Test
     void testWritingNullAccount() {
-        boolean isNullDummy = projection.createAccount(null, null);
-        assertFalse(isNullDummy);
+        assertThrows(NullPointerException.class, () -> projection.createAccount(null, null));
         assertThrows(NullPointerException.class, DataWriter::writeAccount);
     }
 
@@ -78,9 +84,9 @@ public class DataWriterTests {
         projection.createAccount("", "");
         DataWriter.writeAccount();
         assertTrue(DataLoader.loadAccounts()
-                .containsKey(GameState.instance().account().id().toString()));
+                             .containsKey(GameState.instance().account().id().toString()));
         JSONObject emptyDummyJSON = (JSONObject) DataLoader.loadAccounts()
-                .get(GameState.instance().account().id().toString());
+                                                           .get(GameState.instance().account().id().toString());
         assertEquals("", emptyDummyJSON.get("username"));
     }
 
@@ -104,7 +110,10 @@ public class DataWriterTests {
     @DisplayName("Should not write any accounts and confirm accounts.json remains empty")
     @Test
     void testWritingZeroAccounts() {
-        DataWriter.writeAccount();
+        try {
+            DataWriter.writeAccount();
+        } catch (Exception _) {
+        }
         assertTrue(DataLoader.loadAccounts().isEmpty());
     }
 
@@ -115,9 +124,9 @@ public class DataWriterTests {
         GameState.instance().setDifficulty(Difficulty.TRIVIAL);
         DataWriter.writeGameState();
         assertTrue(DataLoader.loadGameStates()
-                .containsKey(GameState.instance().account().id().toString()));
+                             .containsKey(GameState.instance().account().id().toString()));
         JSONObject mrsdummyGS = (JSONObject) DataLoader.loadGameStates()
-                .get(GameState.instance().account().id().toString());
+                                                       .get(GameState.instance().account().id().toString());
         assertEquals(
                 Difficulty.TRIVIAL,
                 Difficulty.valueOf(mrsdummyGS.get("difficulty").toString()));
@@ -126,7 +135,7 @@ public class DataWriterTests {
     @DisplayName("Should fail to write game state with null account and throw a NullPointerException")
     @Test
     void testWritingNullGameState() {
-        projection.createAccount(null, null);
+        assertThrows(NullPointerException.class, () -> projection.createAccount(null, null));
         assertThrows(NullPointerException.class, DataWriter::writeGameState);
     }
 }

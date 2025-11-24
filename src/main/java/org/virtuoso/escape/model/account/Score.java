@@ -33,8 +33,7 @@ public record Score(Duration timeRemaining, Difficulty difficulty, Long totalSco
                 ? (Long) (timeRemaining.toSeconds()
                         - GameState.instance().penalty()
                         - (GameState.instance().hintsUsed() != null
-                                ? GameState.instance().hintsUsed().values().stream()
-                                        .collect(Collectors.summingInt(Integer::intValue))
+                                ? GameState.instance().hintsUsed().values().stream().mapToInt(Integer::intValue).sum()
                                 : 0))
                 : null;
     }

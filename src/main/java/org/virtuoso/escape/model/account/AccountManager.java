@@ -61,6 +61,7 @@ public record AccountManager(JSONObject accounts, JSONObject gameStates) {
      *     {@code Optional.empty}.
      */
     public Optional<Account> newAccount(String username, String password) {
+        if (username == null || password == null) throw new NullPointerException();
         boolean usernameExists = false;
 
         Optional<Account> account = login(username, password);

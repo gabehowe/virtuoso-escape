@@ -122,11 +122,11 @@
     "hintsUsed": {}
   },
   "d32ad7e6-570f-43cb-b447-82d4c8be293e": {
-    "currentItems": [],
+    "currentItems": ["keys"],
     "difficulty": "SUBSTANTIAL",
     "currentRoom": "acorn_grove_0",
     "currentFloor": "acorn_grove",
-    "completedPuzzles": [],
+    "completedPuzzles": ["joe_hardy"],
     "time": 2680,
     "currentEntityStates": {
       "narrator": "narrator_hint_1",
