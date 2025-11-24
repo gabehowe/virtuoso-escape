@@ -290,6 +290,7 @@ public class GameState {
      */
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
+        this.currentEntity = null;
     }
 
     /**
