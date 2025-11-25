@@ -91,6 +91,7 @@ public class GameState {
         for (Room room : currentFloor.rooms())
             for (Entity entity : room.entities())
                 if (states.containsKey(entity.id())) entity.swapState((String) states.get(entity.id()));
+
     }
 
     /**

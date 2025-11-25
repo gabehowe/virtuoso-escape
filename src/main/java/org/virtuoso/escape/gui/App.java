@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class App extends Application {
 
-    private static Scene scene;
+    public static Scene scene;
     public static GameProjection projection;
 
     @Override
@@ -60,14 +60,22 @@ public class App extends Application {
             var window = (JSObject) engine.executeScript("window");
             window.setMember("app", app);
             window.setMember("logger", logger);
+            engine.executeScript("""
+                    console.error = i => logger.logJSError(i);
+                    console.log = i => logger.log(i);
+                    window.onerror = e => console.error(e);
+                    """);
             callback.run();
         });
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {
-        var sanitized = text.replace("\"", "\\\"")
-                            .replace("\n", "<br>").replace("\t", "<span class='tab'></span>");
-        callJSFunction(engine, "setTextOnElement", elementId, sanitized);
+        callJSFunction(engine, "setTextOnElement", elementId, sanitizeForJS(text));
+    }
+    public static String sanitizeForJS(String text) {
+        return text.replace("\"", "\\\"").replace("\n", "<br>").replace("\t", "<span class='tab'></span>")
+                   .replaceAll("(?<!\\*)\\*([^*]+?)\\*(?!\\*)", "<em>$1</em>").replaceAll("\\*\\*([^*]+?)\\*\\*", "<strong>$1</strong>");
+
     }
 
     public static class Logger {
@@ -80,12 +88,16 @@ public class App extends Application {
         public void log(Object msg) {
             System.out.println(msg);
         }
-        public void error(String msg){
+
+        public void error(String msg) {
             System.err.println(msg);
         }
 
         public void logJSError(Object msg) {
-            System.err.print("JSError: " + msg);
+            error("JSError: " + msg);
+            if (msg instanceof Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

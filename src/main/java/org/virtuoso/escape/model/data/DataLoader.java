@@ -1,5 +1,7 @@
 package org.virtuoso.escape.model.data;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -155,21 +157,21 @@ public class DataLoader {
     /**
      * Parses a JSON file into a {@link JSONObject}.
      *
-     * @param file The file to parse
+     * @param path The file to parse
      * @return The loaded into a {@link JSONObject}.
      */
-    private static JSONObject parseJsonFile(Path file) {
-        if (!Files.exists(file)) {
-            System.err.println("File not found");
-            return null;
+    private static JSONObject parseJsonFile(Path path) {
+        var file = new File(path.toUri());
+        if (!file.exists()) {
+            throw new RuntimeException(new FileNotFoundException(path.toString()));
         }
         JSONParser parser = new JSONParser();
-        try (FileReader reader = new FileReader(file.toFile())) {
+        try (FileReader reader = new FileReader(file)) {
             Object obj = parser.parse(reader);
             if (obj instanceof JSONObject) return (JSONObject) obj;
             System.err.println("Not viable");
         } catch (IOException | ParseException e) {
-            System.err.println("Could not parse file");
+            System.err.println("Could not parse path");
         }
         return null;
     }

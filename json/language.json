@@ -1,8 +1,8 @@
 {
   "welcome": {
-	"welcome": "Welcome to Virtuoso Escape!", 
-  	"prelude": "You choose to go to a beaver farm, because of beavers. A very conspicuous beaver approaches, stripping off a mask and hitting you over the head, grinning as you lose consciousness",
-	"welcome_back": "Welcome back %s!\n%s\nYou have answered the following riddles: %s\nYou have used the following hints: %s"
+    "welcome": "Welcome to Virtuoso Escape!",
+    "prelude": "You choose to go to a beaver farm, because of beavers. A very conspicuous beaver approaches, stripping off a mask and hitting you over the head, grinning as you lose consciousness",
+    "welcome_back": "Welcome back %s!\n%s\nYou have answered the following riddles: %s\nYou have used the following hints: %s"
   },
   "acorn_grove_0": {
     "introduce": "You wake up in an acorn grove, seemingly smaller and...furrier...than usual.",
@@ -161,43 +161,51 @@
     "attack": "You jump at the pitcher, but she hits you out of the air with a baseball bat. You fly into the wall at 67 miles per hour.",
     "inspect": "Pitcher Plant is wearing a pinstriped baseball uniform with patches of dirt on it."
   },
-  "door1_0": {
-    "name": "nondescript door",
-    "introduce": "You see a door so closed that Rome must be at peace."
-  },
-  "door1_1": {
-    "name": "nondescript door",
-    "introduce": "You see a door so closed that Rome must be at peace."
-  },
-  "door1_2": {
-    "name": "nondescript door",
-    "introduce": "You see a door so closed that Rome must be at peace."
-  },
-  "door1_3": {
-    "name": "nondescript door",
-    "introduce": "You see a door so closed that Rome must be at peace."
-  },
   "door1": {
     "name": "nondescript door",
     "interact": "You move through the door and enter a new room.",
-    "attack": "You throw yourself against the door, and it shakes like the smell of a blooming citrus tree.",
     "inspect": "You see absolutely nothing remarkable about this door.",
     "introduce": "You see a door so closed that Rome must be at peace.",
     "final_door": "You move through the door and find a very long flight of stairs. You slowly proceed up them..."
   },
+  "door1_0": {
+    "attack": "You weep at the door, but it forces you to imagine renaissance paintings of greek forums.",
+  },
+  "door1_1": {
+    "attack": "You deliver your anguish to the door, but it smells like a decaying oranges in a compost pile."
+  },
+  "door1_2": {
+    "attack": "You throw yourself against the door, and it shakes like the smell of a blooming citrus tree.",
+  },
   "door2": {
     "name": "nondescript door",
     "interact": "You move through the door and see the door you just walked through shut in front of you. You're in the same room you started in.",
-    "attack": "You throw yourself against the door, and it shakes like a hot, dry, dust-laden wind.",
     "inspect": "You see absolutely nothing remarkable about this door.",
     "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door2_2": {
+    "attack": "You throw yourself against the door, and it shakes like a hot, dry, dust-laden wind."
+  },
+  "door2_1": {
+    "attack": "You deliver your anguish to the door, but it remains as steadfast as *Le Penseur*."
+  },
+  "door2_0": {
+    "attack": "You weep at the door, but you feel the sharp idea of taxidermy."
   },
   "door3": {
     "name": "nondescript door",
     "interact": "You move through the door and see the door you just walked through shut in front of you. You're in the same room you started in.",
-    "attack": "You throw yourself against the door, and it shakes like melting prevernal snow...",
     "inspect": "You see absolutely nothing remarkable about this door.",
     "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door3_2": {
+    "attack": "You throw yourself against the door, and it shakes like melting prevernal snow..."
+  },
+  "door3_1": {
+    "attack": "You deliver your anguish to the door, but it whispers like a quiet nocturnal air."
+  },
+  "door3_0": {
+    "attack": "You weep at the door and envision a snow angel."
   },
   "storey_iii_0": {
     "name": "Chambre du Corbeau",
@@ -206,7 +214,7 @@
   "sparrow_ambassador": {
     "name": "Apine Ambassador",
     "inspect": "The sparrow's well-dressed attire glints in the dim light of the bare room.",
-    "introduce":"You behold the sparrow atop the pedestal.",
+    "introduce": "You behold the sparrow atop the pedestal.",
     "attack": "You can't get up to the sparrow, so you sit and think angry thoughts.",
     "interact": "Chirp chirp. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in finding the one true cycle.",
     "hint_general": "Hmm? The box is a closed system. Think about the first number you see—it must be the key to finding the second, and so on. Where do you *start* the chain?",
@@ -215,7 +223,6 @@
   "box_start": {
     "name": "Starting box",
     "introduce": "You see a box."
-
   },
   "box_riddle": {
     "interact": "You stand before the box. You realize you need a strategy to move forward.",
@@ -230,7 +237,7 @@
   "exit_door_locked": {
     "name": "Exit Door (locked)",
     "introduce": "You see a locked door.",
-    "attack":"You throw yourself against the door, but nothing happens."
+    "attack": "You throw yourself against the door, but nothing happens."
   },
   "exit_door": {
     "name": "Exit door",
@@ -320,7 +327,7 @@
     "contributor_3": "Bose Kaikini <bkaikini@email.sc.edu>",
     "message": "Thanks for playing Escape: A Storey!\nSpecial thanks to Joe Hardy for permission for his appearance and for his excellence in teaching assistance.",
     "score": "You had %s remaining on %s difficulty. Your score final score is: %s",
-	"hints": "You used %s hints.",
+    "hints": "You used %s hints.",
     "certificate": "**Escape: A Storey**\nYou finished the game and escaped M. Bert Storey Research and Innovation Center!\n%s\n%s\nThanks for playing!"
   },
   "narrator_start": {

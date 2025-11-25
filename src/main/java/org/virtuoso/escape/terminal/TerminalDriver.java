@@ -447,7 +447,7 @@ public class TerminalDriver {
           fs_r(new FunString("Change room"), () -> this.menu_changeRoom(scanner, projection)));
     }
     for (Entity e : projection.currentRoom().entities()) {
-      actions.add(fs_r(new FunString(e.name()).italic(), () -> projection.pickEntity(e)));
+      actions.add(fs_r(new FunString(e.string("name")).italic(), () -> projection.pickEntity(e)));
     }
     actions.add(fs_r(new FunString("Exit game"), () -> exit(scanner, projection)));
     actions.add(fs_r(new FunString("Options"), () -> menu_options(scanner, projection)));
@@ -467,7 +467,7 @@ public class TerminalDriver {
    * @param projection The source for data.
    */
   void menu_entityAction(Scanner scanner, GameProjection projection) {
-    projection.currentEntity().ifPresent(e -> e.state().introduce());
+    projection.currentEntity().ifPresent(e -> e.string("introduce"));
     var actions = makeTuiActionMap();
     var capabilities = projection.capabilities();
     if (capabilities.interact())

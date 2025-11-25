@@ -1,16 +1,17 @@
 package org.virtuoso.escape.gui;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebView;
 import org.json.simple.JSONArray;
 import org.virtuoso.escape.model.*;
 import org.w3c.dom.events.EventTarget;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class GameViewController implements Initializable {
     public GameProjection projection;
@@ -37,14 +38,14 @@ public class GameViewController implements Initializable {
                 .currentMessage()
                 .orElse(projection
                         .currentEntity()
-                        .map(s -> GameInfo.instance().string(s.state().id(), "introduce"))
+                        .map(s -> s.string("introduce"))
                         .orElse(projection.currentRoom().introMessage())));
         App.setText(
                 webView.getEngine(),
                 "entity-title",
                 projection
                         .currentEntity()
-                        .map(s -> GameInfo.instance().string(s.state().id(), "name"))
+                        .map(s -> s.string("name"))
                         .orElse(projection.currentRoom().name()));
     }
 
@@ -56,30 +57,30 @@ public class GameViewController implements Initializable {
 
     public void updateLeftBar() {
         var roomNames = new ArrayList<>(projection.currentFloor().rooms().stream()
-                .map(rm -> List.of(rm.name(), rm.id()))
-                .toList());
+                                                  .map(rm -> List.of(rm.name(), rm.id()))
+                                                  .toList());
         updateBox("map-box", projection.currentRoom().id(), roomNames, true);
         var mapElements = App.querySelectorAll(webView.getEngine(), "#map-box > .box-element");
         mapElements.forEach(it -> {
             var theRoom = projection.currentFloor().rooms().stream()
-                    .filter(rm -> Objects.equals(rm.id(), it.getAttribute("id")))
-                    .findFirst();
+                                    .filter(rm -> Objects.equals(rm.id(), it.getAttribute("id")))
+                                    .findFirst();
             theRoom.ifPresent(rm -> ((EventTarget) it).addEventListener("click", e -> this.pickRoom(rm), false));
         });
 
         var entityNames = projection.currentRoom().entities().stream()
-                .map(it -> List.of(
-                        GameInfo.instance().string(it.state().id(), "name"),
-                        it.state().id()))
-                .toList();
+                                    .map(it -> List.of(
+                                            it.string("name"),
+                                            it.state().id()))
+                                    .toList();
         var currentEntity = projection.currentEntity().map(e -> e.state().id()).orElse("undefined");
         updateBox("entity-box", currentEntity, entityNames, true);
 
         var entities = App.querySelectorAll(webView.getEngine(), "#entity-box > .box-element");
         entities.forEach(it -> {
             var theEntity = projection.currentRoom().entities().stream()
-                    .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
-                    .findFirst();
+                                      .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
+                                      .findFirst();
             theEntity.ifPresent(ent -> ((EventTarget) it)
                     .addEventListener(
                             "click",
@@ -90,8 +91,8 @@ public class GameViewController implements Initializable {
         });
 
         var itemNames = projection.currentItems().stream()
-                .map(it -> List.of(it.itemName(), it.id()))
-                .toList();
+                                  .map(it -> List.of(it.itemName(), it.id()))
+                                  .toList();
         updateBox("item-box", "undefined", itemNames, false);
     }
 
@@ -103,17 +104,17 @@ public class GameViewController implements Initializable {
         var interact = webView.getEngine().getDocument().getElementById("interact");
         interact.setAttribute("style", cap.interact() ? "" : "display:none;");
         webView.getEngine()
-                .getDocument()
-                .getElementById("inspect")
-                .setAttribute("style", (cap.inspect() ? "" : "display:none;"));
+               .getDocument()
+               .getElementById("inspect")
+               .setAttribute("style", (cap.inspect() ? "" : "display:none;"));
         webView.getEngine()
-                .getDocument()
-                .getElementById("attack")
-                .setAttribute("style", (cap.attack() ? "" : "display:none;"));
+               .getDocument()
+               .getElementById("attack")
+               .setAttribute("style", (cap.attack() ? "" : "display:none;"));
         webView.getEngine()
-                .getDocument()
-                .getElementById("speak")
-                .setAttribute("style", (cap.input() ? "" : "display:none;"));
+               .getDocument()
+               .getElementById("speak")
+               .setAttribute("style", (cap.input() ? "" : "display:none;"));
         webView.getEngine().executeScript("");
     }
 
@@ -191,8 +192,7 @@ public class GameViewController implements Initializable {
     }
 
     private void setDialogue(String text) {
-        var sanitized = text.replace("\"", "\\\"").replace("\n", "<br>").replace("\t", "<span class='tab'></span>");
-        App.callJSFunction(webView.getEngine(), "setDialogue", sanitized);
+        App.callJSFunction(webView.getEngine(), "setDialogue", App.sanitizeForJS(text));
     }
 
     /// DEBUG
@@ -204,10 +204,10 @@ public class GameViewController implements Initializable {
 
     public void setFloor(Object floor) {
         GameState.instance()
-                .setCurrentFloor(GameInfo.instance().building().stream()
-                        .filter(it -> Objects.equals(it.id(), floor.toString()))
-                        .findFirst()
-                        .get());
+                 .setCurrentFloor(GameInfo.instance().building().stream()
+                                          .filter(it -> Objects.equals(it.id(), floor.toString()))
+                                          .findFirst()
+                                          .get());
         updateAll();
     }
 

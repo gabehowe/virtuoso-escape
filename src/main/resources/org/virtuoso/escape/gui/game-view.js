@@ -1,3 +1,5 @@
+let debug = {}
+
 function makeElement(id, text, button) {
     let elem = document.createElement('span')
     if (button) elem.classList.add('logical-button')
@@ -51,7 +53,7 @@ function displaySettings(name) {
             let diff = makeElement("setting-change-difficulty", "Change Difficulty", true);
             let toggleTTS = makeElement("setting-toggle-tts", "Toggle TTS", true);
             let debug = makeElement("setting-debug", "Debug", true);
-            debug.style.color = 'green'
+            debug.style.color = 'PaleGreen'
             let exit = makeElement("setting-exit", "Exit", true)
             diff.onclick = () => displaySettings(Settings.DIFFICULTY)
             toggleTTS.onclick = () => {
@@ -69,10 +71,16 @@ function displaySettings(name) {
         case Settings.DEBUG: {
             let changeFloor = makeElement("debug-change-floor", "Change Floor", true);
             let endGame = makeElement('debug-end-game', "End game", true)
+            let enableDebugMenu = makeElement('debug-enable-menu', "Debug Menu", true)
             changeFloor.onclick = () => displaySettings(Settings.CHANGE_FLOOR)
             endGame.onclick = () => app.endGame()
-            box.append(...[changeFloor, endGame].map(it => {
-                it.style.color = "green";
+            enableDebugMenu.onclick = () => {
+                debug['enabled'] = !debug['enabled'];
+                document.getElementById('debug').style.display= debug['enabled'] ? '' : 'none';
+                clearSettings()
+            };
+            box.append(...[changeFloor, endGame, enableDebugMenu].map(it => {
+                it.style.color = "PaleGreen";
                 return it
             }))
             break;
@@ -85,7 +93,7 @@ function displaySettings(name) {
             let floors = JSON.parse(app.getFloors());
             for (let i of floors) {
                 let elem = makeElement("change-floor-" + i, i, true);
-                elem.style.color = "green";
+                elem.style.color = "PaleGreen";
                 elem.onclick = () => {
                     app.setFloor(i);
                     clearSettings()
@@ -157,7 +165,6 @@ function setDialogue(text) {
 }
 
 function populateBackground(current, others) {
-    // if (document.getElementById('entity').src.includes(current)) return
     let findCurrent = document.querySelector('#background-entities > img.selected')
     if (findCurrent?.src.includes(current)) return
     let predefined = document.querySelectorAll('#background-entities > img');
@@ -170,8 +177,9 @@ function populateBackground(current, others) {
     for (const url of others) {
         let picture = document.createElement('img')
         if (url === current) picture.classList.add('selected')
-        picture.onload = () => picture.width *= 0.7;
+        picture.onload = () => picture.width *= (url.includes('elephant')) ? 0.9 : 0.7;
         picture.src = `../../../../images/${url}.png`
+        picture.id = `img-${url}`
         picture.style.animationDelay = -2 * Math.random() + "s"
         flow.append(picture)
     }
@@ -179,17 +187,18 @@ function populateBackground(current, others) {
 
 function selectEntity(id) {
     document.querySelectorAll('#background-entities > img.selected').forEach(it => it.classList.remove('selected'))
-    document.querySelector(`#background-entities > img[src*="${id}"]`).classList.add('selected')
+    document.querySelector(`#background-entities > img[src*="${id}"]`)?.classList?.add('selected')
 }
 
 function setRoomImage(url) {
     document.getElementById('viewport').style.backgroundImage = `url('../../../../images/${url}.png')`
 }
 
+
 function init() {
-    console.error = i => logger.logJSError(i)
-    console.log = i => logger.log(i)
-    window.onerror = e => console.error(e);
+    debug = {
+        'enabled': false, 'selected': () => Array.from(document.querySelectorAll('.selected')).map(it=>it.id).join("; ")
+    }
     clearSettings()
     document.updateBox = updateBox
     document.addEventListener('keydown', ev => {
@@ -211,6 +220,27 @@ function init() {
 }
 
 function timeAnimator() {
-    setTimeout(timeAnimator, 500)
+    setTimeout(timeAnimator, 250)
     document.getElementById('timer').innerText = app.getTime()
+    if (debug['enabled']) {
+        let dbgE = document.getElementById('debug');
+        dbgE.innerHTML = ""
+        for (const debugKey in debug) {
+            let debugEntry = document.createElement('span');
+            let out;
+            if (typeof debug[debugKey] =='function'){
+                try{
+                    out= debug[debugKey]()
+                } catch(e){
+                    out=e;
+                }
+            }
+            else out=debug[debugKey];
+            debugEntry.innerHTML = `<strong>${debugKey}</strong> ${out}`
+            dbgE.append(debugEntry)
+        }
+        document.getElementById('debug')
+    }
 }
+
+init()
