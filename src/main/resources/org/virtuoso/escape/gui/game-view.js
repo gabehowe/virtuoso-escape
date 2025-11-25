@@ -86,7 +86,16 @@ function displaySettings(name) {
             break;
         }
         case Settings.DIFFICULTY: {
+            let difficulties = ["VIRTUOSIC", "SUBSTANTIAL", "TRIVIAL"]
+            for (let i of difficulties) {
+                let difficultyButton = makeElement('change-difficulty' + difficulties, i, true);
+                difficultyButton.onclick = () => {
+                    app.pickDifficulty(i)
+                    clearSettings()
+                }
 
+                box.append(difficultyButton)
+            }
             break;
         }
         case Settings.CHANGE_FLOOR: {
@@ -146,12 +155,12 @@ function createKeys() {
         }
     }
 }
+
 function recurseTypewriter(node, count) {
     const typewriterDelay = 16
-    let nn;
     if (node.nodeType === 3) {
         let j = document.createElement('div')
-        j.style.display='inline'
+        j.style.display = 'inline'
         Array.from(node.textContent).forEach(str => {
             let elem = document.createElement('span')
             count += 1;
@@ -207,7 +216,8 @@ function setRoomImage(url) {
 
 function init() {
     debug = {
-        'enabled': false, 'selected': () => Array.from(document.querySelectorAll('.selected')).map(it => it.id).join("; ")
+        'enabled': false, 'selected': () => Array.from(document.querySelectorAll('.selected')).map(it => it.id).join("; "),
+        'difficulty': () => app.checkDifficulty()
     }
     clearSettings()
     document.updateBox = updateBox

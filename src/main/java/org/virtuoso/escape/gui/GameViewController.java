@@ -194,6 +194,13 @@ public class GameViewController implements Initializable {
         App.callJSFunction(webView.getEngine(), "setDialogue", App.sanitizeForJS(text));
     }
 
+    public String getTime() {
+        return "{" + projection.time().toMinutes() + ":" + projection.time().toSecondsPart() + "}";
+    }
+    public void pickDifficulty(String difficultyID) {
+        projection.setDifficulty(Difficulty.valueOf(difficultyID));
+    }
+
     /// DEBUG
     public String getFloors() {
         var array = new JSONArray();
@@ -213,8 +220,8 @@ public class GameViewController implements Initializable {
     public void endGame() {
         GameState.instance().end();
     }
-
-    public String getTime() {
-        return "{" + projection.time().toMinutes() + ":" + projection.time().toSecondsPart() + "}";
+    public String checkDifficulty() {
+        return GameState.instance().difficulty().toString();
     }
+
 }
