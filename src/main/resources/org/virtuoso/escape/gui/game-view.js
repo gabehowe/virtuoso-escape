@@ -229,7 +229,13 @@ function init() {
     let keyboardHandler = (event) => {
         let tagName = document.activeElement.tagName
         if (tagName === "INPUT") return;
-        let eventKey = (event.keyIdentifier === undefined) ? event.key : String.fromCodePoint('0x' + event.keyIdentifier.substring(2)).toLowerCase()
+        let eventKey;
+        if (event.keyIdentifier === undefined) eventKey = event.key;
+        else try {
+            eventKey = String.fromCodePoint('0x' + event.keyIdentifier.substring(2)).toLowerCase()
+        } catch (_) {
+            return
+        }
         for (let key of Object.keys(keyMap)) {
             if (eventKey !== key) continue;
             keyMap[key].click()

@@ -248,7 +248,7 @@
     "inspect_locked": "The door looks like it needs a key to open",
     "inspect_unlocked": "You see the light of (tentative) salvation behind the next door as the first sounds of squirrel chattering behind you become apparent."
   },
-  "storey_iv": {
+  "storey_iv_0": {
     "name": "Fin Foyer",
     "introduce": "You enter a culminating room, filled with urgency and a feeling that you might be nearing the end of your adventure. A critical moment is approaching..."
   },
@@ -357,7 +357,7 @@
     "storey_iii_hint_1": "The sparrow says the box's trick lies in finding the one true cycle. The puzzle is solved by correctly ordering three words: START, CONTINUE, and OPEN.",
     "storey_iii_hint_2": "The exit door requires a key, which you receive upon successfully opening the box. The box must be opened in the sequence: START, CONTINUE, OPEN.",
     "storey_iv_hint_1": "You need to unlock the Demetamorphinator. The blocked terminal (CompuTTY) needs to be unblocked by the squirrel with one sock.",
-    "storey_iv_hint_2": "The terminal puzzle involves common Linux commands: cd, tar, and others. The final solution is the password in the good_rotx message."
+    "storey_iv_hint_2": "The terminal puzzle involves common posix commands: cd, tar, and others. The final solution is the password in the good_rotx message. Look around for something that could be a ceaser cipher rotation number."
   },
   "ui": {
     "switch_login": "Have an account?",

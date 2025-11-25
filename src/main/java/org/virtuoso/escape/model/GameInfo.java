@@ -465,10 +465,10 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 new EntityState("microwave_unblocked", this::gameEnding, new Default(), this::gameEnding, null);
         Entity microwave = new Entity("microwave", microwave_blocked, microwaveUnblocked);
         Room floor4 = new Room(
-                "storey_iv",
+                "storey_iv_0",
                 new ArrayList<>(List.of(man, sock_squirrel, computty, microwave, narrator)),
-                this.string("storey_iv", "introduce"));
-        return new Floor("storey_iv", List.of(floor4));
+                this.string("storey_iv_0", "introduce"));
+        return new Floor("storey_iv_0", List.of(floor4));
     }
 
     /**
