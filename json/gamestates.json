@@ -1,1 +1,17 @@
-{"7766f361-af7a-4da5-b741-6867d1768d45":{"currentItems":[],"difficulty":"SUBSTANTIAL","currentRoom":"acorn_grove_0","currentEntity":null,"currentFloor":"acorn_grove","completedPuzzles":[],"time":2698,"currentEntityStates":{"narrator":"narrator_start","portal_squirrel":"portal_squirrel","intro_squirrel":"intro_squirrel"},"hintsUsed":{}}}
+{
+  "7766f361-af7a-4da5-b741-6867d1768d45": {
+    "currentItems": [],
+    "difficulty": "SUBSTANTIAL",
+    "currentRoom": "acorn_grove_0",
+    "currentEntity": null,
+    "currentFloor": "acorn_grove",
+    "completedPuzzles": [],
+    "time": 2698,
+    "currentEntityStates": {
+      "narrator": "narrator_start",
+      "portal_squirrel": "portal_squirrel",
+      "intro_squirrel": "intro_squirrel"
+    },
+    "hintsUsed": {}
+  }
+}

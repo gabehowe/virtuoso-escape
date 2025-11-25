@@ -95,6 +95,5 @@ public class LoginController implements Initializable {
                 this.authMode = AuthMode.LOGIN;
             }
         }
-        //        KeyboardProcessor.addKeyboardBindings(root);
     }
 }

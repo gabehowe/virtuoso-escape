@@ -76,7 +76,7 @@ function displaySettings(name) {
             endGame.onclick = () => app.endGame()
             enableDebugMenu.onclick = () => {
                 debug['enabled'] = !debug['enabled'];
-                document.getElementById('debug').style.display= debug['enabled'] ? '' : 'none';
+                document.getElementById('debug').style.display = debug['enabled'] ? '' : 'none';
                 clearSettings()
             };
             box.append(...[changeFloor, endGame, enableDebugMenu].map(it => {
@@ -146,22 +146,32 @@ function createKeys() {
         }
     }
 }
+function recurseTypewriter(node, count) {
+    const typewriterDelay = 16
+    let nn;
+    if (node.nodeType === 3) {
+        let j = document.createElement('div')
+        j.style.display='inline'
+        Array.from(node.textContent).forEach(str => {
+            let elem = document.createElement('span')
+            count += 1;
+            elem.style.animation = count * typewriterDelay + 'ms step-end fadeIn';
+            elem.textContent = str;
+            j.appendChild(elem);
+        })
+        node.replaceWith(j)
+    } else if (node.nodeType === 1) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+            count = recurseTypewriter(node.childNodes.item(i), count)
+        }
+    }
+    return count
+}
 
 function setDialogue(text) {
-    const typewriterDelay = 16;
     let messageBox = document.getElementById('message')
     messageBox.innerHTML = text;
-    let count = 0;
-    for (let i = 0; i < messageBox.childNodes.length; i++) {
-        let cnode = messageBox.childNodes.item(i)
-        if (cnode.nodeType !== 3) continue;
-        messageBox.childNodes.item(i).replaceWith(...Array.from(cnode.textContent).map(str => {
-            let elem = document.createElement('span');
-            elem.style.animation = count++ * typewriterDelay + 'ms step-end fadeIn';
-            elem.textContent = str;
-            return elem;
-        }))
-    }
+    recurseTypewriter(messageBox, 0)
 }
 
 function populateBackground(current, others) {
@@ -197,7 +207,7 @@ function setRoomImage(url) {
 
 function init() {
     debug = {
-        'enabled': false, 'selected': () => Array.from(document.querySelectorAll('.selected')).map(it=>it.id).join("; ")
+        'enabled': false, 'selected': () => Array.from(document.querySelectorAll('.selected')).map(it => it.id).join("; ")
     }
     clearSettings()
     document.updateBox = updateBox
@@ -228,14 +238,13 @@ function timeAnimator() {
         for (const debugKey in debug) {
             let debugEntry = document.createElement('span');
             let out;
-            if (typeof debug[debugKey] =='function'){
-                try{
-                    out= debug[debugKey]()
-                } catch(e){
-                    out=e;
+            if (typeof debug[debugKey] == 'function') {
+                try {
+                    out = debug[debugKey]()
+                } catch (e) {
+                    out = e;
                 }
-            }
-            else out=debug[debugKey];
+            } else out = debug[debugKey];
             debugEntry.innerHTML = `<strong>${debugKey}</strong> ${out}`
             dbgE.append(debugEntry)
         }

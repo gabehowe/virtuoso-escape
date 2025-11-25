@@ -145,7 +145,6 @@ public class GameViewController implements Initializable {
     }
 
     public void updateButtons() {
-        //        App.addKeyboardBindings(webView.getEngine(), webView);
         webView.getEngine().executeScript("createKeys()");
     }
 
