@@ -1,7 +1,6 @@
 package org.virtuoso.escape.gui;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,216 +20,205 @@ import java.io.IOException;
 
 public class IntroController {
 
-    public StackPane foreground;
-    public VBox beaverBox;
-    public AnchorPane root;
-    @FXML
-    private ImageView hoveredBarn;
-    @FXML
-    private ImageView openedBarn;
-    @FXML
-    private ImageView beaver;
-    @FXML
-    private AnchorPane blackScreen;
-    @FXML
-    private Button continueToGame;
-    @FXML
-    private Label introLabel;
-    @FXML
-    private Label barnLabel;
-    @FXML
-    private Label beaverLabel;
-    @FXML
-    private Label pressToSkip;
+	@FXML
+	public VBox beaverBox;
+	@FXML
+	private ImageView barn;
+	@FXML
+	private ImageView openedBarn;
+	@FXML
+	private ImageView beaver;
+	@FXML
+	private AnchorPane blackScreen;
+	@FXML
+	private AnchorPane background;
+	@FXML
+	private Button continueToGame;
+	@FXML
+	private Label introLabel;
+	@FXML
+	private Label barnLabel;
+	@FXML
+	private Label beaverLabel;
+	@FXML
+	private Label pressToSkip;
 
-    private PauseTransition typewriter;
-    private boolean isBarnOpen;
-    private boolean wasScreenClicked;
-    private String introLabelText;
-    private double typewriteDelay = 1.0 / 60;
+	private PauseTransition typewriter;
+	private boolean wasScreenClicked;
+	private String introLabelText;
+	private static final double typewriteDelay = 0.045;
 
-    @FXML
-    void initialize() {
-//		hoveredBarn.setVisible(false);
-//		barn.setVisible(true);
-        App.scene.setOnKeyPressed(ev -> {
-            if (ev.getCode() == KeyCode.Q) try {
-                App.setRoot("game-view");
-            } catch (IOException e) {
-                throw new RuntimeException();
-            }
-        });
+	@FXML
+	void initialize() {
+		App.scene.setOnKeyPressed(ev -> {
+			if (ev.getCode() == KeyCode.Q) try {
+				App.setRoot("game-view");
+			} catch (IOException e) {
+				throw new RuntimeException();
+			}
+		});
 
-        openedBarn.setVisible(false);
-        openedBarn.setDisable(true);
+		barn.setVisible(true);
+		barn.setPickOnBounds(false);
 
-        beaver.setOpacity(0);
-        beaver.setVisible(true);
-        beaver.setDisable(true);
+		FadeTransition fadeInFG = new FadeTransition(Duration.seconds(0.3), barn);
+		fadeInFG.setFromValue(0);
+		fadeInFG.setToValue(1);
 
-        blackScreen.setOpacity(0);
-        blackScreen.setVisible(true);
-        blackScreen.setMouseTransparent(true);
+		FadeTransition fadeInBG = new FadeTransition(Duration.seconds(0.26), background);
+		fadeInBG.setFromValue(0);
+		fadeInBG.setToValue(1);
 
+		fadeInFG.play();
+		fadeInBG.play();
 
-        continueToGame.setVisible(false);
-        continueToGame.setDisable(true);
+		openedBarn.setVisible(false);
+		openedBarn.setDisable(true);
 
-        introLabel.getParent().setMouseTransparent(true);
-        introLabel.setVisible(false);
-        introLabelText = introLabel.getText();
+		beaver.setOpacity(0);
+		beaver.setVisible(true);
+		beaver.setDisable(true);
+		beaver.setPickOnBounds(false);
+		beaverBox.setMouseTransparent(true);
 
-        barnLabel.setVisible(false);
-        beaverLabel.setVisible(false);
+		blackScreen.setOpacity(0);
+		blackScreen.setVisible(true);
+		blackScreen.setMouseTransparent(true);
 
-        pressToSkip.setOpacity(0);
-        pressToSkip.setVisible(true);
-    }
+		continueToGame.setVisible(false);
+		continueToGame.setDisable(true);
 
-    @FXML
-    void onContinueButtonClick() {
-        try {
-            App.setRoot("game-view");
-            SpeechPlayer.instance().stopSoundbite();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		introLabel.getParent().setMouseTransparent(true);
+		introLabel.setVisible(false);
+		introLabelText = introLabel.getText();
 
-    @FXML
-    void onBarnEnter() {
-        barnLabel.setVisible(true);
-    }
+		barnLabel.setVisible(false);
+		beaverLabel.setVisible(false);
 
-    @FXML
-    void onHBarnClick() {
-        isBarnOpen = true;
+		pressToSkip.setOpacity(0);
+		pressToSkip.setVisible(true);
+	}
 
-        barnLabel.setVisible(false);
+	@FXML
+	void onContinueButtonClick() {
+		try {
+			App.setRoot("game-view");
+			SpeechPlayer.instance().stopSoundbite();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-        hoveredBarn.setVisible(false);
-        hoveredBarn.setDisable(true);
-        openedBarn.setVisible(true);
+	@FXML
+	void onBarnEnter() {
+		barnLabel.setVisible(true);
+	}
 
-        FadeTransition fadeInBeaver = new FadeTransition(Duration.seconds(0.3), beaver);
-        fadeInBeaver.setToValue(1);
-        PauseTransition pause = new PauseTransition(Duration.seconds(1.73));
-        pause.setOnFinished(event -> {
-            beaver.setDisable(false);
-            beaverBox.setMouseTransparent(false);
-            fadeInBeaver.play();
-        });
+	@FXML
+	void onBarnExit() {
+		barnLabel.setVisible(false);
+		barn.setScaleX(openedBarn.getScaleX());
+		barn.setScaleY(openedBarn.getScaleY());
+	}
 
-        pause.play();
-    }
+	@FXML
+	void onBarnClick() {
+		barnLabel.setVisible(false);
+		barn.setVisible(false);
+		barn.setDisable(true);
+		openedBarn.setVisible(true);
 
-    @FXML
-    void onHBarnPressed() {
-        hoveredBarn.setScaleX(openedBarn.getScaleX());
-        hoveredBarn.setScaleY(openedBarn.getScaleY());
-    }
+		FadeTransition fadeInBeaver = new FadeTransition(Duration.seconds(0.3), beaver);
+		fadeInBeaver.setToValue(1);
+		PauseTransition pause = new PauseTransition(Duration.seconds(1.73));
+		pause.setOnFinished(event -> {
+			beaver.setDisable(false);
+			beaverBox.setMouseTransparent(false);
+			fadeInBeaver.play();
+		});
+		pause.play();
+	}
 
-    @FXML
-    void onHBarnExit() {
-        if (isBarnOpen) return;
-        barnLabel.setVisible(false);
-    }
+	@FXML
+	void onBeaverClick() {
+		beaver.setVisible(false);
+		beaver.setDisable(true);
 
-    @FXML
-    void onBeaverClick() {
-        beaver.setVisible(false);
-        beaver.setDisable(true);
+		FadeTransition fadeIn = new FadeTransition(Duration.seconds(1.2), blackScreen);
+		fadeIn.setToValue(1);
 
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1.2), blackScreen);
-        fadeIn.setToValue(1);
+		fadeIn.setOnFinished(event -> {
+			startTypewriteAnimation(introLabel, introLabel.getText() );
+			openedBarn.setVisible(false);
+			blackScreen.setMouseTransparent(false);
+			introLabel.setVisible(true);
+			fadeInPauseFadeOut(0.5, 0.43);
+		});
+		fadeIn.play();
+	}
 
-        fadeIn.setOnFinished(event -> {
-            startTypewriteAnimation(introLabel, introLabel.getText());
-            openedBarn.setVisible(false);
-            blackScreen.setMouseTransparent(false);
-            introLabel.setVisible(true);
-            fadeInPauseFadeOut(0.5, 0.4);
-        });
-        fadeIn.play();
-    }
+	@FXML
+	void onBeaverEnter() {
+		beaverLabel.setVisible(true);
+	}
 
-    @FXML
-    void onBeaverEnter() {
-        beaver.setEffect(new DropShadow(BlurType.THREE_PASS_BOX, Color.BLACK, 10, 0, 0, 0));
-        beaverLabel.setVisible(true);
-    }
+	@FXML
+	void onBeaverExit() {
+		beaver.setOpacity(1);
+		beaverLabel.setVisible(false);
+	}
 
-    @FXML
-    void onBeaverExit() {
-        beaver.setEffect(new InnerShadow(BlurType.TWO_PASS_BOX, Color.BLACK, 10, 0, 0, 0));
-        beaver.setRotate(0);
-        beaver.setOpacity(1);
-        beaverLabel.setVisible(false);
-    }
-//
-//	@FXML
-//	void onContinueButtonEnter() {
-//		continueToGame.setStyle("-fx-font-size: 17.5px;");
-//		continueToGame.setScaleX(1.03);
-//		continueToGame.setScaleY(1.03);
-//	}
-//
-//	@FXML
-//	void onContinueButtonExit() {
-//		continueToGame.setStyle("-fx-font-size: 17px;");
-//		continueToGame.setScaleX(1);
-//		continueToGame.setScaleY(1);
-//	}
+	void fadeInPauseFadeOut(double fadeTime, double pauseTime) {
+		FadeTransition fadeInPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
+		fadeInPTS.setToValue(1);
 
-    void fadeInPauseFadeOut(double fadeTime, double pauseTime) {
-        FadeTransition fadeInPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
-        fadeInPTS.setToValue(1);
+		FadeTransition fadeOutPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
+		fadeOutPTS.setToValue(0);
 
-        FadeTransition fadeOutPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
-        fadeOutPTS.setToValue(0);
+		PauseTransition pausePTS1 = new PauseTransition(Duration.seconds(pauseTime));
+		PauseTransition pausePTS2 = new PauseTransition(Duration.seconds(pauseTime));
 
-        PauseTransition pausePTS1 = new PauseTransition(Duration.seconds(pauseTime));
-        PauseTransition pausePTS2 = new PauseTransition(Duration.seconds(pauseTime));
+		fadeInPTS.setOnFinished(event -> pausePTS1.play());
+		pausePTS1.setOnFinished(event -> fadeOutPTS.play());
+		fadeOutPTS.setOnFinished(event -> pausePTS2.play());
+		pausePTS2.setOnFinished(event -> fadeInPTS.play());
 
-        fadeInPTS.setOnFinished(event -> pausePTS1.play());
-        pausePTS1.setOnFinished(event -> fadeOutPTS.play());
-        fadeOutPTS.setOnFinished(event -> pausePTS2.play());
-        pausePTS2.setOnFinished(event -> fadeInPTS.play());
+		fadeInPTS.play();
+	}
 
-        fadeInPTS.play();
-    }
+	void startTypewriteAnimation(Label label, String text) {
+		label.setText("");
+		typewriter(label, text, 0);
+		SpeechPlayer.instance().playSoundbite(text);
+	}
 
-    void startTypewriteAnimation(Label label, String text) {
-        label.setText("");
-        typewriter(label, text, 0);
-        SpeechPlayer.instance().playSoundbite(text);
-    }
+	@FXML
+	void skipTypewriteAnimation() {
+		if (wasScreenClicked) return;
+		wasScreenClicked = true;
 
-    @FXML
-    void skipTypewriteAnimation() {
-        if (wasScreenClicked) return;
-        wasScreenClicked = true;
+		if (typewriter != null) {
+			typewriter.stop();
+			SpeechPlayer.instance().stopSoundbite();
+		}
+		introLabel.setText(introLabelText);
+		pressToSkip.setVisible(false);
+		continueToGame.setDisable(false);
+		continueToGame.setVisible(true);
+	}
 
-        if (typewriter != null) {
-            SpeechPlayer.instance().stopSoundbite();
-        }
-        typewriteDelay /= 200;
-        pressToSkip.setVisible(false);
-        continueToGame.setDisable(false);
-        continueToGame.setVisible(true);
-    }
+	private void typewriter(Label label, String text, int index) {
+		if (index == text.length()) {
+			wasScreenClicked = true;
+			pressToSkip.setVisible(false);
+			continueToGame.setDisable(false);
+			continueToGame.setVisible(true);
+			return;
+		}
+		label.setText(label.getText() + text.charAt(index));
 
-    private void typewriter(Label label, String text, int index) {
-        if (index == text.length()) {
-            pressToSkip.setVisible(false);
-            continueToGame.setDisable(false);
-            continueToGame.setVisible(true);
-            return;
-        }
-        label.setText(label.getText() + text.charAt(index));
-
-        typewriter = new PauseTransition(Duration.seconds(typewriteDelay));
-        typewriter.setOnFinished(_ -> typewriter(label, text, index + 1));
-        typewriter.play();
-    }
+		typewriter = new PauseTransition(Duration.seconds(typewriteDelay));
+		typewriter.setOnFinished(_ -> typewriter(label, text, index + 1));
+		typewriter.play();
+	}
 }
