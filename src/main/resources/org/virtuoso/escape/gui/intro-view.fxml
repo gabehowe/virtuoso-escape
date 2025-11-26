@@ -8,79 +8,58 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="700.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.virtuoso.escape.gui.IntroController">
-   <StackPane layoutX="290.0" layoutY="130.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="255.0" prefWidth="240.0">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="750.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.virtuoso.escape.gui.IntroController">
+   <StackPane fx:id="barnStack" pickOnBounds="false" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="330.0">
       <children>
-           <ImageView fx:id="openedBarn" fitHeight="255.0" fitWidth="240.0" pickOnBounds="true" preserveRatio="true" styleClass="barn">
+           <ImageView fx:id="openedBarn" fitHeight="255.0" fitWidth="240.0" preserveRatio="true" styleClass="barn">
                <Image url="@../../../../images/opened-beaver-barn.png" />
             <effect>
                <DropShadow />
             </effect>
            </ImageView>
-           <ImageView fx:id="barn" fitHeight="255.0" fitWidth="240.0" focusTraversable="true" onMouseClicked="#onBarnClick" onMouseEntered="#onBarnEnter" onMouseExited="#onBarnExit" opacity="0.96" preserveRatio="true" styleClass="barn" visible="false">
+           <ImageView fx:id="barn" fitHeight="255.0" fitWidth="240.0" onMouseClicked="#onBarnClick" onMouseEntered="#onBarnEnter" onMouseExited="#onBarnExit" preserveRatio="true" styleClass="barn" visible="false">
                <Image url="@../../../../images/beaver-barn.png" />
            </ImageView>
       </children>
    </StackPane>
-   <VBox fx:id="beaverBox" layoutX="280.0" layoutY="130.0" pickOnBounds="false" prefHeight="260.0" prefWidth="250.0">
-      <children>
-         <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="260.0" prefWidth="250.0">
-            <children>
-                  <ImageView fx:id="beaver" fitHeight="134.0" fitWidth="80.0" layoutX="87.0" layoutY="178.0" onMouseClicked="#onBeaverClick" onMouseEntered="#onBeaverEnter" onMouseExited="#onBeaverExit" preserveRatio="true">
-                      <Image url="@../../../../images/beaver.png" />
-                  </ImageView>
-            </children>
-         </Pane>
-      </children>
-   </VBox>
-   <VBox layoutX="515.0" layoutY="233.0" prefHeight="152.0" prefWidth="190.0">
-      <children>
-         <Pane prefHeight="152.0" prefWidth="190.0">
-            <children>
-                <Label fx:id="barnLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="35.0" layoutY="9.0" prefHeight="30.0" prefWidth="113.0" style="-fx-text-fill: black; -fx-background-color: white;" text="Beaver Barn" textAlignment="CENTER">
-                    <font>
-                        <Font size="15.0" />
-                    </font>
-                    <effect>
-                        <DropShadow />
-                    </effect>
-                    <styleClass>
-                        <String fx:value="bold-italic" />
-                        <String fx:value="rounded" />
-                    </styleClass>
-                </Label>
-                <Label fx:id="beaverLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="28.0" layoutY="77.0" prefHeight="30.0" prefWidth="95.0" style="-fx-text-fill: black; -fx-background-color: white;" stylesheets="@style.css" text="Interact" textAlignment="CENTER">
-                    <font>
-                        <Font size="15.0" />
-                    </font>
-                    <effect>
-                        <DropShadow />
-                    </effect>
-                    <styleClass>
-                        <String fx:value="bold-italic" />
-                        <String fx:value="rounded" />
-                    </styleClass>
-                </Label>
-            </children>
-         </Pane>
-      </children>
-   </VBox>
+   <ImageView fx:id="beaver" fitHeight="134.0" fitWidth="80.0" onMouseClicked="#onBeaverClick" onMouseEntered="#onBeaverEnter" onMouseExited="#onBeaverExit" preserveRatio="true" scaleX="1.2" scaleY="1.2" AnchorPane.bottomAnchor="122.0" AnchorPane.rightAnchor="400.0">
+       <Image url="@../../../../images/beaver.png" />
+   </ImageView>
+    <Label fx:id="barnLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="113.0" scaleX="1.1" scaleY="1.1" style="-fx-text-fill: black; -fx-background-color: white;" text="Beaver Barn" textAlignment="CENTER" AnchorPane.bottomAnchor="250.0" AnchorPane.rightAnchor="605.0">
+        <font>
+            <Font size="15.0" />
+        </font>
+        <effect>
+            <DropShadow />
+        </effect>
+        <styleClass>
+            <String fx:value="bold-italic" />
+            <String fx:value="rounded" />
+        </styleClass>
+    </Label>
+    <Label fx:id="beaverLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="95.0" scaleX="1.1" scaleY="1.1" style="-fx-text-fill: black; -fx-background-color: white;" text="Interact" textAlignment="CENTER" AnchorPane.bottomAnchor="175.0" AnchorPane.rightAnchor="195.0">
+        <font>
+            <Font size="15.0" />
+        </font>
+        <effect>
+            <DropShadow />
+        </effect>
+        <styleClass>
+            <String fx:value="bold-italic" />
+            <String fx:value="rounded" />
+        </styleClass>
+    </Label>
+   <Label fx:id="pressToSkipIntro" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="pressToSkip" text="Press Q To Skip Intro →" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="21.0" />
     <AnchorPane fx:id="blackScreen" mouseTransparent="true" onMouseClicked="#skipTypewriteAnimation" opacity="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label fx:id="introLabel" alignment="CENTER" layoutX="30.0" layoutY="5.0" lineSpacing="0.1" prefHeight="465.0" prefWidth="640.0" text="You have been attacked by a beaver at a pick-your-own beaver farm and knocked into the fridge half of a micro-fridge. It turns out that the fridge was a metamorphosis engine, transforming you into a squirrel. You need to get to the top of the M Bert Storey Innovation Center, find the matching microwave half, and use it to become human again!" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="5.0">
             <effect>
                 <Blend />
             </effect>
         </Label>
-        <Label fx:id="pressToSkip" alignment="CENTER" contentDisplay="CENTER" layoutX="416.0" layoutY="431.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Press Anywhere To Skip →" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="21.0">
-         <font>
-            <Font name="System Italic" size="12.0" />
-         </font>
-      </Label>
+        <Label fx:id="pressToSkip" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="pressToSkip" text="Press Anywhere To Skip →" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="21.0" />
         <Button fx:id="continueToGame" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="567.0" layoutY="425.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onContinueButtonClick" styleClass="box, rounded" text="Continue" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="18.0">
         </Button>
     </AnchorPane>

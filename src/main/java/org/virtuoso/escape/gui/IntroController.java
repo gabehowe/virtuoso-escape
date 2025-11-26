@@ -1,18 +1,17 @@
 package org.virtuoso.escape.gui;
 
 import javafx.animation.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.virtuoso.escape.speech.SpeechPlayer;
 
@@ -20,8 +19,6 @@ import java.io.IOException;
 
 public class IntroController {
 
-	@FXML
-	public VBox beaverBox;
 	@FXML
 	private ImageView barn;
 	@FXML
@@ -31,7 +28,9 @@ public class IntroController {
 	@FXML
 	private AnchorPane blackScreen;
 	@FXML
-	private AnchorPane background;
+	private StackPane barnStack;
+	@FXML
+	private AnchorPane root;
 	@FXML
 	private Button continueToGame;
 	@FXML
@@ -42,6 +41,8 @@ public class IntroController {
 	private Label beaverLabel;
 	@FXML
 	private Label pressToSkip;
+	@FXML
+	private Label pressToSkipIntro;
 
 	private PauseTransition typewriter;
 	private boolean wasScreenClicked;
@@ -50,22 +51,27 @@ public class IntroController {
 
 	@FXML
 	void initialize() {
+		pressToSkipIntro.setOpacity(0);
+		pressToSkipIntro.setVisible(true);
+
 		App.scene.setOnKeyPressed(ev -> {
 			if (ev.getCode() == KeyCode.Q) try {
 				App.setRoot("game-view");
+				SpeechPlayer.instance().stopSoundbite();
 			} catch (IOException e) {
 				throw new RuntimeException();
 			}
 		});
+		fadeInPauseFadeOut(pressToSkipIntro, 0.5, 0.45);
 
+		barn.setOpacity(0);
 		barn.setVisible(true);
 		barn.setPickOnBounds(false);
 
 		FadeTransition fadeInFG = new FadeTransition(Duration.seconds(0.3), barn);
-		fadeInFG.setFromValue(0);
 		fadeInFG.setToValue(1);
 
-		FadeTransition fadeInBG = new FadeTransition(Duration.seconds(0.26), background);
+		FadeTransition fadeInBG = new FadeTransition(Duration.seconds(0.26), root);
 		fadeInBG.setFromValue(0);
 		fadeInBG.setToValue(1);
 
@@ -79,7 +85,7 @@ public class IntroController {
 		beaver.setVisible(true);
 		beaver.setDisable(true);
 		beaver.setPickOnBounds(false);
-		beaverBox.setMouseTransparent(true);
+		//beaverBox.setMouseTransparent(true);
 
 		blackScreen.setOpacity(0);
 		blackScreen.setVisible(true);
@@ -133,7 +139,7 @@ public class IntroController {
 		PauseTransition pause = new PauseTransition(Duration.seconds(1.73));
 		pause.setOnFinished(event -> {
 			beaver.setDisable(false);
-			beaverBox.setMouseTransparent(false);
+			//beaverBox.setMouseTransparent(false);
 			fadeInBeaver.play();
 		});
 		pause.play();
@@ -152,7 +158,7 @@ public class IntroController {
 			openedBarn.setVisible(false);
 			blackScreen.setMouseTransparent(false);
 			introLabel.setVisible(true);
-			fadeInPauseFadeOut(0.5, 0.43);
+			fadeInPauseFadeOut(pressToSkip, 0.5, 0.43);
 		});
 		fadeIn.play();
 	}
@@ -168,11 +174,11 @@ public class IntroController {
 		beaverLabel.setVisible(false);
 	}
 
-	void fadeInPauseFadeOut(double fadeTime, double pauseTime) {
-		FadeTransition fadeInPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
+	void fadeInPauseFadeOut(Label label, double fadeTime, double pauseTime) {
+		FadeTransition fadeInPTS = new FadeTransition(Duration.seconds(fadeTime), label);
 		fadeInPTS.setToValue(1);
 
-		FadeTransition fadeOutPTS = new FadeTransition(Duration.seconds(fadeTime), pressToSkip);
+		FadeTransition fadeOutPTS = new FadeTransition(Duration.seconds(fadeTime), label);
 		fadeOutPTS.setToValue(0);
 
 		PauseTransition pausePTS1 = new PauseTransition(Duration.seconds(pauseTime));

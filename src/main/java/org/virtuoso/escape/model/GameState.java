@@ -256,12 +256,10 @@ public class GameState {
      * Recalculate the high score and reset GameState.
      */
     public void updateHighScore() {
-        if (isEnded()) {
-            Long currentScore = Score.calculateScore(this.time, this.difficulty);
-            Long oldScore = this.account.highScore().totalScore();
-            if (oldScore == null || currentScore > oldScore) {
-                this.account.setHighScore(new Score(this.time, this.difficulty, currentScore));
-            }
+	    Long currentScore = Score.calculateScore(this.time, this.difficulty);
+        Long oldScore = this.account.highScore().totalScore();
+        if (oldScore == null || currentScore > oldScore) {
+            this.account.setHighScore(new Score(this.time, this.difficulty, currentScore));
         }
         AccountManager.instance().gameStates().remove(this.account().id());
         this.begin(this.account());
@@ -365,7 +363,7 @@ public class GameState {
     public void write() {
         var delta = System.currentTimeMillis() - this.startTime;
         this.time = this.time.minusMillis(delta);
-        updateHighScore();
+        if (this.ended) updateHighScore();
         DataWriter.writeGameState();
     }
 }

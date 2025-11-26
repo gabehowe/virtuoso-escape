@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.web.WebView;
 import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
+import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.account.AccountManager;
 
 import java.io.IOException;
@@ -45,12 +46,21 @@ public class LoginController implements Initializable {
 
     private AuthMode authMode = AuthMode.LOGIN;
 
-    void switchToIntro() {
-        try {
-            App.setRoot("intro-view");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    void switchToNextScreen() {
+	    if (GameState.instance().time().toSeconds() == GameState.initialTime) {
+		    try {
+			    App.setRoot("intro-view");
+		    } catch (IOException e) {
+			    throw new RuntimeException(e);
+		    }
+	    } else {
+		    try {
+			    App.setRoot("game-view");
+		    } catch (IOException e) {
+			    throw new RuntimeException(e);
+		    }
+	    }
+
     }
 
     public String tryAuth(String user, String pass) {
@@ -63,7 +73,7 @@ public class LoginController implements Initializable {
 
             if (flag) {
                 // Move to next screen
-                switchToIntro();
+                switchToNextScreen();
             } else {
                 return AccountManager.instance().invalidLoginInfo(user, pass);
             }

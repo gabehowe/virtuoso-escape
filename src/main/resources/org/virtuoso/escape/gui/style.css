@@ -68,7 +68,7 @@
     -fx-font-size: 48px;
 }
 
-#background {
+#root {
     -fx-background-image: url(../../../../images/grassy-background.png);
     -fx-background-repeat: none;
     -fx-background-size: cover;
@@ -77,21 +77,24 @@
 #beaver {
     -fx-effect: innershadow(two-pass-box, black, 10, 0, 0, 0);
     -fx-cursor: hand;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 #beaver:hover {
     -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
     -fx-rotate: 6;
     -fx-opacity: 0.98;
-    -fx-scale-x: 1.01;
-    -fx-scale-y: 1.01;
+    -fx-scale-x: 1.21;
+    -fx-scale-y: 1.21;
 }
 
 #blackScreen {
     -fx-background-color: bg;
 }
 
-#pressToSkip {
+.pressToSkip {
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, .25), 4.5, 0, 5, 5);
     -fx-text-fill: white;
     -fx-text: inherit;
     -fx-font-size: 18.2px;
@@ -107,24 +110,26 @@
 
 #barn {
     -fx-cursor: hand;
+/*    -fx-opacity: 1;*/
 }
 
 .barn {
     -fx-effect: dropshadow(three-pass-box, black, 11, 0, 0, 0);
-    -fx-scale-x: 1.00;
-    -fx-scale-y: 1.00;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 #barn:hover {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.75), 13, 0, 20, 8);
-    -fx-scale-x: 1.01;
-    -fx-scale-y: 1.01;
+    -fx-scale-x: 1.21;
+    -fx-scale-y: 1.21;
+    -fx-opacity: 0.96;
 }
 
 #barn:pressed {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.75), 13, 0, 20, 8);
-    -fx-scale-x: 0.99;
-    -fx-scale-y: 0.99;
+    -fx-scale-x: 1.19;
+    -fx-scale-y: 1.19;
 }
 
 #continueToGame {
@@ -142,8 +147,4 @@
     -fx-scale-x: 1.00;
     -fx-scale-y: 1.00;
     -fx-effect: none;
-}
-
-#pressToSkip {
-    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, .25), 4.5, 0, 5, 5);
 }
