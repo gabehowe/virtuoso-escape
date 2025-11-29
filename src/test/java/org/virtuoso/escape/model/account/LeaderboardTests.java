@@ -144,9 +144,12 @@ public class LeaderboardTests {
         var lines = List.of(output.split("\n"));
 
         // checking order
-        int idxHigh = lines.indexOf(lines.stream().filter(it->it.contains("high")).findFirst().get());
-        int idxTieA = output.indexOf(lines.stream().filter(it->it.contains("tieA")).findFirst().get());
-        int idxLow = output.indexOf(lines.stream().filter(it->it.contains("low")).findFirst().get());
+        int idxHigh = lines.indexOf(
+                lines.stream().filter(it -> it.contains("high")).findFirst().get());
+        int idxTieA = output.indexOf(
+                lines.stream().filter(it -> it.contains("tieA")).findFirst().get());
+        int idxLow = output.indexOf(
+                lines.stream().filter(it -> it.contains("low")).findFirst().get());
 
         assertTrue(idxHigh < idxLow, "High scorer should appear before low scorer");
         assertTrue(idxTieA < idxLow, "Tie players should appear before low scorer");

@@ -1,18 +1,19 @@
 package org.virtuoso.escape.gui;
 
-// JEP 511
-
-import module javafx.fxml;
-import module javafx.graphics;
-import javafx.scene.web.WebEngine;
-import netscape.javascript.JSObject;
-import org.virtuoso.escape.model.GameProjection;
-import org.w3c.dom.Element;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.stage.Stage;
+import netscape.javascript.JSObject;
+import org.virtuoso.escape.model.GameProjection;
+import org.w3c.dom.Element;
 
 public class App extends Application {
 
@@ -56,11 +57,13 @@ public class App extends Application {
     public static final Logger logger = new Logger();
 
     public static void setApp(WebEngine engine, Object app, Runnable callback) {
-        engine.documentProperty().addListener((_, _, _) -> {
+        // Unused used here instead of "_" because of linter bug
+        engine.documentProperty().addListener((unused1, unused2, unused3) -> {
             var window = (JSObject) engine.executeScript("window");
             window.setMember("app", app);
             window.setMember("logger", logger);
-            engine.executeScript("""
+            engine.executeScript(
+                    """
                     console.error = i => logger.logJSError(i);
                     console.log = i => logger.log(i);
                     window.onerror = e => console.error(e);
@@ -72,10 +75,13 @@ public class App extends Application {
     public static void setText(WebEngine engine, String elementId, String text) {
         callJSFunction(engine, "setTextOnElement", elementId, sanitizeForJS(text));
     }
-    public static String sanitizeForJS(String text) {
-        return text.replace("\"", "\\\"").replace("\n", "<br>").replace("\t", "<span class='tab'></span>")
-                   .replaceAll("(?<!\\*)\\*([^*]+?)\\*(?!\\*)", "<em>$1</em>").replaceAll("\\*\\*([^*]+?)\\*\\*", "<strong>$1</strong>");
 
+    public static String sanitizeForJS(String text) {
+        return text.replace("\"", "\\\"")
+                .replace("\n", "<br>")
+                .replace("\t", "<span class='tab'></span>")
+                .replaceAll("(?<!\\*)\\*([^*]+?)\\*(?!\\*)", "<em>$1</em>")
+                .replaceAll("\\*\\*([^*]+?)\\*\\*", "<strong>$1</strong>");
     }
 
     public static class Logger {
@@ -111,15 +117,17 @@ public class App extends Application {
     }
 
     public static Object callJSFunction(WebEngine engine, String function, Object... args) {
-        var jsArgs = Arrays.stream(args).map(it -> {
-            if (it instanceof String j) {
-                return "\"" + j + "\"";
-            }
-            return it;
-        }).map(Object::toString).collect(Collectors.joining(","));
+        var jsArgs = Arrays.stream(args)
+                .map(it -> {
+                    if (it instanceof String j) {
+                        return "\"" + j + "\"";
+                    }
+                    return it;
+                })
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
         var cmd = String.format("%s(%s);", function, jsArgs);
         logger.logJSCall(cmd);
         return engine.executeScript(cmd);
     }
-
 }

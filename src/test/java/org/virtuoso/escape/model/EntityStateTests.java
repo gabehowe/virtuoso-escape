@@ -1,5 +1,11 @@
 package org.virtuoso.escape.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,22 +15,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.virtuoso.escape.model.action.*;
 import org.virtuoso.escape.model.data.DataLoader;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * @author Andrew
- */
+/** @author Andrew */
 public class EntityStateTests {
     GameProjection proj;
-
-
 
     @BeforeEach
     public void pre() {
@@ -180,27 +173,30 @@ public class EntityStateTests {
 
         EntityState testState =
                 switch (methodName) {
-                    case "interact" -> new EntityState(
-                            "testState",
-                            null,
-                            null,
-                            mockAction,
-                            null,
-                            new EntityState.Capabilities(false, false, hasAction, false));
-                    case "attack" -> new EntityState(
-                            "testState",
-                            mockAction,
-                            null,
-                            null,
-                            null,
-                            new EntityState.Capabilities(hasAction, false, false, false));
-                    case "inspect" -> new EntityState(
-                            "testState",
-                            null,
-                            mockAction,
-                            null,
-                            null,
-                            new EntityState.Capabilities(false, hasAction, false, false));
+                    case "interact" ->
+                        new EntityState(
+                                "testState",
+                                null,
+                                null,
+                                mockAction,
+                                null,
+                                new EntityState.Capabilities(false, false, hasAction, false));
+                    case "attack" ->
+                        new EntityState(
+                                "testState",
+                                mockAction,
+                                null,
+                                null,
+                                null,
+                                new EntityState.Capabilities(hasAction, false, false, false));
+                    case "inspect" ->
+                        new EntityState(
+                                "testState",
+                                null,
+                                mockAction,
+                                null,
+                                null,
+                                new EntityState.Capabilities(false, hasAction, false, false));
                     default -> throw new IllegalArgumentException("Unknown method: " + methodName);
                 };
 
@@ -310,7 +306,8 @@ public class EntityStateTests {
     @DisplayName("Should handle takeInput correctly when input action is null")
     @Test
     void takeInputActionNullTest() {
-        EntityState state = new EntityState("testState", null, null, null, null, new EntityState.Capabilities(false, false, false, true));
+        EntityState state = new EntityState(
+                "testState", null, null, null, null, new EntityState.Capabilities(false, false, false, true));
         state.takeInput("unknownInput");
         String message = GameState.instance().currentMessage().get();
         assertTrue(message.contains("I couldn't understand 'unknownInput'"));
@@ -319,7 +316,8 @@ public class EntityStateTests {
     @DisplayName("Should handle takeInput when input action is null and key exists")
     @Test
     void takeInputNullActionKeyExistsTest() {
-        EntityState state = new EntityState("computty_unblocked", null, null, null, null, new EntityState.Capabilities(false, false, false, true));
+        EntityState state = new EntityState(
+                "computty_unblocked", null, null, null, null, new EntityState.Capabilities(false, false, false, true));
         state.takeInput("cd");
         String message = GameState.instance().currentMessage().get();
         assertEquals(GameInfo.instance().string("computty_unblocked", "input_cd"), message);

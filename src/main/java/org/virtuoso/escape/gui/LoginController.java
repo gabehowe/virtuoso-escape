@@ -1,5 +1,8 @@
 package org.virtuoso.escape.gui;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
@@ -9,10 +12,6 @@ import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.account.AccountManager;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
     LoginController(GameProjection projection) {
@@ -35,8 +34,7 @@ public class LoginController implements Initializable {
         //        KeyboardProcessor.addKeyboardBindings(root);
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("login.html").toExternalForm());
-        App.setApp(webView.getEngine(), this, () -> {
-        });
+        App.setApp(webView.getEngine(), this, () -> {});
     }
 
     enum AuthMode {
@@ -47,29 +45,29 @@ public class LoginController implements Initializable {
     private AuthMode authMode = AuthMode.LOGIN;
 
     void switchToNextScreen() {
-	    if (GameState.instance().time().toSeconds() == GameState.initialTime) {
-		    try {
-			    App.setRoot("intro-view");
-		    } catch (IOException e) {
-			    throw new RuntimeException(e);
-		    }
-	    } else {
-		    try {
-			    App.setRoot("game-view");
-		    } catch (IOException e) {
-			    throw new RuntimeException(e);
-		    }
-	    }
-
+        if (GameState.instance().time().toSeconds() == GameState.initialTime) {
+            try {
+                App.setRoot("intro-view");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try {
+                App.setRoot("game-view");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public String tryAuth(String user, String pass) {
         try {
 
-            var flag = switch (authMode) {
-                case LOGIN -> proj.login(user, pass);
-                case CREATE -> proj.createAccount(user, pass);
-            };
+            var flag =
+                    switch (authMode) {
+                        case LOGIN -> proj.login(user, pass);
+                        case CREATE -> proj.createAccount(user, pass);
+                    };
 
             if (flag) {
                 // Move to next screen

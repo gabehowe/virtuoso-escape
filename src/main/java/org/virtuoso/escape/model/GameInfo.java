@@ -1,12 +1,11 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.action.*;
-import org.virtuoso.escape.model.data.DataLoader;
-
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.virtuoso.escape.model.action.*;
+import org.virtuoso.escape.model.data.DataLoader;
 
 /**
  * @author Andrew
@@ -16,9 +15,7 @@ import java.util.stream.IntStream;
 public record GameInfo(Map<String, Map<String, String>> language, List<Floor> building) {
     private static GameInfo instance;
 
-    /**
-     * Construct this singleton.
-     */
+    /** Construct this singleton. */
     private GameInfo() {
         this(DataLoader.loadGameLanguage(), new ArrayList<>());
         // todo: add other floors
@@ -64,7 +61,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 narratorMsg.apply(hint2Id), // Give the specific hint text
                 () -> GameState.instance().setHintsUsed(floorId, 2), // Record the hint
                 new SwapEntities("narrator", "narrator_hint_2") // Swap to final state
-        );
+                );
         EntityState hint1Given = new EntityState(
                 "narrator_hint_1",
                 narratorMsg.apply("attack"),
@@ -78,7 +75,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 narratorMsg.apply(hint1Id), // Give the specific hint text
                 () -> GameState.instance().setHintsUsed(floorId, 1), // Record the hint
                 new SwapEntities("narrator", "narrator_hint_1") // Swap to hint1Given state
-        );
+                );
         EntityState start = new EntityState(
                 "narrator_start",
                 narratorMsg.apply("attack"),
@@ -190,20 +187,20 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
      */
     private Entity joeHardy() {
         Predicate<Item[]> hasItems = (i) -> Arrays.stream(i)
-                                                  .map(GameState.instance()::hasItem)
-                                                  .reduce((a, b) -> a && b)
-                                                  .get();
+                .map(GameState.instance()::hasItem)
+                .reduce((a, b) -> a && b)
+                .get();
         EntityState sandwichJoe = new EntityState("sandwich_joe", new Default(), new Default(), new Default(), null);
         EntityState sansSandwichJoe = new EntityState(
                 "sans_sandwich_joe",
                 new Default(),
                 new Default(),
                 new Conditional(
-                        () -> hasItems.test(new Item[]{
-                                Item.left_bread,
-                                Item.right_bread,
-                                Item.sunflower_seed_butter,
-                                Item.sealed_clean_food_safe_hummus
+                        () -> hasItems.test(new Item[] {
+                            Item.left_bread,
+                            Item.right_bread,
+                            Item.sunflower_seed_butter,
+                            Item.sealed_clean_food_safe_hummus
                         }),
                         new Chain(
                                 new SetMessage(this, "sans_sandwich_joe", "interact_sandwich"),
@@ -232,9 +229,9 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
         for (int i = 0; i < length; i++) {
             int current_i = i;
             Map<String, Action> map = IntStream.range(1, PAGES)
-                                               .boxed()
-                                               .collect(Collectors.toMap(
-                                                       j -> String.valueOf(j), j -> turnPage(length - current_i, j, length, CORRECT_PAGE)));
+                    .boxed()
+                    .collect(Collectors.toMap(
+                            j -> String.valueOf(j), j -> turnPage(length - current_i, j, length, CORRECT_PAGE)));
             LinkedHashMap<String, Action> linkedMap = new LinkedHashMap<String, Action>(map);
             Function<String, Action> alm = (stringId) -> new SetMessage(this, "almanac", stringId);
             almanacStates.add(new EntityState(
@@ -251,9 +248,9 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     /**
      * Test the user input page.
      *
-     * @param flips       Attempts remaining
+     * @param flips Attempts remaining
      * @param currentPage The page attempted.
-     * @param maxFlips    The total number of attemptable flips.
+     * @param maxFlips The total number of attemptable flips.
      * @param correctPage The correct, desired page
      * @return An Action to be run later.
      */
@@ -305,10 +302,12 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
 
         Function<String, Entity> createDialogueDoorChain = (id) -> {
             EntityState[] states = new EntityState[3];
-            BiFunction<String, String, Action> setMsg = (resource, state) -> new SetMessage(this.searchString(resource, state, id));
+            BiFunction<String, String, Action> setMsg =
+                    (resource, state) -> new SetMessage(this.searchString(resource, state, id));
             for (int i = 0; i < 3; i++) {
                 var stateId = id + "_" + i;
-                states[i] = new EntityState(stateId, setMsg.apply("attack", stateId), setMsg.apply("inspect", stateId), failDoor, null);
+                states[i] = new EntityState(
+                        stateId, setMsg.apply("attack", stateId), setMsg.apply("inspect", stateId), failDoor, null);
             }
             return new Entity(id, List.of(states).reversed().toArray(EntityState[]::new));
         };
@@ -326,13 +325,14 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     /**
      * Create a linked list of proper doors.
      *
-     * @param length  The number of doors in the linked list.
+     * @param length The number of doors in the linked list.
      * @param shuffle The function to shuffle doors.
      * @return A single door with an internal link to the next door.
      */
     private Entity createDoorChain(int length, Action shuffle, IntConsumer setDoors) {
         EntityState[] door1 = new EntityState[length];
-        BiFunction<String, String, Action> sm = (stringId, state) -> new SetMessage(this.searchString(stringId, state, "door1"));
+        BiFunction<String, String, Action> sm =
+                (stringId, state) -> new SetMessage(this.searchString(stringId, state, "door1"));
         EntityState door1_final = new EntityState(
                 "door1_0",
                 sm.apply("attack", "door1_0"),
@@ -342,7 +342,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
         door1[length - 1] = door1_final;
         for (int i = 1; i < length; i++) {
             final int finalI = i;
-            String id = "door1_"+i;
+            String id = "door1_" + i;
             EntityState next = new EntityState(
                     id,
                     sm.apply("attack", id),
@@ -352,8 +352,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                             GameState.instance()::leaveEntity,
                             shuffle,
                             sm.apply("interact", id),
-                            () ->setDoors.accept(finalI-1)
-                    ),
+                            () -> setDoors.accept(finalI - 1)),
                     null);
             door1[length - (i + 1)] = next;
         }
@@ -430,8 +429,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
 
         Action checkKeysAndSwap = new Conditional(
                 () -> GameState.instance().hasItem(Item.keys),
-                new Chain(doorMsg.apply("unlocked_msg"),
-                        new SwapEntities("exit_door", "exit_door_unlocked")),
+                new Chain(doorMsg.apply("unlocked_msg"), new SwapEntities("exit_door", "exit_door_unlocked")),
                 doorMsg.apply("locked_msg"));
         EntityState doorLocked = new EntityState(
                 "exit_door_locked", new Default(), doorMsg.apply("inspect_locked"), checkKeysAndSwap, null);
@@ -581,9 +579,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
 
     // Ending//
 
-    /**
-     * End the game.
-     */
+    /** End the game. */
     private void gameEnding() {
         GameState.instance().end();
     }
@@ -593,27 +589,26 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     /**
      * Get a string resource from {@link GameInfo#language()} safely.
      *
-     * @param id       The parent of the string resource.
+     * @param id The parent of the string resource.
      * @param stringId The id of the string resource.
      * @return A string resource.
      */
     public String string(String id, String stringId) {
         return Optional.ofNullable(language.get(id))
-                       .map(it -> it.get(stringId))
-                       .orElse("<" + id + "/" + stringId + ">");
+                .map(it -> it.get(stringId))
+                .orElse("<" + id + "/" + stringId + ">");
     }
 
     /**
      * Search for a string resource in multiple places, otherwise return a placeholder
      *
      * @param stringId The resource to search for.
-     * @param roots    The roots to search in.
+     * @param roots The roots to search in.
      * @return A placeholder or the first found string.
      */
     public String searchString(String stringId, String... roots) {
         for (String root : roots) {
-            var attempt = Optional.ofNullable(this.language.get(root))
-                                  .map(it -> it.get(stringId));
+            var attempt = Optional.ofNullable(this.language.get(root)).map(it -> it.get(stringId));
             if (attempt.isPresent()) return attempt.get();
         }
         return "<" + roots[0] + "/" + stringId + ">";
@@ -636,5 +631,4 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     public List<Floor> building() {
         return this.building;
     }
-
 }

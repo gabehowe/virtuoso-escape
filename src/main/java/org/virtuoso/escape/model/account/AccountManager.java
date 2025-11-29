@@ -44,7 +44,7 @@ public record AccountManager(JSONObject accounts, JSONObject gameStates) {
      */
     public Optional<Account> login(String username, String password) {
         GameState gameState = GameState.instance();
-            Account account = accountExists(username, password);
+        Account account = accountExists(username, password);
         if (account != null) {
 
             gameState.begin(account);

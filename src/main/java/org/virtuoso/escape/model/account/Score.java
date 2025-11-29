@@ -1,7 +1,6 @@
 package org.virtuoso.escape.model.account;
 
 import java.time.Duration;
-import java.util.stream.Collectors;
 import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameState;
@@ -33,7 +32,9 @@ public record Score(Duration timeRemaining, Difficulty difficulty, Long totalSco
                 ? (Long) (timeRemaining.toSeconds()
                         - GameState.instance().penalty()
                         - (GameState.instance().hintsUsed() != null
-                                ? GameState.instance().hintsUsed().values().stream().mapToInt(Integer::intValue).sum()
+                                ? GameState.instance().hintsUsed().values().stream()
+                                        .mapToInt(Integer::intValue)
+                                        .sum()
                                 : 0))
                 : null;
     }

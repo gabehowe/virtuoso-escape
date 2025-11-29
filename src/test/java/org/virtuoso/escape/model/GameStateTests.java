@@ -1,21 +1,19 @@
 package org.virtuoso.escape.model;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.virtuoso.escape.model.account.AccountManager;
-import org.virtuoso.escape.model.account.Score;
-import org.virtuoso.escape.model.data.DataLoader;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.virtuoso.escape.model.account.AccountManager;
+import org.virtuoso.escape.model.account.Score;
+import org.virtuoso.escape.model.data.DataLoader;
 
 /**
  * Tests for GameState.java
@@ -106,7 +104,7 @@ public class GameStateTests {
         state = GameState.instance();
         proj.login("dummy", "dummy");
 
-//        injectPrivateField(state, "account", account);
+        //        injectPrivateField(state, "account", account);
         injectPrivateField(state, "time", Duration.ofSeconds(1000));
         injectPrivateField(state, "penalty", 0);
         injectPrivateField(state, "ended", false);
@@ -142,20 +140,14 @@ public class GameStateTests {
     }
 
     @ParameterizedTest
-    @CsvSource({
-            "50, 100",
-            "150, 150",
-            "100, 100"
-    })
+    @CsvSource({"50, 100", "150, 150", "100, 100"})
     void testUpdateHighScore(int value, int expected) {
         GameState.instance().end();
         GameState.instance().account().setHighScore(new Score(null, null, 100L));
         GameState.instance().setTime(Duration.ofSeconds(value));
         GameState.instance().updateHighScore();
         assertEquals(expected, GameState.instance().account().highScore().totalScore());
-
     }
-
 
     @Test
     void testAddAndClearItems() {
@@ -258,7 +250,6 @@ public class GameStateTests {
         state.end();
         assertTrue(state.isEnded());
     }
-
 
     @Test
     void testSetCurrentFloorResetsRoomAndEntity() throws Exception {

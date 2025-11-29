@@ -85,6 +85,12 @@ tasks.register<JavaExec>("tui") {
     standardInput = System.`in`
 }
 
+tasks.register("format") {
+    dependsOn("spotlessApply")
+    description = "Formats code with the Palantir linter"
+    group = "formatting"
+}
+
 tasks.withType<JavaCompile>() {
     options.compilerArgs.add("--enable-preview")
     options.encoding = "UTF-8"

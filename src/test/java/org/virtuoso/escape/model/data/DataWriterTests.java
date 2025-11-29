@@ -1,5 +1,10 @@
 package org.virtuoso.escape.model.data;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,16 +15,7 @@ import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.Util;
 import org.virtuoso.escape.model.account.AccountManager;
 
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * @author Treasure
- */
+/** @author Treasure */
 public class DataWriterTests {
     private static String stateData = """
             {}
@@ -34,21 +30,21 @@ public class DataWriterTests {
         Util.rebuildSingleton(GameState.class);
         Util.rebuildSingleton(AccountManager.class);
         DataWriter.ACCOUNTS_PATH = Paths.get(getClass()
-                                                .getResource("/org/virtuoso/escape/model/data/accounts.json")
-                                                .toURI())
-                                        .toString();
+                        .getResource("/org/virtuoso/escape/model/data/accounts.json")
+                        .toURI())
+                .toString();
         DataWriter.GAMESTATES_PATH = Paths.get(getClass()
-                                                  .getResource("/org/virtuoso/escape/model/data/gamestates.json")
-                                                  .toURI())
-                                          .toString();
+                        .getResource("/org/virtuoso/escape/model/data/gamestates.json")
+                        .toURI())
+                .toString();
         DataLoader.ACCOUNTS_PATH = Paths.get(getClass()
-                                                .getResource("/org/virtuoso/escape/model/data/accounts.json")
-                                                .toURI())
-                                        .toString();
+                        .getResource("/org/virtuoso/escape/model/data/accounts.json")
+                        .toURI())
+                .toString();
         DataLoader.GAMESTATES_PATH = Paths.get(getClass()
-                                                  .getResource("/org/virtuoso/escape/model/data/gamestates.json")
-                                                  .toURI())
-                                          .toString();
+                        .getResource("/org/virtuoso/escape/model/data/gamestates.json")
+                        .toURI())
+                .toString();
         try {
             Files.writeString(Path.of(DataWriter.ACCOUNTS_PATH), accountData);
             Files.writeString(Path.of(DataWriter.GAMESTATES_PATH), stateData);
@@ -84,9 +80,9 @@ public class DataWriterTests {
         projection.createAccount("", "");
         DataWriter.writeAccount();
         assertTrue(DataLoader.loadAccounts()
-                             .containsKey(GameState.instance().account().id().toString()));
+                .containsKey(GameState.instance().account().id().toString()));
         JSONObject emptyDummyJSON = (JSONObject) DataLoader.loadAccounts()
-                                                           .get(GameState.instance().account().id().toString());
+                .get(GameState.instance().account().id().toString());
         assertEquals("", emptyDummyJSON.get("username"));
     }
 
@@ -112,7 +108,7 @@ public class DataWriterTests {
     void testWritingZeroAccounts() {
         try {
             DataWriter.writeAccount();
-        } catch (Exception _) {
+        } catch (Exception unused) {
         }
         assertTrue(DataLoader.loadAccounts().isEmpty());
     }
@@ -124,9 +120,9 @@ public class DataWriterTests {
         GameState.instance().setDifficulty(Difficulty.TRIVIAL);
         DataWriter.writeGameState();
         assertTrue(DataLoader.loadGameStates()
-                             .containsKey(GameState.instance().account().id().toString()));
+                .containsKey(GameState.instance().account().id().toString()));
         JSONObject mrsdummyGS = (JSONObject) DataLoader.loadGameStates()
-                                                       .get(GameState.instance().account().id().toString());
+                .get(GameState.instance().account().id().toString());
         assertEquals(
                 Difficulty.TRIVIAL,
                 Difficulty.valueOf(mrsdummyGS.get("difficulty").toString()));

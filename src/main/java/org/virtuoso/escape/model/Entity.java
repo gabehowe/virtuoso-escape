@@ -1,11 +1,10 @@
 package org.virtuoso.escape.model;
 
-import org.virtuoso.escape.model.action.Action;
-import org.virtuoso.escape.model.action.TakeInput;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.virtuoso.escape.model.action.Action;
+import org.virtuoso.escape.model.action.TakeInput;
 
 /**
  * A finite state machine that holds all possible states for an entity to be in and which state it is currently in.
@@ -29,9 +28,9 @@ public class Entity {
     /**
      * Construct an entity with multiple states.
      *
-     * @param id            The ID of the entity to change.
+     * @param id The ID of the entity to change.
      * @param entity_states The states the entity has, the default state will be a state with the name of the entity id
-     *                      or the first state argument.
+     *     or the first state argument.
      */
     public Entity(String id, EntityState... entity_states) {
         this.id = id;
@@ -42,11 +41,11 @@ public class Entity {
     /**
      * Construct a one-state entity and its state.
      *
-     * @param id             The entity id.
-     * @param attackAction   The entity attack behavior.
-     * @param inspectAction  The entity inspect behavior.
+     * @param id The entity id.
+     * @param attackAction The entity attack behavior.
+     * @param inspectAction The entity inspect behavior.
      * @param interactAction The entity interact behavior.
-     * @param inputAction    The entity input behavior.
+     * @param inputAction The entity input behavior.
      */
     public Entity(String id, Action attackAction, Action inspectAction, Action interactAction, TakeInput inputAction) {
         this.id = id;
@@ -85,7 +84,6 @@ public class Entity {
         return this.id;
     }
 
-
     /**
      * Try to get a string from the current state, but try to get it based on the parent ID in the event that it fails.
      *
@@ -93,7 +91,8 @@ public class Entity {
      * @return The string resource from the Entity, current state, or placeholder.
      */
     public String string(String resource) {
-        return GameInfo.instance().searchString(resource, this.id(), this.state().id());
+        return GameInfo.instance()
+                .searchString(resource, this.id(), this.state().id());
     }
 
     /**
@@ -102,6 +101,6 @@ public class Entity {
      * @return The id and state id of an entity.
      */
     public String[] write() {
-        return new String[]{this.id, this.currentState};
+        return new String[] {this.id, this.currentState};
     }
 }

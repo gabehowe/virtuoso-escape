@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -31,6 +30,7 @@ import org.virtuoso.escape.model.data.DataLoader;
  */
 public class ActionTests {
     GameProjection proj;
+
     @BeforeAll
     public static void setup() throws Exception {
         Util.rebuildSingleton(AccountManager.class);
