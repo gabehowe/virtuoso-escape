@@ -235,10 +235,10 @@ function init() {
             eventKey = String.fromCodePoint('0x' + event.keyIdentifier.substring(2)).toLowerCase()
         } catch (_) {
             return
-        }
-        for (let key of Object.keys(keyMap)) {
-            if (eventKey !== key) continue;
-            keyMap[key].click()
+            for (let key of Object.keys(keyMap)) {
+                if (eventKey !== key) continue;
+                keyMap[key].click()
+            }
         }
     }
     addEventListener('keydown', keyboardHandler)
@@ -267,5 +267,3 @@ function timeAnimator() {
         document.getElementById('debug')
     }
 }
-
-init()
