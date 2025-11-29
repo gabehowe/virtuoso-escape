@@ -115,10 +115,6 @@ function displaySettings(name) {
 
 }
 
-function setTextOnElement(id, text) {
-    document.getElementById(id).innerHTML = text
-}
-
 let keyMap = {};
 
 function createKeys() {

@@ -30,9 +30,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
 
-        stage.setOnCloseRequest(t -> {
-            exit();
-        });
+        stage.setOnCloseRequest(_ -> exit());
     }
 
     public static void exit() {
@@ -70,7 +68,7 @@ public class App extends Application {
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {
-        callJSFunction(engine, "setTextOnElement", elementId, sanitizeForJS(text));
+        engine.executeScript(String.format(" document.getElementById('%s').innerHTML = \"%s\"", elementId, sanitizeForJS(text)));
     }
     public static String sanitizeForJS(String text) {
         return text.replace("\"", "\\\"").replace("\n", "<br>").replace("\t", "<span class='tab'></span>")

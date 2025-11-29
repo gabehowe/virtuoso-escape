@@ -28,9 +28,6 @@
 </div>
 
 <script>
-    function setTextOnElement(id, text) {
-        document.getElementById(id).innerHTML = text
-    }
     addEventListener('submit', ev => ev.preventDefault())
     function trySubmit() {
         document.getElementById('auth-error').innerText = app.tryAuth(document.getElementById('username').value, document.getElementById('password').value)
