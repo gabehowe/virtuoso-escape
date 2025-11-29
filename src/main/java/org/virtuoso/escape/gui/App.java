@@ -31,9 +31,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
 
-        stage.setOnCloseRequest(t -> {
-            exit();
-        });
+        stage.setOnCloseRequest(_ -> exit());
     }
 
     public static void exit() {
@@ -73,7 +71,7 @@ public class App extends Application {
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {
-        callJSFunction(engine, "setTextOnElement", elementId, sanitizeForJS(text));
+        engine.executeScript(String.format(" document.getElementById('%s').innerHTML = \"%s\"", elementId, sanitizeForJS(text)));
     }
 
     public static String sanitizeForJS(String text) {
@@ -84,28 +82,6 @@ public class App extends Application {
                 .replaceAll("\\*\\*([^*]+?)\\*\\*", "<strong>$1</strong>");
     }
 
-    public static class Logger {
-        private static final boolean LOGJSCALLS = true;
-
-        public void logJSCall(String msg) {
-            if (LOGJSCALLS) log("[JS Call]: " + msg);
-        }
-
-        public void log(Object msg) {
-            System.out.println(msg);
-        }
-
-        public void error(String msg) {
-            System.err.println(msg);
-        }
-
-        public void logJSError(Object msg) {
-            error("JSError: " + msg);
-            if (msg instanceof Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public static ArrayList<Element> querySelectorAll(WebEngine engine, String selector) {
         var elements = (Integer) engine.executeScript("j = document.querySelectorAll('" + selector + "'); j.length");
@@ -129,5 +105,28 @@ public class App extends Application {
         var cmd = String.format("%s(%s);", function, jsArgs);
         logger.logJSCall(cmd);
         return engine.executeScript(cmd);
+    }
+
+    public static class Logger {
+        private static final boolean LOGJSCALLS = true;
+
+        public void logJSCall(String msg) {
+            if (LOGJSCALLS) log("[JS Call]: " + msg);
+        }
+
+        public void log(Object msg) {
+            System.out.println(msg);
+        }
+
+        public void error(String msg) {
+            System.err.println(msg);
+        }
+
+        public void logJSError(Object msg) {
+            error("JSError: " + msg);
+            if (msg instanceof Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
