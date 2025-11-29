@@ -78,28 +78,6 @@ public class App extends Application {
 
     }
 
-    public static class Logger {
-        private static final boolean LOGJSCALLS = true;
-
-        public void logJSCall(String msg) {
-            if (LOGJSCALLS) log("[JS Call]: " + msg);
-        }
-
-        public void log(Object msg) {
-            System.out.println(msg);
-        }
-
-        public void error(String msg) {
-            System.err.println(msg);
-        }
-
-        public void logJSError(Object msg) {
-            error("JSError: " + msg);
-            if (msg instanceof Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public static ArrayList<Element> querySelectorAll(WebEngine engine, String selector) {
         var elements = (Integer) engine.executeScript("j = document.querySelectorAll('" + selector + "'); j.length");
@@ -122,4 +100,26 @@ public class App extends Application {
         return engine.executeScript(cmd);
     }
 
+    public static class Logger {
+        private static final boolean LOGJSCALLS = true;
+
+        public void logJSCall(String msg) {
+            if (LOGJSCALLS) log("[JS Call]: " + msg);
+        }
+
+        public void log(Object msg) {
+            System.out.println(msg);
+        }
+
+        public void error(String msg) {
+            System.err.println(msg);
+        }
+
+        public void logJSError(Object msg) {
+            error("JSError: " + msg);
+            if (msg instanceof Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
