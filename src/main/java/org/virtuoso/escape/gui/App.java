@@ -30,8 +30,8 @@ public class App extends Application {
         stage.setTitle("Virtuoso Escape");
         stage.setScene(scene);
         stage.show();
-
-        stage.setOnCloseRequest(_ -> exit());
+        // Unused used here instead of "_" because of linter bug
+        stage.setOnCloseRequest(unused -> exit());
     }
 
     public static void exit() {
