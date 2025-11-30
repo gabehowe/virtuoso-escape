@@ -217,12 +217,10 @@ function init() {
     }
     clearSettings()
     document.updateBox = updateBox
-    document.addEventListener('keydown', ev => {
-        if (ev.keyCode === 27) clearSettings()
-    })
     addEventListener('submit', ev => ev.preventDefault())
 
     let keyboardHandler = (event) => {
+        if (event.keyCode === 27) clearSettings()
         let tagName = document.activeElement.tagName
         if (tagName === "INPUT") return;
         let eventKey;
@@ -231,10 +229,10 @@ function init() {
             eventKey = String.fromCodePoint('0x' + event.keyIdentifier.substring(2)).toLowerCase()
         } catch (_) {
             return
-            for (let key of Object.keys(keyMap)) {
-                if (eventKey !== key) continue;
-                keyMap[key].click()
-            }
+        }
+        for (let key of Object.keys(keyMap)) {
+            if (eventKey !== key) continue;
+            keyMap[key].click()
         }
     }
     addEventListener('keydown', keyboardHandler)
