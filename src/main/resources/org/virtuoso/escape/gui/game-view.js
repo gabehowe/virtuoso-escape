@@ -40,27 +40,17 @@ function init() {
     clearSettings();
     document.updateBox = updateBox;
     addEventListener("submit", (ev) => ev.preventDefault());
-
-    let keyboardHandler = (event) => {
+    addEventListener("keydown", (event) => {
         if (event.keyCode === 27) clearSettings();
         let tagName = document.activeElement.tagName;
         if (tagName === "INPUT") return;
-        let eventKey;
-        if (event.keyIdentifier === undefined) eventKey = event.key;
-        else
-            try {
-                eventKey = String.fromCodePoint(
-                    "0x" + event.keyIdentifier.substring(2)
-                ).toLowerCase();
-            } catch (_) {
-                return;
-            }
         for (let key of Object.keys(keyMap)) {
+            let eventKey = getKeyEventKey(event);
             if (eventKey !== key) continue;
             keyMap[key].click();
+            event.preventDefault();
         }
-    };
-    addEventListener("keydown", keyboardHandler);
+    });
     let timeAnimator = () => {
         setTimeout(timeAnimator, 250);
         document.getElementById("timer").innerText = app.getTime();
@@ -84,6 +74,25 @@ function init() {
         }
     };
     timeAnimator();
+}
+
+/**
+ * Get the key from a keyboard event. Supports multiple browsers and JavaFX to enable some future conversion.
+ * @param {KeyboardEvent} event - The event to find the key from.
+ * @returns {String|null}
+ */
+function getKeyEventKey(event) {
+    let eventKey;
+    if (event.keyIdentifier === undefined) eventKey = event.key;
+    else
+        try {
+            eventKey = String.fromCodePoint(
+                "0x" + event.keyIdentifier.substring(2)
+            ).toLowerCase();
+        } catch (_) {
+            return null;
+        }
+    return eventKey;
 }
 
 /**
