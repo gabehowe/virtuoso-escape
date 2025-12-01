@@ -12,12 +12,20 @@ import org.json.simple.JSONArray;
 import org.virtuoso.escape.model.*;
 import org.w3c.dom.events.EventTarget;
 
+/**
+ * Controller for the game screen.
+ * Interfaces with WebView javascript engine.
+ * @author gabri
+ */
 public class GameViewController implements Initializable {
     public GameProjection projection;
 
     @FXML
     public WebView webView;
 
+    /**
+     * Change the background image and display all entities.
+     */
     public void updateImage() {
         var entities =
                 projection.currentRoom().entities().stream().map(Entity::id).toList();
@@ -32,6 +40,9 @@ public class GameViewController implements Initializable {
                 webView.getEngine(), "setRoomImage", projection.currentRoom().id());
     }
 
+    /**
+     * Update the dialogue box and entity title.
+     */
     public void updateDialogue() {
         setDialogue(projection
                 .currentMessage()
@@ -48,12 +59,22 @@ public class GameViewController implements Initializable {
                         .orElse(projection.currentRoom().name()));
     }
 
-    public void updateBox(String name, String current, List<List<String>> names, boolean button) {
+    /**
+     * Update a left side box.
+     * @param id The id of the box to update.
+     * @param current The currently selected element name (or "undefined").
+     * @param names All elements names including current.
+     * @param button Whether the eleemnts should be buttons.
+     */
+    public void updateBox(String id, String current, List<List<String>> names, boolean button) {
         var mapped = new JSONArray();
         mapped.addAll(names);
-        App.callJSFunction(webView.getEngine(), "updateBox", name, current, mapped, button);
+        App.callJSFunction(webView.getEngine(), "updateBox", id, current, mapped, button);
     }
 
+    /**
+     * Update all left bar boxes.
+     */
     public void updateLeftBar() {
         var roomNames = new ArrayList<>(projection.currentFloor().rooms().stream()
                 .map(rm -> List.of(rm.name(), rm.id()))
@@ -64,7 +85,10 @@ public class GameViewController implements Initializable {
             var theRoom = projection.currentFloor().rooms().stream()
                     .filter(rm -> Objects.equals(rm.id(), it.getAttribute("id")))
                     .findFirst();
-            theRoom.ifPresent(rm -> ((EventTarget) it).addEventListener("click", e -> this.pickRoom(rm), false));
+            theRoom.ifPresent(rm -> ((EventTarget) it).addEventListener("click", e -> {
+                projection.pickRoom(rm);
+                updateAll();
+            }, false));
         });
 
         var entityNames = projection.currentRoom().entities().stream()
@@ -78,7 +102,7 @@ public class GameViewController implements Initializable {
             var theEntity = projection.currentRoom().entities().stream()
                     .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
                     .findFirst();
-            theEntity.ifPresent(ent -> ((EventTarget) it).addEventListener("click", e -> this.pickEntity(ent), false));
+            theEntity.ifPresent(ent -> ((EventTarget) it).addEventListener("click", e -> {projection.pickEntity(ent); updateAll();}, false));
         });
 
         var itemNames = projection.currentItems().stream()
@@ -87,6 +111,9 @@ public class GameViewController implements Initializable {
         updateBox("item-box", "undefined", itemNames, false);
     }
 
+    /**
+     * Update the action box.
+     */
     public void updateCapabilities() {
         var cap = projection
                 .currentEntity()
@@ -109,24 +136,25 @@ public class GameViewController implements Initializable {
         webView.getEngine().executeScript("");
     }
 
+    /**
+     * Initialize the view.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         projection = App.projection;
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("game-view.html").toExternalForm());
         App.setApp(webView.getEngine(), this, () -> {
-            var doc = webView.getEngine().getDocument();
-
-            //            var inspect = doc.getElementById("inspect");
             webView.getEngine().executeScript("init()");
-            //            ((EventTarget) doc).addEventListener("load", e -> webView.getEngine().executeScript("init()"),
-            // false);
-            //            ((EventTarget) doc).addEventListener("keydown", e -> webView.getEngine().executeScript(""),
-            // false);
             updateAll();
         });
     }
 
+    /**
+     * Update all portions of the game screen.
+     */
     public void updateAll() {
         updateLeftBar();
         updateCapabilities();
@@ -135,61 +163,91 @@ public class GameViewController implements Initializable {
         updateImage();
     }
 
-    public void pickEntity(Entity ent) {
-        projection.pickEntity(ent);
-        updateAll();
-    }
-
-    public void pickRoom(Room room) {
-        projection.pickRoom(room);
-        updateAll();
-    }
-
+    /**
+     * Inspect and update all elements.
+     */
     public void inspect() {
         projection.inspect();
         updateAll();
     }
 
+    /**
+     * Interact and update all elements.
+     */
     public void interact() {
         projection.interact();
         updateAll();
     }
 
+    /**
+     * Attack and update all elements.
+     */
     public void attack() {
         projection.attack();
         updateAll();
     }
 
+    /**
+     * Attempt to speak to the selected entity.
+     * @param input The message to send.
+     */
     public void input(Object input) {
         projection.input(input.toString());
         updateAll();
     }
 
+    /**
+     * Toggle TTS.
+     */
     public void toggleTTS() {
         // TODO: make
     }
 
+    /**
+     * Close the application.
+     */
     public void exit() {
         App.exit();
     }
 
+    /**
+     * Set a message in the dialogue window.
+     * @param text The message to set.
+     */
     private void setDialogue(String text) {
         App.callJSFunction(webView.getEngine(), "setDialogue", App.sanitizeForJS(text));
     }
 
+    /**
+     * Return the current remaining time.
+     * @return The current remaining time.
+     */
     public String getTime() {
         return "{" + projection.time().toMinutes() + ":" + projection.time().toSecondsPart() + "}";
     }
 
-    public void pickDifficulty(String difficultyID) {
+    /**
+     * Change the difficulty to the string ID
+     * @param difficultyID The difficulty change to.
+     * @throws IllegalArgumentException if the difficulty id is not a valid difficulty.
+     */
+    public void pickDifficulty(String difficultyID) throws IllegalArgumentException {
         projection.setDifficulty(Difficulty.valueOf(difficultyID));
     }
 
     /// DEBUG
+    /**
+     * Returns all floors in an array.
+     * @return An array of floors.
+     */
     public String[] debugGetFloors() {
         return GameInfo.instance().building().stream().map(Floor::id).toArray(String[]::new);
     }
 
+    /**
+     * Change to a specific floor.
+     * @param floor The floor to change to.
+     */
     public void debugSetFloor(String floor) {
         GameState.instance()
                 .setCurrentFloor(GameInfo.instance().building().stream()
@@ -199,10 +257,17 @@ public class GameViewController implements Initializable {
         updateAll();
     }
 
+    /**
+     * End the game.
+     */
     public void debugEndGame() {
         GameState.instance().end();
     }
 
+    /**
+     * Returns the current difficulty.
+     * @return The current difficulty.
+     */
     public String debugCheckDifficulty() {
         return GameState.instance().difficulty().toString();
     }
