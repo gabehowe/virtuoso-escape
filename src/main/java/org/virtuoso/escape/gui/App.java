@@ -71,7 +71,8 @@ public class App extends Application {
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {
-        engine.executeScript(String.format(" document.getElementById('%s').innerHTML = \"%s\"", elementId, sanitizeForJS(text)));
+        engine.executeScript(
+                String.format(" document.getElementById('%s').innerHTML = \"%s\"", elementId, sanitizeForJS(text)));
     }
 
     public static String sanitizeForJS(String text) {
@@ -81,7 +82,6 @@ public class App extends Application {
                 .replaceAll("(?<!\\*)\\*([^*]+?)\\*(?!\\*)", "<em>$1</em>")
                 .replaceAll("\\*\\*([^*]+?)\\*\\*", "<strong>$1</strong>");
     }
-
 
     public static ArrayList<Element> querySelectorAll(WebEngine engine, String selector) {
         var elements = (Integer) engine.executeScript("j = document.querySelectorAll('" + selector + "'); j.length");

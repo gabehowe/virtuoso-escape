@@ -78,13 +78,7 @@ public class GameViewController implements Initializable {
             var theEntity = projection.currentRoom().entities().stream()
                     .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
                     .findFirst();
-            theEntity.ifPresent(ent -> ((EventTarget) it)
-                    .addEventListener(
-                            "click",
-                            e -> {
-                                this.pickEntity(ent);
-                            },
-                            false));
+            theEntity.ifPresent(ent -> ((EventTarget) it).addEventListener("click", e -> this.pickEntity(ent), false));
         });
 
         var itemNames = projection.currentItems().stream()
@@ -137,12 +131,8 @@ public class GameViewController implements Initializable {
         updateLeftBar();
         updateCapabilities();
         updateDialogue();
-        updateButtons();
+        App.callJSFunction(webView.getEngine(), "createKeys");
         updateImage();
-    }
-
-    public void updateButtons() {
-        webView.getEngine().executeScript("createKeys()");
     }
 
     public void pickEntity(Entity ent) {
@@ -156,25 +146,21 @@ public class GameViewController implements Initializable {
     }
 
     public void inspect() {
-        System.out.println("Inspect!");
         projection.inspect();
         updateAll();
     }
 
     public void interact() {
-        System.out.println("Interact!");
         projection.interact();
         updateAll();
     }
 
     public void attack() {
-        System.out.println("Attack!");
         projection.attack();
         updateAll();
     }
 
     public void input(Object input) {
-        System.out.println("Create input!");
         projection.input(input.toString());
         updateAll();
     }
@@ -200,26 +186,24 @@ public class GameViewController implements Initializable {
     }
 
     /// DEBUG
-    public String getFloors() {
-        var array = new JSONArray();
-        array.addAll(GameInfo.instance().building().stream().map(Floor::id).toList());
-        return array.toJSONString();
+    public String[] debugGetFloors() {
+        return GameInfo.instance().building().stream().map(Floor::id).toArray(String[]::new);
     }
 
-    public void setFloor(Object floor) {
+    public void debugSetFloor(String floor) {
         GameState.instance()
                 .setCurrentFloor(GameInfo.instance().building().stream()
-                        .filter(it -> Objects.equals(it.id(), floor.toString()))
+                        .filter(it -> Objects.equals(it.id(), floor))
                         .findFirst()
                         .get());
         updateAll();
     }
 
-    public void endGame() {
+    public void debugEndGame() {
         GameState.instance().end();
     }
 
-    public String checkDifficulty() {
+    public String debugCheckDifficulty() {
         return GameState.instance().difficulty().toString();
     }
 }
