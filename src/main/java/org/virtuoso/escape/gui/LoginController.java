@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.web.WebView;
 import org.virtuoso.escape.model.GameInfo;
 import org.virtuoso.escape.model.GameProjection;
@@ -18,12 +16,6 @@ public class LoginController implements Initializable {
         this.proj = projection;
     }
 
-    @FXML
-    public TextField usernameEntry;
-
-    @FXML
-    public PasswordField passwordEntry;
-
     GameProjection proj;
 
     @FXML
@@ -31,12 +23,12 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //        KeyboardProcessor.addKeyboardBindings(root);
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("login.html").toExternalForm());
-        App.setApp(webView.getEngine(), this, () -> {});
+        App.setApp(webView.getEngine(), this, () -> App.callJSFunction(webView.getEngine(), "updateKeyHandler", "c"));
     }
 
+    /** All possible authentication states. */
     enum AuthMode {
         LOGIN,
         CREATE
@@ -44,6 +36,7 @@ public class LoginController implements Initializable {
 
     private AuthMode authMode = AuthMode.LOGIN;
 
+    /** Switch to the next screen: intro for new users or game for returning users. */
     void switchToNextScreen() {
         if (GameState.instance().time().toSeconds() == GameState.initialTime) {
             try {
@@ -60,6 +53,13 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Attempt to authenticate and return the error or move to the next screen.
+     *
+     * @param user The username to attempt.
+     * @param pass The password to attempt.
+     * @return A string error message if the message fails, else nothing.
+     */
     public String tryAuth(String user, String pass) {
         try {
 
@@ -82,26 +82,29 @@ public class LoginController implements Initializable {
         return "Bad State!";
     }
 
-    public void toggleAuthMode() {
-        switch (this.authMode) {
+    /**
+     * Toggle the auth mode between {@link AuthMode}s
+     *
+     * @return a String[3] of the prompt text, the change button text, and the welcome message text.
+     */
+    public String[] toggleAuthMode() {
+        return switch (this.authMode) {
             case LOGIN -> {
-                App.setText(
-                        webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_login"));
-                App.setText(
-                        webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_login"));
-                App.setText(
-                        webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_create"));
                 this.authMode = AuthMode.CREATE;
+                yield new String[] {
+                    GameInfo.instance().string("ui", "switch_login"),
+                    GameInfo.instance().string("ui", "prompt_login"),
+                    GameInfo.instance().string("ui", "prompt_create")
+                };
             }
             case CREATE -> {
-                App.setText(
-                        webView.getEngine(), "auth-prompt", GameInfo.instance().string("ui", "switch_create"));
-                App.setText(
-                        webView.getEngine(), "auth-change", GameInfo.instance().string("ui", "prompt_create"));
-                App.setText(
-                        webView.getEngine(), "welcome-text", GameInfo.instance().string("ui", "prompt_login"));
                 this.authMode = AuthMode.LOGIN;
+                yield new String[] {
+                    GameInfo.instance().string("ui", "switch_create"),
+                    GameInfo.instance().string("ui", "prompt_create"),
+                    GameInfo.instance().string("ui", "prompt_login")
+                };
             }
-        }
+        };
     }
 }
