@@ -48,6 +48,9 @@ body {
     flex-shrink: 0;
     cursor: pointer;
 }
+#enter-box:focus {
+    outline: none;
+}
 
 .corner-flair {
     position: absolute;

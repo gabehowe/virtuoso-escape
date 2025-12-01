@@ -63,7 +63,7 @@ public class App extends Application {
             engine.executeScript(
                     """
                     console.error = i => logger.logJSError(i);
-                    console.log = i => logger.log(i);
+                    console.log = i => logger.logJS(i);
                     window.onerror = e => console.error(e);
                     """);
             callback.run();
@@ -109,9 +109,14 @@ public class App extends Application {
 
     public static class Logger {
         private static final boolean LOGJSCALLS = true;
+        private static final boolean LOGJS = true;
 
         public void logJSCall(String msg) {
             if (LOGJSCALLS) log("[JS Call]: " + msg);
+        }
+
+        public void logJS(String msg) {
+            if (LOGJS) log("[JS]: " + msg);
         }
 
         public void log(Object msg) {

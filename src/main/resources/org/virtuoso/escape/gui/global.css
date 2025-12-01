@@ -37,6 +37,9 @@
     font: inherit;
     font-style: normal;
 }
+.floating-box:focus {
+    border: var(--stroke_width) solid var(--Foreground);
+}
 .entry-box {
     display: flex;
     width: 200px;
