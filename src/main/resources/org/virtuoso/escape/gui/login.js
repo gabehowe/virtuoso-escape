@@ -1,4 +1,8 @@
 /**
+ * Interfaces for the login screen.
+ * @author gabri
+ */
+/**
  * @type {{toggleAuthMode: () => [ String, string, string ], tryAuth: (user: string, pass: string) => string}}
  */
 window.app = window.app || {};
