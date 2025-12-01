@@ -6,7 +6,7 @@
 
 buildscript {
     repositories {
-        maven {url = uri("https://jitpack.io")}
+        maven { url = uri("https://jitpack.io") }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -35,13 +35,13 @@ plugins {
 }
 
 java {
-	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(25))
-	}
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
 }
 
 javafx {
-    version= "25"
+    version = "25"
     modules = listOf("javafx.controls", "javafx.fxml", "javafx.web")
     configurations = arrayOf("implementation");
 }
@@ -78,9 +78,9 @@ application {
 }
 
 tasks.register<JavaExec>("tui") {
-    group="application"
+    group = "application"
     description = "Run TerminalDriver"
-    classpath=sourceSets.main.get().runtimeClasspath
+    classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.virtuoso.escape.terminal.TerminalDriver")
     standardInput = System.`in`
 }
@@ -113,8 +113,12 @@ tasks.withType<JavaExec>().configureEach {
 }
 
 spotless {
-    isEnforceCheck=false
+    isEnforceCheck = false
     java {
         palantirJavaFormat().formatJavadoc(true)
+    }
+    javascript {
+        target("src/**/*.js")
+        prettier().npmInstallCache().config(mapOf("tabWidth" to 4))
     }
 }
