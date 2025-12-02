@@ -1,5 +1,6 @@
 package org.virtuoso.escape.gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,6 +162,12 @@ public class GameViewController implements Initializable {
         updateDialogue();
         App.callJSFunction(webView.getEngine(), "createKeys");
         updateImage();
+        if (projection.isEnded())
+            try {
+                App.setRoot("credits");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     /**

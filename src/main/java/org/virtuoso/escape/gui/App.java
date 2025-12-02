@@ -23,7 +23,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         projection = new GameProjection();
-        FXMLLoader loginLoader = new FXMLLoader(App.class.getResource("login-view.fxml"));
+        FXMLLoader loginLoader = new FXMLLoader(App.class.getResource("web-view.fxml"));
         loginLoader.setController(new LoginController(projection));
 
         scene = new Scene(loginLoader.load());

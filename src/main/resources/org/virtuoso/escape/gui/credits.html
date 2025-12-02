@@ -5,7 +5,7 @@
     <link href="credits.css" rel="stylesheet">
     <title>Credits</title> 
 </head>
-<body style="display: flex; padding: 12px; align-items: center;" onload="shuffleNames()">
+<body style="display: flex; padding: 12px; align-items: center;" onload="shuffleNames(); populateRunInfo(); populateLeaderboard();">
     <div class="top-left-flair"></div>
     <div style="flex-direction: column;  align-items: flex-start; align-self: stretch;">
         <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px;">
@@ -21,7 +21,7 @@
                     <label id="time_remaining">00:00</label>
                     <label id="final_score">0</label>
                     <label id="hints_used">0</label>
-                    <label id="difficulty">Virtuosic</label>
+                    <label id="difficulty">VIRTUOSIC</label>
                 </div>
             </div>
             <label class="large">Thanks for playing!</label>
@@ -55,10 +55,6 @@
             <label class="heading-tiny">Score</label>
             <label  class="heading-tiny">Name</label>
             <label class="heading-tiny">Time</label>
-            <label class="small">1</label>
-            <label>5500</label>
-            <label>Elton John</label>
-            <label>45:00</label>
         </div>
     </div>
     <div class="bottom-right-flair"></div>

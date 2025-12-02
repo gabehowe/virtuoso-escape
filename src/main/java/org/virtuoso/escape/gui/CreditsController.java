@@ -1,24 +1,31 @@
 package org.virtuoso.escape.gui;
 
-import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebView;
+
 import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
+import org.virtuoso.escape.model.account.Account;
+import org.virtuoso.escape.model.account.Leaderboard;
+import org.virtuoso.escape.model.account.Score;
 
+/**
+ * Controller for the credits and leaderboard screen.
+ * Interfaces with WebView javascript engine.
+ * @author aheuer
+ */
 public class CreditsController implements Initializable {
-    CreditsController(GameProjection projection) {
-        this.proj = projection;
-    }
-
-    GameProjection proj;
+    private final Leaderboard leaderboard = new Leaderboard();
+    public GameProjection projection;
 
     @FXML
     public WebView webView;
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -27,20 +34,38 @@ public class CreditsController implements Initializable {
         App.setApp(webView.getEngine(), this, () -> App.callJSFunction(webView.getEngine(), "updateKeyHandler", "c"));
     }
 
-    /** Switch to the next screen: intro for new users or game for returning users. */
-    void switchToNextScreen() {
-        if (GameState.instance().time().toSeconds() == GameState.initialTime) {
-            try {
-                App.setRoot("intro-view");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
-                App.setRoot("game-view");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    /** 
+     * Called in javascript to return the current run info, serializes the string
+     * as tab separated values. Records the session to the leaderboard.
+     * @return A tab separated string with all current run info.
+    */
+    public String getRunInfo() {
+        Account currentAccount = GameState.instance().account();
+
+        String usernameToRecord = (currentAccount != null) ? currentAccount.username() : "Guest";
+
+        leaderboard.recordSession(usernameToRecord);
+        
+        String formattedTime = String.format(
+                "%02d:%02d",
+                GameState.instance().time().toMinutesPart(),
+                GameState.instance().time().toSecondsPart());
+
+        long totalScore = Score.calculateScore(GameState.instance().time(), GameState.instance().difficulty());
+
+        Map<String, Integer> hintsUsedMap = GameState.instance().hintsUsed();
+        int totalHintsUsed = hintsUsedMap.values().stream().reduce(0, Integer::sum);
+
+        return formattedTime + "\t" + totalScore + "\t" + totalHintsUsed + "\t" + GameState.instance().difficulty();
+    }
+
+    /** 
+     * Called in javascript to return the leaderboard contents, serializes the string
+     * as tab separated values.
+     * @return A tab separated string with all leaderboard values.
+    */
+    public String getLeaderboardElements() {
+        List<String> lb_array = leaderboard.getLeaderboard();
+        return String.join("\t",lb_array);
     }
 }
