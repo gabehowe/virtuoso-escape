@@ -1,5 +1,5 @@
  .heading {
-    color: #82F6FF;
+    color: var(--cyan-1);
     text-align: center;
     font-family: "JetBrains Mono";
     font-size: 36px;
@@ -9,7 +9,7 @@
 } 
 
 .heading-small {
-    color: #82F6FF;
+    color: var(--cyan-1);
     text-align: center;
     font-family: "JetBrains Mono";
     font-size: 24px;
@@ -18,9 +18,18 @@
     line-height: normal;
 } 
 
+.heading-tiny {
+    color: var(--cyan-1);
+    text-align: center;
+    font-family: "JetBrains Mono";
+    font-size: 18;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+} 
 
 .large {
-    color:#FFF;
+    color:var(--Foreground);
     text-align: center;
     font-family: "JetBrains Mono";
     font-size: 20px;
@@ -30,7 +39,7 @@
 }
 
 .small {
-    color:#FFF;
+    color:var(--Foreground);
     text-align: center;
     font-family: "JetBrains Mono";
     font-size: 16;
@@ -40,7 +49,7 @@
 }
 
 .small-italic {
-    color:#FFF;
+    color:var(--Foreground);
     text-align: center;
     font-family: "JetBrains Mono";
     font-size: 16;
@@ -50,7 +59,7 @@
 }
 
 a {
-    color: #82F6FF;
+    color: var(--cyan-1);
     text-align: center;
     font-family: "JetBrains Mono";
     font-size: 16px;
@@ -60,12 +69,74 @@ a {
     text-decoration: none;
 }
 
+hr {
+  height: 2px;
+  background-color: var(--Stroke);
+  border: none;
+}
+
 .vr {
-    border-left: 1px solid #535353;
-    height: 100%;
-    width: 1px;
+    border-left: 2px solid var(--Stroke);
+    height: 100vh;
+    width: 2px;
     margin: 12px;
 }
 
+.leaderboard {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
 
+.leaderboard label {
+    padding: 10;
+    justify-self: start
+}
+
+.top-left-flair {
+    position: absolute;
+    left:0;
+    top:0;
+    height: 10px;
+    width: 140px;
+    opacity: .28;
+    background: linear-gradient(to right,
+    var(--Foreground) 0%, var(--Foreground) 7.14%,
+    var(--Background) 7.14%, var(--Background) 14.29%,
+    var(--Stroke) 14.29%, var(--Stroke) 21.43%,
+    var(--cyan-1) 21.43%, var(--cyan-1) 28.57%,
+    var(--yellow-1) 28.57%, var(--yellow-1) 35.71%,
+    var(--red-1) 35.71%, var(--red-1) 42.86%,
+    var(--pink-1) 42.86%, var(--pink-1) 50%,
+    var(--Foreground) 50%, var(--Foreground) 57.14%,
+    var(--Background) 57.14%, var(--Background) 64.29%,
+    var(--Stroke) 64.29%, var(--Stroke) 71.43%,
+    var(--cyan-1) 71.43%, var(--cyan-1) 78.57%,
+    var(--yellow-1) 78.57%, var(--yellow-1) 85.71%,
+    var(--red-1) 85.71%, var(--red-1) 92.85%,
+    var(--pink-1) 92.85%, var(--pink-1) 100%);
+}
+
+.bottom-right-flair {
+    position: absolute;
+    right:0;
+    bottom:0;
+    height: 10px;
+    width: 140px;
+    opacity: .28;
+    background: linear-gradient(to right,
+    var(--Foreground) 0%, var(--Foreground) 7.14%,
+    var(--Background) 7.14%, var(--Background) 14.29%,
+    var(--Stroke) 14.29%, var(--Stroke) 21.43%,
+    var(--cyan-1) 21.43%, var(--cyan-1) 28.57%,
+    var(--yellow-1) 28.57%, var(--yellow-1) 35.71%,
+    var(--red-1) 35.71%, var(--red-1) 42.86%,
+    var(--pink-1) 42.86%, var(--pink-1) 50%,
+    var(--Foreground) 50%, var(--Foreground) 57.14%,
+    var(--Background) 57.14%, var(--Background) 64.29%,
+    var(--Stroke) 64.29%, var(--Stroke) 71.43%,
+    var(--cyan-1) 71.43%, var(--cyan-1) 78.57%,
+    var(--yellow-1) 78.57%, var(--yellow-1) 85.71%,
+    var(--red-1) 85.71%, var(--red-1) 92.85%,
+    var(--pink-1) 92.85%, var(--pink-1) 100%);
+}
 
