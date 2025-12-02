@@ -91,6 +91,13 @@ tasks.register("format") {
     group = "formatting"
 }
 
+tasks.register("formatCheck") {
+    dependsOn("spotlessCheck")
+    description = "Checks if codebase is formatted correctly."
+    group = "formatting"
+}
+
+
 tasks.withType<JavaCompile>() {
     options.compilerArgs.add("--enable-preview")
     options.encoding = "UTF-8"
