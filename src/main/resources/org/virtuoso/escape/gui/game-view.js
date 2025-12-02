@@ -166,25 +166,16 @@ function displaySettings(name) {
                 "Change Difficulty",
                 true
             );
-            let toggleTTS = makeLogicalButton(
-                "setting-toggle-tts",
-                "Toggle TTS",
-                true
-            );
             let debug = makeLogicalButton("setting-debug", "Debug", true);
             debug.style.color = "PaleGreen";
             let exit = makeLogicalButton("setting-exit", "Exit", true);
             diff.onclick = () => displaySettings(Settings.DIFFICULTY);
-            toggleTTS.onclick = () => {
-                app.toggleTTS();
-                clearSettings();
-            };
             debug.onclick = () => displaySettings(Settings.DEBUG);
             exit.onclick = () => {
                 app.exit();
                 clearSettings();
             };
-            box.append(diff, toggleTTS, debug, exit);
+            box.append(diff, debug, exit);
             break;
         }
         case Settings.DEBUG: {

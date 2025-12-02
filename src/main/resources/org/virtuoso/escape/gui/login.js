@@ -3,7 +3,8 @@
  * @author gabri
  */
 /**
- * @type {{toggleAuthMode: () => [ String, string, string ], tryAuth: (user: string, pass: string) => string}}
+ * An instance of LoginController to be set from java.
+ * @type {{toggleAuthMode: () => [ string, string, string ], tryAuth: (user: string, pass: string) => string}}
  */
 window.app = window.app || {};
 

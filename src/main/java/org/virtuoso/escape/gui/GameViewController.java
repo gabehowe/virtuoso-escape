@@ -14,8 +14,8 @@ import org.virtuoso.escape.model.*;
 import org.w3c.dom.events.EventTarget;
 
 /**
- * Controller for the game screen.
- * Interfaces with WebView javascript engine.
+ * Controller for the game screen. Interfaces with WebView javascript engine.
+ *
  * @author gabri
  */
 public class GameViewController implements Initializable {
@@ -24,9 +24,7 @@ public class GameViewController implements Initializable {
     @FXML
     public WebView webView;
 
-    /**
-     * Change the background image and display all entities.
-     */
+    /** Change the background image and display all entities. */
     public void updateImage() {
         var entities =
                 projection.currentRoom().entities().stream().map(Entity::id).toList();
@@ -41,9 +39,7 @@ public class GameViewController implements Initializable {
                 webView.getEngine(), "setRoomImage", projection.currentRoom().id());
     }
 
-    /**
-     * Update the dialogue box and entity title.
-     */
+    /** Update the dialogue box and entity title. */
     public void updateDialogue() {
         setDialogue(projection
                 .currentMessage()
@@ -62,6 +58,7 @@ public class GameViewController implements Initializable {
 
     /**
      * Update a left side box.
+     *
      * @param id The id of the box to update.
      * @param current The currently selected element name (or "undefined").
      * @param names All elements names including current.
@@ -73,9 +70,7 @@ public class GameViewController implements Initializable {
         App.callJSFunction(webView.getEngine(), "updateBox", id, current, mapped, button);
     }
 
-    /**
-     * Update all left bar boxes.
-     */
+    /** Update all left bar boxes. */
     public void updateLeftBar() {
         var roomNames = new ArrayList<>(projection.currentFloor().rooms().stream()
                 .map(rm -> List.of(rm.name(), rm.id()))
@@ -86,10 +81,14 @@ public class GameViewController implements Initializable {
             var theRoom = projection.currentFloor().rooms().stream()
                     .filter(rm -> Objects.equals(rm.id(), it.getAttribute("id")))
                     .findFirst();
-            theRoom.ifPresent(rm -> ((EventTarget) it).addEventListener("click", e -> {
-                projection.pickRoom(rm);
-                updateAll();
-            }, false));
+            theRoom.ifPresent(rm -> ((EventTarget) it)
+                    .addEventListener(
+                            "click",
+                            e -> {
+                                projection.pickRoom(rm);
+                                updateAll();
+                            },
+                            false));
         });
 
         var entityNames = projection.currentRoom().entities().stream()
@@ -103,7 +102,14 @@ public class GameViewController implements Initializable {
             var theEntity = projection.currentRoom().entities().stream()
                     .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
                     .findFirst();
-            theEntity.ifPresent(ent -> ((EventTarget) it).addEventListener("click", e -> {projection.pickEntity(ent); updateAll();}, false));
+            theEntity.ifPresent(ent -> ((EventTarget) it)
+                    .addEventListener(
+                            "click",
+                            e -> {
+                                projection.pickEntity(ent);
+                                updateAll();
+                            },
+                            false));
         });
 
         var itemNames = projection.currentItems().stream()
@@ -112,9 +118,7 @@ public class GameViewController implements Initializable {
         updateBox("item-box", "undefined", itemNames, false);
     }
 
-    /**
-     * Update the action box.
-     */
+    /** Update the action box. */
     public void updateCapabilities() {
         var cap = projection
                 .currentEntity()
@@ -139,6 +143,7 @@ public class GameViewController implements Initializable {
 
     /**
      * Initialize the view.
+     *
      * @param url
      * @param resourceBundle
      */
@@ -153,9 +158,7 @@ public class GameViewController implements Initializable {
         });
     }
 
-    /**
-     * Update all portions of the game screen.
-     */
+    /** Update all portions of the game screen. */
     public void updateAll() {
         updateLeftBar();
         updateCapabilities();
@@ -170,25 +173,19 @@ public class GameViewController implements Initializable {
             }
     }
 
-    /**
-     * Inspect and update all elements.
-     */
+    /** Inspect and update all elements. */
     public void inspect() {
         projection.inspect();
         updateAll();
     }
 
-    /**
-     * Interact and update all elements.
-     */
+    /** Interact and update all elements. */
     public void interact() {
         projection.interact();
         updateAll();
     }
 
-    /**
-     * Attack and update all elements.
-     */
+    /** Attack and update all elements. */
     public void attack() {
         projection.attack();
         updateAll();
@@ -196,6 +193,7 @@ public class GameViewController implements Initializable {
 
     /**
      * Attempt to speak to the selected entity.
+     *
      * @param input The message to send.
      */
     public void input(Object input) {
@@ -203,22 +201,14 @@ public class GameViewController implements Initializable {
         updateAll();
     }
 
-    /**
-     * Toggle TTS.
-     */
-    public void toggleTTS() {
-        // TODO: make
-    }
-
-    /**
-     * Close the application.
-     */
+    /** Close the application. */
     public void exit() {
         App.exit();
     }
 
     /**
      * Set a message in the dialogue window.
+     *
      * @param text The message to set.
      */
     private void setDialogue(String text) {
@@ -227,6 +217,7 @@ public class GameViewController implements Initializable {
 
     /**
      * Return the current remaining time.
+     *
      * @return The current remaining time.
      */
     public String getTime() {
@@ -235,6 +226,7 @@ public class GameViewController implements Initializable {
 
     /**
      * Change the difficulty to the string ID
+     *
      * @param difficultyID The difficulty change to.
      * @throws IllegalArgumentException if the difficulty id is not a valid difficulty.
      */
@@ -245,6 +237,7 @@ public class GameViewController implements Initializable {
     /// DEBUG
     /**
      * Returns all floors in an array.
+     *
      * @return An array of floors.
      */
     public String[] debugGetFloors() {
@@ -253,6 +246,7 @@ public class GameViewController implements Initializable {
 
     /**
      * Change to a specific floor.
+     *
      * @param floor The floor to change to.
      */
     public void debugSetFloor(String floor) {
@@ -264,15 +258,14 @@ public class GameViewController implements Initializable {
         updateAll();
     }
 
-    /**
-     * End the game.
-     */
+    /** End the game. */
     public void debugEndGame() {
         GameState.instance().end();
     }
 
     /**
      * Returns the current difficulty.
+     *
      * @return The current difficulty.
      */
     public String debugCheckDifficulty() {
