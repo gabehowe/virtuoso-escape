@@ -59,7 +59,7 @@
                 <Blend />
             </effect>
         </Label>
-        <Label fx:id="pressToSkip" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="pressToSkip" text="Press Anywhere To Skip →" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="21.0" />
+        <Label fx:id="pressToSkipDialogue" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="pressToSkip" text="Press Anywhere To Skip →" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="21.0" />
         <Button fx:id="continueToGame" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="567.0" layoutY="425.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onContinueButtonClick" styleClass="box, rounded" text="Continue" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="18.0">
         </Button>
     </AnchorPane>
