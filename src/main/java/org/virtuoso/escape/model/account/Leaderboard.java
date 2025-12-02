@@ -95,10 +95,11 @@ public class Leaderboard {
         System.out.println("==========================================================");
     }
 
-    /** 
+    /**
      * Returns a list format version of the leaderboard
+     *
      * @return A list of every leaderboard element, row by row, left to right.
-    */
+     */
     public static List<String> getLeaderboard() {
         JSONObject accountsJson = AccountManager.instance().accounts();
         List<ScoreEntry> allScores = new ArrayList<>();
@@ -142,7 +143,11 @@ public class Leaderboard {
         ArrayList<String> output_array = new ArrayList<String>();
         int place = 1;
         for (ScoreEntry score : top_scores) {
-            List<String> to_add = Arrays.asList(String.valueOf(place), String.valueOf(score.totalScore()), score.username(), String.valueOf(score.getFormattedTime()));
+            List<String> to_add = Arrays.asList(
+                    String.valueOf(place),
+                    String.valueOf(score.totalScore()),
+                    score.username(),
+                    String.valueOf(score.getFormattedTime()));
             output_array.addAll(to_add);
             place++;
         }
