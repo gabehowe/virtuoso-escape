@@ -1,6 +1,5 @@
 package org.virtuoso.escape.gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -190,12 +189,10 @@ public class GameViewController implements Initializable {
         App.callJSFunction(webView.getEngine(), "createKeys");
         if (projection.isEnded()) {
             ourFunTemporaryEventHandlerReference = event -> {
-                try {
+                System.out.println(GameState.instance().currentEntity());
+                if (GameState.instance().currentEntity() != null)
                     updateDialogue();
-                    App.setRoot("credits");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                App.loadWebView(new CreditsController());
             };
             webView.addEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
             return;
@@ -294,6 +291,7 @@ public class GameViewController implements Initializable {
     /** End the game. */
     public void debugEndGame() {
         GameState.instance().end();
+        updateAll();
     }
 
     /**
