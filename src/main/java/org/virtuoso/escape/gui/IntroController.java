@@ -12,6 +12,7 @@ import org.virtuoso.escape.speech.SpeechPlayer;
 
 /**
  * Controller for the intro screen.
+ *
  * @author Treasure
  */
 public class IntroController {
@@ -54,9 +55,7 @@ public class IntroController {
     private String introLabelText;
     private static final double typewriteDelay = 0.045;
 
-    /**
-     * Initialize the intro.
-     */
+    /** Initialize the intro. */
     @FXML
     void initialize() {
         App.scene.setOnKeyPressed(ev -> {
@@ -111,18 +110,14 @@ public class IntroController {
         pressToSkipDialogue.setVisible(true);
     }
 
-    /**
-     * Switch to the next screen.
-     */
+    /** Switch to the next screen. */
     @FXML
     void onContinueButtonClick() {
         App.loadWebView(new GameViewController());
         SpeechPlayer.instance().stopSoundbite();
     }
 
-    /**
-     * Display the open barn.
-     */
+    /** Display the open barn. */
     @FXML
     void onBarnClick() {
         barnLabel.setVisible(false);
@@ -140,9 +135,7 @@ public class IntroController {
         pause.play();
     }
 
-    /**
-     * Continue the animation.
-     */
+    /** Continue the animation. */
     @FXML
     void onBeaverClick() {
         beaver.setVisible(false);
@@ -161,33 +154,25 @@ public class IntroController {
         fadeIn.play();
     }
 
-    /**
-     * Make the barn label visible on hover.
-     */
+    /** Make the barn label visible on hover. */
     @FXML
     void onBarnEnter() {
         barnLabel.setVisible(true);
     }
 
-    /**
-     * Set the barn label invisible on hover.
-     */
+    /** Set the barn label invisible on hover. */
     @FXML
     void onBarnExit() {
         barnLabel.setVisible(false);
     }
 
-    /**
-     * Set the beaver label visible on hover.
-     */
+    /** Set the beaver label visible on hover. */
     @FXML
     void onBeaverEnter() {
         beaverLabel.setVisible(true);
     }
 
-    /**
-     * Hide the beaver label on unhover.
-     */
+    /** Hide the beaver label on unhover. */
     @FXML
     void onBeaverExit() {
         beaver.setOpacity(1);
@@ -196,6 +181,7 @@ public class IntroController {
 
     /**
      * Create the animation for the press to skip button.
+     *
      * @param label The label to pulse.
      * @param fadeTime The duration of the fade animation.
      * @param pauseTime The duration fo the pause between animation fades.
@@ -210,16 +196,18 @@ public class IntroController {
         PauseTransition pausePTS1 = new PauseTransition(Duration.seconds(pauseTime));
         PauseTransition pausePTS2 = new PauseTransition(Duration.seconds(pauseTime));
 
-        fadeInPTS.setOnFinished(_ -> pausePTS1.play());
-        pausePTS1.setOnFinished(_ -> fadeOutPTS.play());
-        fadeOutPTS.setOnFinished(_ -> pausePTS2.play());
-        pausePTS2.setOnFinished(_ -> fadeInPTS.play());
+        // 'unused' used here instead of "_" because of linter bug
+        fadeInPTS.setOnFinished(unused -> pausePTS1.play());
+        pausePTS1.setOnFinished(unused -> fadeOutPTS.play());
+        fadeOutPTS.setOnFinished(unused -> pausePTS2.play());
+        pausePTS2.setOnFinished(unused -> fadeInPTS.play());
 
         fadeInPTS.play();
     }
 
     /**
      * Begin the typewriter animation.
+     *
      * @param label The label in which to play the animation.
      * @param text The text to place in the label.
      */
@@ -229,9 +217,7 @@ public class IntroController {
         SpeechPlayer.instance().playSoundbite(text);
     }
 
-    /**
-     * Skip the typewriter animation.
-     */
+    /** Skip the typewriter animation. */
     @FXML
     void skipTypewriteAnimation() {
         if (wasScreenClicked) return;
@@ -246,9 +232,7 @@ public class IntroController {
         continueToGame.setDisable(false);
         continueToGame.setVisible(true);
     }
-    /**
-     * Helper function for typewriter animation.
-     */
+    /** Helper function for typewriter animation. */
     private void typewriterAnimation(Label label, String text, int index) {
         if (index == text.length()) {
             wasScreenClicked = true;
