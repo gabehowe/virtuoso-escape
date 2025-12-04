@@ -2,12 +2,12 @@ package org.virtuoso.escape.gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import org.json.simple.JSONArray;
 import org.virtuoso.escape.model.*;
@@ -20,6 +20,13 @@ import org.w3c.dom.events.EventTarget;
  */
 public class GameViewController implements Initializable {
     public GameProjection projection;
+    private Floor lastFloor;
+    private Entity lastEntity;
+    // grandfathered in, so no longer temporary
+    // we also can't remove this temporary value because industry depends on it, and we don't want to ruin backwards
+    // compatibility
+    private EventHandler<KeyEvent> ourFunTemporaryEventHandlerReference;
+    private String dialogueSuffix = "\nPress any button to continue...";
 
     @FXML
     public WebView webView;
@@ -41,19 +48,20 @@ public class GameViewController implements Initializable {
 
     /** Update the dialogue box and entity title. */
     public void updateDialogue() {
+        var switchedFloor = lastFloor != null && lastFloor != projection.currentFloor();
         setDialogue(projection
-                .currentMessage()
-                .orElse(projection
-                        .currentEntity()
-                        .map(s -> s.string("introduce"))
-                        .orElse(projection.currentRoom().introMessage())));
-        App.setText(
-                webView.getEngine(),
-                "entity-title",
-                projection
-                        .currentEntity()
-                        .map(s -> s.string("name"))
-                        .orElse(projection.currentRoom().name()));
+                        .currentMessage()
+                        .orElse(projection
+                                .currentEntity()
+                                .map(s -> s.string("introduce"))
+                                .orElse(projection.currentRoom().introMessage()))
+                + ((switchedFloor) ? dialogueSuffix : ""));
+        AtomicReference<String> name = new AtomicReference<>(projection
+                .currentEntity()
+                .map(s -> s.string("name"))
+                .orElse(projection.currentRoom().name()));
+        if (switchedFloor) Optional.ofNullable(lastEntity).ifPresent(jim -> name.set(jim.string("name")));
+        App.setText(webView.getEngine(), "entity-title", name.get());
     }
 
     /**
@@ -160,17 +168,33 @@ public class GameViewController implements Initializable {
 
     /** Update all portions of the game screen. */
     public void updateAll() {
+        updateDialogue();
+        // Keep the dialogue and wait for a key.
+        if (lastFloor != null && lastFloor != projection.currentFloor()) {
+
+            ourFunTemporaryEventHandlerReference = event -> {
+                lastFloor = projection.currentFloor();
+                lastEntity = null;
+                updateAll();
+                event.consume();
+                webView.removeEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
+            };
+            webView.addEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
+            return;
+        }
         updateLeftBar();
         updateCapabilities();
-        updateDialogue();
-        App.callJSFunction(webView.getEngine(), "createKeys");
         updateImage();
+        App.callJSFunction(webView.getEngine(), "createKeys");
         if (projection.isEnded())
             try {
                 App.setRoot("credits");
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+        lastFloor = projection.currentFloor();
+        lastEntity = projection.currentEntity().orElse(null);
     }
 
     /** Inspect and update all elements. */

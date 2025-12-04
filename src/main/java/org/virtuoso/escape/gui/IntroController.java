@@ -9,8 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
-import org.virtuoso.escape.model.GameState;
-import org.virtuoso.escape.model.account.AccountManager;
 import org.virtuoso.escape.speech.SpeechPlayer;
 
 public class IntroController {
@@ -71,12 +69,12 @@ public class IntroController {
         pressToSkipAnimation(pressToSkipIntro, 0.5, 0.45);
 
         barn.setVisible(true);
-		barn.setDisable(true);
+        barn.setDisable(true);
         barn.setPickOnBounds(false);
 
         FadeTransition fadeInFG = new FadeTransition(Duration.seconds(0.3), barn);
-		fadeInFG.setOnFinished(event -> barn.setDisable(false));
-		fadeInFG.setFromValue(0);
+        fadeInFG.setOnFinished(event -> barn.setDisable(false));
+        fadeInFG.setFromValue(0);
         fadeInFG.setToValue(1);
 
         FadeTransition fadeInBG = new FadeTransition(Duration.seconds(0.26), root);
@@ -174,7 +172,7 @@ public class IntroController {
 
     @FXML
     void onBeaverExit() {
-		beaver.setOpacity(1);
+        beaver.setOpacity(1);
         beaverLabel.setVisible(false);
     }
 
