@@ -172,14 +172,19 @@ function displaySettings(name) {
             );
             let debug = makeLogicalButton("setting-debug", "Debug", true);
             debug.style.color = "PaleGreen";
+            let logout = makeLogicalButton("setting-logout", "Logout", true);
             let exit = makeLogicalButton("setting-exit", "Exit", true);
             diff.onclick = () => displaySettings(Settings.DIFFICULTY);
             debug.onclick = () => displaySettings(Settings.DEBUG);
+            logout.onclick = () => {
+                app.logout();
+                clearSettings();
+            };
             exit.onclick = () => {
                 app.exit();
                 clearSettings();
             };
-            box.append(diff, debug, exit);
+            box.append(diff, debug, logout, exit);
             break;
         }
         case Settings.DEBUG: {

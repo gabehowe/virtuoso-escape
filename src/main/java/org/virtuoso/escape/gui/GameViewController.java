@@ -264,6 +264,12 @@ public class GameViewController implements Initializable {
         projection.setDifficulty(Difficulty.valueOf(difficultyID));
     }
 
+    /** Called in javascript to logout the user and swap to the login screen. */
+    public void logout() {
+        App.projection.logout();
+        App.loadWebView(new LoginController());
+    }
+
     /// DEBUG
     /**
      * Returns all floors in an array.
