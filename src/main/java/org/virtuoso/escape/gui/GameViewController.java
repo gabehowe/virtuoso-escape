@@ -38,6 +38,7 @@ public class GameViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        App.page = App.page.GAMEVIEW;
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("game-view.html").toExternalForm());
         App.setApp(webView.getEngine(), this, () -> {
@@ -190,8 +191,7 @@ public class GameViewController implements Initializable {
         if (projection.isEnded()) {
             ourFunTemporaryEventHandlerReference = event -> {
                 System.out.println(GameState.instance().currentEntity());
-                if (GameState.instance().currentEntity() != null)
-                    updateDialogue();
+                if (GameState.instance().currentEntity() != null) updateDialogue();
                 App.loadWebView(new CreditsController());
             };
             webView.addEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);

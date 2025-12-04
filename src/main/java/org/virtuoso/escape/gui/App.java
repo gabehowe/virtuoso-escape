@@ -17,12 +17,13 @@ import org.virtuoso.escape.model.GameProjection;
 import org.w3c.dom.Element;
 
 public class App extends Application {
-
     public static Scene scene;
     public static GameProjection projection;
+    public static CurrentPage page;
 
     @Override
     public void start(Stage stage) throws IOException {
+        page = page.NONE;
         projection = new GameProjection();
         App.loadWebView(new LoginController());
         stage.setTitle("Virtuoso Escape");

@@ -25,6 +25,7 @@ public class CreditsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        App.page = App.page.CREDITS;
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("credits.html").toExternalForm());
         App.setApp(webView.getEngine(), this, () -> {});

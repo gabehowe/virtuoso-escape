@@ -58,8 +58,9 @@ public class IntroController {
     /** Initialize the intro. */
     @FXML
     void initialize() {
+        App.page = App.page.INTRO;
         App.scene.setOnKeyPressed(ev -> {
-            if (ev.getCode() == KeyCode.Q) App.loadWebView(new GameViewController());
+            if (ev.getCode() == KeyCode.Q && App.page == App.page.INTRO) App.loadWebView(new GameViewController());
             SpeechPlayer.instance().stopSoundbite();
         });
 
