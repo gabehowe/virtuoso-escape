@@ -48,13 +48,16 @@
         </div>
     </div>
     <div class="vr"></div>
-    <div style="flex-direction: column; gap: 10px; align-self: stretch;">
+    <div style="display: flex; flex-direction: column; gap: 10px; align-self: stretch;">
         <label class="heading">Leaderboard</label>
         <div id="leaderboard" class="small leaderboard">
             <label class="heading-tiny">Rank</label>
             <label class="heading-tiny">Score</label>
             <label  class="heading-tiny">Name</label>
             <label class="heading-tiny">Time</label>
+        </div>
+        <div style="width: 100%; text-align: right; align-self: flex-end;">
+            <label class="large" onclick="app.logout()">[Logout]</label>
         </div>
     </div>
     <div class="bottom-right-flair"></div>

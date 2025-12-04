@@ -1,6 +1,5 @@
 package org.virtuoso.escape.gui;
 
-import java.io.IOException;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,8 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
-import org.virtuoso.escape.model.GameState;
-import org.virtuoso.escape.model.account.AccountManager;
+
 import org.virtuoso.escape.speech.SpeechPlayer;
 
 public class IntroController {
@@ -57,12 +55,8 @@ public class IntroController {
     void initialize() {
         App.scene.setOnKeyPressed(ev -> {
             if (ev.getCode() == KeyCode.Q)
-                try {
-                    App.setRoot("game-view");
-                    SpeechPlayer.instance().stopSoundbite();
-                } catch (IOException e) {
-                    throw new RuntimeException();
-                }
+                App.loadWebView(new GameViewController());
+                SpeechPlayer.instance().stopSoundbite();
         });
 
         pressToSkipIntro.setOpacity(0);
@@ -114,12 +108,8 @@ public class IntroController {
 
     @FXML
     void onContinueButtonClick() {
-        try {
-            App.setRoot("game-view");
-            SpeechPlayer.instance().stopSoundbite();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        App.loadWebView(new GameViewController());
+        SpeechPlayer.instance().stopSoundbite();
     }
 
     @FXML

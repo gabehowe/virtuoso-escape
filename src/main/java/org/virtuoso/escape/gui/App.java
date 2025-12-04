@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
@@ -23,10 +24,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         projection = new GameProjection();
-        FXMLLoader loginLoader = new FXMLLoader(App.class.getResource("web-view.fxml"));
-        loginLoader.setController(new LoginController(projection));
-
-        scene = new Scene(loginLoader.load());
+        App.loadWebView(new LoginController());
         stage.setTitle("Virtuoso Escape");
         stage.setScene(scene);
         stage.show();
@@ -66,8 +64,21 @@ public class App extends Application {
                     console.log = i => logger.logJS(i);
                     window.onerror = e => console.error(e);
                     """);
-            callback.run();
+                callback.run();
         });
+    }
+
+    public static void loadWebView(Initializable controller) {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("web-view.fxml"));
+        loader.setController(controller);
+        try {
+            if (App.scene != null)
+                App.scene.setRoot(loader.load());
+            else
+                App.scene = new Scene(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void setText(WebEngine engine, String elementId, String text) {

@@ -7,16 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebView;
 import org.virtuoso.escape.model.GameInfo;
-import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.account.AccountManager;
 
 public class LoginController implements Initializable {
-    LoginController(GameProjection projection) {
-        this.proj = projection;
-    }
-
-    GameProjection proj;
 
     @FXML
     public WebView webView;
@@ -45,11 +39,7 @@ public class LoginController implements Initializable {
                 throw new RuntimeException(e);
             }
         } else {
-            try {
-                App.setRoot("game-view");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                App.loadWebView(new GameViewController());
         }
     }
 
@@ -65,8 +55,8 @@ public class LoginController implements Initializable {
 
             var flag =
                     switch (authMode) {
-                        case LOGIN -> proj.login(user, pass);
-                        case CREATE -> proj.createAccount(user, pass);
+                        case LOGIN -> App.projection.login(user, pass);
+                        case CREATE -> App.projection.createAccount(user, pass);
                     };
 
             if (flag) {

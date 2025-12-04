@@ -19,7 +19,6 @@ import org.w3c.dom.events.EventTarget;
  * @author gabri
  */
 public class GameViewController implements Initializable {
-    public GameProjection projection;
 
     @FXML
     public WebView webView;
@@ -27,33 +26,33 @@ public class GameViewController implements Initializable {
     /** Change the background image and display all entities. */
     public void updateImage() {
         var entities =
-                projection.currentRoom().entities().stream().map(Entity::id).toList();
+                App.projection.currentRoom().entities().stream().map(Entity::id).toList();
         var arr = new JSONArray();
         arr.addAll(entities);
         App.callJSFunction(
                 webView.getEngine(),
                 "populateBackground",
-                projection.currentEntity().map(Entity::id).orElse("undefined"),
+                App.projection.currentEntity().map(Entity::id).orElse("undefined"),
                 arr);
         App.callJSFunction(
-                webView.getEngine(), "setRoomImage", projection.currentRoom().id());
+                webView.getEngine(), "setRoomImage", App.projection.currentRoom().id());
     }
 
     /** Update the dialogue box and entity title. */
     public void updateDialogue() {
-        setDialogue(projection
+        setDialogue(App.projection
                 .currentMessage()
-                .orElse(projection
+                .orElse(App.projection
                         .currentEntity()
                         .map(s -> s.string("introduce"))
-                        .orElse(projection.currentRoom().introMessage())));
+                        .orElse(App.projection.currentRoom().introMessage())));
         App.setText(
                 webView.getEngine(),
                 "entity-title",
-                projection
+                App.projection
                         .currentEntity()
                         .map(s -> s.string("name"))
-                        .orElse(projection.currentRoom().name()));
+                        .orElse(App.projection.currentRoom().name()));
     }
 
     /**
@@ -72,47 +71,47 @@ public class GameViewController implements Initializable {
 
     /** Update all left bar boxes. */
     public void updateLeftBar() {
-        var roomNames = new ArrayList<>(projection.currentFloor().rooms().stream()
+        var roomNames = new ArrayList<>(App.projection.currentFloor().rooms().stream()
                 .map(rm -> List.of(rm.name(), rm.id()))
                 .toList());
-        updateBox("map-box", projection.currentRoom().id(), roomNames, true);
+        updateBox("map-box", App.projection.currentRoom().id(), roomNames, true);
         var mapElements = App.querySelectorAll(webView.getEngine(), "#map-box > .box-element");
         mapElements.forEach(it -> {
-            var theRoom = projection.currentFloor().rooms().stream()
+            var theRoom = App.projection.currentFloor().rooms().stream()
                     .filter(rm -> Objects.equals(rm.id(), it.getAttribute("id")))
                     .findFirst();
             theRoom.ifPresent(rm -> ((EventTarget) it)
                     .addEventListener(
                             "click",
                             e -> {
-                                projection.pickRoom(rm);
+                                App.projection.pickRoom(rm);
                                 updateAll();
                             },
                             false));
         });
 
-        var entityNames = projection.currentRoom().entities().stream()
+        var entityNames = App.projection.currentRoom().entities().stream()
                 .map(it -> List.of(it.string("name"), it.state().id()))
                 .toList();
-        var currentEntity = projection.currentEntity().map(e -> e.state().id()).orElse("undefined");
+        var currentEntity = App.projection.currentEntity().map(e -> e.state().id()).orElse("undefined");
         updateBox("entity-box", currentEntity, entityNames, true);
 
         var entities = App.querySelectorAll(webView.getEngine(), "#entity-box > .box-element");
         entities.forEach(it -> {
-            var theEntity = projection.currentRoom().entities().stream()
+            var theEntity = App.projection.currentRoom().entities().stream()
                     .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
                     .findFirst();
             theEntity.ifPresent(ent -> ((EventTarget) it)
                     .addEventListener(
                             "click",
                             e -> {
-                                projection.pickEntity(ent);
+                                App.projection.pickEntity(ent);
                                 updateAll();
                             },
                             false));
         });
 
-        var itemNames = projection.currentItems().stream()
+        var itemNames = App.projection.currentItems().stream()
                 .map(it -> List.of(it.itemName(), it.id()))
                 .toList();
         updateBox("item-box", "undefined", itemNames, false);
@@ -120,7 +119,7 @@ public class GameViewController implements Initializable {
 
     /** Update the action box. */
     public void updateCapabilities() {
-        var cap = projection
+        var cap = App.projection
                 .currentEntity()
                 .map(it -> it.state().capabilities())
                 .orElse(new EntityState.Capabilities(false, false, false, false));
@@ -149,7 +148,6 @@ public class GameViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        projection = App.projection;
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("game-view.html").toExternalForm());
         App.setApp(webView.getEngine(), this, () -> {
@@ -165,29 +163,25 @@ public class GameViewController implements Initializable {
         updateDialogue();
         App.callJSFunction(webView.getEngine(), "createKeys");
         updateImage();
-        if (projection.isEnded())
-            try {
-                App.setRoot("credits");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (App.projection.isEnded())
+            App.loadWebView(new CreditsController());
     }
 
     /** Inspect and update all elements. */
     public void inspect() {
-        projection.inspect();
+        App.projection.inspect();
         updateAll();
     }
 
     /** Interact and update all elements. */
     public void interact() {
-        projection.interact();
+        App.projection.interact();
         updateAll();
     }
 
     /** Attack and update all elements. */
     public void attack() {
-        projection.attack();
+        App.projection.attack();
         updateAll();
     }
 
@@ -197,7 +191,7 @@ public class GameViewController implements Initializable {
      * @param input The message to send.
      */
     public void input(Object input) {
-        projection.input(input.toString());
+        App.projection.input(input.toString());
         updateAll();
     }
 
@@ -221,7 +215,7 @@ public class GameViewController implements Initializable {
      * @return The current remaining time.
      */
     public String getTime() {
-        return "{" + projection.time().toMinutes() + ":" + projection.time().toSecondsPart() + "}";
+        return "{" + App.projection.time().toMinutes() + ":" + App.projection.time().toSecondsPart() + "}";
     }
 
     /**
@@ -231,7 +225,7 @@ public class GameViewController implements Initializable {
      * @throws IllegalArgumentException if the difficulty id is not a valid difficulty.
      */
     public void pickDifficulty(String difficultyID) throws IllegalArgumentException {
-        projection.setDifficulty(Difficulty.valueOf(difficultyID));
+        App.projection.setDifficulty(Difficulty.valueOf(difficultyID));
     }
 
     /// DEBUG

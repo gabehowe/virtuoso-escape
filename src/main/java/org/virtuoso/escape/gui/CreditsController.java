@@ -20,7 +20,6 @@ import org.virtuoso.escape.model.account.Score;
  */
 public class CreditsController implements Initializable {
     private final Leaderboard leaderboard = new Leaderboard();
-    public GameProjection projection;
 
     @FXML
     public WebView webView;
@@ -29,7 +28,7 @@ public class CreditsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("credits.html").toExternalForm());
-        App.setApp(webView.getEngine(), this, () -> App.callJSFunction(webView.getEngine(), "updateKeyHandler", "c"));
+        App.setApp(webView.getEngine(), this, ()->{});
     }
 
     /**
@@ -72,5 +71,13 @@ public class CreditsController implements Initializable {
     public String[] getLeaderboardElements() {
         List<String> lb_array = leaderboard.getLeaderboard();
         return lb_array.toArray(new String[0]);
+    }
+
+    /**
+     * Called in javascript to logout the user and swap to the login screen.
+     */
+    public void logout() {
+        App.projection.logout();
+        App.loadWebView(new LoginController());
     }
 }
