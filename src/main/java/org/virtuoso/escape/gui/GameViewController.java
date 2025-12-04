@@ -32,21 +32,39 @@ public class GameViewController implements Initializable {
     @FXML
     public WebView webView;
 
+
+    /**
+     * Initialize the view.
+     *
+     * @param url
+     * @param resourceBundle
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        webView.getEngine().setJavaScriptEnabled(true);
+        webView.getEngine().load(getClass().getResource("game-view.html").toExternalForm());
+        App.setApp(webView.getEngine(), this, () -> {
+            webView.getEngine().executeScript("init()");
+            updateAll();
+        });
+        projection = App.projection;
+    }
+
     /**
      * Change the background image and display all entities.
      */
     public void updateImage() {
         var entities =
-                App.projection.currentRoom().entities().stream().map(Entity::id).toList();
+                projection.currentRoom().entities().stream().map(Entity::id).toList();
         var arr = new JSONArray();
         arr.addAll(entities);
         App.callJSFunction(
                 webView.getEngine(),
                 "populateBackground",
-                App.projection.currentEntity().map(Entity::id).orElse("undefined"),
+                projection.currentEntity().map(Entity::id).orElse("undefined"),
                 arr);
         App.callJSFunction(
-                webView.getEngine(), "setRoomImage", App.projection.currentRoom().id());
+                webView.getEngine(), "setRoomImage", projection.currentRoom().id());
     }
 
     /**
@@ -56,7 +74,7 @@ public class GameViewController implements Initializable {
         var switchedFloor = lastFloor != null && lastFloor != projection.currentFloor() || projection.isEnded();
         setDialogue(projection
                 .currentMessage()
-                .orElse(App.projection
+                .orElse(projection
                         .currentEntity()
                         .map(s -> s.string("introduce"))
                         .orElse(projection.currentRoom().introMessage()))
@@ -100,7 +118,7 @@ public class GameViewController implements Initializable {
                     .addEventListener(
                             "click",
                             e -> {
-                                App.projection.pickRoom(rm);
+                                projection.pickRoom(rm);
                                 updateAll();
                             },
                             false));
@@ -121,7 +139,7 @@ public class GameViewController implements Initializable {
                     .addEventListener(
                             "click",
                             e -> {
-                                App.projection.pickEntity(ent);
+                                projection.pickEntity(ent);
                                 updateAll();
                             },
                             false));
@@ -137,7 +155,7 @@ public class GameViewController implements Initializable {
      * Update the action box.
      */
     public void updateCapabilities() {
-        var cap = App.projection
+        var cap = projection
                 .currentEntity()
                 .map(it -> it.state().capabilities())
                 .orElse(new EntityState.Capabilities(false, false, false, false));
@@ -156,22 +174,6 @@ public class GameViewController implements Initializable {
                .getElementById("speak")
                .setAttribute("style", (cap.input() ? "" : "display:none;"));
         webView.getEngine().executeScript("");
-    }
-
-    /**
-     * Initialize the view.
-     *
-     * @param url
-     * @param resourceBundle
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        webView.getEngine().setJavaScriptEnabled(true);
-        webView.getEngine().load(getClass().getResource("game-view.html").toExternalForm());
-        App.setApp(webView.getEngine(), this, () -> {
-            webView.getEngine().executeScript("init()");
-            updateAll();
-        });
     }
 
     /**
@@ -218,7 +220,7 @@ public class GameViewController implements Initializable {
      * Inspect and update all elements.
      */
     public void inspect() {
-        App.projection.inspect();
+        projection.inspect();
         updateAll();
     }
 
@@ -226,7 +228,7 @@ public class GameViewController implements Initializable {
      * Interact and update all elements.
      */
     public void interact() {
-        App.projection.interact();
+        projection.interact();
         updateAll();
     }
 
@@ -234,7 +236,7 @@ public class GameViewController implements Initializable {
      * Attack and update all elements.
      */
     public void attack() {
-        App.projection.attack();
+        projection.attack();
         updateAll();
     }
 
@@ -244,7 +246,7 @@ public class GameViewController implements Initializable {
      * @param input The message to send.
      */
     public void input(Object input) {
-        App.projection.input(input.toString());
+        projection.input(input.toString());
         updateAll();
     }
 
@@ -280,7 +282,7 @@ public class GameViewController implements Initializable {
      * @throws IllegalArgumentException if the difficulty id is not a valid difficulty.
      */
     public void pickDifficulty(String difficultyID) throws IllegalArgumentException {
-        App.projection.setDifficulty(Difficulty.valueOf(difficultyID));
+        projection.setDifficulty(Difficulty.valueOf(difficultyID));
     }
 
     /// DEBUG
