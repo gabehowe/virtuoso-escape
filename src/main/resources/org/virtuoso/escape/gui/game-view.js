@@ -119,13 +119,17 @@ function updateBox(id, current, rooms, button) {
 function createInputBox() {
     if (document.getElementById("speak").style.display === "none") return;
     let box = document.getElementById("input-box");
-    box.style.display = "";
+    box.style.display = ''
+    box.disabled = false
     let input = document.getElementById("input");
+    input.disabled = false
     input.focus();
     input.value = "";
     let inputbox = document.getElementById("input-box");
     inputbox.onsubmit = () => {
-        inputbox.display = "none";
+        inputbox.style.display = 'none'
+        inputbox.disabled = true
+        input.disabled = true
         app.input(document.getElementById("input").value);
     };
 }

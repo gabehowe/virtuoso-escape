@@ -1,17 +1,18 @@
 package org.virtuoso.escape.gui;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import org.json.simple.JSONArray;
 import org.virtuoso.escape.model.*;
 import org.w3c.dom.events.EventTarget;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Controller for the game screen. Interfaces with WebView javascript engine.
@@ -19,11 +20,21 @@ import org.w3c.dom.events.EventTarget;
  * @author gabri
  */
 public class GameViewController implements Initializable {
+    public GameProjection projection;
+    private Floor lastFloor;
+    private Entity lastEntity;
+    // grandfathered in, so no longer temporary
+    // we also can't remove this temporary value because industry depends on it, and we don't want to ruin backwards
+    // compatibility
+    private EventHandler<KeyEvent> ourFunTemporaryEventHandlerReference;
+    private String dialogueSuffix = "\nPress any button to continue...";
 
     @FXML
     public WebView webView;
 
-    /** Change the background image and display all entities. */
+    /**
+     * Change the background image and display all entities.
+     */
     public void updateImage() {
         var entities =
                 App.projection.currentRoom().entities().stream().map(Entity::id).toList();
@@ -38,30 +49,33 @@ public class GameViewController implements Initializable {
                 webView.getEngine(), "setRoomImage", App.projection.currentRoom().id());
     }
 
-    /** Update the dialogue box and entity title. */
+    /**
+     * Update the dialogue box and entity title.
+     */
     public void updateDialogue() {
-        setDialogue(App.projection
+        var switchedFloor = lastFloor != null && lastFloor != projection.currentFloor() || projection.isEnded();
+        setDialogue(projection
                 .currentMessage()
                 .orElse(App.projection
                         .currentEntity()
                         .map(s -> s.string("introduce"))
-                        .orElse(App.projection.currentRoom().introMessage())));
-        App.setText(
-                webView.getEngine(),
-                "entity-title",
-                App.projection
-                        .currentEntity()
-                        .map(s -> s.string("name"))
-                        .orElse(App.projection.currentRoom().name()));
+                        .orElse(projection.currentRoom().introMessage()))
+                + (switchedFloor ? dialogueSuffix : ""));
+        AtomicReference<String> name = new AtomicReference<>(projection
+                .currentEntity()
+                .map(s -> s.string("name"))
+                .orElse(projection.currentRoom().name()));
+        if (switchedFloor) Optional.ofNullable(lastEntity).ifPresent(jim -> name.set(jim.string("name")));
+        App.setText(webView.getEngine(), "entity-title", name.get());
     }
 
     /**
      * Update a left side box.
      *
-     * @param id The id of the box to update.
+     * @param id      The id of the box to update.
      * @param current The currently selected element name (or "undefined").
-     * @param names All elements names including current.
-     * @param button Whether the eleemnts should be buttons.
+     * @param names   All elements names including current.
+     * @param button  Whether the eleemnts should be buttons.
      */
     public void updateBox(String id, String current, List<List<String>> names, boolean button) {
         var mapped = new JSONArray();
@@ -69,17 +83,19 @@ public class GameViewController implements Initializable {
         App.callJSFunction(webView.getEngine(), "updateBox", id, current, mapped, button);
     }
 
-    /** Update all left bar boxes. */
+    /**
+     * Update all left bar boxes.
+     */
     public void updateLeftBar() {
-        var roomNames = new ArrayList<>(App.projection.currentFloor().rooms().stream()
-                .map(rm -> List.of(rm.name(), rm.id()))
-                .toList());
-        updateBox("map-box", App.projection.currentRoom().id(), roomNames, true);
+        var roomNames = new ArrayList<>(projection.currentFloor().rooms().stream()
+                                                  .map(rm -> List.of(rm.name(), rm.id()))
+                                                  .toList());
+        updateBox("map-box", projection.currentRoom().id(), roomNames, true);
         var mapElements = App.querySelectorAll(webView.getEngine(), "#map-box > .box-element");
         mapElements.forEach(it -> {
-            var theRoom = App.projection.currentFloor().rooms().stream()
-                    .filter(rm -> Objects.equals(rm.id(), it.getAttribute("id")))
-                    .findFirst();
+            var theRoom = projection.currentFloor().rooms().stream()
+                                    .filter(rm -> Objects.equals(rm.id(), it.getAttribute("id")))
+                                    .findFirst();
             theRoom.ifPresent(rm -> ((EventTarget) it)
                     .addEventListener(
                             "click",
@@ -90,17 +106,17 @@ public class GameViewController implements Initializable {
                             false));
         });
 
-        var entityNames = App.projection.currentRoom().entities().stream()
-                .map(it -> List.of(it.string("name"), it.state().id()))
-                .toList();
-        var currentEntity = App.projection.currentEntity().map(e -> e.state().id()).orElse("undefined");
+        var entityNames = projection.currentRoom().entities().stream()
+                                    .map(it -> List.of(it.string("name"), it.state().id()))
+                                    .toList();
+        var currentEntity = projection.currentEntity().map(e -> e.state().id()).orElse("undefined");
         updateBox("entity-box", currentEntity, entityNames, true);
 
         var entities = App.querySelectorAll(webView.getEngine(), "#entity-box > .box-element");
         entities.forEach(it -> {
-            var theEntity = App.projection.currentRoom().entities().stream()
-                    .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
-                    .findFirst();
+            var theEntity = projection.currentRoom().entities().stream()
+                                      .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
+                                      .findFirst();
             theEntity.ifPresent(ent -> ((EventTarget) it)
                     .addEventListener(
                             "click",
@@ -111,13 +127,15 @@ public class GameViewController implements Initializable {
                             false));
         });
 
-        var itemNames = App.projection.currentItems().stream()
-                .map(it -> List.of(it.itemName(), it.id()))
-                .toList();
+        var itemNames = projection.currentItems().stream()
+                                  .map(it -> List.of(it.itemName(), it.id()))
+                                  .toList();
         updateBox("item-box", "undefined", itemNames, false);
     }
 
-    /** Update the action box. */
+    /**
+     * Update the action box.
+     */
     public void updateCapabilities() {
         var cap = App.projection
                 .currentEntity()
@@ -126,17 +144,17 @@ public class GameViewController implements Initializable {
         var interact = webView.getEngine().getDocument().getElementById("interact");
         interact.setAttribute("style", cap.interact() ? "" : "display:none;");
         webView.getEngine()
-                .getDocument()
-                .getElementById("inspect")
-                .setAttribute("style", (cap.inspect() ? "" : "display:none;"));
+               .getDocument()
+               .getElementById("inspect")
+               .setAttribute("style", (cap.inspect() ? "" : "display:none;"));
         webView.getEngine()
-                .getDocument()
-                .getElementById("attack")
-                .setAttribute("style", (cap.attack() ? "" : "display:none;"));
+               .getDocument()
+               .getElementById("attack")
+               .setAttribute("style", (cap.attack() ? "" : "display:none;"));
         webView.getEngine()
-                .getDocument()
-                .getElementById("speak")
-                .setAttribute("style", (cap.input() ? "" : "display:none;"));
+               .getDocument()
+               .getElementById("speak")
+               .setAttribute("style", (cap.input() ? "" : "display:none;"));
         webView.getEngine().executeScript("");
     }
 
@@ -156,30 +174,65 @@ public class GameViewController implements Initializable {
         });
     }
 
-    /** Update all portions of the game screen. */
+    /**
+     * Update all portions of the game screen.
+     */
     public void updateAll() {
+        updateDialogue();
+        // Keep the dialogue and wait for a key.
+        if (lastFloor != null && lastFloor != projection.currentFloor()) {
+
+            ourFunTemporaryEventHandlerReference = event -> {
+                lastFloor = projection.currentFloor();
+                lastEntity = null;
+                updateAll();
+                event.consume();
+                webView.removeEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
+                ourFunTemporaryEventHandlerReference = null;
+            };
+            webView.addEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
+            return;
+        }
         updateLeftBar();
         updateCapabilities();
-        updateDialogue();
-        App.callJSFunction(webView.getEngine(), "createKeys");
         updateImage();
-        if (App.projection.isEnded())
-            App.loadWebView(new CreditsController());
+        App.callJSFunction(webView.getEngine(), "createKeys");
+        if (projection.isEnded()) {
+            ourFunTemporaryEventHandlerReference = event -> {
+                try {
+                    updateDialogue();
+                    App.setRoot("credits");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            };
+            webView.addEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
+            return;
+        }
+
+        lastFloor = projection.currentFloor();
+        lastEntity = projection.currentEntity().orElse(null);
     }
 
-    /** Inspect and update all elements. */
+    /**
+     * Inspect and update all elements.
+     */
     public void inspect() {
         App.projection.inspect();
         updateAll();
     }
 
-    /** Interact and update all elements. */
+    /**
+     * Interact and update all elements.
+     */
     public void interact() {
         App.projection.interact();
         updateAll();
     }
 
-    /** Attack and update all elements. */
+    /**
+     * Attack and update all elements.
+     */
     public void attack() {
         App.projection.attack();
         updateAll();
@@ -195,7 +248,9 @@ public class GameViewController implements Initializable {
         updateAll();
     }
 
-    /** Close the application. */
+    /**
+     * Close the application.
+     */
     public void exit() {
         App.exit();
     }
@@ -215,7 +270,7 @@ public class GameViewController implements Initializable {
      * @return The current remaining time.
      */
     public String getTime() {
-        return "{" + App.projection.time().toMinutes() + ":" + App.projection.time().toSecondsPart() + "}";
+        return String.format("{%02d:%02d}", projection.time().toMinutes(), projection.time().toSecondsPart());
     }
 
     /**
@@ -245,14 +300,16 @@ public class GameViewController implements Initializable {
      */
     public void debugSetFloor(String floor) {
         GameState.instance()
-                .setCurrentFloor(GameInfo.instance().building().stream()
-                        .filter(it -> Objects.equals(it.id(), floor))
-                        .findFirst()
-                        .get());
+                 .setCurrentFloor(GameInfo.instance().building().stream()
+                                          .filter(it -> Objects.equals(it.id(), floor))
+                                          .findFirst()
+                                          .get());
         updateAll();
     }
 
-    /** End the game. */
+    /**
+     * End the game.
+     */
     public void debugEndGame() {
         GameState.instance().end();
     }
