@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebView;
-import org.virtuoso.escape.model.GameProjection;
 import org.virtuoso.escape.model.GameState;
 import org.virtuoso.escape.model.account.Account;
 import org.virtuoso.escape.model.account.Leaderboard;
@@ -28,7 +27,7 @@ public class CreditsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("credits.html").toExternalForm());
-        App.setApp(webView.getEngine(), this, ()->{});
+        App.setApp(webView.getEngine(), this, () -> {});
     }
 
     /**
@@ -73,11 +72,14 @@ public class CreditsController implements Initializable {
         return lb_array.toArray(new String[0]);
     }
 
-    /**
-     * Called in javascript to logout the user and swap to the login screen.
-     */
+    /** Called in javascript to logout the user and swap to the login screen. */
     public void logout() {
         App.projection.logout();
         App.loadWebView(new LoginController());
+    }
+
+    /** Called in javascript to exit the application. */
+    public void exit() {
+        App.exit();
     }
 }

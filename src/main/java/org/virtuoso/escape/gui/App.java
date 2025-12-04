@@ -33,6 +33,7 @@ public class App extends Application {
     }
 
     public static void exit() {
+        App.projection.logout();
         Platform.exit();
         System.exit(0);
     }
@@ -64,7 +65,7 @@ public class App extends Application {
                     console.log = i => logger.logJS(i);
                     window.onerror = e => console.error(e);
                     """);
-                callback.run();
+            callback.run();
         });
     }
 
@@ -72,10 +73,8 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("web-view.fxml"));
         loader.setController(controller);
         try {
-            if (App.scene != null)
-                App.scene.setRoot(loader.load());
-            else
-                App.scene = new Scene(loader.load());
+            if (App.scene != null) App.scene.setRoot(loader.load());
+            else App.scene = new Scene(loader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }

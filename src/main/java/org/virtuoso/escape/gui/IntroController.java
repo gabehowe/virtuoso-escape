@@ -53,9 +53,8 @@ public class IntroController {
     @FXML
     void initialize() {
         App.scene.setOnKeyPressed(ev -> {
-            if (ev.getCode() == KeyCode.Q)
-                App.loadWebView(new GameViewController());
-                SpeechPlayer.instance().stopSoundbite();
+            if (ev.getCode() == KeyCode.Q) App.loadWebView(new GameViewController());
+            SpeechPlayer.instance().stopSoundbite();
         });
 
         pressToSkipIntro.setOpacity(0);

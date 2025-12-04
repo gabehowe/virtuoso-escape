@@ -39,7 +39,7 @@ public class LoginController implements Initializable {
                 throw new RuntimeException(e);
             }
         } else {
-                App.loadWebView(new GameViewController());
+            App.loadWebView(new GameViewController());
         }
     }
 

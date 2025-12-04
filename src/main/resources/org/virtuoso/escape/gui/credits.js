@@ -59,3 +59,24 @@ function shuffleArrays(input_names, input_emails) {
     }
     return [return_names, return_emails];
 }
+
+/**
+ * Update the key handler to click logout when the user presses "l" and exit when the user presses "e".
+ */
+function updateKeyHandlers() {
+    document.onkeydown = (event) => {
+        let eventKey;
+        if (event.keyIdentifier === undefined) eventKey = event.key;
+        else
+            try {
+                eventKey = String.fromCodePoint(
+                    "0x" + event.keyIdentifier.substring(2)
+                ).toLowerCase();
+            } catch (_) {
+                return;
+            }
+
+        if (eventKey === "l") app.logout();
+        else if (eventKey === "e") app.exit();
+    };
+}

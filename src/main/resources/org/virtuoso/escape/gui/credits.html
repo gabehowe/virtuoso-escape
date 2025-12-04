@@ -5,7 +5,7 @@
     <link href="credits.css" rel="stylesheet">
     <title>Credits</title> 
 </head>
-<body style="display: flex; padding: 12px; align-items: center;" onload="shuffleNames(); populateRunInfo(); populateLeaderboard();">
+<body style="display: flex; padding: 12px; align-items: center;" onload="shuffleNames(); populateRunInfo(); populateLeaderboard(); updateKeyHandlers();">
     <div class="top-left-flair"></div>
     <div style="flex-direction: column;  align-items: flex-start; align-self: stretch;">
         <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 12px;">
@@ -58,6 +58,9 @@
         </div>
         <div style="width: 100%; text-align: right; align-self: flex-end;">
             <label class="large" onclick="app.logout()">[Logout]</label>
+        </div>
+        <div style="width: 100%; text-align: right; align-self: flex-end;">
+            <label class="large" onclick="app.exit()">[Exit]</label>
         </div>
     </div>
     <div class="bottom-right-flair"></div>
