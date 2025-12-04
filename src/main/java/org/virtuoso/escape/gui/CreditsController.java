@@ -28,6 +28,7 @@ public class CreditsController implements Initializable {
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("credits.html").toExternalForm());
         App.setApp(webView.getEngine(), this, () -> {});
+        webView.setContextMenuEnabled(false);
     }
 
     /**

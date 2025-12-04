@@ -45,6 +45,7 @@ public class GameViewController implements Initializable {
             webView.getEngine().executeScript("init()");
             updateAll();
         });
+        webView.setContextMenuEnabled(false);
         projection = App.projection;
     }
 

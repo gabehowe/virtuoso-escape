@@ -20,6 +20,7 @@ public class LoginController implements Initializable {
         webView.getEngine().setJavaScriptEnabled(true);
         webView.getEngine().load(getClass().getResource("login.html").toExternalForm());
         App.setApp(webView.getEngine(), this, () -> App.callJSFunction(webView.getEngine(), "updateKeyHandler", "c"));
+        webView.setContextMenuEnabled(false);
     }
 
     /** All possible authentication states. */
