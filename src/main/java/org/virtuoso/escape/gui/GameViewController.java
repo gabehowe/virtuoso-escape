@@ -271,7 +271,7 @@ public class GameViewController implements Initializable {
      * @return The current remaining time.
      */
     public String getTime() {
-        return "{" + projection.time().toMinutes() + ":" + projection.time().toSecondsPart() + "}";
+        return String.format("{%02d:%02d}", projection.time().toMinutes(), projection.time().toSecondsPart());
     }
 
     /**
