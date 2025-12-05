@@ -296,6 +296,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
         Action failDoor = new Chain(
                 new AddPenalty(Severity.MEDIUM),
                 new SwapEntities("door1", "door1_2"),
+                new SetMessage(this.searchString("interact", "door2")),
                 shuffle,
                 GameState.instance()::leaveEntity,
                 () -> setDoors.accept(0));
@@ -304,6 +305,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
             EntityState[] states = new EntityState[3];
             BiFunction<String, String, Action> setMsg =
                     (resource, state) -> new SetMessage(this.searchString(resource, state, id));
+
             for (int i = 0; i < 3; i++) {
                 var stateId = id + "_" + i;
                 states[i] = new EntityState(

@@ -90,6 +90,8 @@ public class App extends Application {
 
     public static String sanitizeForJS(String text) {
         return text.replace("\"", "\\\"")
+                .replace(">", "&gt;")
+                .replace("<", "&lt;")
                 .replace("\n", "<br>")
                 .replace("\t", "<span class='tab'></span>")
                 .replaceAll("(?<!\\*)\\*([^*]+?)\\*(?!\\*)", "<em>$1</em>")
