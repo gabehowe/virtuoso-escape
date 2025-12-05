@@ -24,7 +24,7 @@ function updateKeyHandler(key) {
             } catch (_) {
                 return;
             }
-
+        if (document.activeElement.tagName === "INPUT") return
         if (eventKey === key) document.getElementById("auth-change").click();
     };
 }
