@@ -18,7 +18,8 @@ import org.virtuoso.escape.model.data.DataLoader;
 /**
  * Tests for GameState.java
  *
- * @author Bos
+ * @author Bose
+ * @author Andre
  */
 public class GameStateTests {
 
@@ -27,64 +28,64 @@ public class GameStateTests {
 
     private static String stateData =
             """
-                      {"7766f361-af7a-4da5-b741-6867d1768d45": {
-                        "currentItems": [],
-                        "difficulty": "SUBSTANTIAL",
-                        "currentRoom": "acorn_grove_0",
-                        "currentEntity": null,
-                        "currentFloor": "acorn_grove",
-                        "completedPuzzles": [],
-                        "time": 2698,
-                        "currentEntityStates": {
-                          "narrator": "narrator_start",
-                          "portal_squirrel": "portal_squirrel",
-                          "intro_squirrel": "intro_squirrel"
-                        },
-                        "hintsUsed": {}
-                      },
-                    "d32ad7e6-570f-43cb-b447-82d4c8be293e": {
-                      "currentItems": ["keys"],
+                    {"7766f361-af7a-4da5-b741-6867d1768d45": {
+                      "currentItems": [],
                       "difficulty": "SUBSTANTIAL",
                       "currentRoom": "acorn_grove_0",
+                      "currentEntity": null,
                       "currentFloor": "acorn_grove",
-                      "completedPuzzles": ["joe_hardy"],
-                      "time": 2680,
+                      "completedPuzzles": [],
+                      "time": 2698,
                       "currentEntityStates": {
-                        "narrator": "narrator_hint_1",
+                        "narrator": "narrator_start",
                         "portal_squirrel": "portal_squirrel",
                         "intro_squirrel": "intro_squirrel"
                       },
-                      "hintsUsed": {
-                        "acorn_grove": 1
-                      }
+                      "hintsUsed": {}
                     },
-                      }
-                    """;
+                  "d32ad7e6-570f-43cb-b447-82d4c8be293e": {
+                    "currentItems": ["keys"],
+                    "difficulty": "SUBSTANTIAL",
+                    "currentRoom": "acorn_grove_0",
+                    "currentFloor": "acorn_grove",
+                    "completedPuzzles": ["joe_hardy"],
+                    "time": 2680,
+                    "currentEntityStates": {
+                      "narrator": "narrator_hint_1",
+                      "portal_squirrel": "portal_squirrel",
+                      "intro_squirrel": "intro_squirrel"
+                    },
+                    "hintsUsed": {
+                      "acorn_grove": 1
+                    }
+                  },
+                    }
+                  """;
     private static String accountData =
             """
-                      {
-                      "7766f361-af7a-4da5-b741-6867d1768d45": {
-                        "highScore": {
-                          "difficulty": "TRIVIAL",
-                          "timeRemaining": null,
-                          "totalScore": null
-                        },
-                        "hashedPassword": "829c3804401b0727f70f73d4415e162400cbe57b",
-                        "ttsOn": true,
-                        "username": "dummy"
-                      }
-                    "d32ad7e6-570f-43cb-b447-82d4c8be293e": {
+                    {
+                    "7766f361-af7a-4da5-b741-6867d1768d45": {
                       "highScore": {
                         "difficulty": "TRIVIAL",
                         "timeRemaining": null,
                         "totalScore": null
                       },
-                      "ttsOn": true,
                       "hashedPassword": "829c3804401b0727f70f73d4415e162400cbe57b",
-                      "username": "dummy_loaded"
+                      "ttsOn": true,
+                      "username": "dummy"
+                    }
+                  "d32ad7e6-570f-43cb-b447-82d4c8be293e": {
+                    "highScore": {
+                      "difficulty": "TRIVIAL",
+                      "timeRemaining": null,
+                      "totalScore": null
                     },
-                      }
-                    """;
+                    "ttsOn": true,
+                    "hashedPassword": "829c3804401b0727f70f73d4415e162400cbe57b",
+                    "username": "dummy_loaded"
+                  },
+                    }
+                  """;
 
     @BeforeEach
     void setup() throws Exception {
@@ -278,5 +279,20 @@ public class GameStateTests {
         state.setCurrentRoom(r2);
         assertEquals(floor, state.currentFloor());
         assertEquals(r2, state.currentRoom());
+    }
+
+    @Test
+    void testResetTimer() throws Exception {
+        Field startTimeField = GameState.class.getDeclaredField("startTime");
+        startTimeField.setAccessible(true);
+        long originalStartTime = (long) startTimeField.get(state);
+
+        Thread.sleep(2);
+
+        state.resetTimer();
+
+        long newStartTime = (long) startTimeField.get(state);
+
+        assertTrue(newStartTime > originalStartTime, "startTime should be updated to a more recent timestamp");
     }
 }

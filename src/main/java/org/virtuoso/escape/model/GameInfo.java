@@ -371,12 +371,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
     private Floor floor3() {
         Entity narrator = makeNarrator("storey_iii");
         // hi treasure
-        Entity sparrowAmbassador = new Entity(
-                "sparrow_ambassador",
-                new Default(),
-                new Default(),
-                new Default(),
-                null);
+        Entity sparrowAmbassador = new Entity("sparrow_ambassador", new Default(), new Default(), new Default(), null);
 
         Function<String, Action> puzzleMsg = (string) -> new SetMessage(this, "box_riddle", string);
 
@@ -394,7 +389,8 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                         new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
                         ".*",
                         new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))));
-        EntityState box_success = new EntityState("box_success", new Default(), new Default(), new Default(), boxLogicSuccess);
+        EntityState box_success =
+                new EntityState("box_success", new Default(), new Default(), new Default(), boxLogicSuccess);
 
         var boxLogicFollow = new TakeInput(
                 "",

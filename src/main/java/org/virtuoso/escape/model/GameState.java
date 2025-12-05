@@ -191,6 +191,11 @@ public class GameState {
         this.time = time;
     }
 
+    /** Resets the countdown * */
+    public void resetTimer() {
+        this.startTime = System.currentTimeMillis();
+    }
+
     /**
      * Get the current penalty score.
      *

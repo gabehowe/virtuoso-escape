@@ -136,6 +136,11 @@ public record GameProjection(GameState gameState, AccountManager accountManager)
         return this.gameState.time();
     }
 
+    /** Reset time remaining on the countdown. */
+    public void resetTimer() {
+        this.gameState.resetTimer();
+    }
+
     /** Increments the {@code initialTime} by 1 minute if it is less than 2 hours. */
     public void incrementInitialTime() {
         this.gameState.incrementInitialTime();
