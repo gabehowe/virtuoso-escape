@@ -11,7 +11,10 @@ import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameState;
 
-/** Leaderboard Displays high scores per user accounts */
+/** Leaderboard Displays high scores per user accounts
+ * @author Andrew
+ * @author Bose
+ */
 public class Leaderboard {
 
     /**
@@ -31,7 +34,6 @@ public class Leaderboard {
                     && Objects.nonNull(currentHighScore.totalScore())
                     && newScore.totalScore() > currentHighScore.totalScore()) {
                 account.setHighScore(newScore);
-                System.out.println("Score updated");
             }
         }
     }
@@ -78,11 +80,7 @@ public class Leaderboard {
                 .collect(Collectors.toList());
 
         System.out.println("\nTop 5 Leaderboard");
-        if (topScores.isEmpty()) {
-            System.out.println("No scores yet.");
-            return;
-        }
-
+ 
         System.out.printf("%-6s %-10s %-10s %-12s %s%n", "RANK", "SCORE", "TIME", "DIFF", "USERNAME");
         System.out.println("==========================================================");
 
