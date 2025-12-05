@@ -60,7 +60,7 @@ public class IntroController {
     void initialize() {
         App.page = App.page.INTRO;
         App.scene.setOnKeyPressed(ev -> {
-            if (ev.getCode() == KeyCode.Q && App.page == App.page.INTRO) {
+            if ((ev.getCode() == KeyCode.Q || ev.getCode() == KeyCode.C)&& App.page == App.page.INTRO) {
                 App.loadWebView(new GameViewController());
                 SpeechPlayer.instance().stopSoundbite();
                 System.out.println(App.projection.time().toSeconds());
