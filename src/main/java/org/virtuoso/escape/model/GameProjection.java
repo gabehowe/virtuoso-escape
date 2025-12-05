@@ -12,7 +12,12 @@ import org.virtuoso.escape.speech.SpeechPlayer;
  *
  * @author Treasure
  */
-public record GameProjection() {
+public record GameProjection(GameState gameState, AccountManager accountManager) {
+
+    /** Create the default projection without state. */
+    public GameProjection() {
+        this(GameState.instance(), AccountManager.instance());
+    }
 
     /**
      * Initialize and attempt login.
@@ -22,7 +27,7 @@ public record GameProjection() {
      * @return {@code true} if the username-password combination was valid, otherwise {@code false}.
      */
     public boolean login(String username, String password) {
-        Optional<Account> currentAccount = AccountManager.instance().login(username, password);
+        Optional<Account> currentAccount = this.accountManager.login(username, password);
         return currentAccount.isPresent();
     }
 
@@ -34,15 +39,15 @@ public record GameProjection() {
      * @return {@code true} if no user exists with this exact username-password combination, otherwise {@code false}.
      */
     public boolean createAccount(String username, String password) {
-        Optional<Account> currentAccount = AccountManager.instance().newAccount(username, password);
+        Optional<Account> currentAccount = this.accountManager.newAccount(username, password);
         return currentAccount.isPresent();
     }
 
     /** Log the current user out and write data. */
     public void logout() {
         SpeechPlayer.instance().stopSoundbite();
-        GameState.instance().write();
-        AccountManager.instance().logout();
+        this.gameState.write();
+        this.accountManager.logout();
     }
 
     /**
@@ -51,7 +56,7 @@ public record GameProjection() {
      * @return The room the user is in.
      */
     public Room currentRoom() {
-        return GameState.instance().currentRoom();
+        return this.gameState.currentRoom();
     }
 
     /**
@@ -60,7 +65,7 @@ public record GameProjection() {
      * @param room The room to change to.
      */
     public void pickRoom(Room room) {
-        GameState.instance().setCurrentRoom(room);
+        this.gameState.setCurrentRoom(room);
     }
 
     /**
@@ -69,7 +74,7 @@ public record GameProjection() {
      * @return The {@link Optional<Entity>} if the current entity is non-null, otherwise {@link Optional#empty()}.
      */
     public Optional<Entity> currentEntity() {
-        return GameState.instance().currentEntity();
+        return this.gameState.currentEntity();
     }
 
     /**
@@ -78,7 +83,7 @@ public record GameProjection() {
      * @return The current floor.
      */
     public Floor currentFloor() {
-        return GameState.instance().currentFloor();
+        return this.gameState.currentFloor();
     }
 
     /**
@@ -87,7 +92,7 @@ public record GameProjection() {
      * @return {@link Optional<String>} if the message is non-null, otherwise {@link Optional#empty()}.
      */
     public Optional<String> currentMessage() {
-        return GameState.instance().currentMessage();
+        return this.gameState.currentMessage();
     }
 
     /**
@@ -96,7 +101,7 @@ public record GameProjection() {
      * @return A list of items.
      */
     public List<Item> currentItems() {
-        return GameState.instance().currentItems();
+        return this.gameState.currentItems();
     }
 
     /**
@@ -105,7 +110,7 @@ public record GameProjection() {
      * @param difficulty The {@link Difficulty} to change to.
      */
     public void setDifficulty(Difficulty difficulty) {
-        GameState.instance().setDifficulty(difficulty);
+        this.gameState.setDifficulty(difficulty);
     }
 
     /**
@@ -114,12 +119,12 @@ public record GameProjection() {
      * @param entity The {@link Entity} to focus.
      */
     public void pickEntity(Entity entity) {
-        GameState.instance().pickEntity(entity);
+        this.gameState.pickEntity(entity);
     }
 
     /** Unfocus the current entity. */
     public void leaveEntity() {
-        GameState.instance().leaveEntity();
+        this.gameState.leaveEntity();
     }
 
     /**
@@ -128,12 +133,12 @@ public record GameProjection() {
      * @return The time remaining on the countdown.
      */
     public Duration time() {
-        return GameState.instance().time();
+        return this.gameState.time();
     }
 
     /** Increments the {@code initialTime} by 1 minute if it is less than 2 hours. */
     public void incrementInitialTime() {
-        GameState.instance().incrementInitialTime();
+        this.gameState.incrementInitialTime();
     }
 
     /**
@@ -188,6 +193,6 @@ public record GameProjection() {
      * @return {@code true} if the game has ended, otherwise {@code false}.
      */
     public boolean isEnded() {
-        return GameState.instance().isEnded();
+        return this.gameState.isEnded();
     }
 }
