@@ -13,6 +13,20 @@ body {
     margin: 0;
 }
 
+.box-element {
+    color: var(--Foreground, #FFF);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.box-element.selected {
+    border: var(--stroke_width) solid var(--Foreground);
+    border-radius: var(--radius);
+    margin-left: 0.29em;
+    padding: 0 0.25em;
+}
+
 
 #left-bar {
     width: 30%;
@@ -40,20 +54,6 @@ body {
             color: var(--Foreground, #FFF);
             text-align: center;
             font-weight: 700;
-        }
-
-        .box-element {
-            color: var(--Foreground, #FFF);
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-        }
-
-        .box-element.selected {
-            border: var(--stroke_width) solid var(--Foreground);
-            border-radius: var(--radius);
-            margin-left: 0.29em;
-            padding: 0 0.25em;
         }
     }
 

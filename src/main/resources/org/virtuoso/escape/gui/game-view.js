@@ -230,6 +230,10 @@ function displaySettings(name) {
                     app.pickDifficulty(i);
                     clearSettings();
                 };
+                if (i == app.getDifficulty()) {
+                    difficultyButton?.classList?.add("box-element");
+                    difficultyButton?.classList?.add("selected");
+                }
                 box.append(difficultyButton);
             }
             break;

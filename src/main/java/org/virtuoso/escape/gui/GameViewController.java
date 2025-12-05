@@ -278,6 +278,15 @@ public class GameViewController implements Initializable {
         projection.setDifficulty(Difficulty.valueOf(difficultyID));
     }
 
+    /**
+     * Return the string ID of the current difficulty
+     * 
+     * @return The current difficulty
+     */
+    public String getDifficulty() {
+        return GameState.instance().difficulty().name();
+    }
+
     /** Called in javascript to logout the user and swap to the login screen. */
     public void logout() {
         App.projection.logout();
