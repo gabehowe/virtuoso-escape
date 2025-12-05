@@ -101,7 +101,7 @@ public class GameViewController implements Initializable {
      * @param id The id of the box to update.
      * @param current The currently selected element name (or "undefined").
      * @param names All elements names including current.
-     * @param button Whether the eleemnts should be buttons.
+     * @param button Whether the elements should be buttons.
      */
     public void updateBox(String id, String current, List<List<String>> names, boolean button) {
         var mapped = new JSONArray();

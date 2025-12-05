@@ -23,7 +23,7 @@ function updateKeyHandler(key) {
             } catch (_) {
                 return;
             }
-
+        if (document.activeElement.tagName === "INPUT") return;
         if (eventKey === 'c') document.getElementById("auth-change").click();
         else if (eventKey === 'e') app.exit();
 
