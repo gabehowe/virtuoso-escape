@@ -1,7 +1,10 @@
 package org.virtuoso.escape.model;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.virtuoso.escape.model.action.*;
@@ -204,7 +207,9 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                         }),
                         new Chain(
                                 new SetMessage(this, "sans_sandwich_joe", "interact_sandwich"),
-                                new SwapEntities("joe_hardy", "sandwich_joe"))),
+                                new SwapEntities("joe_hardy", "sandwich_joe"),
+                                GameState.instance()::clearItems)
+                        ),
                 null);
         EntityState introJoe = new EntityState(
                 "intro_joe",
