@@ -24,8 +24,9 @@ public class DataWriter {
         GameState currentGameState = GameState.instance();
         if (GameState.instance().account() == null) throw new NullPointerException();
         JSONObject currentGameStateMap = loadGameStateInfo(currentGameState);
+        currentGameStateMap.remove(currentGameState.account().id());
         JSONObject allGameStatesMap = AccountManager.instance().gameStates();
-        allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
+        if (!GameState.instance().isEnded()) allGameStatesMap.put(currentGameState.account().id().toString(), currentGameStateMap);
         writeToFile(GAMESTATES_PATH, allGameStatesMap);
     }
 
