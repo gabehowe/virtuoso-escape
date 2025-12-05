@@ -14,6 +14,7 @@ import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import org.virtuoso.escape.model.GameProjection;
+import org.virtuoso.escape.model.GameState;
 import org.w3c.dom.Element;
 
 public class App extends Application {
@@ -34,7 +35,8 @@ public class App extends Application {
     }
 
     public static void exit() {
-        App.projection.logout();
+        if (GameState.instance().account() != null)
+            App.projection.logout();
         Platform.exit();
         System.exit(0);
     }
