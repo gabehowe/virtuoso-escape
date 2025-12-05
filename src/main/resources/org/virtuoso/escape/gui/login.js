@@ -14,6 +14,7 @@ window.app = window.app || {};
 function updateKeyHandler(key) {
     document.onkeydown = (event) => {
         let eventKey;
+        if (event.keyCode === 27 /*ESCAPE*/) document.activeElement.blur();
         if (event.keyIdentifier === undefined) eventKey = event.key;
         else
             try {
@@ -24,9 +25,8 @@ function updateKeyHandler(key) {
                 return;
             }
         if (document.activeElement.tagName === "INPUT") return;
-        if (eventKey === 'c') document.getElementById("auth-change").click();
-        else if (eventKey === 'e') app.exit();
-
+        if (eventKey === "c") document.getElementById("auth-change").click();
+        else if (eventKey === "e") app.exit();
     };
 }
 
