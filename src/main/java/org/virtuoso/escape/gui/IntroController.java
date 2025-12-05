@@ -60,8 +60,9 @@ public class IntroController {
     void initialize() {
         App.page = App.page.INTRO;
         App.scene.setOnKeyPressed(ev -> {
-            if (ev.getCode() == KeyCode.Q && App.page == App.page.INTRO) App.loadWebView(new GameViewController());
+            if (ev.getCode() == KeyCode.Q && App.page == App.page.INTRO) {App.loadWebView(new GameViewController());
             SpeechPlayer.instance().stopSoundbite();
+            }
         });
 
         pressToSkipIntro.setOpacity(0);

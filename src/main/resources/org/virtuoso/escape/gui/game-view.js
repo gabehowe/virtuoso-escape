@@ -7,9 +7,9 @@
  * An instance of GameViewController.
  * @typedef App
  * @property {() => string} debugCheckDifficulty - Returns the current difficulty.
+ * @property {(entityId: string) => void} pickEntity - Choose an entity based on its string id.
  * @property {() => string} getTime - Returns the current time.
  * @property {(input: string) => void} input - Tries the input action with the current input.
- * @property {() => void} updateButtons - Create keyboard hotkeys.
  * @property {() => void} toggleTTS - Toggle text to speech.
  * @property {() => void} debugEndGame - End the game.
  * @property {() => void} exit - Close the window.
@@ -205,7 +205,7 @@ function displaySettings(name) {
                 debug["enabled"] = !debug["enabled"];
                 document.getElementById("debug").style.display = debug[
                     "enabled"
-                ]
+                    ]
                     ? ""
                     : "none";
                 clearSettings();
@@ -263,7 +263,6 @@ function createKeys() {
     // Find action box buttons to ensure they stay the same between createKeys calls.
     let actions = document.querySelectorAll("#action-box > .logical-button");
     let buttons = document.querySelectorAll(".logical-button");
-    let selected = document.querySelectorAll(".selected");
     keyMap = {};
     // let fixed = Array.from(buttons).filter(it => it.hasAttribute('keyboard'))
     // Find a unique letter in elem.innerText.
@@ -388,7 +387,20 @@ function populateBackground(current, entities) {
             (picture.width *= url.includes("elephant") ? 0.9 : 0.7);
         picture.src = `../../../../images/${url}.png`;
         picture.id = `img-${url}`;
-        picture.style.animationDelay = -2 * Math.random() + "s";
+        let delay = -2 * Math.random() + "s"
+        picture.style.animationDelay = delay;
+        picture.onmouseover = ev => {
+            picture.style.animationDelay = '0s'
+            picture.classList.add('hover')
+        }
+        picture.onanimationend = ev => {
+            picture.style.animationDelay = delay
+            picture.classList.remove('hover')
+        }
+        picture.onclick = () => {
+            console.log(url)
+            app.pickEntity(url)
+        }
         flow.append(picture);
     }
 }

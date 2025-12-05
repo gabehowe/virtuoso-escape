@@ -30,6 +30,7 @@ public class GameViewController implements Initializable {
     @FXML
     public WebView webView;
 
+
     /**
      * Initialize the view.
      *
@@ -49,7 +50,20 @@ public class GameViewController implements Initializable {
         projection = App.projection;
     }
 
-    /** Change the background image and display all entities. */
+    /**
+     * Pick an entity based on its ID (not state ID).
+     * @param entityId The ID to attempt to find and select.
+     */
+    public void pickEntity(String entityId){
+        projection.currentRoom().entities().stream().filter(
+                it -> it.id().equals(entityId)
+        ).findFirst().ifPresent(projection::pickEntity);
+        updateAll();
+    }
+
+    /**
+     * Change the background image and display all entities.
+     */
     public void updateImage() {
         var entities =
                 projection.currentRoom().entities().stream().map(Entity::id).toList();
