@@ -30,7 +30,6 @@ public class GameViewController implements Initializable {
     @FXML
     public WebView webView;
 
-
     /**
      * Initialize the view.
      *
@@ -52,18 +51,18 @@ public class GameViewController implements Initializable {
 
     /**
      * Pick an entity based on its ID (not state ID).
+     *
      * @param entityId The ID to attempt to find and select.
      */
-    public void pickEntity(String entityId){
-        projection.currentRoom().entities().stream().filter(
-                it -> it.id().equals(entityId)
-        ).findFirst().ifPresent(projection::pickEntity);
+    public void pickEntity(String entityId) {
+        projection.currentRoom().entities().stream()
+                .filter(it -> it.id().equals(entityId))
+                .findFirst()
+                .ifPresent(projection::pickEntity);
         updateAll();
     }
 
-    /**
-     * Change the background image and display all entities.
-     */
+    /** Change the background image and display all entities. */
     public void updateImage() {
         var entities =
                 projection.currentRoom().entities().stream().map(Entity::id).toList();
@@ -142,14 +141,7 @@ public class GameViewController implements Initializable {
             var theEntity = projection.currentRoom().entities().stream()
                     .filter(ent -> Objects.equals(ent.state().id(), it.getAttribute("id")))
                     .findFirst();
-            theEntity.ifPresent(ent -> ((EventTarget) it)
-                    .addEventListener(
-                            "click",
-                            e -> {
-                                projection.pickEntity(ent);
-                                updateAll();
-                            },
-                            false));
+            theEntity.ifPresent(ent -> ((EventTarget) it).addEventListener("click", e -> pickEntity(ent.id()), false));
         });
 
         var itemNames = projection.currentItems().stream()
@@ -197,6 +189,9 @@ public class GameViewController implements Initializable {
             };
             webView.addEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
             return;
+        }
+        if (lastEntity != projection.currentEntity().orElse(null)) {
+            App.callJSFunction(webView.getEngine(), "hideInputBox");
         }
         updateLeftBar();
         updateCapabilities();

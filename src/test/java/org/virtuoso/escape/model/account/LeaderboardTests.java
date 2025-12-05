@@ -7,9 +7,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -343,6 +341,5 @@ public class LeaderboardTests {
 
         List<String> flat = Leaderboard.getLeaderboard();
         assertFalse(flat.contains("missingScore"));
-    }    
-
+    }
 }
