@@ -63,9 +63,7 @@ public class IntroController {
             if ((ev.getCode() == KeyCode.Q || ev.getCode() == KeyCode.C)&& App.page == App.page.INTRO) {
                 App.loadWebView(new GameViewController());
                 SpeechPlayer.instance().stopSoundbite();
-                System.out.println(App.projection.time().toSeconds());
                 App.projection.resetTimer();
-                System.out.println(App.projection.time().toSeconds());
             }
         });
 
