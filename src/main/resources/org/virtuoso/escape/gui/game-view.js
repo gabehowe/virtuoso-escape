@@ -376,12 +376,14 @@ function populateBackground(current, entities) {
         "#background-entities > img.selected"
     );
     if (findCurrent?.src.includes(current)) return;
-    let predefined = document.querySelectorAll("#background-entities > img");
+    let predefined = Array.from(
+        document.querySelector("#background-entities").children
+    ).map((it) => it.id);
     if (
         predefined.length > 0 &&
-        Array.from(predefined)
-            .map((it) => it.src)
-            .every((it) => Array.from(entities).some((key) => it.includes(key)))
+        predefined.every((it) =>
+            it.includes(Array.from(entities)[predefined.indexOf(it)])
+        )
     ) {
         document
             .querySelectorAll("#background-entities > img.selected")

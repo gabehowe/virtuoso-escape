@@ -21,6 +21,7 @@ public class GameViewController implements Initializable {
     public GameProjection projection;
     private Floor lastFloor;
     private Entity lastEntity;
+    private Room lastRoom;
     // grandfathered in, so no longer temporary
     // we also can't remove this temporary value because industry depends on it, and we don't want to ruin backwards
     // compatibility
@@ -73,8 +74,11 @@ public class GameViewController implements Initializable {
                 "populateBackground",
                 projection.currentEntity().map(Entity::id).orElse("undefined"),
                 arr);
-        App.callJSFunction(
-                webView.getEngine(), "setRoomImage", projection.currentRoom().id());
+        if (lastRoom != projection.currentRoom())
+            App.callJSFunction(
+                    webView.getEngine(),
+                    "setRoomImage",
+                    projection.currentRoom().id());
     }
 
     /** Update the dialogue box and entity title. */
@@ -206,7 +210,7 @@ public class GameViewController implements Initializable {
             webView.addEventFilter(KeyEvent.KEY_PRESSED, ourFunTemporaryEventHandlerReference);
             return;
         }
-
+        lastRoom = projection.currentRoom();
         lastFloor = projection.currentFloor();
         lastEntity = projection.currentEntity().orElse(null);
     }
