@@ -142,6 +142,7 @@
 #continueToGame:hover {
     -fx-scale-x: 1.07;
     -fx-scale-y: 1.07;
+    -fx-cursor: hand;
 }
 
 #continueToGame:pressed {
