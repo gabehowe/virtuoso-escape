@@ -25,7 +25,7 @@ function updateKeyHandler(key) {
                 return;
             }
         if (document.activeElement.tagName === "INPUT") return;
-        if (eventKey === "c") document.getElementById("auth-change").click();
+        if (eventKey === key) document.getElementById("auth-change").click();
         else if (eventKey === "e") app.exit();
     };
 }

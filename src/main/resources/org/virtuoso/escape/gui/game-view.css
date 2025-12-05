@@ -206,7 +206,7 @@ body {
                 image-rendering: pixelated;
             }
             img.hover {
-                animation: spin 0.5s ease-out backwards 0s 1;
+                animation: spin 0.5s cubic-bezier(.25,.46,.45,.94) backwards 0s 1;
             }
         }
 
