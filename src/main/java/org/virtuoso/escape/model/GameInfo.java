@@ -208,8 +208,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                         new Chain(
                                 new SetMessage(this, "sans_sandwich_joe", "interact_sandwich"),
                                 new SwapEntities("joe_hardy", "sandwich_joe"),
-                                GameState.instance()::clearItems)
-                        ),
+                                GameState.instance()::clearItems)),
                 null);
         EntityState introJoe = new EntityState(
                 "intro_joe",
@@ -571,7 +570,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
         var computtyUnblocked = new EntityState(
                 "computty_unblocked",
                 ttyStr.apply("attack"),
-                ttyStr.apply("attack"),
+                ttyStr.apply("inspect"),
                 ttyStr.apply("interact"),
                 computtyDefault);
 

@@ -288,7 +288,7 @@
     "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5."
   },
   "computty_unblocked": {
-    "name": "Computty",
+    "name": "CompuTTY",
     "introduce": "CompuTTY 0.0.0\n~$ ",
     "interact": "The terminal awaits input.",
     "inspect": "You see a terminal fit for use by a squirrel.",
