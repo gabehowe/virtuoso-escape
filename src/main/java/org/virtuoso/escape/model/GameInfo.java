@@ -376,9 +376,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                 new Default(),
                 new Default(),
                 new Default(),
-                new TakeInput(
-                        "(?:sparrow )?help", new SetMessage(this, "sparrow_ambassador", "hint_help"),
-                        ".*", new SetMessage(this, "sparrow_ambassador", "hint_general")));
+                null);
 
         Function<String, Action> puzzleMsg = (string) -> new SetMessage(this, "box_riddle", string);
 
@@ -396,7 +394,7 @@ public record GameInfo(Map<String, Map<String, String>> language, List<Floor> bu
                         new Chain(new SwapEntities("box_riddle", "box_open"), puzzleMsg.apply("step_success")),
                         ".*",
                         new Chain(puzzleMsg.apply("step_wrong"), new SwapEntities("box_riddle", "box_start"))));
-        EntityState box_success = new EntityState("box_success", new Default(), new Default(), null, boxLogicSuccess);
+        EntityState box_success = new EntityState("box_success", new Default(), new Default(), new Default(), boxLogicSuccess);
 
         var boxLogicFollow = new TakeInput(
                 "",

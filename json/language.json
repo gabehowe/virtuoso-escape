@@ -169,13 +169,13 @@
     "final_door": "You move through the door and find a very long flight of stairs. You slowly proceed up them..."
   },
   "door1_0": {
-    "attack": "You weep at the door, but it forces you to imagine renaissance paintings of greek forums.",
+    "attack": "You weep at the door, but it forces you to imagine renaissance paintings of greek forums."
   },
   "door1_1": {
     "attack": "You deliver your anguish to the door, but it smells like a decaying oranges in a compost pile."
   },
   "door1_2": {
-    "attack": "You throw yourself against the door, and it shakes like the smell of a blooming citrus tree.",
+    "attack": "You throw yourself against the door, and it shakes like the smell of a blooming citrus tree."
   },
   "door2": {
     "name": "nondescript door",
@@ -213,18 +213,33 @@
   },
   "sparrow_ambassador": {
     "name": "Apine Ambassador",
-    "inspect": "The sparrow's well-dressed attire glints in the dim light of the bare room.",
+    "inspect": "The sparrow's well-dressed attire glints in the dim light of the bare room. It is muttering something about a closed system.",
     "introduce": "You behold the sparrow atop the pedestal.",
     "attack": "You can't get up to the sparrow, so you sit and think angry thoughts.",
-    "interact": "Chirp chirp. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in finding the one true cycle.",
-    "hint_general": "Hmm? The box is a closed system. Think about the first number you see—it must be the key to finding the second, and so on. Where do you *start* the chain?",
-    "hint_help": "I've said all I can, little squirrel. The wise know where to begin their journey. The patient know they must follow the path laid before them. The intelligent know when to *open* the door."
+    "interact": "Chirp chirp. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in finding the one true cycle.  Think about the first number you see—it must be the key to finding the second, and so on. Where do you *start* the chain? The puzzle is solved by correctly ordering three words: FOLLOW, OPEN, and START."
   },
   "box_start": {
     "name": "Starting box",
     "introduce": "You see a box."
   },
+  "box_step1": {
+    "interact": "The box still remains closed. You need to take another step.",
+    "inspect": "The box looks largley the same.",
+    "attack": "You try to smash the box, but it is no more effective than any prior attempts."
+  },
+  "box_success": {
+    "interact": "The box appears unlocked. One final step is required.",
+    "inspect": "The box still looks largley the same.",
+    "attack": "You try to smash the box, but it is just as ineffectual as all prior effors."
+  },
+  "box_open": {
+    "interact": "The box lays open on a table.",
+    "inspect": "The box looks the same as it did when it was closed, except now it is open...",
+    "attack": "You try to smash the box, but despite it no longer being closed, it is still as impervious your efforts."
+  },
   "box_riddle": {
+    "name": "Box",
+    "introduce": "You see a box.",
     "interact": "You stand before the box. You realize you need a strategy to move forward.",
     "step_start": "You decided to start with your own box. A subtle click confirms you made the first correct move. Now, where does the number inside point you?",
     "step_follow": "You follow the number's instruction and move your attention to the next box in the chain. You sense the loop is closing. It's time to claim your prize.",
@@ -354,8 +369,8 @@
     "storey_i_hint_2": "The bread is the crux of all this. One piece is a reward for a numbers game in the closet, and the other is a reward for a tricky word puzzle with the guard.",
     "storey_ii_hint_1": "The door puzzle requires you to choose the door that 'rings with the most life.' Think about what the pitcher plant values.",
     "storey_ii_hint_2": "The doors must be opened in a specific sequence, which is shuffled after every failure. The hint lies in the doors' numerical property.",
-    "storey_iii_hint_1": "The sparrow says the box's trick lies in finding the one true cycle. The puzzle is solved by correctly ordering three words: START, CONTINUE, and OPEN.",
-    "storey_iii_hint_2": "The exit door requires a key, which you receive upon successfully opening the box. The box must be opened in the sequence: START, CONTINUE, OPEN.",
+    "storey_iii_hint_1": "The sparrow says the box's trick lies in finding the one true cycle. The wise know where to begin their journey. The patient know they must follow the path laid before them. The intelligent know when to *open* the door.",
+    "storey_iii_hint_2": "The exit door requires a key, which you receive upon successfully opening the box. The box must be opened in the sequence: START, FOLLOW, OPEN.",
     "storey_iv_hint_1": "You need to unlock the Demetamorphinator. The blocked terminal (CompuTTY) needs to be unblocked by the squirrel with one sock.",
     "storey_iv_hint_2": "The terminal puzzle involves common posix commands: cd, tar, and others. The final solution is the password in the good_rotx message. Look around for something that could be a ceaser cipher rotation number."
   },
