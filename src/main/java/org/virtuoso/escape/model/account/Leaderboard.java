@@ -130,14 +130,9 @@ public class Leaderboard {
                 GameState.instance().difficulty().toString()));
 
         List<ScoreEntry> top_scores = allScores.stream()
-                .sorted(Comparator.comparing(ScoreEntry::totalScore)
-                        .thenComparing((s1, s2) -> {
-                            Difficulty d1 = Difficulty.valueOf(s1.difficulty());
-                            Difficulty d2 = Difficulty.valueOf(s2.difficulty());
-                            return Integer.compare(d2.ordinal(), d1.ordinal());
-                        })
-                        .reversed())
-                .limit(5)
+                .sorted(Comparator.comparing(ScoreEntry::totalScore, Comparator.reverseOrder())
+                .thenComparing(s -> Difficulty.valueOf(s.difficulty()), Comparator.reverseOrder()))
+                .limit(10)
                 .collect(Collectors.toList());
 
         ArrayList<String> output_array = new ArrayList<String>();

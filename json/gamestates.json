@@ -1,17 +1,1 @@
-{
-  "7766f361-af7a-4da5-b741-6867d1768d45": {
-    "currentItems": [],
-    "difficulty": "SUBSTANTIAL",
-    "currentRoom": "acorn_grove_0",
-    "currentEntity": null,
-    "currentFloor": "acorn_grove",
-    "completedPuzzles": [],
-    "time": 2700,
-    "currentEntityStates": {
-      "narrator": "narrator_start",
-      "portal_squirrel": "portal_squirrel",
-      "intro_squirrel": "intro_squirrel"
-    },
-    "hintsUsed": {}
-  }
-}
+{"7766f361-af7a-4da5-b741-6867d1768d45":{"currentItems":["left_bread"],"difficulty":"SUBSTANTIAL","currentRoom":"storey_i_1","currentEntity":null,"currentFloor":"storey_i","completedPuzzles":["almanac"],"time":2697,"currentEntityStates":{"trash_can":"trash_can","security":"security","narrator":"narrator_start","almanac":"found_almanac","elephant_in_the_room":"elephant_in_the_room","joe_hardy":"intro_joe","first_door":"first_door"},"hintsUsed":{}}}

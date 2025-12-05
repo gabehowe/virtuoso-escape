@@ -1,6 +1,9 @@
 package org.virtuoso.escape.model.account;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -8,14 +11,22 @@ import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
+
 import org.json.simple.JSONObject;
-import org.junit.jupiter.api.*;
-import org.virtuoso.escape.model.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.virtuoso.escape.model.Difficulty;
+import org.virtuoso.escape.model.GameInfo;
+import org.virtuoso.escape.model.GameState;
+import org.virtuoso.escape.model.Util;
 
 /**
- * tests for Leaderboard.java
+ * Tests for Leaderboard.java
  *
  * @author Bose
+ * @author Andrew
  */
 public class LeaderboardTests {
 
@@ -189,4 +200,191 @@ public class LeaderboardTests {
         mockAccountManager.accounts().putAll(corrupted);
         assertDoesNotThrow(Leaderboard::showLeaderboard);
     }
+
+    @Test
+    @DisplayName("getLeaderboard should return correctly ordered flat list")
+    void testGetLeaderboardOrdering() throws Exception {
+        mockAccountManager.accounts().clear();
+
+        JSONObject multiple = new JSONObject();
+        multiple.putAll(buildAccountJson("steve", "TRIVIAL", 120L, 100L));
+        multiple.putAll(buildAccountJson("joe", "SUBSTANTIAL", 150L, 300L));
+        multiple.putAll(buildAccountJson("frank", "VIRTUOSIC", 200L, 500L));
+        mockAccountManager.accounts().putAll(multiple);
+
+        injectPrivateField(GameState.class, "time", mockGameState, Duration.ofSeconds(180));
+        injectPrivateField(GameState.class, "difficulty", mockGameState, Difficulty.VIRTUOSIC);
+
+        List<String> flat = Leaderboard.getLeaderboard();
+
+        assertEquals(4*4, flat.size(), "Flat list must be 4 columns per entry");
+
+        String firstPlaceUser = flat.get(2);
+        assertEquals("frank", firstPlaceUser, "frank should be the #1 high scorer");
+    }
+
+    @Test
+    @DisplayName("getLeaderboard should include current session even if no stored accounts exist")
+    void testGetLeaderboardOnlyCurrentSession() throws Exception {
+        mockAccountManager.accounts().clear();
+
+        injectPrivateField(GameState.class, "time", mockGameState, Duration.ofSeconds(95));
+        injectPrivateField(GameState.class, "difficulty", mockGameState, Difficulty.SUBSTANTIAL);
+
+        List<String> flat = Leaderboard.getLeaderboard();
+
+        assertFalse(flat.isEmpty(), "Leaderboard should still include current session");
+        assertEquals("dummy", flat.get(2), "Current session username should appear");
+    }
+
+    @Test
+    @DisplayName("getLeaderboard should skip entries with non-positive timeRemaining")
+    void testGetLeaderboardSkipsZeroTime() {
+        mockAccountManager.accounts().clear();
+
+        // This entry should be skipped because timeRemaining = 0
+        JSONObject bad = new JSONObject();
+        JSONObject hs = new JSONObject();
+        hs.put("difficulty", "TRIVIAL");
+        hs.put("timeRemaining", 0L);
+        hs.put("totalScore", 300L);
+        JSONObject acct = new JSONObject();
+        acct.put("username", "zeroTime");
+        acct.put("highScore", hs);
+        bad.put(UUID.randomUUID().toString(), acct);
+
+        mockAccountManager.accounts().putAll(bad);
+
+        List<String> flat = Leaderboard.getLeaderboard();
+
+        // Only the current session should appear
+        assertFalse(flat.stream().anyMatch(s -> s.equals("zeroTime")), "Entries with zero timeRemaining should be excluded");
+    }
+
+    @Test
+    @DisplayName("recordSession should not throw if highScore is null")
+    void testRecordSessionHandlesNullHighScore() throws Exception {
+        Score brokenScore = new Score(Duration.ofSeconds(100), Difficulty.TRIVIAL, null);
+
+        injectPrivateField(Account.class, "highScore", mockAccount, brokenScore);
+        assertDoesNotThrow(() -> Leaderboard.recordSession("dummy"));
+    }
+
+    @Test
+    @DisplayName("showLeaderboard should not print negative timeRemaining entries")
+    void testShowLeaderboardSkipsNegativeTime() {
+        mockAccountManager.accounts().clear();
+
+        JSONObject bad = new JSONObject();
+        JSONObject hs = new JSONObject();
+        hs.put("difficulty", "SUBSTANTIAL");
+        hs.put("timeRemaining", -50L);
+        hs.put("totalScore", 900L);
+
+        JSONObject acct = new JSONObject();
+        acct.put("username", "negativeTime");
+        acct.put("highScore", hs);
+
+        bad.put(UUID.randomUUID().toString(), acct);
+        mockAccountManager.accounts().putAll(bad);
+
+        Leaderboard.showLeaderboard();
+        String output = outContent.toString();
+
+        assertFalse(output.contains("negativeTime"), "Negative timeRemaining entries should not be printed");
+    }
+
+
+    @Test
+    @DisplayName("getLeaderboard should cap at 10 entries even with many users")
+    void testGetLeaderboardLimitTop5() {
+        mockAccountManager.accounts().clear();
+
+        for (int i = 1; i <= 20; i++) {
+            JSONObject entry = buildAccountJson("user" + i, "TRIVIAL", 100L + i, (long) i);
+            mockAccountManager.accounts().putAll(entry);
+        }
+
+        List<String> flat = Leaderboard.getLeaderboard();
+        int rows = flat.size() / 4;
+
+        assertEquals(10, rows, "Only top 5 entries should be returned");
+    }
+
+    @Test
+    @DisplayName("getLeaderboard should sort by score then difficulty descending")
+    void testGetLeaderboardDifficultySorting() {
+        mockAccountManager.accounts().clear();
+
+        JSONObject a = buildAccountJson("easy", "TRIVIAL", 100L, 500L);
+        JSONObject b = buildAccountJson("hard", "VIRTUOSIC", 100L, 500L);
+
+        mockAccountManager.accounts().putAll(a);
+        mockAccountManager.accounts().putAll(b);
+
+        List<String> flat = Leaderboard.getLeaderboard();
+
+        String firstUser = flat.get(2);
+
+        assertEquals("hard", firstUser, "Harder difficulty should rank ahead when scores tie");
+    }
+
+    @Test
+    @DisplayName("highScore exists but is not JSONObject ")
+    void testHighScoreNotJSONObjectInnerBranchCoverage() {
+        mockAccountManager.accounts().clear();
+
+        JSONObject acct = new JSONObject();
+        acct.put("username", "badHS");
+        acct.put("highScore", "notJson");
+
+        mockAccountManager.accounts().put(UUID.randomUUID().toString(), acct);
+
+        List<String> result = Leaderboard.getLeaderboard();
+
+        assertFalse(result.contains("badHS"));
+    }
+
+
+    @Test
+    @DisplayName("Leaderboard skips entry when timeRemaining is missing")
+    void testMissingTimeRemaining() {
+        mockAccountManager.accounts().clear();
+
+        JSONObject hs = new JSONObject();
+        hs.put("difficulty", "TRIVIAL");
+        // MISSING timeRemaining
+        hs.put("totalScore", 500L);
+
+        JSONObject acct = new JSONObject();
+        acct.put("username", "missingTime");
+        acct.put("highScore", hs);
+
+        mockAccountManager.accounts().put(UUID.randomUUID().toString(), acct);
+
+        List<String> flat = Leaderboard.getLeaderboard();
+        assertFalse(flat.stream().anyMatch(s -> s.equals("missingTime")));
+    }
+
+    @Test
+    @DisplayName("Leaderboard skips entry when totalScore is missing")
+    void testMissingTotalScore() {
+        mockAccountManager.accounts().clear();
+
+        JSONObject hs = new JSONObject();
+        hs.put("difficulty", "TRIVIAL");
+        hs.put("timeRemaining", 100L);
+        // MISSING totalScore
+
+        JSONObject acct = new JSONObject();
+        acct.put("username", "missingScore");
+        acct.put("highScore", hs);
+
+        mockAccountManager.accounts().put(UUID.randomUUID().toString(), acct);
+
+        List<String> flat = Leaderboard.getLeaderboard();
+        assertFalse(flat.stream().anyMatch(s -> s.equals("missingScore")));
+    }
+
+
 }

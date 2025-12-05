@@ -91,6 +91,12 @@ tasks.register("format") {
     group = "formatting"
 }
 
+tasks.register("coverage") {
+    dependsOn("jacocoTestReport")
+    description = "Generates a test coverage report in build/reports/jacoco"
+    group="test"
+}
+
 tasks.register("formatCheck") {
     dependsOn("spotlessCheck")
     description = "Checks if codebase is formatted correctly."
@@ -114,6 +120,7 @@ tasks.named<Test>("test") {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showStandardStreams = true
     }
+    group="test"
 }
 tasks.withType<JavaExec>().configureEach {
     jvmArgs("--enable-preview")
