@@ -34,17 +34,17 @@
 }
 
 .rounded {
-    -fx-border-radius: 3px;
-    -fx-background-radius: 3px;
+    -fx-border-radius: 0.1875rem;
+    -fx-background-radius: 0.1875rem;
 }
 
 .box {
     -fx-background-color: bg;
     -fx-text-fill: white;
-    -fx-padding: 3px 12px;
+    -fx-padding: 0.1875rem 0.75rem;
     -fx-alignment: center;
     -fx-background-inset: 0;
-    -fx-border-width: 1px;
+    -fx-border-width: 0.0625rem;
     -fx-border-color: stroke;
 }
 
@@ -65,7 +65,7 @@
 }
 
 #title {
-    -fx-font-size: 48px;
+    -fx-font-size: 3rem;
 }
 
 #root {
@@ -97,15 +97,15 @@
     -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, .25), 4.5, 0, 5, 5);
     -fx-text-fill: white;
     -fx-text: inherit;
-    -fx-font-size: 18.2px;
+    -fx-font-size: 1.1375rem;
     -fx-font-style: italic;
 }
 
 #introLabel {
-    -fx-font-size: 21px;
+    -fx-font-size: 1.3125rem;
     -fx-text-alignment: left;
     -fx-alignment: center-left;
-    -fx-padding: 25px;
+    -fx-padding: 1.5625rem;
 }
 
 #barn {
@@ -132,7 +132,7 @@
 }
 
 #continueToGame {
-    -fx-font-size: 17px;
+    -fx-font-size: 1.0625rem;
     -fx-text-alignment: center;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
     -fx-scale-x: 1.03;
