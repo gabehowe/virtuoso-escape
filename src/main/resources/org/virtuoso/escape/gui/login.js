@@ -52,3 +52,11 @@ function tryAuth() {
         document.getElementById("password").value
     );
 }
+
+/**
+ * Initialize.
+ */
+function init() {
+    addEventListener("submit", (ev) => ev.preventDefault());
+    document.getElementById("username").focus();
+}

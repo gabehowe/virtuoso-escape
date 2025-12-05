@@ -410,6 +410,7 @@ function populateBackground(current, entities) {
             console.log(url);
             app.pickEntity(url);
         };
+        picture.draggable = false;
         flow.append(picture);
     }
 }
