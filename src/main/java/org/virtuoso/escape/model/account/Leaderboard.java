@@ -11,7 +11,9 @@ import org.json.simple.JSONObject;
 import org.virtuoso.escape.model.Difficulty;
 import org.virtuoso.escape.model.GameState;
 
-/** Leaderboard Displays high scores per user accounts
+/**
+ * Leaderboard Displays high scores per user accounts
+ *
  * @author Andrew
  * @author Bose
  */
@@ -80,7 +82,7 @@ public class Leaderboard {
                 .collect(Collectors.toList());
 
         System.out.println("\nTop 5 Leaderboard");
- 
+
         System.out.printf("%-6s %-10s %-10s %-12s %s%n", "RANK", "SCORE", "TIME", "DIFF", "USERNAME");
         System.out.println("==========================================================");
 
@@ -129,7 +131,7 @@ public class Leaderboard {
 
         List<ScoreEntry> top_scores = allScores.stream()
                 .sorted(Comparator.comparing(ScoreEntry::totalScore, Comparator.reverseOrder())
-                .thenComparing(s -> Difficulty.valueOf(s.difficulty()), Comparator.reverseOrder()))
+                        .thenComparing(s -> Difficulty.valueOf(s.difficulty()), Comparator.reverseOrder()))
                 .limit(10)
                 .collect(Collectors.toList());
 

@@ -114,6 +114,17 @@ function updateBox(id, current, rooms, button) {
 }
 
 /**
+ * Hide the input box.
+ */
+function hideInputBox() {
+    let input = document.getElementById("input");
+    let inputbox = document.getElementById("input-box");
+    inputbox.style.display = "none";
+    inputbox.disabled = true;
+
+    input.disabled = true;
+}
+/**
  * Create an input box to take respond via {@link window#app.input}
  */
 function createInputBox() {
@@ -127,9 +138,7 @@ function createInputBox() {
     input.value = "";
     let inputbox = document.getElementById("input-box");
     inputbox.onsubmit = () => {
-        inputbox.style.display = "none";
-        inputbox.disabled = true;
-        input.disabled = true;
+        hideInputBox();
         app.input(document.getElementById("input").value);
     };
 }
@@ -205,7 +214,7 @@ function displaySettings(name) {
                 debug["enabled"] = !debug["enabled"];
                 document.getElementById("debug").style.display = debug[
                     "enabled"
-                    ]
+                ]
                     ? ""
                     : "none";
                 clearSettings();
@@ -391,20 +400,21 @@ function populateBackground(current, entities) {
             (picture.width *= url.includes("elephant") ? 0.9 : 0.7);
         picture.src = `../../../../images/${url}.png`;
         picture.id = `img-${url}`;
-        let delay = -2 * Math.random() + "s"
+        let delay = -2 * Math.random() + "s";
         picture.style.animationDelay = delay;
-        picture.onmouseover = ev => {
-            picture.style.animationDelay = '0s'
-            picture.classList.add('hover')
-        }
-        picture.onanimationend = ev => {
-            picture.style.animationDelay = delay
-            picture.classList.remove('hover')
-        }
+        picture.onmouseover = (ev) => {
+            picture.style.animationDelay = "0s";
+            picture.classList.add("hover");
+        };
+        picture.onanimationend = (ev) => {
+            picture.style.animationDelay = delay;
+            picture.classList.remove("hover");
+        };
         picture.onclick = () => {
-            console.log(url)
-            app.pickEntity(url)
-        }
+            console.log(url);
+            app.pickEntity(url);
+        };
+        picture.draggable = false;
         flow.append(picture);
     }
 }
