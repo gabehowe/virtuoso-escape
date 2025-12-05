@@ -9,8 +9,7 @@
 window.app = window.app || {};
 
 /**
- * Update the key handler to click auth change if {@link key} is pressed
- * @param {string} key - The key to compare the pressed key with.
+ * Update the key handler to change authentication or exit if 'c' or 'e' is pressed.
  */
 function updateKeyHandler(key) {
     document.onkeydown = (event) => {
@@ -25,7 +24,9 @@ function updateKeyHandler(key) {
                 return;
             }
 
-        if (eventKey === key) document.getElementById("auth-change").click();
+        if (eventKey === 'c') document.getElementById("auth-change").click();
+        else if (eventKey === 'e') app.exit();
+
     };
 }
 

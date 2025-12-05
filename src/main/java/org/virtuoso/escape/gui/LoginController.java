@@ -99,4 +99,10 @@ public class LoginController implements Initializable {
             }
         };
     }
+
+    /** Close the application. */
+    public void exit() {
+        App.exit();
+    }
+
 }
