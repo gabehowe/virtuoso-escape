@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 
 /**
  * A JavaFX GUI for Virtuoso Escape.
+ *
  * @author gabri
  * @author Andrew
  */
@@ -27,9 +28,9 @@ public class App extends Application {
     public static CurrentPage page;
     public static final Logger logger = new Logger();
 
-
     /**
      * Begin the application.
+     *
      * @param stage The initial stage.
      */
     @Override
@@ -44,18 +45,16 @@ public class App extends Application {
         stage.setOnCloseRequest(unused -> exit());
     }
 
-    /**
-     * Close the application.
-     */
+    /** Close the application. */
     public static void exit() {
-        if (GameState.instance().account() != null)
-            App.projection.logout();
+        if (GameState.instance().account() != null) App.projection.logout();
         Platform.exit();
         System.exit(0);
     }
 
     /**
      * Set the root based on an FXML file.
+     *
      * @param fxml The name of the fxml file (without the file extension).
      * @throws IOException If the file does not exist.
      */
@@ -64,15 +63,14 @@ public class App extends Application {
         scene.setRoot(fxmlLoader.load());
     }
 
-    /**
-     * Run the application.
-     */
+    /** Run the application. */
     static void main() {
         launch();
     }
 
     /**
      * Set the global constant app in the webengine.
+     *
      * @param engine The {@link WebEngine} under which to set the constant.
      * @param app The value to set the constant to.
      * @param callback The lambda to run when the document finishes loading.
@@ -95,6 +93,7 @@ public class App extends Application {
 
     /**
      * Create a simple web view with a controller.
+     *
      * @param controller The controller to attach to the web view.
      */
     public static void loadWebView(Initializable controller) {
@@ -110,6 +109,7 @@ public class App extends Application {
 
     /**
      * Set text in an element.
+     *
      * @param engine The {@link WebEngine} under which to set the text.
      * @param elementId The ID of the element in which to set the text.
      * @param text The text to set.
@@ -121,15 +121,16 @@ public class App extends Application {
 
     /**
      * Replace near markdownizations with HTML friendly representations.
-     * @apiNote
-     * Supports replacing
-     *<ul>
-     *     <li>{@code >/<} with {@code &gt;/&lt;} </li>
-     *     <li>{@code \n} with {@code <br>}</li>
-     *     <li>{@code \t} with {@code <span class='tab'></span>}</li>
-     *     <li>{@code *text*} with {@code <em>text</em>}</li>
-     *     <li>{@code **text**} with {@code <strong>text</strong>}</li>
-     *</ul>
+     *
+     * @apiNote Supports replacing
+     *     <ul>
+     *       <li>{@code >/<} with {@code &gt;/&lt;}
+     *       <li>{@code \n} with {@code <br>}
+     *       <li>{@code \t} with {@code <span class='tab'></span>}
+     *       <li>{@code *text*} with {@code <em>text</em>}
+     *       <li>{@code **text**} with {@code <strong>text</strong>}
+     *     </ul>
+     *
      * @param text The markdown-like text to santitize.
      * @return The sanitized HTML ready text.
      */
@@ -145,6 +146,7 @@ public class App extends Application {
 
     /**
      * Find all elements that satisfy the css selector.
+     *
      * @param engine The engine under which to search.
      * @param selector The CSS selector to search by.
      * @return A list of elements.
@@ -161,9 +163,11 @@ public class App extends Application {
     /**
      * Call an arbitrary javascript function.<br>
      * Example:
+     *
      * <pre>{@code
      * App.callJSFunction(engine, "updateBox", id, current, mapped, button);
      * }</pre>
+     *
      * @param engine The {@link WebEngine} under which to call the functino.
      * @param function The function name to call.
      * @param args Args to provide to the function.
@@ -186,6 +190,7 @@ public class App extends Application {
 
     /**
      * A simple logger class to support logging from javascript.
+     *
      * @author gabri
      */
     public static class Logger {
@@ -194,6 +199,7 @@ public class App extends Application {
 
         /**
          * Log a call to javascript from java.
+         *
          * @param msg The message to log.
          */
         public void logJSCall(String msg) {
@@ -202,6 +208,7 @@ public class App extends Application {
 
         /**
          * Log a message.
+         *
          * @apiNote Should be called from javascript.
          * @param msg The message to log.
          */
@@ -211,6 +218,7 @@ public class App extends Application {
 
         /**
          * Log a message.
+         *
          * @param msg The message to log.
          */
         public void log(Object msg) {
@@ -219,6 +227,7 @@ public class App extends Application {
 
         /**
          * Log an error.
+         *
          * @param msg The error to log.
          */
         public void error(String msg) {
@@ -227,6 +236,7 @@ public class App extends Application {
 
         /**
          * Log an error.
+         *
          * @apiNote Should be called from javascript.
          * @param msg The error to log.
          */

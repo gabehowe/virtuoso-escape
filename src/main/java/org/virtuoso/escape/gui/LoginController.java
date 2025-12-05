@@ -104,5 +104,4 @@ public class LoginController implements Initializable {
     public void exit() {
         App.exit();
     }
-
 }

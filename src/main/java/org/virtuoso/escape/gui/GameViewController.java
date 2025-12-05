@@ -275,7 +275,7 @@ public class GameViewController implements Initializable {
 
     /**
      * Return the string ID of the current difficulty
-     * 
+     *
      * @return The current difficulty
      */
     public String getDifficulty() {
