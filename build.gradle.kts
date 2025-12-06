@@ -27,24 +27,32 @@ repositories {
 }
 
 plugins {
-    application
-    id("org.openjfx.javafxplugin") version "0.1.0"
-    id("org.javamodularity.moduleplugin") version "1.8.15"
     id("com.diffplug.spotless") version "8.0.0"
     jacoco
+    kotlin("multiplatform") version "2.2.21"
+    kotlin("plugin.serialization") version "2.2.21"
 }
+kotlin {
+    js(IR) {
+        browser()
+        binaries.executable()
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+    }
+    jvm()
+    sourceSets {
+        jsMain {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.10.2")
+            }
+        }
+        commonMain {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+            }
+        }
     }
 }
 
-javafx {
-    version = "25"
-    modules = listOf("javafx.controls", "javafx.fxml", "javafx.web")
-    configurations = arrayOf("implementation");
-}
 configurations.all {
     resolutionStrategy {
         force("org.hamcrest:hamcrest-core:1.3")
@@ -52,35 +60,17 @@ configurations.all {
     exclude(group = "org.hamcrest", module = "hamcrest-core")
 }
 
-dependencies {
-    implementation("org.mobicents.external.freetts:freetts:1.0")
-    implementation("org.mobicents.external.freetts:en_us:1.0")
-    implementation("org.mobicents.external.freetts:cmu_us_kal:1.0")
-    implementation("org.mobicents.external.freetts:cmulex:1.0")
-    implementation("org.mobicents.external.freetts:cmudict04:1.0")
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:6.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0")
-    testImplementation("org.junit.platform:junit-platform-launcher:6.0.0")
-    testImplementation("org.junit.platform:junit-platform-commons:6.0.0")
-}
-
 group = "org.virtuoso"
 version = "0.1.0"
 description = "escape"
-java.sourceCompatibility = JavaVersion.VERSION_25
-java.modularity.inferModulePath.set(false)
 
-application {
-    mainModule = "org.virtuoso.escape"
-    mainClass = "org.virtuoso.escape.gui.App"
-}
 
 tasks.register<JavaExec>("tui") {
     group = "application"
     description = "Run TerminalDriver"
-    classpath = sourceSets.main.get().runtimeClasspath
+    classpath = kotlin.jvm().compilations.getByName("main").let {
+        it.runtimeDependencyFiles + it.output.allOutputs
+    }
     mainClass.set("org.virtuoso.escape.terminal.TerminalDriver")
     standardInput = System.`in`
 }
@@ -94,7 +84,7 @@ tasks.register("format") {
 tasks.register("coverage") {
     dependsOn("jacocoTestReport")
     description = "Generates a test coverage report in build/reports/jacoco"
-    group="test"
+    group = "test"
 }
 
 tasks.register("formatCheck") {
@@ -104,26 +94,19 @@ tasks.register("formatCheck") {
 }
 
 
-tasks.withType<JavaCompile>() {
-    options.compilerArgs.add("--enable-preview")
-    options.encoding = "UTF-8"
-}
-
-tasks.withType<Javadoc>() {
-    options.encoding = "UTF-8"
-}
-tasks.named<Test>("test") {
-    jvmArgs("--enable-preview")
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        showStandardStreams = true
-    }
-    group="test"
-}
+//tasks.named<Test>("test") {
+//    jvmArgs("--enable-preview")
+//    useJUnitPlatform()
+//    testLogging {
+//        events("passed", "skipped", "failed")
+//        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+//        showStandardStreams = true
+//    }
+//    group="test"
+//}
 tasks.withType<JavaExec>().configureEach {
     jvmArgs("--enable-preview")
+    standardInput = System.`in`
 }
 
 spotless {
@@ -136,3 +119,7 @@ spotless {
         prettier().npmInstallCache().config(mapOf("tabWidth" to 4))
     }
 }
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(24)
+}
+
