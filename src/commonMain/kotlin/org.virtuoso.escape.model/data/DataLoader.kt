@@ -12,7 +12,6 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.jsonObject
 import org.virtuoso.escape.model.GameState
 import org.virtuoso.escape.model.Language
 import org.virtuoso.escape.model.account.Account
@@ -41,10 +40,15 @@ object DataLoader {
      *
      * @return An id-account accounts map.
      */
+
+    /**
+     * Load all accounts from accounts.json
+     *
+     * @return An id-account accounts map.
+     */
     fun loadAccounts(): Map<Uuid, Account> {
         val root = getJsonFile(ACCOUNTS_PATH) ?: return mutableMapOf()
         return Json.decodeFromJsonElement<Map<Uuid, Account>>(root)
-
     }
 
     /**

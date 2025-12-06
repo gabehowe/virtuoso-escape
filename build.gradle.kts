@@ -50,6 +50,12 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
             }
         }
+        commonTest {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+
     }
 }
 
@@ -94,16 +100,16 @@ tasks.register("formatCheck") {
 }
 
 
-//tasks.named<Test>("test") {
-//    jvmArgs("--enable-preview")
-//    useJUnitPlatform()
-//    testLogging {
-//        events("passed", "skipped", "failed")
-//        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-//        showStandardStreams = true
-//    }
-//    group="test"
-//}
+tasks.named<Test>("jvmTest") {
+    jvmArgs("--enable-preview")
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showStandardStreams = true
+    }
+}
+
 tasks.withType<JavaExec>().configureEach {
     jvmArgs("--enable-preview")
     standardInput = System.`in`

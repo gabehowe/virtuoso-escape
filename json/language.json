@@ -93,7 +93,7 @@
     "interact": "\"Hello, squirrel. I've been searching through this book all day, but every time I get five pages in, it closes on me.\nUse \"Speak\" to tell the almanac which page to open to and you an tell if the bread is on a preceding or following page.\"",
     "inspect": "The sunflower has all the aspects characteristic of such a creature:\nA bright ring of ray florets, smaller, dimmer, inner florets, and a rough stalk.\nYou wonder how it remains bright in as dull a location as a janitor's closet.\nThe almanac has 32 pages, which may somehow be connected to the number 5...",
     "too_high": "The glow from the correct page seems to come from earlier in the almanac.",
-    "guesses_remaining": "The book seems %d/%d as happy.",
+    "guesses_remaining": "The book seems %s/%s as happy.",
     "too_low": "The glow of the correct page seems to come from later in the almanac.",
     "correct_page": "\"Wow, you found the right page! ... Wow, this is brilliant!\nIt says here that for the next year, the sun will move from east to west! I'm saved! I don't need this spatially conditionally usable slice of bread anymore!\"",
     "break": "\"If I knew you were just going to fail, I wouldn't have let you touch the book in the first place! How am I ever going to find the sun?!\"\nThe almanac slams shut and bursts into flames.\nA new dusty old almanac is born from the ashes."

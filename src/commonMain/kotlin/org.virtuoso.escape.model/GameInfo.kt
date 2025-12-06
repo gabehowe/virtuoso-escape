@@ -1,6 +1,6 @@
 package org.virtuoso.escape.model
 
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 import org.virtuoso.escape.model.Floor.Initializers.floor2
 import org.virtuoso.escape.model.Floor.Initializers.floor3
 import org.virtuoso.escape.model.Floor.Initializers.floor4
@@ -53,7 +53,7 @@ enum class Floor(val rooms: List<Room>) {
         fun acornGrove(): List<Room> {
             val intro_squirrel = Entity("intro_squirrel", {}, {}, {}, null)
             val portal_squirrel = Entity(
-                "portal_squirrel", {}, {}, chain(completePuzzle("portal"), {setFloor(Floor.StoreyI)(it)}), null
+                "portal_squirrel", {}, {}, chain(completePuzzle("portal"), { setFloor(Floor.StoreyI)(it) }), null
             )
             val narrator = makeNarrator("acorn_grove")
             val acornGrove_0 = Room("acorn_grove_0", mutableListOf(intro_squirrel, portal_squirrel, narrator))
@@ -90,7 +90,7 @@ enum class Floor(val rooms: List<Room>) {
             val hint1Id = floorId + "_hint_1"
             val giveHint1 = chain(
                 narratorMsg(hint1Id),  // Give the specific hint text
-                { it.hintsUsed[floorId] =1 },  // Record the hint
+                { it.hintsUsed[floorId] = 1 },  // Record the hint
                 swapEntities("narrator", "narrator_hint_1") // Swap to hint1Given state
             )
             val start = EntityState(
@@ -102,12 +102,12 @@ enum class Floor(val rooms: List<Room>) {
 
         fun floor1(): List<Room> {
 
-            val door = Entity("first_door", {}, {}, {setFloor(Floor.StoreyII)(it)}, null)
+            val door = Entity("first_door", {}, {}, { setFloor(Floor.StoreyII)(it) }, null)
             val narrator = makeNarrator("storey_i")
             val hummus_trash_can = EntityState(
                 "trash_can", chain(
-                giveItem(Item.SealedCleanFoodSafeHummus), completePuzzle("trash"), swapEntities("trash_can", "sans_hummus_trash_can")
-            ), {}, {}, null
+                    giveItem(Item.SealedCleanFoodSafeHummus), completePuzzle("trash"), swapEntities("trash_can", "sans_hummus_trash_can")
+                ), {}, {}, null
             )
             val sans_hummus_trash_can = EntityState("sans_hummus_trash_can", {}, {}, {}, null)
             val trash_can = Entity("trash_can", hummus_trash_can, sans_hummus_trash_can)
@@ -116,8 +116,8 @@ enum class Floor(val rooms: List<Room>) {
 
             val hummus_elephant = EntityState(
                 "elephant_in_the_room", {}, {}, chain(
-                giveItem(Item.SunflowerSeedButter), completePuzzle("elephant"), swapEntities("elephant_in_the_room", "sans_butter_elephant")
-            ), null
+                    giveItem(Item.SunflowerSeedButter), completePuzzle("elephant"), swapEntities("elephant_in_the_room", "sans_butter_elephant")
+                ), null
             )
             val sans_butter_elephant = EntityState("sans_butter_elephant", {}, {}, {}, null)
             val elephant = Entity("elephant_in_the_room", hummus_elephant, sans_butter_elephant)
@@ -131,11 +131,11 @@ enum class Floor(val rooms: List<Room>) {
 
             val securityBread = Entity(
                 "security", {}, {}, {}, takeInput(
-                listOf(
-                    ".*(?<!w)right.*" to chain(setMessage("security", "right_answer"), giveItem(Item.RightBread), completePuzzle("right")),
-                    ".*" to chain(addPenalty(Severity.LOW), setMessage("security", "non_right_answer"))
+                    listOf(
+                        ".*(?<!w)right.*" to chain(setMessage("security", "right_answer"), giveItem(Item.RightBread), completePuzzle("right")),
+                        ".*" to chain(addPenalty(Severity.LOW), setMessage("security", "non_right_answer"))
+                    )
                 )
-            )
             )
             val hallway = Room("storey_i_2", securityBread)
 
@@ -152,9 +152,9 @@ enum class Floor(val rooms: List<Room>) {
             val sandwichJoe = EntityState("sandwich_joe", {}, {}, {}, null)
             val sansSandwichJoe = EntityState(
                 "sans_sandwich_joe", {}, {}, conditional(
-                hasItems(listOf(Item.LeftBread, Item.RightBread, Item.SunflowerSeedButter, Item.SealedCleanFoodSafeHummus)), chain(
-                    setMessage("sans_sandwich_joe", "interact_sandwich"), swapEntities("joe_hardy", "sandwich_joe"), { it.items.clear() })
-            ), null
+                    hasItems(listOf(Item.LeftBread, Item.RightBread, Item.SunflowerSeedButter, Item.SealedCleanFoodSafeHummus)), chain(
+                        setMessage("sans_sandwich_joe", "interact_sandwich"), swapEntities("joe_hardy", "sandwich_joe"), { it.items.clear() })
+                ), null
             )
             val introJoe = EntityState(
                 "intro_joe", {}, {}, chain(completePuzzle("sandwich"), swapEntities("joe_hardy", "sans_sandwich_joe")), null
@@ -200,7 +200,9 @@ enum class Floor(val rooms: List<Room>) {
             else swapEntities("almanac", "almanac_$maxFlips")
 
             val caseBreak = chain(addPenalty(Severity.MEDIUM), setMessage("almanac", "break"))
-            val guessesRemaining: (Language) -> String = { String.format(it.string("almanac", "guesses_remaining"), (flips - 1), flips) }
+            val guessesRemaining: (Language) -> String = { language ->
+                language.string("almanac", "guesses_remaining").split("%s").let { it[0] + (flips - 1) + it[1] + flips + it[2] }
+            }
             val caseOvershoot: ActionType = { setMessage(it.language.string("almanac", "too_high") + " " + guessesRemaining(it.language))(it) }
             val caseUndershoot: ActionType = { setMessage(it.language.string("almanac", "too_low") + " " + guessesRemaining(it.language))(it) }
             val caseFound = chain(
@@ -281,7 +283,7 @@ enum class Floor(val rooms: List<Room>) {
                 "door1_0",
                 sm("attack", "door1_0"),
                 sm("inspect", "door1_0"),
-                chain(completePuzzle("doors"), setMessage("door1", "final_door"), {setFloor(StoreyIII)(it)}),
+                chain(completePuzzle("doors"), setMessage("door1", "final_door"), { setFloor(StoreyIII)(it) }),
                 null
             )
             door1[length - 1] = door1_final
@@ -344,7 +346,7 @@ enum class Floor(val rooms: List<Room>) {
             val puzzleBox = Entity("box_riddle", box_start, box_step1, box_success, box_open)
             val doorMsg = { string: String -> setMessage("exit_door", string) }
 
-            val goToFloor4 = chain(doorMsg("unlocked_success"), {setFloor(StoreyIV)(it)})
+            val goToFloor4 = chain(doorMsg("unlocked_success"), { setFloor(StoreyIV)(it) })
             val doorUnlocked = EntityState(
                 "exit_door_unlocked", {}, doorMsg("inspect_unlocked"), goToFloor4, null
             )
@@ -389,15 +391,15 @@ enum class Floor(val rooms: List<Room>) {
             val manMsg = { stringId: String -> setMessage("man", stringId) }
             val man = Entity(
                 "man", {}, {}, {}, takeInput(
-                listOf(
-                    "(?:man )?help" to manMsg("input_help"),
-                    "(?:man )?man" to manMsg("input_man"),
-                    "(?:man )?ls" to manMsg("input_ls"),
-                    "(?:man )?cd" to manMsg("input_cd"),
-                    "(?:man )?tar" to manMsg("input_tar"),
-                    "(?:man )?rotx" to manMsg("input_rotx")
+                    listOf(
+                        "(?:man )?help" to manMsg("input_help"),
+                        "(?:man )?man" to manMsg("input_man"),
+                        "(?:man )?ls" to manMsg("input_ls"),
+                        "(?:man )?cd" to manMsg("input_cd"),
+                        "(?:man )?tar" to manMsg("input_tar"),
+                        "(?:man )?rotx" to manMsg("input_rotx")
+                    )
                 )
-            )
             )
             return man
         }
@@ -486,8 +488,11 @@ data class Room(val id: String, val entities: MutableList<Entity>) {
  * An enumeration of items to be held in an inventory list.
  * @author gabri
  */
+
 enum class Item(val display: String) {
-    LeftBread("left bread"), SunflowerSeedButter("sunflower seed butter"), RightBread("right bread"), SealedCleanFoodSafeHummus("sealed clean food-safe hummus"), Keys(
-        "keys"
-    );
+    LeftBread("left bread"),
+    SunflowerSeedButter("sunflower seed butter"),
+    RightBread("right bread"),
+    SealedCleanFoodSafeHummus("sealed clean food-safe hummus"),
+    Keys("keys");
 }
