@@ -1,11 +1,16 @@
 @file:OptIn(ExperimentalUuidApi::class, ExperimentalJsExport::class)
+//@file:JsModule("virtuoso-game")
 
+import Game.accountsData
+import Game.gamestatesData
+import Game.languageData
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.promise
 import kotlinx.html.classes
 import kotlinx.html.div
 import kotlinx.html.dom.append
@@ -21,8 +26,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import kotlin.uuid.ExperimentalUuidApi
 
-
-object App {
+object Game {
     var debug = mutableMapOf<String, () -> String?>("enabled" to { null }, "selected" to {
         document.querySelectorAll(".selected").asList().joinToString(";") { (it as HTMLElement).id }
     })
@@ -30,16 +34,7 @@ object App {
     var lastFloor: Floor? = null
     var lastEntity: Entity? = null
     var lastRoom: Room? = null
-    val projection: GameProjection = GameProjection({
-        when (it) {
-            "json/gamestates.json" -> gamestatesData
-            "json/accounts.json" -> accountsData
-            "json/language.json" -> languageData
-            else -> {
-                console.error(it); ""
-            }
-        }
-    }, { p, d -> console.log(p, d) })
+    val projection: GameProjection = window.asDynamic().projection
 
     var eventHandlerRef: ((Event) -> Unit)? = null
     fun updateAll() {
@@ -89,7 +84,13 @@ object App {
     }
 
     fun populateBackground(current: Entity?, entities: List<Entity>) {
-        if ((document.querySelector("#background-entities > img.selected") as? HTMLImageElement)?.src?.let{ elem-> current?.id?.let { elem.contains(it) } ?: false } == true) return
+        if ((document.querySelector("#background-entities > img.selected") as? HTMLImageElement)?.src?.let { elem ->
+                current?.id?.let {
+                    elem.contains(
+                        it
+                    )
+                } ?: false
+            } == true) return
 
         document.querySelector("#background-entities")!!.children.asList().map { it.id }.let { imgs ->
             // check if img is empty or any entity has a different index in entities than in the images
@@ -342,7 +343,6 @@ object App {
                 updateAll()
             }
         }
-        projection.login("dummy", "dummy")
         document.addEventListener("submit", { it.preventDefault() })
         document.addEventListener("keydown", {
             it as KeyboardEvent
@@ -416,7 +416,7 @@ object App {
         }
     }
 
-    fun displaySettings(menu: App.Menu) {
+    fun displaySettings(menu: Game.Menu) {
         clearSettings()
         (document.getElementById("settings-box") as? HTMLElement)!!.style.display = ""
         menu.show()
@@ -474,14 +474,18 @@ object App {
 
 }
 
-@JsExport
-@JsName("runEscape")
-fun begin() {
-    App.run()
-}
-
 
 fun main() {
-    console.log("Hello, world!")
-    begin()
+    window.asDynamic().projection = GameProjection({
+        when (it) {
+            "json/gamestates.json" -> gamestatesData
+            "json/accounts.json" -> accountsData
+            "json/language.json" -> languageData
+            else -> {
+                console.error(it); ""
+            }
+        }
+    }, { p, d -> console.log(p, d) })
+    window.asDynamic().runGame = Game::run
+    window.asDynamic().runLogin = Login::run
 }

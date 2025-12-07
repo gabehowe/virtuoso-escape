@@ -12,6 +12,7 @@ import org.virtuoso.escape.model.account.Score
 import org.virtuoso.escape.model.data.SerializableDuration
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -21,7 +22,7 @@ import kotlin.uuid.ExperimentalUuidApi
  * @author Andrew
  */
 
-@Serializable(with= GameState.Serializer::class)
+@Serializable(with = GameState.Serializer::class)
 class GameState @OptIn(ExperimentalTime::class) constructor(
     currentFloor: Floor,
     currentRoomId: String,
@@ -60,9 +61,21 @@ class GameState @OptIn(ExperimentalTime::class) constructor(
                 Score.calculateScore(this.penalty, this.hintsUsed, this.time)
             )
         }
-    var entity: Entity? = if (entityId == null) entityId else room.entities.first {it.id == entityId}
+    var entity: Entity? = if (entityId == null) entityId else room.entities.first { it.id == entityId }
 
     @Transient lateinit var language: Language
+
+    constructor() : this(
+        Floor.AcornGrove,
+        "acorn_grove_0",
+        null,
+        mutableSetOf(),
+        2700.seconds,
+        mutableMapOf(),
+        mutableSetOf(),
+        Difficulty.SUBSTANTIAL,
+        0
+    )
 
     /**
      * Whether the inventory contains `item`.
@@ -95,8 +108,9 @@ class GameState @OptIn(ExperimentalTime::class) constructor(
     }
 
     fun leaveEntity() {
-        this.entity =null
+        this.entity = null
     }
+
     fun end() {
         this.isEnded = true
     }

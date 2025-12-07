@@ -47,7 +47,7 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
      */
     fun createAccount(username: String, password: String): Boolean {
         val currentAccount = this.accountManager.newAccount(username, password)?.let {
-            account = it; state = accountManager.gameStates[account.id]!!; state.language = language
+            account = it; state = GameState(); state.language = language
         }
         return currentAccount != null
     }

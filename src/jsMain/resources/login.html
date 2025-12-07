@@ -7,32 +7,26 @@
 </head>
 <body>
 <div style="display:flex; flex-direction: column;">
-    <a id="title" class="header">Escape: A Storey</a>
-    <form onsubmit="tryAuth()" id="center-box">
+    <span id="title" class="header">Escape: A Storey</span>
+    <form id="center-box">
         <a id="welcome-text" class="header" style="font-size: 1.375rem">Login</a>
         <input type="text" id="username" class="entry-box floating-box" placeholder="Username">
         <div id="password-enter-container">
-            <input type="password" id="password" class="entry-box floating-box" placeholder="Password" onsubmit="tryAuth()">
-            <button id="enter-box" class="floating-box"
-                    onclick="tryAuth()">
+            <input type="password" id="password" class="entry-box floating-box" placeholder="Password" >
+            <button id="enter-box" class="floating-box">
                 &rarr;
             </button>
         </div>
-        <a id="auth-error"></a>
+        <span id="auth-error"></span>
         <div id="auth-change-container">
             <span id="auth-prompt">New?</span>
-            <span id="auth-change" class="logical-button" style="font-style: normal;" onclick="toggleAuthMode()">[<u><b>C</b></u>reate an account]</span>
+            <span id="auth-change" class="logical-button" style="font-style: normal;" >[<u><b>C</b></u>reate an account]</span>
         </div>
     </form>
 </div>
-<div style="position: absolute; right: calc(20% + 1.5rem); bottom: 1.5rem;"> 
-    <span class="logical-button" onclick="app.exit()">[<u><b>E</b></u>xit]</span>
-</div>
 <div class="corner-flair"></div>
-
-<script src="login.js"></script>
-<script> init()
-</script>
+<script src="/virtuoso-escape.js"></script>
+<script> runLogin()</script>
 </body>
 
 </html>
