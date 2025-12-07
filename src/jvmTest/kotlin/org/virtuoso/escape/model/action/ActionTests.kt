@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalUuidApi::class)
 package org.virtuoso.escape.model.action
 
+import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.*
 import org.virtuoso.escape.model.data.DataLoader
 import kotlin.test.*
@@ -12,15 +13,9 @@ class ActionTests {
 
     @BeforeTest
     fun pre() {
-         DataLoader.FILE_READER = { path ->
-            when {
-                path.endsWith("accounts.json") -> "{}"
-                path.endsWith("gamestates.json") -> "{}"
-                path.endsWith("language.json") -> "{}" 
-                else -> throw IllegalArgumentException("Unknown path: $path")
-            }
-        }
-        proj = GameProjection()
+        proj = GameProjection(
+            TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER
+        )
         proj.login("dummy", "dummy")
     }
 

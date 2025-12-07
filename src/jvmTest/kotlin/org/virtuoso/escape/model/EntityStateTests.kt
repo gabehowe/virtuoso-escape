@@ -1,5 +1,6 @@
 package org.virtuoso.escape.model
 
+import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.action.Actions
 import org.virtuoso.escape.model.action.Severity
 import org.virtuoso.escape.model.data.DataLoader
@@ -15,16 +16,17 @@ class EntityStateTests {
     @BeforeTest
     fun pre() {
         // Setup mock DataLoader
-        DataLoader.FILE_READER = { path ->
-            when {
-                path.endsWith("accounts.json") -> "{}"
-                path.endsWith("gamestates.json") -> "{}"
-                path.endsWith("language.json") -> "{}"
-                else -> throw IllegalArgumentException("Unknown path: $path")
-            }
-        }
-        
-        proj = GameProjection()
+
+        proj = GameProjection(
+            { path ->
+                when {
+                    path.endsWith("accounts.json") -> "{}"
+                    path.endsWith("gamestates.json") -> "{}"
+                    path.endsWith("language.json") -> "{}"
+                    else -> throw IllegalArgumentException("Unknown path: $path")
+                }
+            }, TestHelper.DUMMY_WRITER
+        )
         // Create a dummy account to initialize state
         proj.createAccount("testUser", "password")
     }

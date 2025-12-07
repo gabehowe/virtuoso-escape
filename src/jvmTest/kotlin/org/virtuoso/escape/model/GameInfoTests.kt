@@ -15,8 +15,7 @@ class GameInfoTests {
     @BeforeTest
     fun pre() {
         // Setup mock DataLoader
-        TestHelper.setupDataLoader(this::class)
-        proj = GameProjection()
+        proj = GameProjection(TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER)
         proj.login("dummy", "dummy")
     }
 

@@ -1,12 +1,14 @@
 @file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
 package org.virtuoso.escape.model
 
+import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.action.Actions
 import org.virtuoso.escape.model.action.Severity
 import org.virtuoso.escape.model.data.DataLoader
 import org.virtuoso.escape.model.account.Account
 import org.virtuoso.escape.model.account.AccountManager
 import org.virtuoso.escape.model.account.Score
+import java.io.FileReader
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
@@ -52,7 +54,7 @@ class EntityTests {
         val gameStates = mapOf(account.id to gameState)
         val am = AccountManager(accounts, gameStates)
         
-        proj = GameProjection(am)
+        proj = GameProjection({""}, TestHelper.DUMMY_WRITER)
         // Login to set state
         proj.login(dummyUser, dummyPass)
     }
@@ -64,7 +66,7 @@ class EntityTests {
 
         assertEquals("testEntity", entity.id)
         assertNotNull(entity.state())
-        assertEquals("testEntity", entity.state()!!.id)
+        assertEquals("testEntity", entity.state().id)
     }
 
     @Test
@@ -75,7 +77,7 @@ class EntityTests {
         val entity = Entity("state1", state2, state1)
 
         assertEquals("state1", entity.id)
-        assertEquals("state1", entity.state()!!.id)
+        assertEquals("state1", entity.state().id)
     }
 
     @Test
@@ -86,7 +88,7 @@ class EntityTests {
         val entity = Entity("missingId", state1, state2)
 
         assertEquals("missingId", entity.id)
-        assertEquals("state1", entity.state()!!.id)
+        assertEquals("state1", entity.state().id)
     }
 
     @Test
@@ -101,12 +103,12 @@ class EntityTests {
 
         assertEquals("actionEntity", entity.id)
         assertNotNull(entity.state())
-        assertNotNull(entity.state()!!.attackAction)
-        assertNotNull(entity.state()!!.inspectAction)
-        assertNotNull(entity.state()!!.interactAction)
-        assertNotNull(entity.state()!!.inputAction)
+        assertNotNull(entity.state().attackAction)
+        assertNotNull(entity.state().inspectAction)
+        assertNotNull(entity.state().interactAction)
+        assertNotNull(entity.state().inputAction)
 
-        entity.state()!!.attackAction!!.invoke(proj.state)
+        entity.state().attackAction!!.invoke(proj.state)
         assertTrue(attackExecuted)
     }
 /*
@@ -140,7 +142,7 @@ class EntityTests {
              // But let's assume we want to call swapState(newState) and check expected.
              
              entity.swapState(newState)
-             assertEquals(expected, entity.state()?.id)
+             assertEquals(expected, entity.state().id)
         }
     }
 
@@ -158,7 +160,7 @@ class EntityTests {
     @Test
     fun idMethodTest() {
         val entity = Entity("testState")
-        val result: String? = entity.id
+        val result: String = entity.id
         assertEquals("testState", result)
     }
 
@@ -168,7 +170,7 @@ class EntityTests {
         val state = EntityState("myState")
         val entity = Entity("myEntity", state)
 
-        assertEquals("myState", entity.state()!!.id)
+        assertEquals("myState", entity.state().id)
     }
 
     // -- String Resource Tests -- //

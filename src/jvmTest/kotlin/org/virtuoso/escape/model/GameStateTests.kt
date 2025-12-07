@@ -13,8 +13,7 @@ class GameStateTests {
 
     @BeforeTest
     fun setup() {
-        TestHelper.setupDataLoader(this::class)
-        proj = GameProjection()
+        proj = GameProjection(TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER)
         proj.login("dummy", "dummy")
         state = proj.state
         
@@ -32,7 +31,7 @@ class GameStateTests {
 
     @Test
     fun startWithLoadedData() {
-        val proj2 = GameProjection()
+        val proj2 = GameProjection(TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER)
         assertTrue(proj2.login("dummy_loaded", "dummy"))
         assertEquals(proj2.account.username, "dummy_loaded")
         assertContains(proj2.currentItems(), Item.Keys)

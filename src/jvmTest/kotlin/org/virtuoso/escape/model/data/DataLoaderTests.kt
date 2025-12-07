@@ -10,12 +10,12 @@ class DataLoaderTests {
     @BeforeTest
     fun pre() {
         // We set FILE_READER in each test or here
+        DataLoader.FILE_READER = TestHelper.FILE_READER(this::class)
     }
 
     @Test
     fun testLoadAccounts() {
-        TestHelper.setupDataLoader(this::class)
-        
+
         val accounts = DataLoader.loadAccounts()
         assertNotNull(accounts)
         // Check if dummy exists
@@ -29,8 +29,7 @@ class DataLoaderTests {
 
     @Test
     fun testLoadGameStates() {
-        TestHelper.setupDataLoader(this::class)
-        
+
         val states = DataLoader.loadGameStates()
         assertNotNull(states)
         val key = states.keys.firstOrNull { it.toString() == "7766f361-af7a-4da5-b741-6867d1768d45" }

@@ -13,8 +13,7 @@ class AccountManagerTests {
 
     @BeforeTest
     fun pre() {
-        TestHelper.setupDataLoader(this::class)
-        proj = GameProjection()
+        proj = GameProjection(TestHelper.FILE_READER(this::class)) { _, _ -> }
         manager = proj.accountManager
     }
 

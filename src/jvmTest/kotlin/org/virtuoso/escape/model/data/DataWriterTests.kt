@@ -12,8 +12,7 @@ class DataWriterTests {
 
     @BeforeTest
     fun pre() {
-         TestHelper.setupDataLoader(this::class)
-         proj = GameProjection()
+         proj = GameProjection({""},{_,_->})
     }
 
     @Test
