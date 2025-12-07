@@ -14,7 +14,12 @@ import kotlin.uuid.ExperimentalUuidApi
  *
  * @author Treasure
  */
-data class GameProjection(val accountManager: AccountManager = AccountManager()) {
+class GameProjection(fileReader: ((String) -> String), fileWriter: (String, String) ->Unit) {
+    init {
+        DataLoader.FILE_READER = fileReader
+        DataWriter.FILE_WRITER = fileWriter
+    }
+    val accountManager: AccountManager = AccountManager()
     lateinit var state: GameState
     lateinit var account: Account
     val language = DataLoader.loadGameLanguage()!!

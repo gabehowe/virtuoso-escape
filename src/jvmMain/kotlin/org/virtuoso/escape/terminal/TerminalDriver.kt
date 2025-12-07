@@ -6,8 +6,6 @@ import org.virtuoso.escape.model.Difficulty
 import org.virtuoso.escape.model.Floor
 import org.virtuoso.escape.model.GameProjection
 import org.virtuoso.escape.model.Item
-import org.virtuoso.escape.model.data.DataLoader
-import org.virtuoso.escape.model.data.DataWriter
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -228,10 +226,12 @@ class TerminalDriver {
         val remaining = ".".repeat(max(0, barWidth - progressChars))
 
         // FunString!!
-        val bar = FunString("[").add(FunString(completed).green()).add(FunString(remaining).terminalColor(240)) // Light Gray
-            .add(FunString("]"))
+        val bar =
+            FunString("[").add(FunString(completed).green()).add(FunString(remaining).terminalColor(240)) // Light Gray
+                .add(FunString("]"))
 
-        val progressText = String.format("Floor %d of %d (%d%%)", currentFloorIndex + 1, totalFloors, progressPercentage)
+        val progressText =
+            String.format("Floor %d of %d (%d%%)", currentFloorIndex + 1, totalFloors, progressPercentage)
 
         return progressText + "\n" + bar
     }
@@ -258,16 +258,20 @@ class TerminalDriver {
             "\n", transform = { entry -> entry.key + ": " + entry.value })
         else "None"
 
-        var contributors = (0 until 4).map { i -> projection.state.language.string("credits", "contributor_$i") }.map { it: String ->
-            val j = it.split(Regex("<")).dropLastWhile { it.isEmpty() }.toTypedArray()
-            j[0] + FunString("<" + j[1]).italic().terminalColor(50)
-        }.shuffled()
+        var contributors =
+            (0 until 4).map { i -> projection.state.language.string("credits", "contributor_$i") }.map { it: String ->
+                val j = it.split(Regex("<")).dropLastWhile { it.isEmpty() }.toTypedArray()
+                j[0] + FunString("<" + j[1]).italic().terminalColor(50)
+            }.shuffled()
 
         val formattedTime = String.format(
             "%02d:%02d", projection.time(), projection.time()
         )
         val scoremsg = String.format(
-            projection.state.language.string("credits", "score"), formattedTime, projection.state.difficulty, projection.state.score
+            projection.state.language.string("credits", "score"),
+            formattedTime,
+            projection.state.difficulty,
+            projection.state.score
         )
 
         // num hints
@@ -445,7 +449,9 @@ class TerminalDriver {
      * @param projection The source for data.
      */
     fun menu_options(projection: GameProjection) {
-        val actions = makeTuiActionMap(FunString("Set difficulty") to { menu_difficulty(projection) }, FunString("Nevermind") to {})
+        val actions = makeTuiActionMap(
+            FunString("Set difficulty") to { menu_difficulty(projection) },
+            FunString("Nevermind") to {})
         if (DEBUG) {
             actions.add(0, FunString("DEBUG").green() to { menu_debug(projection) })
         }
@@ -489,9 +495,9 @@ class TerminalDriver {
      * Program entrance.
      */
     fun main() {
-        DataLoader.FILE_READER = { path: String -> Path(path).readText() }
-        DataWriter.FILE_WRITER = { path: String, data: String -> Path(path).writeText(data) }
-        val projection = GameProjection()
+        val projection = GameProjection(
+            { path: String -> Path(path).readText() },
+            { path: String, data: String -> Path(path).writeText(data) })
         // Ensure these are initialized
         var flag = false
         while (!flag) {

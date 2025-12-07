@@ -15,18 +15,18 @@
    <StackPane fx:id="barnStack" pickOnBounds="false" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="330.0">
       <children>
            <ImageView fx:id="openedBarn" fitHeight="255.0" fitWidth="240.0" preserveRatio="true" styleClass="barn">
-               <Image url="@../../../../images/opened-beaver-barn.png" />
+               <Image url="@images/opened-beaver-barn.png" />
             <effect>
                <DropShadow />
             </effect>
            </ImageView>
            <ImageView fx:id="barn" fitHeight="255.0" fitWidth="240.0" onMouseClicked="#onBarnClick" onMouseEntered="#onBarnEnter" onMouseExited="#onBarnExit" preserveRatio="true" styleClass="barn" visible="false">
-               <Image url="@../../../../images/beaver-barn.png" />
+               <Image url="@images/beaver-barn.png" />
            </ImageView>
       </children>
    </StackPane>
    <ImageView fx:id="beaver" fitHeight="134.0" fitWidth="80.0" onMouseClicked="#onBeaverClick" onMouseEntered="#onBeaverEnter" onMouseExited="#onBeaverExit" preserveRatio="true" scaleX="1.2" scaleY="1.2" AnchorPane.bottomAnchor="122.0" AnchorPane.rightAnchor="400.0">
-       <Image url="@../../../../images/beaver.png" />
+       <Image url="@images/beaver.png" />
    </ImageView>
     <Label fx:id="barnLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="180.0" scaleX="1.1" scaleY="1.1" style="-fx-text-fill: black; -fx-background-color: white;" text="[Beaver Barn]" textAlignment="CENTER" AnchorPane.bottomAnchor="250.0" AnchorPane.rightAnchor="605.0">
         <font>

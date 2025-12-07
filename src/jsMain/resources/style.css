@@ -1,18 +1,18 @@
 @font-face {
-    src: url("../../../../fonts/JetBrainsMono-Regular.ttf");
+    src: url("fonts/JetBrainsMono-Regular.ttf");
 }
 
 @font-face {
     font-family: "Jetbrains Mono Italic";
-    src: url("../../../../fonts/JetBrainsMono-Italic.ttf");
+    src: url("fonts/JetBrainsMono-Italic.ttf");
 }
 
 @font-face {
-    src: url("../../../../fonts/JetBrainsMono-BoldItalic.ttf");
+    src: url("fonts/JetBrainsMono-BoldItalic.ttf");
 }
 
 @font-face {
-    src: url("../../../../fonts/JetBrainsMono-Bold.ttf");
+    src: url("fonts/JetBrainsMono-Bold.ttf");
 }
 
 .root {
@@ -69,7 +69,7 @@
 }
 
 #root {
-    -fx-background-image: url(../../../../images/grassy-background.png);
+    -fx-background-image: url(images/grassy-background.png);
     -fx-background-repeat: none;
     -fx-background-size: cover;
 }

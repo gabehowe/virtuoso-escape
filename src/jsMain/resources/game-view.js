@@ -70,7 +70,6 @@ function init() {
                 debugEntry.innerHTML = `<strong>${debugKey}</strong> ${out}`;
                 dbgE.append(debugEntry);
             }
-            document.getElementById("debug");
         }
     };
     timeAnimator();
@@ -187,11 +186,9 @@ function displaySettings(name) {
             debug.onclick = () => displaySettings(Settings.DEBUG);
             logout.onclick = () => {
                 app.logout();
-                clearSettings();
             };
             exit.onclick = () => {
                 app.exit();
-                clearSettings();
             };
             box.append(diff, debug, logout, exit);
             break;

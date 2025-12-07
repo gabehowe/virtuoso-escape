@@ -36,13 +36,14 @@ kotlin {
     js(IR) {
         browser()
         binaries.executable()
-
+        outputModuleName = "virtuoso-escape"
     }
     jvm()
     sourceSets {
         jsMain {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.10.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.8.0")
             }
         }
         commonMain {

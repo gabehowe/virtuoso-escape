@@ -49,8 +49,8 @@ class Entity(val id: String, val states: Map<String, EntityState>, var currentSt
      *
      * @return The current state of the entity.
      */
-    fun state(): EntityState? {
-        return states[currentState]
+    fun state(): EntityState {
+        return states[currentState]!!
     }
 
     /**
