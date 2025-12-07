@@ -210,16 +210,16 @@ body {
             }
         }
 
-        #entity {
-            transform: rotate(5deg);
-            z-index: 0;
-            position: absolute;
-            height: 12.5rem;
-            width: auto;
-            right: 20%;
-            filter: drop-shadow(0.5rem 0.6875rem 0.125rem rgba(0, 0, 0, 0.40));
-            image-rendering: pixelated;
-        }
+        /*#entity {*/
+        /*    transform: rotate(5deg);*/
+        /*    z-index: 0;*/
+        /*    position: absolute;*/
+        /*    height: 12.5rem;*/
+        /*    width: auto;*/
+        /*    right: 20%;*/
+        /*    filter: drop-shadow(0.5rem 0.6875rem 0.125rem rgba(0, 0, 0, 0.40));*/
+        /*    image-rendering: pixelated;*/
+        /*}*/
     }
 }
 

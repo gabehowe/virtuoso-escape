@@ -84,8 +84,49 @@ object App {
     fun updateImage() {
         populateBackground(projection.currentEntity(), projection.currentRoom().entities)
         if (lastRoom == projection.currentRoom()) return
-        (document.getElementById(projection.currentRoom().id) as? HTMLElement)?.style?.backgroundImage =
-            "images/${projection.currentRoom().id}"
+        (document.getElementById("viewport") as? HTMLDivElement)?.style?.backgroundImage =
+            "url(/images/${projection.currentRoom().id}.png)"
+    }
+
+    fun populateBackground(current: Entity?, entities: List<Entity>) {
+        if ((document.querySelector("#background-entities > img.selected") as? HTMLImageElement)?.src?.let{ elem-> current?.id?.let { elem.contains(it) } ?: false } == true) return
+
+        document.querySelector("#background-entities")!!.children.asList().map { it.id }.let { imgs ->
+            // check if img is empty or any entity has a different index in entities than in the images
+            if (imgs.isEmpty() || imgs.any { entities[imgs.indexOf(it)].id !in it }) return@let
+            document.querySelectorAll("#background-entities > img.selected").asList()
+                .forEach { (it as Element).classList.remove("selected") }
+            current?.let { document.getElementById("img-${it.id}")?.classList?.add("selected") }
+            return
+        }
+        document.getElementById("background-entities")!!.let { imgFlow ->
+            imgFlow as HTMLElement
+            imgFlow.innerHTML = ""
+            for (entity in entities) {
+                val delay = "${-2 * (js("Math").random() as Float)}s"
+                imgFlow.append(
+                    (document.createElement("img") as HTMLImageElement).apply {
+                        src = "/images/${entity.id}.png"
+                        id = "img-${entity.id}"
+                        if (entity == current) classList.add("selected")
+                        style.animationDelay = delay
+                        onload = { this.width = (this.width.toFloat() * if ("elephant" in id) 0.8 else 0.7).toInt() }
+                        onmouseover = {
+                            style.animationDelay = "0s"
+                            classList.add("hover")
+                        }
+                        this.asDynamic().onanimationend = {
+                            style.animationDelay = delay
+                            classList.remove("hover")
+                        }
+                        onclick = {
+                            projection.pickEntity(entity)
+                            updateAll()
+                        }
+                        draggable = false
+                    })
+            }
+        }
     }
 
     fun updateLeftBar() {
@@ -260,46 +301,6 @@ object App {
         val messageBox = document.getElementById("message")!!
         messageBox.innerHTML = text
         recurseTypewriter(messageBox, 0)
-    }
-
-    fun populateBackground(current: Entity?, entities: List<Entity>) {
-        if ((document.querySelector("#background-entities > img.selected") as? HTMLImageElement)?.src?.contains(current?.id.orEmpty()) == true) return
-
-        document.querySelector("#background-entities")!!.children.asList().map { it.id }.let { imgs ->
-            // check if img is empty or any entity has a different index in entities than in the images
-            if (imgs.isEmpty() || imgs.any { entities[imgs.indexOf(it)].id !in it }) return@let
-            document.querySelectorAll("#background-entities > img.selected").asList()
-                .forEach { (it as Element).classList.remove("selected") }
-            current?.let { document.getElementById("img-${it.id}")?.classList?.add("selected") }
-            return
-        }
-        document.getElementById("background-entities")!!.let { imgFlow ->
-            imgFlow as HTMLElement
-            for (entity in entities) {
-                val delay = "${-2 * (js("Math").random() as Float)}s"
-                imgFlow.append(
-                    (document.createElement("img") as HTMLImageElement).apply {
-                        src = "/images/${entity.id}.png"
-                        id = "img-${entity.id}"
-                        if (entity == current) classList.add("selected")
-                        style.animationDelay = delay
-                        onload = { this.width = (this.width.toFloat() * if ("elephant" in id) 0.8 else 0.7).toInt() }
-                        onmouseover = {
-                            style.animationDelay = "0s"
-                            classList.add("hover")
-                        }
-                        this.asDynamic().onanimationend = {
-                            style.animationDelay = delay
-                            classList.remove("hover")
-                        }
-                        onclick = {
-                            projection.pickEntity(entity)
-                            updateAll()
-                        }
-                        draggable = false
-                    })
-            }
-        }
     }
 
 
