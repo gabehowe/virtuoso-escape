@@ -79,6 +79,7 @@ object Login {
             AuthMode.Create -> projection.createAccount(user, pass)
         }
         if (flag) {
+            println(authMode)
             switchToNextScreen()
         } else {
             (document.getElementById("auth-error") as? HTMLSpanElement)!!.innerText =
@@ -87,13 +88,15 @@ object Login {
     }
 
     fun switchToNextScreen() {
+        //todo: switch to intro if new.
         window.fetch("game-view.html").then {
             it.text()
         }.then {
             document.open()
             document.write(it)
             document.close()
-            Game.run()
+            window.asDynamic().projection = projection
+            window.asDynamic().runGame()()
         }
     }
 }

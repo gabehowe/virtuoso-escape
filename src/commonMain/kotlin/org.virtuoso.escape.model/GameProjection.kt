@@ -46,10 +46,13 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
      * @return `true` if no user exists with this exact username-password combination, otherwise `false`.
      */
     fun createAccount(username: String, password: String): Boolean {
-        val currentAccount = this.accountManager.newAccount(username, password)?.let {
-            account = it; state = GameState(); state.language = language
+        this.accountManager.newAccount(username, password)?.let {
+            account = it
+            this.state = GameState()
+            state.language = language
+            return true
         }
-        return currentAccount != null
+        return false
     }
 
     /** Log the current user out and write data.  */

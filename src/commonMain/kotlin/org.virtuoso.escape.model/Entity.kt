@@ -28,7 +28,7 @@ class Entity(val id: String, val states: Map<String, EntityState>, var currentSt
     constructor(id: String, vararg entityStates: EntityState) : this(
         id,
         entityStates.associateBy { it.id },
-        if (entityStates.any { it.id.contains(id) }) id else entityStates[0].id
+        if (entityStates.any { it.id == id }) id else entityStates[0].id
     )
 
     /**
@@ -50,7 +50,7 @@ class Entity(val id: String, val states: Map<String, EntityState>, var currentSt
      * @return The current state of the entity.
      */
     fun state(): EntityState {
-        return states[currentState]!!
+        return states[currentState] ?: throw NoSuchElementException("${this.id} $currentState ${this.states.keys}")
     }
 
     /**

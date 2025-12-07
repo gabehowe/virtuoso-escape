@@ -10,7 +10,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.promise
 import kotlinx.html.classes
 import kotlinx.html.div
 import kotlinx.html.dom.append
@@ -34,7 +33,7 @@ object Game {
     var lastFloor: Floor? = null
     var lastEntity: Entity? = null
     var lastRoom: Room? = null
-    val projection: GameProjection = window.asDynamic().projection
+    lateinit var projection: GameProjection
 
     var eventHandlerRef: ((Event) -> Unit)? = null
     fun updateAll() {
@@ -356,9 +355,11 @@ object Game {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun run() = GlobalScope.launch {
+    fun run() = {
+        projection = window.asDynamic().projection
+        console.log(projection)
         setupListeners()
-        launch { timeAnimator() }
+        GlobalScope.launch { timeAnimator() }
         updateAll()
     }
 
