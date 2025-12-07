@@ -263,8 +263,8 @@ object App {
     }
 
     fun populateBackground(current: Entity?, entities: List<Entity>) {
-        (document.querySelector("#background-entities > img.selected") as? HTMLImageElement)?.src?.contains(current?.id.orEmpty())
-            ?: return
+        if ((document.querySelector("#background-entities > img.selected") as? HTMLImageElement)?.src?.contains(current?.id.orEmpty()) == true) return
+
         document.querySelector("#background-entities")!!.children.asList().map { it.id }.let { imgs ->
             // check if img is empty or any entity has a different index in entities than in the images
             if (imgs.isEmpty() || imgs.any { entities[imgs.indexOf(it)].id !in it }) return@let
