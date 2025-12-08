@@ -23,8 +23,8 @@ body {
 .box-element.selected {
     border: var(--stroke_width) solid var(--Foreground);
     border-radius: var(--radius);
-    margin-left: 0.29em;
-    padding: 0 0.25em;
+    margin-left: .341ch;
+    padding: 0 .408ch;
 }
 
 
