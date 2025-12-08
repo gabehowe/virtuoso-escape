@@ -288,7 +288,7 @@ enum class Floor(val rooms: List<Room>) {
                 setMessage("door2", "interact"),
                 { shuffle() },
                 { it.leaveEntity() },
-                setDoors(0)
+                setDoors(2)
             )
 
             val createDialogueDoorchain = { id: String ->
@@ -357,7 +357,7 @@ enum class Floor(val rooms: List<Room>) {
                         { it.leaveEntity() },
                         { shuffle() },
                         sm("interact", id),
-                        { setDoors(i - 1) }),
+                        setDoors(i - 1)),
                     null
                 )
                 door1[length - (i + 1)] = next
