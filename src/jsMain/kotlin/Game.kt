@@ -77,7 +77,7 @@ object Game {
         populateBackground(projection.currentEntity(), projection.currentRoom().entities)
         if (lastRoom == projection.currentRoom()) return
         (document.getElementById("viewport") as? HTMLDivElement)?.style?.backgroundImage =
-            "url(/images/${projection.currentRoom().id}.png)"
+            "url(images/${projection.currentRoom().id}.png)"
     }
 
     fun populateBackground(current: Entity?, entities: List<Entity>) {
@@ -104,7 +104,7 @@ object Game {
                 val delay = "${-2 * (js("Math").random() as Float)}s"
                 imgFlow.append(
                     (document.createElement("img") as HTMLImageElement).apply {
-                        src = "/images/${entity.id}.png"
+                        src = "images/${entity.id}.png"
                         id = "img-${entity.id}"
                         if (entity == current) classList.add("selected")
                         style.animationDelay = delay
@@ -205,7 +205,7 @@ object Game {
                     )
                 } ?: getStr(
                     currentRoom().id, "introduce"
-                )), "message")
+                )) + if(switchedFloor) "Press any key to continue..." else "", "message")
 
                 currentEntity()?.let {
                     language.searchString("name", it.id, it.state().id) ?: getStr(
@@ -335,9 +335,7 @@ object Game {
             { if (projection.currentEntity() != null) projection.interact(); updateAll() }
         (document.getElementById("speak") as? HTMLElement)!!.let {
             it.onclick = {
-                projection.input(
-                    (document.getElementById("input") as? HTMLInputElement)!!.value
-                )
+                createInputBox()
                 updateAll()
             }
         }
@@ -397,7 +395,7 @@ object Game {
 
     fun createInputBox() {
         if ((document.getElementById("speak") as HTMLElement).style.display == "none") return
-        (document.getElementById("input-box") as? HTMLDivElement)!!.let {
+        (document.getElementById("input-box") as? HTMLFormElement)!!.let {
             it.style.display = ""
             it.onsubmit = {
                 hideInputBox()
@@ -482,8 +480,8 @@ object Game {
 
 enum class View(val path: String, val init: (GameProjection?) -> Unit) {
     GameView("game.html", { Game.run(it!!) }),
-    IntroView("intro.html", { Intro.run(it!!) }),
-    LoginView("login.html", { Login.run(window.asDynamic().projection) }),
+    IntroView("login.html", { Intro.run(it!!) }),
+    LoginView("index.html", { Login.run(window.asDynamic().projection) }),
     CreditsView("credits.html", { Credits.run(it!!) })
 }
 

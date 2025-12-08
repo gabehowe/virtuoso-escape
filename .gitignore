@@ -1,6 +1,6 @@
 # Require explicit add
-json/gamestates.json
-json/accounts.json
+src/commonMain/resources/json/gamestates.json
+src/commonMain/resources/json/accounts.json
 *.json
 
 target/
