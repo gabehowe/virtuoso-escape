@@ -1,6 +1,7 @@
 :root {
-    --hr-size:0.15rem;
+    --hr-size: 0.15rem;
 }
+
 .heading {
     color: var(--cyan-1);
     font-size: 2.7rem;
@@ -54,8 +55,8 @@ a {
 hr {
     height: var(--stroke_width);
     background-color: var(--Stroke);
-    border:none;
-    padding:none;
+    border: none;
+    padding: none;
     margin: var(--padding) 0;
 }
 
@@ -73,7 +74,7 @@ div:has(.leaderboard) {
 .leaderboard {
     display: flex;
     flex-direction: column;
-    text-align:center;
+    text-align: center;
 
     tr {
         display: flex;
@@ -86,11 +87,14 @@ div:has(.leaderboard) {
         }
     }
 
-    td:first-child, th:first-child {
-        width:10%;
+    td:first-child,
+    th:first-child {
+        width: 10%;
     }
-    td:last-child, th:last-child {
-        width:30%;
+
+    td:last-child,
+    th:last-child {
+        width: 30%;
     }
 }
 
@@ -146,12 +150,59 @@ div:has(.leaderboard) {
     var(--red-1) 85.71%, var(--red-1) 92.85%,
     var(--pink-1) 92.85%, var(--pink-1) 100%);
 }
+
 #logout {
-    right:var(--padding);
-    bottom:var(--padding);
-    position:absolute;
+    right: var(--padding);
+    bottom: var(--padding);
+    position: absolute;
 }
-.left{
-    height:calc(50% - var(--padding));
+
+.left {
+    height: calc(50% - var(--padding));
     justify-content: space-evenly;
+}
+
+#entity-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+
+    img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 75px;
+        animation: 3s linear infinite rotate;
+    }
+}
+
+@keyframes translate {
+    from {
+        translate: 0 0;
+    }
+    25% {
+        translate: 100% 0;
+    }
+    50% {
+        translate: 100% 100%;
+    }
+    75% {
+        translate: 0 100%;
+    }
+
+}
+
+@keyframes rotate {
+    from {
+        rotate: 0deg;
+    }
+    to {
+        rotate: 360deg;
+    }
 }
