@@ -96,7 +96,7 @@ object Login {
             document.write(it)
             document.close()
             window.asDynamic().projection = projection
-            window.asDynamic().runGame()()
+            window.asDynamic().runGame()
         }
     }
 }

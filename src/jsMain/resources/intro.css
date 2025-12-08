@@ -1,0 +1,73 @@
+body {
+    margin:0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url(images/grassy-background.png) !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#barn {
+    position: absolute;
+    transition: 0.1s;
+    scale: 1.2;
+    right: 330px;
+    bottom: 140px;
+}
+
+#barn.closed {
+    cursor: pointer;
+    filter: drop-shadow(10px 4px 11px black);
+}
+
+#barn.closed:hover {
+    /*<blur-type> , <color> , <radius> , <spread> , <offsetX> , <offsetY>*/
+    filter: drop-shadow(20px 8px 13px rgba(0, 0, 0, 0.75));
+    scale: 1.21;
+}
+
+#beaver {
+    position: absolute;
+    filter: drop-shadow(10px 5px 2px black);
+    cursor: pointer;
+    scale: 1.2;
+    transition: all 0.2s, opacity 1s;
+    bottom: 122px;
+    right: 400px;
+}
+
+#beaver:hover {
+    opacity: 0.98;
+    scale: 1.21;
+    filter: drop-shadow(10px 5px 5px black);
+    rotate: 5deg;
+}
+
+#overlay {
+    position: absolute;
+    width: calc(100% - var(--padding) * 4);
+    height: calc(100% - var(--padding) * 4);
+    background-color: var(--Background);
+    z-index: 1;
+    opacity: 0;
+    transition: 0.5s;
+    font-family: "JetBrains Mono";
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    text-align: left;
+    padding: calc(var(--padding) * 2);
+    word-break: keep-all;
+}
+
+#skip {
+    padding: var(--padding);
+    border-top-right-radius: var(--radius);
+    border: var(--stroke_width, 0.0625rem) solid var(--Stroke, #535353);
+    border-left-width: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background: var(--Background);
+}
