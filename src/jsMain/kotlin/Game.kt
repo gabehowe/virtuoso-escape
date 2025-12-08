@@ -32,7 +32,7 @@ object Game {
     var lastRoom: Room? = null
     lateinit var projection: GameProjection
 
-    var  switchedFloor = false;
+    var switchedFloor = false;
     fun updateAll() {
         updateDialogue()
 
@@ -178,23 +178,17 @@ object Game {
     fun updateDialogue() {
         val switchedFloor = lastFloor != null && lastFloor != projection.currentFloor() || projection.isEnded
         with(projection) {
-            language::string.let { getStr ->
-                setDialogue(sanitizeForJS((currentMessage() ?: currentEntity()?.let {
-                    language.searchString(
-                        "introduce", it.id, it.state().id
-                    )
-                } ?: getStr(
-                    currentRoom().id, "introduce"
-                ) )+ if(switchedFloor) "\n Press any key to continue..." else ""), "message")
+            val room = if (!switchedFloor) currentRoom() else lastRoom!!
+            val entity = if (!switchedFloor) currentEntity() else lastEntity
+            setDialogue(
+                sanitizeForJS((currentMessage() ?: entity.let {
+                    language["introduce", it?.id, it?.state()?.id, room.id]
+                }) + if (switchedFloor) "\n Press any key to continue..." else ""),
+                "message"
+            )
 
-                currentEntity()?.let {
-                    language.searchString("name", it.id, it.state().id) ?: getStr(
-                        currentRoom().id, "name"
-                    )
-                }?.let {
-                    (document.getElementById("entity-title") as? HTMLElement)?.innerText = it
-                }
-
+            entity.let { language["name", it?.id, it?.state()?.id, room.id] }?.let {
+                (document.getElementById("entity-title") as? HTMLElement)?.innerText = it
             }
         }
     }
@@ -322,7 +316,7 @@ object Game {
         document.addEventListener("submit", { it.preventDefault() })
         document.addEventListener("keydown", {
             it as KeyboardEvent
-            if (switchedFloor){
+            if (switchedFloor) {
                 if (projection.isEnded) end()
                 lastFloor = projection.currentFloor()
                 lastEntity = null
@@ -420,7 +414,8 @@ object Game {
                         "Change Difficulty" to { displaySettings(Menu.Difficulty) },
                         "Debug" to { displaySettings(Menu.Debug) },
                         "Logout" to { logout() }
-            ))}),
+                    ))
+            }),
         Debug({
             createSettings(
                 "debug", listOf(

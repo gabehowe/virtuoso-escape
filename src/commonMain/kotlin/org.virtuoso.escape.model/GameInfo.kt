@@ -35,8 +35,9 @@ data class Language(private val data: Map<String, Map<String, String>>) {
         return null
     }
 
-    operator fun get(namespace: String, resource: String): String? {
-        return data[namespace]?.get(resource)
+    operator fun get(resource: String, vararg namespaces: String?): String? {
+        for (i in namespaces) i?.let{ i->data[i]?.get(resource)?.let{return it}}
+        return null
     }
 }
 

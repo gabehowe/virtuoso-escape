@@ -357,7 +357,7 @@ class TerminalDriver {
         }
         actions.add(FunString("Exit game") to { exit(projection) })
         actions.add(FunString("Options") to { menu_options(projection) })
-        val prompt = projection.time().toMicrowaveTime() + "\n"+ projection.language[projection.currentRoom().id, "introduce"]
+        val prompt = projection.time().toMicrowaveTime() + "\n"+ projection.language["introduce", projection.currentRoom().id]
         createActionInterface(actions, prompt)
     }
 

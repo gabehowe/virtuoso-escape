@@ -16,7 +16,7 @@ body {
 .box-element {
     color: var(--Foreground, #FFF);
     font-style: normal;
-    font-weight: 25rem;
+    /*font-weight: 25;*/
     line-height: normal;
 }
 

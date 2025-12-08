@@ -105,7 +105,7 @@ class EntityState(
      */
     fun takeInput(input: String, state: GameState) {
         check(this.capabilities.input)
-        val message = if (state.language[id, "input_$input"] == null) "I couldn't understand '$input'"
+        val message = if (state.language["input_$input", id] == null) "I couldn't understand '$input'"
         else state.language.string(id, "input_$input")
         state.message = message
         inputAction?.invoke(input, state)
