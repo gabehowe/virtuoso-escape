@@ -351,8 +351,8 @@ object Game {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun run() {
-        projection = window.asDynamic().projection
+    fun run(projection: GameProjection) {
+        this.projection = projection
         console.log(projection)
         setupListeners()
         GlobalScope.launch { timeAnimator() }
@@ -471,11 +471,23 @@ object Game {
 
 }
 
-//enum class Views(val path: String, val init: () -> Unit) {
-//    Game_("game.html", { Game.run() }),
-//    Intro("intro.html"),
-//    Login("login.html")
-//}
+enum class View(val path: String, val init: (GameProjection?) -> Unit) {
+    GameView("game.html", { Game.run(it!!) }),
+    IntroView("intro.html", { Intro.run(it!!) }),
+    LoginView("login.html", { Login.run(window.asDynamic().projection) })
+}
+
+fun switchTo(view: View, projection: GameProjection) {
+    window.fetch(view.path).then {
+        it.text()
+    }.then {
+        document.open()
+        document.write(it)
+        document.close()
+        view.init(projection)
+    }
+}
+
 
 suspend fun getData(url: String, setter: (String) -> Unit): Promise<Unit> {
     return window.fetch(url).await().text().then { setter(it) }
@@ -497,8 +509,7 @@ fun main() {
             }
         }, { p, d -> console.log(p, d) })
     }
-    // TODO: make these call each other
-    window.asDynamic().runGame = { GlobalScope.launch { setup.then { Game.run() } } }
-    window.asDynamic().runLogin = { GlobalScope.launch { setup.then { Login.run() } } }
-    window.asDynamic().runIntro = { GlobalScope.launch { setup.then { Intro.run() } } }
+//    window.asDynamic().runGame = { GlobalScope.launch { setup.then { Game.run() } } }
+    window.asDynamic().runLogin = { GlobalScope.launch { setup.then { View.LoginView.init(null) } } }
+//    window.asDynamic().runIntro = { GlobalScope.launch { setup.then { Intro.run() } } }
 }

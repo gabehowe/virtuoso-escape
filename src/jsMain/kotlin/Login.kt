@@ -27,7 +27,7 @@ object Login {
         (document.getElementById("enter-box") as? HTMLElement)!!.onclick = document.onsubmit
     }
 
-    fun run() = GlobalScope.launch {
+    fun run(projection: GameProjection) = GlobalScope.launch {
         println("Login")
         updateKeyHandler("c")
         setupListeners()
@@ -80,23 +80,15 @@ object Login {
         }
         if (flag) {
             println(authMode)
-            switchToNextScreen()
+            window.asDynamic().projection = projection
+            when (authMode){
+                AuthMode.Login -> switchTo(View.GameView, projection)
+                AuthMode.Create -> switchTo(View.IntroView, projection)
+            }
         } else {
             (document.getElementById("auth-error") as? HTMLSpanElement)!!.innerText =
                 projection.accountManager.invalidLoginInfo(user, pass)
         }
     }
 
-    fun switchToNextScreen() {
-        //todo: switch to intro if new.
-        window.fetch("game-view.html").then {
-            it.text()
-        }.then {
-            document.open()
-            document.write(it)
-            document.close()
-            window.asDynamic().projection = projection
-            window.asDynamic().runGame()
-        }
-    }
 }

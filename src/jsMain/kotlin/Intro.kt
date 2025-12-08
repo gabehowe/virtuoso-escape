@@ -5,8 +5,8 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLImageElement
 
 object Intro {
-    fun run() {
-        val projection: GameProjection =  window.asDynamic().projection!!
+    fun run(projection: GameProjection) {
+        console.log(projection.state)
         val beaver = (document.getElementById("beaver") as? HTMLImageElement)!!
         val barn = (document.getElementById("barn") as? HTMLImageElement)!!
         beaver.apply {
@@ -33,10 +33,9 @@ object Intro {
                 classList.remove("closed")
             }
         }
-        document.onkeypress = {
-            if (it.key == "q") {
-
-            }
+        document.onkeypress = kp@{
+            if (it.key != "q") return@kp Unit
+            switchTo(View.GameView, projection)
         }
     }
 }
