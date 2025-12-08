@@ -64,7 +64,7 @@ object Credits {
     fun imageAnimation() {
         framecount++
         (document.getElementById("entity-flow") as? HTMLDivElement)!!.children.asList().forEachIndexed { index, i ->
-            val (x, y) = boustrophedon((framecount.toDouble() + index * 60) % (60 * 120))
+            val (x, y) = boustrophedon((framecount.toDouble() + index * 60) % (60 * 180))
             (i as HTMLElement).style.transform = "translate(${x + 12}px, ${y + 12}px)"
         }
         window.requestAnimationFrame { imageAnimation() }
