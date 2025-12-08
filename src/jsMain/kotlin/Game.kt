@@ -463,7 +463,7 @@ object Game {
 
 enum class View(val path: String, val init: (GameProjection?) -> Unit) {
     GameView("game.html", { Game.run(it!!) }),
-    IntroView("login.html", { Intro.run(it!!) }),
+    IntroView("intro.html", { Intro.run(it!!) }),
     LoginView("index.html", { Login.run(window.asDynamic().projection) }),
     CreditsView("credits.html", { Credits.run(it!!) })
 }
