@@ -433,10 +433,8 @@ object Game {
                     "settings", listOf(
                         "Change Difficulty" to { displaySettings(Menu.Difficulty) },
                         "Debug" to { displaySettings(Menu.Debug) },
-                        "Logout" to { logout() },
-                        "Exit" to { exit() })
-                )
-            }),
+                        "Logout" to { logout() }
+            ))}),
         Debug({
             createSettings(
                 "debug", listOf(
@@ -465,7 +463,7 @@ object Game {
                         it.name to {
                             projection.state.floor = it
                             clearSettings()
-                            lastFloor =null
+                            lastFloor = null
                             updateAll()
                         }
                     })
@@ -473,7 +471,11 @@ object Game {
     }
 
     fun end() = switchTo(View.CreditsView, projection)
-    fun logout() = projection.logout()
+    fun logout() {
+        projection.logout()
+        switchTo(View.LoginView, null)
+    }
+
     fun exit() = logout()
 
 }
