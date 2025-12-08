@@ -6,6 +6,7 @@ import org.virtuoso.escape.model.Difficulty
 import org.virtuoso.escape.model.Floor
 import org.virtuoso.escape.model.GameProjection
 import org.virtuoso.escape.model.Item
+import org.virtuoso.escape.model.toMicrowaveTime
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
@@ -356,15 +357,7 @@ class TerminalDriver {
         }
         actions.add(FunString("Exit game") to { exit(projection) })
         actions.add(FunString("Options") to { menu_options(projection) })
-        val prompt = String.format(
-            projection.time().toComponents { minutes, seconds, _ ->
-                String.format(
-                    "%02d:%02d\n%s",
-                    minutes,
-                    seconds,
-                    projection.language[projection.currentRoom().id, "introduce"],
-                )
-            })
+        val prompt = projection.time().toMicrowaveTime() + "\n"+ projection.language[projection.currentRoom().id, "introduce"]
         createActionInterface(actions, prompt)
     }
 

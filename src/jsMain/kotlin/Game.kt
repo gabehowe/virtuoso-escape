@@ -63,7 +63,7 @@ object Game {
         if (projection.isEnded) {
             eventHandlerRef = { event ->
                 if (projection.state.entity != null) updateDialogue()
-                window.location.href = TODO("create href for window")
+                this.end()
             }
             document.addEventListener("keydown", eventHandlerRef)
             return
@@ -327,9 +327,12 @@ object Game {
 
     fun setupListeners() {
         (document.getElementById("settings") as? HTMLElement)!!.onclick = { displaySettings(Menu.Settings) }
-        (document.getElementById("inspect") as? HTMLElement)!!.onclick = { projection.inspect(); updateAll() }
-        (document.getElementById("attack") as? HTMLElement)!!.onclick = { projection.attack(); updateAll() }
-        (document.getElementById("interact") as? HTMLElement)!!.onclick = { projection.interact(); updateAll() }
+        (document.getElementById("inspect") as? HTMLElement)!!.onclick =
+            { if (projection.currentEntity() != null) projection.inspect(); updateAll() }
+        (document.getElementById("attack") as? HTMLElement)!!.onclick =
+            { if (projection.currentEntity() != null) projection.attack(); updateAll() }
+        (document.getElementById("interact") as? HTMLElement)!!.onclick =
+            { if (projection.currentEntity() != null) projection.interact(); updateAll() }
         (document.getElementById("speak") as? HTMLElement)!!.let {
             it.onclick = {
                 projection.input(
@@ -360,11 +363,7 @@ object Game {
     }
 
     suspend fun timeAnimator() {
-        document.getElementById("timer")!!.innerHTML = projection.time().toComponents { minutes, seconds, _ ->
-            "{${minutes.toString().padStart(2, '0')}:${
-                seconds.toString().padStart(2, '0')
-            }}"
-        }
+        document.getElementById("timer")!!.innerHTML = "{${projection.time().toMicrowaveTime()}}"
         if (debug["enabled"]!!.invoke() != null) {
             val debugMenu = (document.getElementById("debug") as? HTMLDivElement)!!
             debugMenu.style.display = ""
@@ -379,7 +378,7 @@ object Game {
             }
         }
         delay(250L)
-        timeAnimator()
+        if (window.asDynamic().currentView == View.GameView) timeAnimator()
     }
 
     fun makeLogicalButton(id: String, display: String, button: Boolean = true): HTMLSpanElement {
@@ -441,8 +440,8 @@ object Game {
         Debug({
             createSettings(
                 "debug", listOf(
-                    "Change Floor" to { displaySettings(Menu.ChangeFloor) },
-                    "End Game" to { projection.state.end() },
+                    "Change Floor" to { displaySettings(ChangeFloor) },
+                    "End Game" to { end() },
                     "Debug Menu" to {
                         val currentDebugState = if (debug["enabled"]?.invoke() != null) null else " "
                         debug["enabled"] = { currentDebugState }
@@ -462,10 +461,18 @@ object Game {
         ChangeFloor(
             {
                 createSettings(
-                    "change floor", Floor.entries.map { it.name to { projection.state.floor = it; clearSettings() } })
+                    "change floor", Floor.entries.map {
+                        it.name to {
+                            projection.state.floor = it
+                            clearSettings()
+                            lastFloor =null
+                            updateAll()
+                        }
+                    })
             })
     }
 
+    fun end() = switchTo(View.CreditsView, projection)
     fun logout() = projection.logout()
     fun exit() = logout()
 
@@ -474,10 +481,17 @@ object Game {
 enum class View(val path: String, val init: (GameProjection?) -> Unit) {
     GameView("game.html", { Game.run(it!!) }),
     IntroView("intro.html", { Intro.run(it!!) }),
-    LoginView("login.html", { Login.run(window.asDynamic().projection) })
+    LoginView("login.html", { Login.run(window.asDynamic().projection) }),
+    CreditsView("credits.html", { Credits.run(it!!) })
 }
 
-fun switchTo(view: View, projection: GameProjection) {
+fun switchTo(view: View, projection: GameProjection?) {
+    window.asDynamic().currentView = view
+    if (view.path in window.location.href) {
+        view.init(projection)
+        return
+    }
+    window.history.replaceState(null, view.name.removeSuffix("View"), view.path)
     window.fetch(view.path).then {
         it.text()
     }.then {
@@ -510,6 +524,6 @@ fun main() {
         }, { p, d -> console.log(p, d) })
     }
 //    window.asDynamic().runGame = { GlobalScope.launch { setup.then { Game.run() } } }
-    window.asDynamic().runLogin = { GlobalScope.launch { setup.then { View.LoginView.init(null) } } }
+    window.asDynamic().runLogin = { GlobalScope.launch { setup.then { switchTo(View.LoginView, null) } } }
 //    window.asDynamic().runIntro = { GlobalScope.launch { setup.then { Intro.run() } } }
 }

@@ -27,7 +27,7 @@ object Login {
         (document.getElementById("enter-box") as? HTMLElement)!!.onclick = document.onsubmit
     }
 
-    fun run(projection: GameProjection) = GlobalScope.launch {
+    fun run(projection: GameProjection?) = GlobalScope.launch {
         println("Login")
         updateKeyHandler("c")
         setupListeners()

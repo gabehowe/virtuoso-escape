@@ -1,6 +1,5 @@
 package org.virtuoso.escape.model
 
-import kotlinx.serialization.SerialName
 import org.virtuoso.escape.model.Floor.Initializers.floor2
 import org.virtuoso.escape.model.Floor.Initializers.floor3
 import org.virtuoso.escape.model.Floor.Initializers.floor4
@@ -16,6 +15,15 @@ import org.virtuoso.escape.model.action.Actions.swapEntities
 import org.virtuoso.escape.model.action.Actions.takeInput
 import org.virtuoso.escape.model.action.Severity
 import kotlin.math.pow
+import kotlin.time.Duration
+
+fun Duration.toMicrowaveTime(): String {
+    return toComponents { minutes, seconds, _ ->
+        "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')
+        }"
+    }
+}
+
 
 data class Language(private val data: Map<String, Map<String, String>>) {
     fun string(namespace: String, resource: String): String {
@@ -47,7 +55,9 @@ enum class Difficulty {
  */
 enum class Floor(val rooms: List<Room>) {
 
-    AcornGrove(Initializers.acornGrove()), StoreyI(Initializers.floor1()), StoreyII(floor2()), StoreyIII(floor3()), StoreyIV(floor4());
+    AcornGrove(Initializers.acornGrove()), StoreyI(Initializers.floor1()), StoreyII(floor2()), StoreyIII(floor3()), StoreyIV(
+        floor4()
+    );
 
     private object Initializers {
         fun acornGrove(): List<Room> {
@@ -67,7 +77,8 @@ enum class Floor(val rooms: List<Room>) {
          */
         private fun makeNarrator(floorId: String): Entity {
             // Utility function to easily create the message setter
-            val narratorMsg: (String) -> ActionType = { it: String -> { state: GameState -> setMessage(state.language, "narrator", it)(state) } }
+            val narratorMsg: (String) -> ActionType =
+                { it: String -> { state: GameState -> setMessage(state.language, "narrator", it)(state) } }
 
             // No left
             val hintsUsedUp = EntityState(
@@ -82,7 +93,10 @@ enum class Floor(val rooms: List<Room>) {
                 swapEntities("narrator", "narrator_hint_2") // Swap to final state
             )
             val hint1Given = EntityState(
-                "narrator_hint_1", narratorMsg("attack"), narratorMsg("inspect"), giveHint2,  // Interact action: Give Hint 2 and move to final state
+                "narrator_hint_1",
+                narratorMsg("attack"),
+                narratorMsg("inspect"),
+                giveHint2,  // Interact action: Give Hint 2 and move to final state
                 null
             )
 
@@ -94,7 +108,10 @@ enum class Floor(val rooms: List<Room>) {
                 swapEntities("narrator", "narrator_hint_1") // Swap to hint1Given state
             )
             val start = EntityState(
-                "narrator_start", narratorMsg("attack"), narratorMsg("inspect"), giveHint1,  // Interact action: Give Hint 1 and move to next state
+                "narrator_start",
+                narratorMsg("attack"),
+                narratorMsg("inspect"),
+                giveHint1,  // Interact action: Give Hint 1 and move to next state
                 null
             )
             return Entity("narrator", start, hint1Given, hintsUsedUp)
@@ -106,7 +123,9 @@ enum class Floor(val rooms: List<Room>) {
             val narrator = makeNarrator("storey_i")
             val hummus_trash_can = EntityState(
                 "trash_can", chain(
-                    giveItem(Item.SealedCleanFoodSafeHummus), completePuzzle("trash"), swapEntities("trash_can", "sans_hummus_trash_can")
+                    giveItem(Item.SealedCleanFoodSafeHummus),
+                    completePuzzle("trash"),
+                    swapEntities("trash_can", "sans_hummus_trash_can")
                 ), {}, {}, null
             )
             val sans_hummus_trash_can = EntityState("sans_hummus_trash_can", {}, {}, {}, null)
@@ -116,7 +135,9 @@ enum class Floor(val rooms: List<Room>) {
 
             val hummus_elephant = EntityState(
                 "elephant_in_the_room", {}, {}, chain(
-                    giveItem(Item.SunflowerSeedButter), completePuzzle("elephant"), swapEntities("elephant_in_the_room", "sans_butter_elephant")
+                    giveItem(Item.SunflowerSeedButter),
+                    completePuzzle("elephant"),
+                    swapEntities("elephant_in_the_room", "sans_butter_elephant")
                 ), null
             )
             val sans_butter_elephant = EntityState("sans_butter_elephant", {}, {}, {}, null)
@@ -132,7 +153,11 @@ enum class Floor(val rooms: List<Room>) {
             val securityBread = Entity(
                 "security", {}, {}, {}, takeInput(
                     listOf(
-                        ".*(?<!w)right.*" to chain(setMessage("security", "right_answer"), giveItem(Item.RightBread), completePuzzle("right")),
+                        ".*(?<!w)right.*" to chain(
+                            setMessage("security", "right_answer"),
+                            giveItem(Item.RightBread),
+                            completePuzzle("right")
+                        ),
                         ".*" to chain(addPenalty(Severity.LOW), setMessage("security", "non_right_answer"))
                     )
                 )
@@ -148,16 +173,30 @@ enum class Floor(val rooms: List<Room>) {
          * @return Joe Hardy.
          */
         private fun joeHardy(): Entity {
-            val hasItems: (List<Item>) -> (GameState) -> Boolean = { items -> { state -> items.map { state.hasItem(it) }.reduce { a, b -> a && b } } }
+            val hasItems: (List<Item>) -> (GameState) -> Boolean =
+                { items -> { state -> items.map { state.hasItem(it) }.reduce { a, b -> a && b } } }
             val sandwichJoe = EntityState("sandwich_joe", {}, {}, {}, null)
             val sansSandwichJoe = EntityState(
                 "sans_sandwich_joe", {}, {}, conditional(
-                    hasItems(listOf(Item.LeftBread, Item.RightBread, Item.SunflowerSeedButter, Item.SealedCleanFoodSafeHummus)), chain(
-                        setMessage("sans_sandwich_joe", "interact_sandwich"), swapEntities("joe_hardy", "sandwich_joe"), { it.items.clear() })
+                    hasItems(
+                        listOf(
+                            Item.LeftBread,
+                            Item.RightBread,
+                            Item.SunflowerSeedButter,
+                            Item.SealedCleanFoodSafeHummus
+                        )
+                    ), chain(
+                        setMessage("sans_sandwich_joe", "interact_sandwich"),
+                        swapEntities("joe_hardy", "sandwich_joe"),
+                        { it.items.clear() })
                 ), null
             )
             val introJoe = EntityState(
-                "intro_joe", {}, {}, chain(completePuzzle("sandwich"), swapEntities("joe_hardy", "sans_sandwich_joe")), null
+                "intro_joe",
+                {},
+                {},
+                chain(completePuzzle("sandwich"), swapEntities("joe_hardy", "sans_sandwich_joe")),
+                null
             )
             return Entity("joe_hardy", introJoe, sansSandwichJoe, sandwichJoe)
         }
@@ -174,7 +213,8 @@ enum class Floor(val rooms: List<Room>) {
 
             val almanacStates = mutableListOf<EntityState>()
             for (i in 0..<length) {
-                val map = (1..PAGES).associate { it.toString() to turnPage(length - i, it, length, CORRECT_PAGE) }.toList()
+                val map =
+                    (1..PAGES).associate { it.toString() to turnPage(length - i, it, length, CORRECT_PAGE) }.toList()
                 val alm = { stringId: String -> setMessage("almanac", stringId) }
                 almanacStates.add(
                     EntityState(
@@ -201,12 +241,18 @@ enum class Floor(val rooms: List<Room>) {
 
             val caseBreak = chain(addPenalty(Severity.MEDIUM), setMessage("almanac", "break"))
             val guessesRemaining: (Language) -> String = { language ->
-                language.string("almanac", "guesses_remaining").split("%s").let { it[0] + (flips - 1) + it[1] + flips + it[2] }
+                language.string("almanac", "guesses_remaining").split("%s")
+                    .let { it[0] + (flips - 1) + it[1] + flips + it[2] }
             }
-            val caseOvershoot: ActionType = { setMessage(it.language.string("almanac", "too_high") + " " + guessesRemaining(it.language))(it) }
-            val caseUndershoot: ActionType = { setMessage(it.language.string("almanac", "too_low") + " " + guessesRemaining(it.language))(it) }
+            val caseOvershoot: ActionType =
+                { setMessage(it.language.string("almanac", "too_high") + " " + guessesRemaining(it.language))(it) }
+            val caseUndershoot: ActionType =
+                { setMessage(it.language.string("almanac", "too_low") + " " + guessesRemaining(it.language))(it) }
             val caseFound = chain(
-                setMessage("almanac", "correct_page"), giveItem(Item.LeftBread), completePuzzle("almanac"), swapEntities("almanac", "found_almanac")
+                setMessage("almanac", "correct_page"),
+                giveItem(Item.LeftBread),
+                completePuzzle("almanac"),
+                swapEntities("almanac", "found_almanac")
             )
             val evaluatePage: ActionType = when {
                 flips - 1 == 0 -> caseBreak
@@ -247,7 +293,13 @@ enum class Floor(val rooms: List<Room>) {
             val createDialogueDoorchain = { id: String ->
                 val states = arrayOfNulls<EntityState>(3)
                 val setMsg: (String, String) -> ActionType =
-                    { resource: String, state: String -> { setMessage(it.language.searchString(resource, state, id).orEmpty())(it) } }
+                    { resource: String, state: String ->
+                        {
+                            setMessage(
+                                it.language.searchString(resource, state, id).orEmpty()
+                            )(it)
+                        }
+                    }
 
                 for (i in 0..2) {
                     val stateId = id + "_" + i
@@ -278,7 +330,13 @@ enum class Floor(val rooms: List<Room>) {
         private fun createDoorchain(length: Int, shuffle: () -> Unit, setDoors: (Int) -> ActionType): Entity {
             val door1 = arrayOfNulls<EntityState>(length)
             val sm: (String, String) -> ActionType =
-                { stringId: String, state: String -> { setMessage(it.language.searchString(stringId, state, "door1") ?: "<$stringId/$state")(it) } }
+                { stringId: String, state: String ->
+                    {
+                        setMessage(
+                            it.language.searchString(stringId, state, "door1") ?: "<$stringId/$state"
+                        )(it)
+                    }
+                }
             val door1_final = EntityState(
                 "door1_0",
                 sm("attack", "door1_0"),
@@ -293,7 +351,12 @@ enum class Floor(val rooms: List<Room>) {
                     id,
                     sm("attack", id),
                     sm("inspect", id),
-                    chain(swapEntities("door1", "door1_" + (i - 1)), { it.leaveEntity() }, { shuffle() }, sm("interact", id), { setDoors(i - 1) }),
+                    chain(
+                        swapEntities("door1", "door1_" + (i - 1)),
+                        { it.leaveEntity() },
+                        { shuffle() },
+                        sm("interact", id),
+                        { setDoors(i - 1) }),
                     null
                 )
                 door1[length - (i + 1)] = next
@@ -336,7 +399,8 @@ enum class Floor(val rooms: List<Room>) {
 
             val boxLogicStart = takeInput(
                 listOf(
-                    "(?:box )?start" to chain(swapEntities("box_riddle", "box_step1"), puzzleMsg("step_start")), ".*" to puzzleMsg("step_wrong")
+                    "(?:box )?start" to chain(swapEntities("box_riddle", "box_step1"), puzzleMsg("step_start")),
+                    ".*" to puzzleMsg("step_wrong")
                 )
             )
             val box_start = EntityState(
@@ -352,7 +416,9 @@ enum class Floor(val rooms: List<Room>) {
             )
 
             val checkKeysAndSwap = conditional(
-                { it.hasItem(Item.Keys) }, chain(doorMsg("unlocked_msg"), swapEntities("exit_door", "exit_door_unlocked")), doorMsg("locked_msg")
+                { it.hasItem(Item.Keys) },
+                chain(doorMsg("unlocked_msg"), swapEntities("exit_door", "exit_door_unlocked")),
+                doorMsg("locked_msg")
             )
             val doorLocked = EntityState(
                 "exit_door_locked", {}, doorMsg("inspect_locked"), checkKeysAndSwap, null
@@ -372,7 +438,11 @@ enum class Floor(val rooms: List<Room>) {
 
             val computty = makeComputtyLogic()
             val sock_squirrel = Entity(
-                "sock_squirrel", chain(completePuzzle("unblock"), swapEntities("computty", "computty_unblocked")), {}, {}, null
+                "sock_squirrel",
+                chain(completePuzzle("unblock"), swapEntities("computty", "computty_unblocked")),
+                {},
+                {},
+                null
             )
             val microwave_blocked = EntityState("microwave_blocked", {}, {}, {}, null)
             // Whoops! JEP 126!
@@ -416,7 +486,9 @@ enum class Floor(val rooms: List<Room>) {
             val computtyTarLogic = takeInput(
                 listOf(
                     "rotx 16 code" to chain(
-                        ttyStr("good_rotx"), completePuzzle("CompuTTY"), swapEntities("microwave", "microwave_unblocked")
+                        ttyStr("good_rotx"),
+                        completePuzzle("CompuTTY"),
+                        swapEntities("microwave", "microwave_unblocked")
                     ),
                     "rotx 16 .*" to ttyStr("no_file"),
                     "rotx \\d+.*" to ttyStr("failed_rotx"),

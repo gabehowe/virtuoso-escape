@@ -3,6 +3,7 @@ package org.virtuoso.escape.model.account
 import kotlinx.serialization.Serializable
 import org.virtuoso.escape.model.Difficulty
 import org.virtuoso.escape.model.data.SerializableDuration
+import org.virtuoso.escape.model.toMicrowaveTime
 import kotlin.time.Duration
 
 /**
@@ -22,12 +23,7 @@ data class Score(val timeRemaining: SerializableDuration, val difficulty: Diffic
     }
 
     fun scoreEntry(username: String): List<String> {
-        val formattedTime = this.timeRemaining.toComponents { minutes, seconds, _ ->
-            "${minutes.toString().padStart(2, '0')}, ${
-                seconds.toString().padStart(2, '0')
-            }"
-        }
-        return listOf(username, this.totalScore.toString(), this.timeRemaining.toString(), this.difficulty.name, formattedTime)
+        return listOf(username, this.totalScore.toString(), this.timeRemaining.toString(), this.difficulty.name)
     }
 
     companion object {
