@@ -18,7 +18,6 @@ import kotlinx.html.js.span
 import kotlinx.html.js.strong
 import org.virtuoso.escape.model.*
 import org.w3c.dom.*
-import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import kotlin.js.Promise
 import kotlin.uuid.ExperimentalUuidApi
@@ -33,24 +32,13 @@ object Game {
     var lastRoom: Room? = null
     lateinit var projection: GameProjection
 
-    var eventHandlerRef: ((Event) -> Unit)? = null
+    var  switchedFloor = false;
     fun updateAll() {
         updateDialogue()
 
         // Keep the dialogue and wait for a key.
-        if (lastFloor != null && lastFloor != projection.currentFloor()) {
-
-            eventHandlerRef = { event ->
-                lastFloor = projection.currentFloor()
-                lastEntity = null
-                updateAll()
-                event.preventDefault()
-                event.stopPropagation()
-                document.removeEventListener("keydown", eventHandlerRef!!)
-                eventHandlerRef = null
-            }
-            document.addEventListener("keydown", eventHandlerRef)
-
+        if (lastFloor != null && lastFloor != projection.currentFloor() || projection.isEnded) {
+            switchedFloor = true
             return
         }
         if (lastEntity != projection.currentEntity()) hideInputBox()
@@ -60,14 +48,6 @@ object Game {
 
         updateImage()
         createKeys()
-        if (projection.isEnded) {
-            eventHandlerRef = { event ->
-                if (projection.state.entity != null) updateDialogue()
-                this.end()
-            }
-            document.addEventListener("keydown", eventHandlerRef)
-            return
-        }
         lastRoom = projection.currentRoom()
         lastFloor = projection.currentFloor()
         lastEntity = projection.currentEntity()
@@ -199,13 +179,13 @@ object Game {
         val switchedFloor = lastFloor != null && lastFloor != projection.currentFloor() || projection.isEnded
         with(projection) {
             language::string.let { getStr ->
-                setDialogue(sanitizeForJS(currentMessage() ?: currentEntity()?.let {
+                setDialogue(sanitizeForJS((currentMessage() ?: currentEntity()?.let {
                     language.searchString(
                         "introduce", it.id, it.state().id
                     )
                 } ?: getStr(
                     currentRoom().id, "introduce"
-                )) + if(switchedFloor) "Press any key to continue..." else "", "message")
+                ) )+ if(switchedFloor) "\n Press any key to continue..." else ""), "message")
 
                 currentEntity()?.let {
                     language.searchString("name", it.id, it.state().id) ?: getStr(
@@ -342,6 +322,14 @@ object Game {
         document.addEventListener("submit", { it.preventDefault() })
         document.addEventListener("keydown", {
             it as KeyboardEvent
+            if (switchedFloor){
+                if (projection.isEnded) end()
+                lastFloor = projection.currentFloor()
+                lastEntity = null
+                updateAll()
+                switchedFloor = false
+                return@addEventListener
+            }
             if (it.key == "Escape") clearSettings()
             if (document.activeElement?.tagName == "INPUT") return@addEventListener
             keyMap.toList().firstOrNull { i -> it.key == i.first }?.let { i ->
