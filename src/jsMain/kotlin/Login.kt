@@ -11,84 +11,93 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSpanElement
 
 object Login {
-    val projection: GameProjection = window.asDynamic().projection
+  val projection: GameProjection = window.asDynamic().projection
 
-    enum class AuthMode {
-        Login, Create
+  enum class AuthMode {
+    Login,
+    Create,
+  }
+
+  var authMode = AuthMode.Login
+
+  fun setupListeners() {
+    (document.getElementById("auth-change") as? HTMLSpanElement)?.onclick = {
+      this.toggleAuthMode()
     }
-
-    var authMode = AuthMode.Login
-    fun setupListeners() {
-        (document.getElementById("auth-change") as? HTMLSpanElement)?.onclick = { this.toggleAuthMode() }
-        document.onsubmit = { ev ->
-            ev.preventDefault()
-            tryAuth()
-        }
-        (document.getElementById("enter-box") as? HTMLElement)!!.onclick = document.onsubmit
+    document.onsubmit = { ev ->
+      ev.preventDefault()
+      tryAuth()
     }
+    (document.getElementById("enter-box") as? HTMLElement)!!.onclick = document.onsubmit
+  }
 
-    fun run(projection: GameProjection?) = GlobalScope.launch {
+  fun run(projection: GameProjection?) =
+      GlobalScope.launch {
         println("Login")
         updateKeyHandler("c")
         setupListeners()
+      }
+
+  fun updateKeyHandler(key: String) {
+    document.onkeydown = keydown@{ ev ->
+      if (ev.key == "Escape") (document.activeElement as HTMLElement).blur()
+      if (document.activeElement as? HTMLInputElement != null) return@keydown Unit
+      if (ev.key == key) (document.getElementById("auth-change") as? HTMLElement)?.click()
+    }
+  }
+
+  fun toggleAuthMode() {
+    println(this.authMode)
+    (document.getElementById("auth-prompt") as? HTMLSpanElement)?.apply {
+      innerText =
+          projection.language.string(
+              "ui",
+              if (authMode == AuthMode.Login) "switch_login" else "switch_create",
+          )
     }
 
-    fun updateKeyHandler(key: String) {
-        document.onkeydown = keydown@{ ev ->
-            if (ev.key == "Escape") (document.activeElement as HTMLElement).blur()
-            if (document.activeElement as? HTMLInputElement != null) return@keydown Unit
-            if (ev.key == key) (document.getElementById("auth-change") as? HTMLElement)?.click()
-        }
+    (document.getElementById("welcome-text") as? HTMLSpanElement)?.apply {
+      innerText =
+          projection.language.string(
+              "ui",
+              if (authMode == AuthMode.Login) "prompt_login" else "prompt_create",
+          )
     }
 
-    fun toggleAuthMode() {
-        println(this.authMode)
-        (document.getElementById("auth-prompt") as? HTMLSpanElement)?.apply {
-            innerText =
-                projection.language.string("ui", if (authMode == AuthMode.Login) "switch_login" else "switch_create")
-        }
-
-        (document.getElementById("welcome-text") as? HTMLSpanElement)?.apply {
-            innerText =
-                projection.language.string("ui", if (authMode == AuthMode.Login) "prompt_login" else "prompt_create")
-        }
-
-        (document.getElementById("auth-change") as? HTMLSpanElement)?.apply {
-            innerHTML = ""
-            projection.language.string("ui", if (authMode == AuthMode.Create) "prompt_create" else "prompt_login").let {
-                append {
-                    span { +"[" }
-                    b {
-                        +it[0].toString()
-                    }.apply { this.style.textDecoration = "underline" }
-                    span {
-                        +(it.substring(1) + "]")
-                    }
-                }
+    (document.getElementById("auth-change") as? HTMLSpanElement)?.apply {
+      innerHTML = ""
+      projection.language
+          .string("ui", if (authMode == AuthMode.Create) "prompt_create" else "prompt_login")
+          .let {
+            append {
+              span { +"[" }
+              b { +it[0].toString() }.apply { this.style.textDecoration = "underline" }
+              span { +(it.substring(1) + "]") }
             }
-            updateKeyHandler(innerText[1].lowercase())
-        }
-        authMode = if (authMode == AuthMode.Create) AuthMode.Login else AuthMode.Create
+          }
+      updateKeyHandler(innerText[1].lowercase())
     }
+    authMode = if (authMode == AuthMode.Create) AuthMode.Login else AuthMode.Create
+  }
 
-    fun tryAuth() {
-        val user = (document.getElementById("username") as? HTMLInputElement)!!.value
-        val pass = (document.getElementById("password") as? HTMLInputElement)!!.value
-        val flag = when (authMode) {
-            AuthMode.Login -> projection.login(user, pass)
-            AuthMode.Create -> projection.createAccount(user, pass)
+  fun tryAuth() {
+    val user = (document.getElementById("username") as? HTMLInputElement)!!.value
+    val pass = (document.getElementById("password") as? HTMLInputElement)!!.value
+    val flag =
+        when (authMode) {
+          AuthMode.Login -> projection.login(user, pass)
+          AuthMode.Create -> projection.createAccount(user, pass)
         }
-        if (flag) {
-            println(authMode)
-            window.asDynamic().projection = projection
-            when (authMode){
-                AuthMode.Login -> switchTo(View.GameView, projection)
-                AuthMode.Create -> switchTo(View.IntroView, projection)
-            }
-        } else {
-            (document.getElementById("auth-error") as? HTMLSpanElement)!!.innerText =
-                projection.accountManager.invalidLoginInfo(user, pass)
-        }
+    if (flag) {
+      println(authMode)
+      window.asDynamic().projection = projection
+      when (authMode) {
+        AuthMode.Login -> switchTo(View.GameView, projection)
+        AuthMode.Create -> switchTo(View.IntroView, projection)
+      }
+    } else {
+      (document.getElementById("auth-error") as? HTMLSpanElement)!!.innerText =
+          projection.accountManager.invalidLoginInfo(user, pass)
     }
-
+  }
 }

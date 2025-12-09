@@ -1,10 +1,9 @@
 package org.virtuoso.escape.model.account
 
+import kotlin.time.Duration
 import kotlinx.serialization.Serializable
 import org.virtuoso.escape.model.Difficulty
 import org.virtuoso.escape.model.data.SerializableDuration
-import org.virtuoso.escape.model.toMicrowaveTime
-import kotlin.time.Duration
 
 /**
  * Holds information about the users score.
@@ -16,20 +15,29 @@ import kotlin.time.Duration
  * @author Andrew
  */
 @Serializable
-data class Score(val timeRemaining: SerializableDuration, val difficulty: Difficulty, val totalScore: Long) {
+data class Score(
+    val timeRemaining: SerializableDuration,
+    val difficulty: Difficulty,
+    val totalScore: Long,
+) {
 
-    operator fun compareTo(other: Score): Int {
-        return this.totalScore.compareTo(other.totalScore)
-    }
+  operator fun compareTo(other: Score): Int {
+    return this.totalScore.compareTo(other.totalScore)
+  }
 
-    fun scoreEntry(username: String): List<String> {
-        return listOf(username, this.totalScore.toString(), this.timeRemaining.toString(), this.difficulty.name)
-    }
+  fun scoreEntry(username: String): List<String> {
+    return listOf(
+        username,
+        this.totalScore.toString(),
+        this.timeRemaining.toString(),
+        this.difficulty.name,
+    )
+  }
 
-    companion object {
-        /** Calculate a score from timeRemaining, difficulty, and GameState data.  */
-        fun calculateScore(penalty: Int, hintsUsed: Map<String, Int>, timeRemaining: Duration): Long {
-            return timeRemaining.inWholeSeconds - penalty - hintsUsed.values.sum()
-        }
+  companion object {
+    /** Calculate a score from timeRemaining, difficulty, and GameState data. */
+    fun calculateScore(penalty: Int, hintsUsed: Map<String, Int>, timeRemaining: Duration): Long {
+      return timeRemaining.inWholeSeconds - penalty - hintsUsed.values.sum()
     }
+  }
 }
