@@ -8,6 +8,8 @@ Along the way you'll encounter a cast of characters highly interested in making 
 
 Through at least 3 bombastic, blathering, and challenging floors, you'll be challenged in a way you've never been challenged since last semester. 
 
+You can play this game at 
+https://gabe.how/e/virtuoso/index!
 
 ---
 
