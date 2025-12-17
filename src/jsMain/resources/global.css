@@ -22,6 +22,7 @@
     --red-1: #FF5151;
     --pink-1: #FE82CC;
     cursor: default;
+    image-rendering: crisp-edges;
 }
 body {
     width: 100vw;
