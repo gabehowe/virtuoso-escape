@@ -3,6 +3,7 @@ body {
     width: 100vw;
     height: 100vh;
     background-image: url(images/grassy-background.png) !important;
+    image-rendering: crisp-edges;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -13,6 +14,7 @@ body {
     scale: 1.2;
     right: 330px;
     bottom: 140px;
+    image-rendering: crisp-edges;
 }
 
 #barn.closed {
