@@ -5,12 +5,12 @@
 import Game.accountsData
 import Game.gamestatesData
 import Game.languageData
-import kotlin.js.Promise
-import kotlin.uuid.ExperimentalUuidApi
 import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.*
-import kotlinx.coroutines.GlobalScope.coroutineContext
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.await
+import kotlinx.coroutines.promise
 import kotlinx.html.classes
 import kotlinx.html.div
 import kotlinx.html.dom.append
@@ -22,7 +22,8 @@ import kotlinx.html.js.strong
 import org.virtuoso.escape.model.*
 import org.w3c.dom.*
 import org.w3c.dom.events.KeyboardEvent
-import kotlin.coroutines.coroutineContext
+import kotlin.js.Promise
+import kotlin.uuid.ExperimentalUuidApi
 
 object Game {
   var debug =
@@ -392,11 +393,11 @@ object Game {
     this.projection = projection
     console.log(projection)
     setupListeners()
-      MainScope().promise { timeAnimator() }
+      timeAnimator()
     updateAll()
   }
 
-  suspend fun timeAnimator() {
+  fun timeAnimator() {
     document.getElementById("timer")!!.innerHTML = "{${projection.time().toMicrowaveTime()}}"
     if (debug["enabled"]!!.invoke() != null) {
       val debugMenu = (document.getElementById("debug") as? HTMLDivElement)!!
@@ -411,8 +412,10 @@ object Game {
         }
       }
     }
-    delay(250L)
-    if (window.asDynamic().currentView == View.GameView) timeAnimator()
+    window.setTimeout(handler = {
+        if (window.asDynamic().currentView == View.GameView) timeAnimator()
+    }, 250)
+
   }
 
   fun makeLogicalButton(id: String, display: String, button: Boolean = true): HTMLSpanElement {
@@ -555,7 +558,7 @@ suspend fun getData(url: String, setter: (String) -> Unit): Promise<Unit> {
 
 fun main() {
   val setup =
-      MainScope().promise {
+      suspend {
         getData("json/gamestates.json") { gamestatesData = it }.await()
         getData("json/accounts.json") { accountsData = it }.await()
         getData("json/language.json") { languageData = it }.await() // BUG: possible race condition
@@ -577,7 +580,7 @@ fun main() {
       }
   window.asDynamic().runLogin = {
     MainScope().promise {
-      setup.await()
+        setup()
       switchTo(View.LoginView, null)
     }
   }
