@@ -1,0 +1,384 @@
+{
+  "welcome": {
+    "welcome": "Welcome to Virtuoso Escape!",
+    "prelude": "You choose to go to a beaver farm, because of beavers. A very conspicuous beaver approaches, stripping off a mask and hitting you over the head, grinning as you lose consciousness",
+    "welcome_back": "Welcome back %s!\n%s\nYou have answered the following riddles: %s\nYou have used the following hints: %s"
+  },
+  "acorn_grove_0": {
+    "introduce": "You wake up in an acorn grove, seemingly smaller and...furrier...than usual.",
+    "name": "Acorn Grove"
+  },
+  "intro_squirrel": {
+    "name": "Eckard",
+    "introduce": "You see the well-mannered Eckard.",
+    "attack": "You try to throw a punch, but Eckard uses his squirrimobilizer on you.",
+    "interact": "\"Hello fellow squirrel, sit still. You just came out of the metamorphinator. A new member of the squirrel empire!\"",
+    "inspect": "Eckard's large bushy tail sways in the bustling acorn grove wind, acting not only aesthetically but also as an effective barometer."
+  },
+  "portal_squirrel": {
+    "name": "Gottfried",
+    "introduce": "You see the unruly Gottfried.",
+    "attack": "You try to throw a punch, but Gottfried uses his squirrimobilizer on you.",
+    "interact": "\"If we get rid of the demetamorphinator now, we are ready to take over the world and restore rightful squirrel hegemony with our metamorphinator. We're about to send out squirrel team 6 on the mission.",
+    "inspect": "Gottfried's matted and unruly fur is knotted in ways that would stump the most dedicated of knot theorists."
+  },
+  "traitor_squirrel": {
+    "name": "Eckard but on your side",
+    "introduce": "You see a tense light, a flicker of fiery desperation light itself behind Eckard's eyes.",
+    "attack": "You try to throw a punch, but Eckard just looks at you disappointed.",
+    "interact": "We don't have much time. Believe it or not, I don't want a squirrel hegemony. Our only chance is for you to get to the demetamorphinator and break this candy cane - he hands you an exquisite looking red and white cane. Here, I'm sending you there now. Remember: top floor.",
+    "inspect": "Eckard is ushering you towards an open portal."
+  },
+  "storey_i_0": {
+    "name": "Lobby",
+    "introduce": "*Crash!* You land on a sofa in the University of South Carolina M Bert Storey Research and Innovation Center Lobby! Under the all-day 50W lighting, it still seems like there's something you're failing to acknowledge about this room."
+  },
+  "storey_i_1": {
+    "name": "Janitor's Dusty Old Closet",
+    "introduce": "You enter a dusty old closet that vaguely smells of the American Nuclear Society's 2002 article on the scientific contributions of Enrico Fermi.\nThere isn't much sun in here."
+  },
+  "storey_i_2": {
+    "name": "Hallway",
+    "introduce": "You enter a long and seemingly unremarkable. What could possibly happen here."
+  },
+  "intro_joe": {
+    "name": "THE Joe Hardy",
+    "introduce": "You see the comparatively enormous stature of Joe Hardy leaning against a wall.",
+    "attack": "You try to throw a punch, but you realize you're a squirrel.",
+    "interact": "\"Oh shoot, you can talk? Anyway, I'm assuming you want to get through that door. The first thing you'll need is a sunflower seed butter and hummus sandwich.\"",
+    "inspect": "Joe's hair's highlights tell a story of scale, of sorrow, and of substance. You look on, fascinated."
+  },
+  "sans_sandwich_joe": {
+    "name": "STILL Joe Hardy",
+    "introduce": "You see Joe staring at you: \"Nice to see you again but where's the sandwich?\"",
+    "attack": "You try to kick Joe, but forget you're a squirrel. They're dangerous, you know.",
+    "interact": "Joe's voice booms': \"How dare you come back without the sandwich?\". Then he adds, \"That's okay, but what else do you have in your inventory?\"",
+    "interact_sandwich": "You hand over the sunflower seed butter and hummus sandwich to Joe. He says: \"(munches) Thanks for the sandwich, but if you look closely (munches again), the door was open all along.\"",
+    "inspect": "Joe thinks aggressively about a sandwich ... and inklings."
+  },
+  "sandwich_joe": {
+    "name": "Joe Hardy, plus a sandwich",
+    "introduce": "You see Joe eating a sandwich.",
+    "attack": "Joe doesn't care anymore, as long as he has his sandwich.",
+    "interact": "\"Thanks for the sandwich!\"",
+    "inspect": "On a table next to Joe you see a no longer sealed food safe jar of hummus and a no longer sealed food safe jar of sunflower seed butter."
+  },
+  "elephant_in_the_room": {
+    "name": "The elephant in the room",
+    "introduce": "\"Are you addressing me?\"",
+    "interact": "You address the elephant in the room. \"Wow, I feel recognized! I no longer need this sealed, food-safe, jar of comforting sunflower seed butter!\"",
+    "attack": "\"Ouch! but at least someone is acknowledging me.\"",
+    "inspect": "Everyone in the room is seemingly ignoring the elephant."
+  },
+  "sans_butter_elephant": {
+    "name": "The elephant in the room",
+    "introduce": "The elephant seems far more content. \"It's nice to actually meet someone, my name is Jeremy.\"",
+    "interact": "\"I hope you enjoy my sealed, food-safe, jar of comforting sunflower seed butter! I'll miss it dearly.\"",
+    "attack": "\"Ouch! but at least someone is acknowledging me.\"",
+    "inspect": "Everyone in the room seems seems suddenly shocked to discover the presence of an elephant."
+  },
+  "security": {
+    "name": "Security Bread",
+    "introduce": "You bump into a security guard roaming around the floor.",
+    "attack": "You try to punch the security, but he manhandles you to the ground and handcuffs you. **He had the right bread but you choose violence instead.**",
+    "interact": "\"You want the right right bread, right? Right. Answer my riddle 'right' and you'll be left left with the right right bread:\nLeft Left-Right, son of Right Right and Left Left, brother of Right Left-Right, writes right, drives right. Left Left LEFT Left Left-Right with Right Right and Right Left-Right, which isn't right. Who is left?\"",
+    "right_answer": "Right, \"Right\"! Right, You'll now be left left with the right right bread.",
+    "non_right_answer": "Sorry, but that answer just isn't 'right'!",
+    "inspect": "The security guard seems partially (mentally) composed of left and right hands. Where one would expect a set of shoes, he instead has wisdom."
+  },
+  "almanac": {
+    "name": "Friendly Sunflower and Dusty Old Almanac",
+    "introduce": "You find a personable sunflower and an extremely rusty, beat-up almanac laying in the janitor's closet.",
+    "attack": "You tear up the pages, leaving pieces scattered around. The pieces suddenly reform.",
+    "interact": "\"Hello, squirrel. I've been searching through this book all day, but every time I get five pages in, it closes on me.\nUse \"Speak\" to tell the almanac which page to open to and you an tell if the bread is on a preceding or following page.\"",
+    "inspect": "The sunflower has all the aspects characteristic of such a creature:\nA bright ring of ray florets, smaller, dimmer, inner florets, and a rough stalk.\nYou wonder how it remains bright in as dull a location as a janitor's closet.\nThe almanac has 32 pages, which may somehow be connected to the number 5...",
+    "too_high": "The glow from the correct page seems to come from earlier in the almanac.",
+    "guesses_remaining": "The book seems %s/%s as happy.",
+    "too_low": "The glow of the correct page seems to come from later in the almanac.",
+    "correct_page": "\"Wow, you found the right page! ... Wow, this is brilliant!\nIt says here that for the next year, the sun will move from east to west! I'm saved! I don't need this spatially conditionally usable slice of bread anymore!\"",
+    "break": "\"If I knew you were just going to fail, I wouldn't have let you touch the book in the first place! How am I ever going to find the sun?!\"\nThe almanac slams shut and bursts into flames.\nA new dusty old almanac is born from the ashes."
+  },
+  "almanac_5": {
+    "name": "Friendly Sunflower and Dusty Old Almanac",
+    "introduce": "You find a personable sunflower and an extremely rusty, beat-up almanac laying in the janitor's closet."
+  },
+  "almanac_4": {
+    "name": "Friendly Sunflower and Displeased Old Almanac",
+    "introduce": "As you flip through the almanac, you can't shake the feeling that it is unhappy with your attempt's to discover its contents."
+  },
+  "almanac_3": {
+    "name": "Friendly Sunflower and Disgruntled Old Almanac",
+    "introduce": "You begin to imagine that the almanac is developing some further animosity towards this series of events."
+  },
+  "almanac_2": {
+    "name": "Friendly Sunflower and Disdainful Old Almanac",
+    "introduce": "You have the striking impression that the almanac considers itself more important than you."
+  },
+  "almanac_1": {
+    "name": "Friendly Sunflower and Demented Old Almanac",
+    "introduce": "You feel the almanac practically vibrating with its pure hatred of your mere existence."
+  },
+  "found_almanac": {
+    "name": "Friendly Sunflower and Distinct Lack of Almanac",
+    "introduce": "You find a personable sunflower and a spot where an almanac used to be...",
+    "attack": "You slash your squirrel claws at the lack of an almanac and create a lack of action.",
+    "interact": "\"Hello, squirrel. Thanks for helping me solve the puzzle. I can finally be sure of the sun's location from within this dim closet!\"",
+    "inspect": "The sunflower has all the aspects characteristic of such a creature:\nA bright ring of ray florets, smaller, dimmer, inner florets, and a rough stalk.\nYou wonder how it remains bright in as dull a location as a janitor's closet.\nThe almanac has 32 pages, which may somehow be connected to the number 5..."
+  },
+  "trash_can": {
+    "name": "Trash Can",
+    "introduce": "You see the only available trash can on the 1st floor.",
+    "attack": "You knock over the trash can, revealing a sealed, clean, food-safe hummus.",
+    "interact": "**Can't interact with the trash can.**",
+    "inspect": "Flies circulate around the trash bin."
+  },
+  "sans_hummus_trash_can": {
+    "name": "Trash Can",
+    "introduce": "You see the trash can, lying pitifully on the ground.",
+    "attack": "You attack the trash can, and it rolls slightly.",
+    "interact": "**Can't interact with the trash can.**",
+    "inspect": "Ants crawl around the spilled garbage."
+  },
+  "first_door": {
+    "name": "Mysterious Door",
+    "introduce": "This door is probably, most definitely locked.",
+    "attack": "**Can't attack door.**",
+    "interact": "The door wasn't locked! You travel up the stairs to the next floor.",
+    "inspect": "The glowing door has a surprise behind it."
+  },
+  "storey_ii_0": {
+    "name": "Plant Office",
+    "introduce": "You enter an academic office with a standard desk, chair, and a bookshelf. There was a cool new chair in the hallway."
+  },
+  "storey_ii_1": {
+    "name": "Blue Room",
+    "introduce": "You enter a room with three identical doors."
+  },
+  "pitcher_plant": {
+    "name": "Pitcher Plant",
+    "introduce": "You see a professional baseball pitcher sitting behind the desk.",
+    "interact": "\"Hi, squirrel! What a wonderful day to play baseball!\nI know what you seek, and to get to the demetamorphinator you must pass through the correct door. Passing through an incorrect door will land you in the same place.\nJust remember, go through the door that rings with the most life!\"",
+    "attack": "You jump at the pitcher, but she hits you out of the air with a baseball bat. You fly into the wall at 97 miles per hour.",
+    "inspect": "Pitcher Plant is wearing a pinstriped baseball uniform with patches of dirt on it."
+  },
+  "door1": {
+    "name": "nondescript door",
+    "interact": "You move through the door and enter a new room.",
+    "inspect": "You see absolutely nothing remarkable about this door.",
+    "introduce": "You see a door so closed that Rome must be at peace.",
+    "final_door": "You move through the door and find a very long flight of stairs. You slowly proceed up them..."
+  },
+  "door1_0": {
+    "attack": "You weep at the door, but it forces you to imagine renaissance paintings of greek forums."
+  },
+  "door1_1": {
+    "attack": "You deliver your anguish to the door, but it smells like a decaying oranges in a compost pile."
+  },
+  "door1_2": {
+    "attack": "You throw yourself against the door, and it shakes like the smell of a blooming citrus tree."
+  },
+  "door2": {
+    "name": "nondescript door",
+    "interact": "You move through the door and see the door you just walked through shut in front of you. You're in the same room you started in.",
+    "inspect": "You see absolutely nothing remarkable about this door.",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door2_2": {
+    "attack": "You throw yourself against the door, and it shakes like a hot, dry, dust-laden wind."
+  },
+  "door2_1": {
+    "attack": "You deliver your anguish to the door, but it remains as steadfast as *Le Penseur*."
+  },
+  "door2_0": {
+    "attack": "You weep at the door, but you feel the sharp idea of taxidermy."
+  },
+  "door3": {
+    "name": "nondescript door",
+    "interact": "You move through the door and see the door you just walked through shut in front of you. You're in the same room you started in.",
+    "inspect": "You see absolutely nothing remarkable about this door.",
+    "introduce": "You see a door so closed that Rome must be at peace."
+  },
+  "door3_2": {
+    "attack": "You throw yourself against the door, and it shakes like melting prevernal snow..."
+  },
+  "door3_1": {
+    "attack": "You deliver your anguish to the door, but it whispers like a quiet nocturnal air."
+  },
+  "door3_0": {
+    "attack": "You weep at the door and envision a snow angel."
+  },
+  "storey_iii_0": {
+    "name": "Chambre du Corbeau",
+    "introduce": "The room is bare except for a pedestal in the center holding an intricately designed wooden box. A small, but well-dressed, sparrow sits atop it, looking expectantly at you."
+  },
+  "sparrow_ambassador": {
+    "name": "Apine Ambassador",
+    "inspect": "The sparrow's well-dressed attire glints in the dim light of the bare room. It is muttering something about a closed system.",
+    "introduce": "You behold the sparrow atop the pedestal.",
+    "attack": "You can't get up to the sparrow, so you sit and think angry thoughts.",
+    "interact": "Chirp chirp. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in finding the one true cycle.  Think about the first number you see—it must be the key to finding the second, and so on. Where do you *start* the chain? The puzzle is solved by correctly ordering three words: FOLLOW, OPEN, and START."
+  },
+  "box_start": {
+    "name": "Starting box",
+    "introduce": "You see a box."
+  },
+  "box_step1": {
+    "interact": "The box still remains closed. You need to take another step.",
+    "inspect": "The box looks largley the same.",
+    "attack": "You try to smash the box, but it is no more effective than any prior attempts."
+  },
+  "box_success": {
+    "interact": "The box appears unlocked. One final step is required.",
+    "inspect": "The box still looks largley the same.",
+    "attack": "You try to smash the box, but it is just as ineffectual as all prior effors."
+  },
+  "box_open": {
+    "interact": "The box lays open on a table.",
+    "inspect": "The box looks the same as it did when it was closed, except now it is open...",
+    "attack": "You try to smash the box, but despite it no longer being closed, it is still as impervious your efforts."
+  },
+  "box_riddle": {
+    "name": "Box",
+    "introduce": "You see a box.",
+    "interact": "You stand before the box. You realize you need a strategy to move forward.",
+    "step_start": "You decided to start with your own box. A subtle click confirms you made the first correct move. Now, where does the number inside point you?",
+    "step_follow": "You follow the number's instruction and move your attention to the next box in the chain. You sense the loop is closing. It's time to claim your prize.",
+    "step_success": "A deep rumble confirms the final mechanism is unlocked. The loop is complete! The contents are within reach.",
+    "solved": "The box slides open with a whisper, revealing the long-sought-after item inside. You feel a small victory against the vastness of chance. The item is now yours.",
+    "step_wrong": "The box snaps back into place. You must have broken the sequence! The strategy must be followed precisely from the beginning.",
+    "attack": "You try to smash the box, but it's ineffective. You gain nothing but a bruised hand.",
+    "inspect": "The box is designed to hide its mechanism. Only by understanding the flow of the puzzle will you find the way in."
+  },
+  "exit_door_locked": {
+    "name": "Exit Door (locked)",
+    "introduce": "You see a locked door.",
+    "attack": "You throw yourself against the door, but nothing happens."
+  },
+  "exit_door": {
+    "name": "Exit door",
+    "introduce": "Here lies a door",
+    "locked_msg": "The door needs a key to open, how would you get that?",
+    "unlocked_msg": "You use the key and the door is now open.",
+    "unlocked_success": "You step through the open door and proceed to the next floor.",
+    "inspect_locked": "The door looks like it needs a key to open",
+    "inspect_unlocked": "You see the light of (tentative) salvation behind the next door as the first sounds of squirrel chattering behind you become apparent."
+  },
+  "storey_iv_0": {
+    "name": "Fin Foyer",
+    "introduce": "You enter a culminating room, filled with urgency and a feeling that you might be nearing the end of your adventure. A critical moment is approaching..."
+  },
+  "man": {
+    "name": "man",
+    "attack": "Man doesn't respond to your attempts to attack.",
+    "introduce": "What manual page do you want?\nFor example, try 'man help'.",
+    "interact": "There's nothing to interact with, only a mere wish to know more...",
+    "inspect": "You don't see anything, but you feel millimeters away from endless knowledge.",
+    "input_help": "HELP(1)\t\t\tList of all commands\t\t\tHELP(1)\n\nLIST\n\tman\tcat\tls\tcd\ttar\trotx\n\nTry asking man for information on these!",
+    "input_man": "MAN(1)\t\t\tManual pager utils\t\t\tMAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS man [man options]\n\nDESCRIPTION\tProvide information about a utility.",
+    "input_ls": "LS(1)\t\t\tUser Commands\t\t\tLS(1)\n\nNAME\n\tls - list directory contents\n\nSYNOPSIS\n\tls [OPTION]... [FILE]...\n\nDESCRIPTION\n\tList information about the FILEs (the current directory by default). ",
+    "input_cd": "cd: cd [dir]\n\tChange the shell working directory.\n\t\n\tChange the current directory to DIR.",
+    "input_tar": "TAR(1)\t\t\tTAR\t\t\tTAR(1)\n\nNAME\n\ttar - an archiving utility\n\nSYNOPSIS\n\ttar xvf [file]",
+    "input_rotx": "ROTX(1)\t\t\tROTX\t\t\tROTX(1)\n\nNAME\n\trotx - A ceaser cipher decrypter\n\nSYNOPSIS\n   rotx [amount to rotate] [file]"
+  },
+  "computty_blocked": {
+    "name": "CompuTTY",
+    "introduce": "CompuTTY 0.0.0 ]LOCKED[",
+    "interact": "The terminal is locked.",
+    "inspect": "You see a terminal fit for use by a squirrel, but it's locked.",
+    "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5."
+  },
+  "computty_unblocked": {
+    "name": "CompuTTY",
+    "introduce": "CompuTTY 0.0.0\n~$ ",
+    "interact": "The terminal awaits input.",
+    "inspect": "You see a terminal fit for use by a squirrel.",
+    "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5.",
+    "ls_default": "code/",
+    "ls_cd": "code.tar",
+    "ls_tar": "code.tar  code",
+    "cat_tar": "code0000664000175000017500000000006615075030073010651 0ustar  squirrelsquirrelxubbe, jxyi yi q fuhvusjbo vydu unqcfbu ev iecu junj.",
+    "cat_code": "xubbe, jxyi yi q fuhvusjbo vydu unqcfbu ev iecu junj.",
+    "no_file": "cd: No such file or directory",
+    "failed_rotx": "Failed to decrypt: vcjyhvao kchvridcrsav bviirgv. ifkyhhva xvgvbdco hkavi!",
+    "good_rotx": "Password: praise_squirrel_hegemon7\nDemetamorphinator Unlocked!",
+    "man_cat": "see man cat",
+    "man_tar": "see man tar",
+    "man_rotx": "see man rotx",
+    "input_cd": ""
+  },
+  "computty_cd": {
+    "name": "Computty",
+    "introduce": "CompuTTY 0.0.0\n~/code$"
+  },
+  "computty_tar": {
+    "name": "Computty",
+    "introduce": "CompuTTY 0.0.0\n~/code$"
+  },
+  "microwave_blocked": {
+    "name": "Demetamorphinator",
+    "introduce": "You behold the Demetamorphinator, the machine the Squirrels wish to destroy.",
+    "attack": "You try to attack the Demetamorphinator open, but you damage a claw.",
+    "inspect": "The Demetamorhphinator has a popcorn button, a pizza button, and an option to reheat frozen meat.",
+    "interact": "The Demetamorphinator is locked. Despite all your wishing, it won't open."
+  },
+  "microwave_unblocked": {
+    "name": "Demetamorphinator",
+    "introduce": "As you step towards the demetamorphinator, you feel your claws begin to tremble as a stampede of squirrels rushes towards you, screaming like a horde of demons.\nYou jump farther and just barely reach it, suddenly  realizing that if you use the Demetamorphinator, you won't have time to use the candy cane after and the squirrel hegemony will reign.\nYou can: \nAttack and destroy it now, and remain a squirrel.\nInteract with it, and ignore the well-being of countless squirrels.",
+    "inspect": "In your minute moment of thought, you examine the Demetamorphinator and reflect on your past decisions: Intro to Kantian Ethics in sophomore year; Every squirrel you've ever seen with a family, a life; The Russell House 70th anniversary (featuring squirrels). Is it worth creating a squirrel hegemony just to keep your own selfish humanity?",
+    "attack": "You grab the candy cane and, taking a deep breath, break it. The smell of peppermint is overpowering for a second, and then the demetamorphinator seems to contort into itself, disappearing. You've saved humanity by sacrificing your own to prevent a squirrel takeover. As your squirrel body is ripped to shreds by the now further enraged mass of oppressive squirrels, you stare off into the setting sun and think \"Was I ever human, until now?\"",
+    "interact": "You take the candy cane out of your tail (among its many uses, a multipurpose storage device) and throw it at a calculated angle into the air as you leap across the floor into the Demetamorphinator, slamming the door shut behind yourself. The carefully calculated cane hits the 30 seconds button and you begin to increase in size, just as the mass of angry squirrels pounds against the glass. Your arms grow longer, your spine shrinks (proportionally), and your legs stretch out...\n\nYou wake up in the beaver field with a roaring headache. Everything is bright, but you begin to make out a group of people standing over you. \"Are you alright, son? That beaver hit you pretty hard.\" one of them says. \"Yeah, I'm fine,\" you say, curious at the sound of your own voice.\nYou walk towards your car beaverless and sit down to drive, but accidentally sit on something. As you reach down to check your back pocket, you find a metal fork with hummus residue, with a sinking feeling in your stomach."
+  },
+  "sock_squirrel": {
+    "name": "Angry squirrel with one sock",
+    "attack": "You throw a punch at the angry squirrel, which then becomes placated and unlocks CompuTTY.",
+    "inspect": "You see a squirrel as angry as an aggressively unwatered plant. You notice it has a total of 16 claws. Maybe that's important?",
+    "interact": "You try to negotiate peacefully with the squirrel, but it just snarls and screams.",
+    "introduce": "You see a squirrel with one squirrel-sized sock on. You think it might know something, but it just keeps snarling and screaming."
+  },
+  "credits": {
+    "contributor_0": "Gabriel Howe <gabri@sc.edu>",
+    "contributor_1": "Treasure Uzondu <tuzondu@email.sc.edu>",
+    "contributor_2": "Andrew Heuer <aheuer@email.sc.edu>",
+    "contributor_3": "Bose Kaikini <bkaikini@email.sc.edu>",
+    "message": "Thanks for playing Escape: A Storey!\nSpecial thanks to Joe Hardy for permission for his appearance and for his excellence in teaching assistance.",
+    "score": "You had %s remaining on %s difficulty. Your score final score is: %s",
+    "hints": "You used %s hints.",
+    "certificate": "**Escape: A Storey**\nYou finished the game and escaped M. Bert Storey Research and Innovation Center!\n%s\n%s\nThanks for playing!"
+  },
+  "narrator_start": {
+    "name": "Narrator",
+    "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old)."
+  },
+  "narrator_hint_1": {
+    "name": "Narrator",
+    "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old). He seems to be almost out of things to say."
+  },
+  "narrator_hint_2": {
+    "name": "Narrator",
+    "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old). He seems out of things to say."
+  },
+  "narrator": {
+    "name": "Narrator",
+    "introduce": "A nearly transparent figure stands here, whispering secret stories.",
+    "inspect": "The narrator seems to be an extension of the building itself, offering silent, wise counsel.",
+    "attack": "Your attack passes straight through the figure, leaving you questioning either your ability or sanity.",
+    "hints_exhausted": "I have shared all my wisdom for this floor. You must proceed on your own now.",
+    "acorn_grove_hint_1": "You need to escape this grove to reach the building. Perhaps one of your squirrel friends knows how to use the machinery.",
+    "acorn_grove_hint_2": "The friendly squirrel wants to help you.",
+    "storey_i_hint_1": "You need THE sandwich. The ingredients are scattered across the floor, disguised as other objects or rewards for solving puzzles, try your best stoic mammal.",
+    "storey_i_hint_2": "The bread is the crux of all this. One piece is a reward for a numbers game in the closet, and the other is a reward for a tricky word puzzle with the guard.",
+    "storey_ii_hint_1": "The door puzzle requires you to choose the door that 'rings with the most life.' Think about what the pitcher plant values.",
+    "storey_ii_hint_2": "The doors must be opened in a specific sequence, which is shuffled after every failure. The hint lies in the doors' numerical property.",
+    "storey_iii_hint_1": "The sparrow says the box's trick lies in finding the one true cycle. The wise know where to begin their journey. The patient know they must follow the path laid before them. The intelligent know when to *open* the door.",
+    "storey_iii_hint_2": "The exit door requires a key, which you receive upon successfully opening the box. The box must be opened in the sequence: START, FOLLOW, OPEN.",
+    "storey_iv_hint_1": "You need to unlock the Demetamorphinator. The blocked terminal (CompuTTY) needs to be unblocked by the squirrel with one sock.",
+    "storey_iv_hint_2": "The terminal puzzle involves common posix commands: cd, tar, and others. The final solution is the password in the good_rotx message. Look around for something that could be a ceaser cipher rotation number."
+  },
+  "ui": {
+    "switch_login": "Have an account?",
+    "switch_create": "New?",
+    "prompt_login": "Login",
+    "prompt_create": "Create an account",
+    "intro": "You have been attacked by a beaver at a pick-your-own beaver farm and knocked into the fridge half of a micro-fridge. It turns out that the fridge was a metamorphosis engine, transforming you into a squirrel. You need to get to the top of the M Bert Storey Innovation Center, find the matching microwave half, and use it to become human again!"
+  }
+}
