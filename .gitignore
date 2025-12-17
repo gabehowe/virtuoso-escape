@@ -52,3 +52,5 @@ bin/
 *.nix
 *.lock.direnv/
 .envrc/
+kotlin-js-store/
+.kotlin
