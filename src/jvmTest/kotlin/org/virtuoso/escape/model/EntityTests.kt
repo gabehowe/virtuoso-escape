@@ -51,7 +51,7 @@ class EntityTests {
     val gameStates = mapOf(account.id to gameState)
     val am = AccountManager(accounts, gameStates)
 
-    proj = GameProjection({ "" }, TestHelper.DUMMY_WRITER)
+    proj = GameProjection(TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER)
     // Login to set state
     proj.login(dummyUser, dummyPass)
   }

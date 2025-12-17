@@ -2,6 +2,7 @@
 
 package org.virtuoso.escape.model.data
 
+import org.virtuoso.escape.TestHelper
 import kotlin.test.*
 import kotlin.uuid.ExperimentalUuidApi
 import org.virtuoso.escape.model.GameProjection
@@ -11,7 +12,7 @@ class DataWriterTests {
 
   @BeforeTest
   fun pre() {
-    proj = GameProjection({ "" }, { _, _ -> })
+    proj = GameProjection(TestHelper.FILE_READER(this::class), { _, _ -> })
   }
 
   @Test

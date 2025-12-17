@@ -4,6 +4,7 @@ import kotlin.time.Duration
 import kotlinx.serialization.Serializable
 import org.virtuoso.escape.model.Difficulty
 import org.virtuoso.escape.model.data.SerializableDuration
+import org.virtuoso.escape.model.toMicrowaveTime
 
 /**
  * Holds information about the users score.
@@ -29,7 +30,7 @@ data class Score(
     return listOf(
         username,
         this.totalScore.toString(),
-        this.timeRemaining.toString(),
+        this.timeRemaining.toMicrowaveTime(),
         this.difficulty.name,
     )
   }

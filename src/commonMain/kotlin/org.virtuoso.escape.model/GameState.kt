@@ -34,6 +34,7 @@ constructor(
     val completedPuzzles: MutableSet<String>,
     var difficulty: Difficulty,
     var penalty: Int,
+    val currentEntityStates: Map<String, String> = mapOf(),
     private var startTime: Long = Clock.System.now().toEpochMilliseconds(),
     var isEnded: Boolean = false,
     currentMessage: String? = null,
@@ -166,25 +167,17 @@ constructor(
       val surrogate = decoder.decodeSerializableValue(Surrogate.serializer())
 
       return GameState(
-              surrogate.currentFloor,
-              surrogate.currentRoom,
-              surrogate.currentEntity,
-              surrogate.currentItems,
-              surrogate.time,
-              surrogate.hintsUsed,
-              surrogate.completedPuzzles,
-              surrogate.difficulty,
-              surrogate.penalty,
-          )
-          .apply {
-            this.floor.rooms
-                .flatMap { it.entities }
-                .map { entity ->
-                  surrogate.currentEntityStates[entity.id]?.let { newState ->
-                    entity.swapState(newState)
-                  }
-                }
-          }
+          surrogate.currentFloor,
+          surrogate.currentRoom,
+          surrogate.currentEntity,
+          surrogate.currentItems,
+          surrogate.time,
+          surrogate.hintsUsed,
+          surrogate.completedPuzzles,
+          surrogate.difficulty,
+          surrogate.penalty,
+          surrogate.currentEntityStates,
+      )
     }
   }
 }

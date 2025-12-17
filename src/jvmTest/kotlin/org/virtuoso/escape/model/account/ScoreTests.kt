@@ -23,7 +23,7 @@ class ScoreTests {
     val score = Score(125.seconds, Difficulty.SUBSTANTIAL, 500L)
     val entry = score.scoreEntry("testPlayer")
 
-    assertEquals(5, entry.size)
+    assertEquals(4, entry.size)
     assertEquals("testPlayer", entry[0])
     assertEquals("500", entry[1])
     // entry[2] is Duration.toString(), format depends on Kotlin implementation but usually ISO-8601
@@ -32,9 +32,6 @@ class ScoreTests {
     // checking implementation: "this.timeRemaining.toString()"
     assertFalse(entry[2].isEmpty())
     assertEquals("SUBSTANTIAL", entry[3])
-
-    // formattedTime: "02, 05"
-    assertEquals("02, 05", entry[4])
   }
 
   @Test

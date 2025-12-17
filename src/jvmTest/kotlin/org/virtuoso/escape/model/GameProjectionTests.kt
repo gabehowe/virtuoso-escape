@@ -11,8 +11,8 @@ import org.virtuoso.escape.model.action.Actions
 
 class GameProjectionTests {
   private lateinit var proj: GameProjection
-  private val testUser = "testUser"
-  private val testPass = "password"
+  private val testUser = "dummy"
+  private val testPass = "dummy"
 
   @BeforeTest
   fun setup() {
@@ -152,10 +152,10 @@ class GameProjectionTests {
   @Test
   fun testItems() {
     proj.login(testUser, testPass)
-    assertTrue(proj.currentItems().isEmpty())
+    assertTrue(proj.currentItems().isEmpty(), "Expected no items.")
 
     proj.state.items.add(Item.Keys)
-    assertTrue(proj.currentItems().any { it == Item.Keys })
+    assertTrue(proj.currentItems().any { it == Item.Keys }, "Expected keys")
   }
 
   @Test

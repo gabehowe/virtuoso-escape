@@ -5,6 +5,8 @@
 import Game.accountsData
 import Game.gamestatesData
 import Game.languageData
+import kotlin.js.Promise
+import kotlin.uuid.ExperimentalUuidApi
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -22,8 +24,6 @@ import kotlinx.html.js.strong
 import org.virtuoso.escape.model.*
 import org.w3c.dom.*
 import org.w3c.dom.events.KeyboardEvent
-import kotlin.js.Promise
-import kotlin.uuid.ExperimentalUuidApi
 
 object Game {
   var debug =
@@ -393,7 +393,7 @@ object Game {
     this.projection = projection
     console.log(projection)
     setupListeners()
-      timeAnimator()
+    timeAnimator()
     updateAll()
   }
 
@@ -412,10 +412,10 @@ object Game {
         }
       }
     }
-    window.setTimeout(handler = {
-        if (window.asDynamic().currentView == View.GameView) timeAnimator()
-    }, 250)
-
+    window.setTimeout(
+        handler = { if (window.asDynamic().currentView == View.GameView) timeAnimator() },
+        250,
+    )
   }
 
   fun makeLogicalButton(id: String, display: String, button: Boolean = true): HTMLSpanElement {
@@ -557,30 +557,29 @@ suspend fun getData(url: String, setter: (String) -> Unit): Promise<Unit> {
 }
 
 fun main() {
-  val setup =
-      suspend {
-        getData("json/gamestates.json") { gamestatesData = it }.await()
-        getData("json/accounts.json") { accountsData = it }.await()
-        getData("json/language.json") { languageData = it }.await() // BUG: possible race condition
-        window.asDynamic().projection =
-            GameProjection(
-                reader@{
-                  when (it) {
-                    "json/gamestates.json" -> gamestatesData
-                    "json/accounts.json" -> accountsData
-                    "json/language.json" -> languageData
-                    else -> {
-                      console.error(it)
-                      ""
-                    }
-                  }
-                },
-                { p, d -> console.log(p, d) },
-            )
-      }
+  val setup = suspend {
+    getData("json/gamestates.json") { gamestatesData = it }.await()
+    getData("json/accounts.json") { accountsData = it }.await()
+    getData("json/language.json") { languageData = it }.await() // BUG: possible race condition
+    window.asDynamic().projection =
+        GameProjection(
+            reader@{
+              when (it) {
+                "json/gamestates.json" -> gamestatesData
+                "json/accounts.json" -> accountsData
+                "json/language.json" -> languageData
+                else -> {
+                  console.error(it)
+                  ""
+                }
+              }
+            },
+            { p, d -> console.log(p, d) },
+        )
+  }
   window.asDynamic().runLogin = {
     MainScope().promise {
-        setup()
+      setup()
       switchTo(View.LoginView, null)
     }
   }

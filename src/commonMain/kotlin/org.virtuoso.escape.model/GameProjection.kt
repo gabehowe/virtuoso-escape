@@ -34,10 +34,13 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
    */
   fun login(username: String, password: String): Boolean {
     val currentAccount =
-        this.accountManager.login(username, password)?.let {
-          account = it
+        this.accountManager.login(username, password)?.let { acc ->
+          account = acc
           state = accountManager.gameStates[account.id]!!
           state.language = language
+          state.floor.rooms
+              .flatMap { it.entities }
+              .map { state.currentEntityStates[it.id]?.let(it::swapState) }
         }
     return currentAccount != null
   }

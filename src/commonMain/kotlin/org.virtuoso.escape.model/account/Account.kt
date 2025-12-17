@@ -4,7 +4,6 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.serializer
 import org.virtuoso.escape.model.Difficulty
 import org.virtuoso.escape.model.GameState
 

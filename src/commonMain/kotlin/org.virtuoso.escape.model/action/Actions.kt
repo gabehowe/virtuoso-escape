@@ -95,6 +95,7 @@ object Actions {
    */
   fun swapEntities(entity: String, newState: String): ActionType {
     return { state ->
+      println("swapped $entity to $newState")
       val entityToSwap =
           state.floor.rooms.flatMap { it.entities }.firstOrNull { it.id == entity }
               ?: throw IllegalArgumentException(
