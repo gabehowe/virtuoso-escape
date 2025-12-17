@@ -10,6 +10,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.html.classes
 import kotlinx.html.div
 import kotlinx.html.dom.append
@@ -21,6 +22,7 @@ import kotlinx.html.js.strong
 import org.virtuoso.escape.model.*
 import org.w3c.dom.*
 import org.w3c.dom.events.KeyboardEvent
+import kotlin.coroutines.coroutineContext
 
 object Game {
   var debug =
@@ -390,7 +392,7 @@ object Game {
     this.projection = projection
     console.log(projection)
     setupListeners()
-    MainScope().promise { timeAnimator() }
+      MainScope().promise { timeAnimator() }
     updateAll()
   }
 
@@ -574,7 +576,7 @@ fun main() {
             )
       }
   window.asDynamic().runLogin = {
-    MainScope().launch {
+    MainScope().promise {
       setup.await()
       switchTo(View.LoginView, null)
     }
