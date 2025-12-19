@@ -12,22 +12,15 @@
     "name": "Eckard",
     "introduce": "You see the well-mannered Eckard.",
     "attack": "You try to throw a punch, but Eckard uses his squirrimobilizer on you.",
-    "interact": "\"Hello fellow squirrel, sit still. You just came out of the metamorphinator. A new member of the squirrel empire!\"",
+    "interact": "\"Hello fellow squirrel, sit still. You just came out of the *Metamorphinator*, a device that turns humans into squirrels. A new member of the squirrel empire! The squirrel hegemony will reign unstoppable once we destroy the *Demetamorphinator*, the only thing that can turn creatures back to their original forms!\"",
     "inspect": "Eckard's large bushy tail sways in the bustling acorn grove wind, acting not only aesthetically but also as an effective barometer."
   },
   "portal_squirrel": {
     "name": "Gottfried",
     "introduce": "You see the unruly Gottfried.",
-    "attack": "You try to throw a punch, but Gottfried uses his squirrimobilizer on you.",
-    "interact": "\"If we get rid of the demetamorphinator now, we are ready to take over the world and restore rightful squirrel hegemony with our metamorphinator. We're about to send out squirrel team 6 on the mission.",
+    "attack": "You try to throw a punch, but Gottfried sidesteps you and slams your head into the ground.",
+    "interact": "\"We're going to send a group to find the *Demetamorphinator*. Oh, shoot, are you alright?\"\nYou feel a little woozy and stumble\n\"No, wait!\"\nYou trip over a root and fall down a rabbit hole, seeing the sun grow darker as a spot as you again drift into unconsciousness...",
     "inspect": "Gottfried's matted and unruly fur is knotted in ways that would stump the most dedicated of knot theorists."
-  },
-  "traitor_squirrel": {
-    "name": "Eckard but on your side",
-    "introduce": "You see a tense light, a flicker of fiery desperation light itself behind Eckard's eyes.",
-    "attack": "You try to throw a punch, but Eckard just looks at you disappointed.",
-    "interact": "We don't have much time. Believe it or not, I don't want a squirrel hegemony. Our only chance is for you to get to the demetamorphinator and break this candy cane - he hands you an exquisite looking red and white cane. Here, I'm sending you there now. Remember: top floor.",
-    "inspect": "Eckard is ushering you towards an open portal."
   },
   "storey_i_0": {
     "name": "Lobby",
@@ -214,9 +207,9 @@
   "sparrow_ambassador": {
     "name": "Apine Ambassador",
     "inspect": "The sparrow's well-dressed attire glints in the dim light of the bare room. It is muttering something about a closed system.",
-    "introduce": "You behold the sparrow atop the pedestal.",
+    "introduce": "You behold a sparrow atop a pedestal.",
     "attack": "You can't get up to the sparrow, so you sit and think angry thoughts.",
-    "interact": "Chirp chirp. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in finding the one true cycle.  Think about the first number you see—it must be the key to finding the second, and so on. Where do you *start* the chain? The puzzle is solved by correctly ordering three words: FOLLOW, OPEN, and START."
+    "interact": "*chirp chirp*. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in whispering to it the one path. The puzzle is solved by correctly ordering three words: FOLLOW, OPEN, and START."
   },
   "box_start": {
     "name": "Starting box",
@@ -224,12 +217,12 @@
   },
   "box_step1": {
     "interact": "The box still remains closed. You need to take another step.",
-    "inspect": "The box looks largley the same.",
+    "inspect": "The box looks largely the same.",
     "attack": "You try to smash the box, but it is no more effective than any prior attempts."
   },
   "box_success": {
     "interact": "The box appears unlocked. One final step is required.",
-    "inspect": "The box still looks largley the same.",
+    "inspect": "The box still looks largely the same.",
     "attack": "You try to smash the box, but it is just as ineffectual as all prior effors."
   },
   "box_open": {
@@ -241,8 +234,8 @@
     "name": "Box",
     "introduce": "You see a box.",
     "interact": "You stand before the box. You realize you need a strategy to move forward.",
-    "step_start": "You decided to start with your own box. A subtle click confirms you made the first correct move. Now, where does the number inside point you?",
-    "step_follow": "You follow the number's instruction and move your attention to the next box in the chain. You sense the loop is closing. It's time to claim your prize.",
+    "step_start": "A subtle click confirms you made the first correct move. Now, where does the number inside point you?",
+    "step_follow": "You sense the loop is closing. It's time to claim your prize.",
     "step_success": "A deep rumble confirms the final mechanism is unlocked. The loop is complete! The contents are within reach.",
     "solved": "The box slides open with a whisper, revealing the long-sought-after item inside. You feel a small victory against the vastness of chance. The item is now yours.",
     "step_wrong": "The box snaps back into place. You must have broken the sequence! The strategy must be followed precisely from the beginning.",
@@ -250,13 +243,13 @@
     "inspect": "The box is designed to hide its mechanism. Only by understanding the flow of the puzzle will you find the way in."
   },
   "exit_door_locked": {
-    "name": "Exit Door (locked)",
+    "name": "Locked Exit Door",
     "introduce": "You see a locked door.",
     "attack": "You throw yourself against the door, but nothing happens."
   },
   "exit_door": {
     "name": "Exit door",
-    "introduce": "Here lies a door",
+    "introduce": "You see a normal door.",
     "locked_msg": "The door needs a key to open, how would you get that?",
     "unlocked_msg": "You use the key and the door is now open.",
     "unlocked_success": "You step through the open door and proceed to the next floor.",
@@ -320,10 +313,10 @@
     "open": "You press in the passcode and the Demetamorphinator unlocks."
   },
   "microwave_unblocked": {
-    "introduce": "As you step towards the demetamorphinator, you feel your claws begin to tremble as a stampede of squirrels rushes towards you, screaming like a horde of demons.\nYou jump farther and just barely reach it, suddenly  realizing that if you use the Demetamorphinator, you won't have time to use the candy cane after and the squirrel hegemony will reign.\nYou can: \nAttack and destroy it now, and remain a squirrel.\nInteract with it, and ignore the well-being of countless squirrels.",
+    "introduce": "As you step towards the Demetamorphinator, you feel your claws begin to tremble as a stampede of squirrels rushes towards you, screaming like a horde of demons.\nYou jump farther and just barely reach it, suddenly realizing that if you use the Demetamorphinator, you won't have time to destroy it after and the squirrel hegemony will reign.\n**You can:** \n*Attack* and destroy it now, and remain a squirrel.\n*Interact* with it, and ignore the well-being of countless squirrels.",
     "inspect": "In your minute moment of thought, you examine the Demetamorphinator and reflect on your past decisions: Intro to Kantian Ethics in sophomore year; Every squirrel you've ever seen with a family, a life; The Russell House 70th anniversary (featuring squirrels). Is it worth creating a squirrel hegemony just to keep your own selfish humanity?",
-    "attack": "You grab the candy cane and, taking a deep breath, break it. The smell of peppermint is overpowering for a second, and then the demetamorphinator seems to contort into itself, disappearing. You've saved humanity by sacrificing your own to prevent a squirrel takeover. As your squirrel body is ripped to shreds by the now further enraged mass of oppressive squirrels, you stare off into the setting sun and think \"Was I ever human, until now?\"",
-    "interact": "You take the candy cane out of your tail (among its many uses, a multipurpose storage device) and throw it at a calculated angle into the air as you leap across the floor into the Demetamorphinator, slamming the door shut behind yourself. The carefully calculated cane hits the 30 seconds button and you begin to increase in size, just as the mass of angry squirrels pounds against the glass. Your arms grow longer, your spine shrinks (proportionally), and your legs stretch out...\n\nYou wake up in the beaver field with a roaring headache. Everything is bright, but you begin to make out a group of people standing over you. \"Are you alright, son? That beaver hit you pretty hard.\" one of them says. \"Yeah, I'm fine,\" you say, curious at the sound of your own voice.\nYou walk towards your car beaverless and sit down to drive, but accidentally sit on something. As you reach down to check your back pocket, you find a metal fork with hummus residue, with a sinking feeling in your stomach."
+    "attack": "You grab a fork off the ground and throw it into the Demetamorphinator. You dash to it and slam the pizza button, and the Demetamorphinator seems to contort into itself, disappearing, just as you feel the impact of the raging squirrel mass. As your squirrel body is ripped to shreds by the enraged mass of oppressive squirrels, you stare off into the setting sun and think *Was I ever human, until now?*",
+    "interact": "You pick up a fork off the ground and throw it at a calculated angle into the air as you leap across the floor into the Demetamorphinator, slamming the door shut behind yourself. The carefully calculated fork hits the 30 seconds button, and you begin to increase in size, just as the mass of angry squirrels pounds against the glass. Your arms grow longer, your spine shrinks, and your legs stretch out...\n\nYou wake up in the beaver field with a roaring headache. Everything is bright, but you begin to make out a group of people standing over you. \"Are you alright, son? That beaver hit you pretty hard.\" one of them says. \"Yeah, I'm fine,\" you say, curious at the sound of your own voice.\nYou walk towards your car beaverless and sit down to drive, but accidentally sit on something. As you reach down to check your back pocket, you find a metal fork with hummus residue, with a sinking feeling in your stomach."
   },
   "sock_squirrel": {
     "name": "Angry squirrel with one sock",

@@ -214,7 +214,7 @@ object Game {
           sanitizeForJS(
               (currentMessage()
                   ?: entity.let { language["introduce", it?.id, it?.state()?.id, room.id] }) +
-                  if (switchedFloor) "\n Press any key to continue..." else ""
+                  if (switchedFloor) "\n **Press any key to continue...**" else ""
           ),
           "message",
       )
