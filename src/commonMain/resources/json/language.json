@@ -273,22 +273,25 @@
     "introduce": "What manual page do you want?\nFor example, try 'man help'.",
     "interact": "There's nothing to interact with, only a mere wish to know more...",
     "inspect": "You don't see anything, but you feel millimeters away from endless knowledge.",
+    "input_cat": "CAT(1)\t\t\t User Commands\t\t\t CAT(1)\n\n NAME\n\t cat - concatenate files and print on the standard output \n\nSYNOPSIS\n\t cat [OPTION]... [FILE]...\n\n DESCRIPTION\n\t Concatenate FILE(s) to standard output.",
     "input_help": "HELP(1)\t\t\tList of all commands\t\t\tHELP(1)\n\nLIST\n\tman\tcat\tls\tcd\ttar\trotx\n\nTry asking man for information on these!",
-    "input_man": "MAN(1)\t\t\tManual pager utils\t\t\tMAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS man [man options]\n\nDESCRIPTION\tProvide information about a utility.",
+    "input_man": "MAN(1)\t\t\tManual pager utils\t\t\tMAN(1)\n\nNAME\n\tman - an interface to the system reference manuals\n\nSYNOPSIS\n\t man [man options]\n\nDESCRIPTION\n\tProvide information about a utility.",
     "input_ls": "LS(1)\t\t\tUser Commands\t\t\tLS(1)\n\nNAME\n\tls - list directory contents\n\nSYNOPSIS\n\tls [OPTION]... [FILE]...\n\nDESCRIPTION\n\tList information about the FILEs (the current directory by default). ",
     "input_cd": "cd: cd [dir]\n\tChange the shell working directory.\n\t\n\tChange the current directory to DIR.",
     "input_tar": "TAR(1)\t\t\tTAR\t\t\tTAR(1)\n\nNAME\n\ttar - an archiving utility\n\nSYNOPSIS\n\ttar xvf [file]",
-    "input_rotx": "ROTX(1)\t\t\tROTX\t\t\tROTX(1)\n\nNAME\n\trotx - A ceaser cipher decrypter\n\nSYNOPSIS\n   rotx [amount to rotate] [file]"
+    "input_rotx": "ROTX(1)\t\t\tROTX\t\t\tROTX(1)\n\nNAME\n\trotx - A ceaser cipher decrypter\n\nSYNOPSIS\n\trotx [amount to rotate] [file]",
+    "input_posix": "This terminal is not completely POSIX compliant."
+  },
+  "computty": {
+    "name": "CompuTTY"
   },
   "computty_blocked": {
-    "name": "CompuTTY",
     "introduce": "CompuTTY 0.0.0 ]LOCKED[",
     "interact": "The terminal is locked.",
     "inspect": "You see a terminal fit for use by a squirrel, but it's locked.",
     "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5."
   },
   "computty_unblocked": {
-    "name": "CompuTTY",
     "introduce": "CompuTTY 0.0.0\n~$ ",
     "interact": "The terminal awaits input.",
     "inspect": "You see a terminal fit for use by a squirrel.",
@@ -296,22 +299,22 @@
     "ls_default": "code/",
     "ls_cd": "code.tar",
     "ls_tar": "code.tar  code",
-    "cat_tar": "code0000664000175000017500000000006615075030073010651 0ustar  squirrelsquirrelxubbe, jxyi yi q fuhvusjbo vydu unqcfbu ev iecu junj.",
-    "cat_code": "xubbe, jxyi yi q fuhvusjbo vydu unqcfbu ev iecu junj.",
-    "no_file": "cd: No such file or directory",
-    "failed_rotx": "Failed to decrypt: vcjyhvao kchvridcrsav bviirgv. ifkyhhva xvgvbdco hkavi!",
+    "cat_code/code.tar": "code0000664000175000017500000000006615075030073010651 0ustar  squirrelsquirrelfqiimeht: fhqyiu_igkyhhub_xuwuced7",
+    "cat_code/code": "fqiimeht: fhqyiu_igkyhhub_xuwuced7",
+    "no_file": "No such file or directory",
+    "failed_cd": "No such directory",
+    "failed_rotx": "Failed to decrypt: ",
     "good_rotx": "Password: praise_squirrel_hegemon7\nDemetamorphinator Unlocked!",
     "man_cat": "see man cat",
     "man_tar": "see man tar",
     "man_rotx": "see man rotx",
+    "man_x": "see man ",
     "input_cd": ""
   },
-  "computty_cd": {
-    "name": "Computty",
+  "computty_code": {
     "introduce": "CompuTTY 0.0.0\n~/code$"
   },
   "computty_tar": {
-    "name": "Computty",
     "introduce": "CompuTTY 0.0.0\n~/code$"
   },
   "microwave_blocked": {

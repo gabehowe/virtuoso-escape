@@ -71,6 +71,7 @@ class Entity(val id: String, val states: Map<String, EntityState>, var currentSt
    * @param newState The name of the state to swap to.
    */
   fun swapState(newState: String) {
+    println("$id swapped to $newState")
     require(states.containsKey(newState)) {
       "Entity '${this.id}' cannot be swapped to non-existent state: '${newState}'"
     }

@@ -256,6 +256,9 @@ class EntityStateTests {
 
   @Test
   fun trashCanStartsWithHummus() {
-      assertEquals(Floor.StoreyI.rooms.first().entities.first { it.id == "trash_can" }.state().id, "trash_can")
+    assertEquals(
+        Floor.StoreyI.rooms.first().entities.first { it.id == "trash_can" }.state().id,
+        "trash_can",
+    )
   }
 }

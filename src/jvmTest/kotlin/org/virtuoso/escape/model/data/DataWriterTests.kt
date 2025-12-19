@@ -2,9 +2,9 @@
 
 package org.virtuoso.escape.model.data
 
-import org.virtuoso.escape.TestHelper
 import kotlin.test.*
 import kotlin.uuid.ExperimentalUuidApi
+import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.GameProjection
 
 class DataWriterTests {

@@ -116,6 +116,7 @@ spotless {
   kotlin {
     ktfmt()
     target("src/**/*.kt")
+    toggleOffOn("@formatter:off", "@formatter:on")
   }
   kotlinGradle { ktfmt() }
   javascript {

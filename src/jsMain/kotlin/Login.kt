@@ -1,7 +1,7 @@
 import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.promise
 import kotlinx.html.dom.append
 import kotlinx.html.js.b
 import kotlinx.html.js.span
@@ -32,7 +32,7 @@ object Login {
   }
 
   fun run(projection: GameProjection?) =
-      GlobalScope.launch {
+      MainScope().promise {
         println("Login")
         updateKeyHandler("c")
         setupListeners()
