@@ -24,17 +24,9 @@ object Intro {
             (document.getElementById("skip")!! as HTMLElement).apply {
               innerHTML = ""
               append {
-                span {
-                  +"["
-                }
-                b {
-                  +"P"
-                }.apply {
-                  style.textDecoration = "underline"
-                }
-                span {
-                  +"ress anywhere to continue]"
-                }
+                span { +"[" }
+                b { +"P" }.apply { style.textDecoration = "underline" }
+                span { +"ress anywhere to continue]" }
               }
             }
             "Press anywhere to continue..."
@@ -44,9 +36,7 @@ object Intro {
       }
     }
     (document.getElementById("skip")!! as HTMLElement).apply {
-      addEventListener("click", {
-        switchTo(View.GameView, projection)
-      })
+      addEventListener("click", { switchTo(View.GameView, projection) })
     }
     barn.apply {
       onclick = {
