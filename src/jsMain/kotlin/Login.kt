@@ -36,6 +36,7 @@ object Login {
         println("Login")
         updateKeyHandler("c")
         setupListeners()
+        toggleAuthMode()
       }
 
   fun updateKeyHandler(key: String) {
@@ -60,7 +61,7 @@ object Login {
       innerText =
           projection.language.string(
               "ui",
-              if (authMode == AuthMode.Login) "prompt_login" else "prompt_create",
+              if (authMode == AuthMode.Create) "prompt_login" else "prompt_create",
           )
     }
 
