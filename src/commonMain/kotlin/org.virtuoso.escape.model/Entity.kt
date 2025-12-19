@@ -81,5 +81,6 @@ class Entity(val id: String, val states: Map<String, EntityState>, var currentSt
    * @param resource The id of the resource to attempt to get.
    * @return The string resource from the Entity, current state, or placeholder.
    */
-  fun string(language: Language, resource: String): String = language[resource, this.id, this.state().id]!!
+  fun string(language: Language, resource: String): String =
+      language[resource, this.id, this.state().id]!!
 }

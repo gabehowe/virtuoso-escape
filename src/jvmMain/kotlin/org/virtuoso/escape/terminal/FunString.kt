@@ -247,7 +247,7 @@ data class FunString(
     }
 
     /**
-     * Join [<] by a delimiter. Similar to [String.join]
+     * Join each string by a delimiter. Similar to [joinToString]
      *
      * @param delimiter The string to delimit by.
      * @param funStrings The FunStrings to join

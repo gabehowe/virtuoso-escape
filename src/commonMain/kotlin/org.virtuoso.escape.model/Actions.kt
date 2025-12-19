@@ -68,7 +68,7 @@ object Actions {
    */
   fun setMessage(message: String): ActionType = { it.message = message }
 
-  fun setMessage(resource:String, vararg namespaces: String): ActionType={
+  fun setMessage(resource: String, vararg namespaces: String): ActionType = {
     setMessage(it.language.get(resource, *namespaces) ?: "<${namespaces[0]}/$resource>")(it)
   }
 

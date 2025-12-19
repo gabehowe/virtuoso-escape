@@ -2,13 +2,13 @@
 
 package org.virtuoso.escape.terminal
 
-import org.virtuoso.escape.model.*
-import org.virtuoso.escape.model.account.AccountManager
 import kotlin.io.path.Path
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 import kotlin.math.max
 import kotlin.uuid.ExperimentalUuidApi
+import org.virtuoso.escape.model.*
+import org.virtuoso.escape.model.account.Account
 
 /**
  * Creates and runs the game.
@@ -26,7 +26,7 @@ class TerminalDriver {
    * @return A list of pairings.
    */
   fun makeTuiActionMap(
-    vararg input: Pair<FunString, () -> Unit>
+      vararg input: Pair<FunString, () -> Unit>
   ): MutableList<Pair<FunString, () -> Unit>> {
     return input.toMutableList()
   }
@@ -34,7 +34,6 @@ class TerminalDriver {
   /**
    * Create a terminal with unique keys for action name: action pairings.
    *
-   * @param scanner The scanner to request input on.
    * @param tuiAction A list of name, action pairings. Note this is not an injective mapping.
    * @param status A prompt to display before the actions.
    */
@@ -86,7 +85,6 @@ class TerminalDriver {
   /**
    * Request user input until they provide valid input.
    *
-   * @param scanner The scanner to request input on.
    * @param prompt The thing to ask the user.
    * @param predicate The function that validates the string.
    * @return Valid input.
@@ -109,7 +107,7 @@ class TerminalDriver {
    * @param authenticator The function to try to authenticate on, usually create account or login.
    */
   fun tryLogin(
-    authenticator: (String, String) -> Boolean,
+      authenticator: (String, String) -> Boolean,
   ): Boolean {
     val username: String
     val password: String
@@ -121,7 +119,7 @@ class TerminalDriver {
       // Move to the second console line
       print(FunString.escape("2;1H") + FunString.escape(CLEAR_BELOW))
       return true
-    } catch (e: AccountManager.AccountError) {
+    } catch (e: Account.AccountError) {
       display((FunString(e.message)).red().toString())
       return false
     }
@@ -208,9 +206,9 @@ class TerminalDriver {
 
     // finds floor
     val currentFloorIndex =
-      (0 until totalFloors).firstOrNull { i ->
-        Floor.entries[i].name == projection.currentFloor().name
-      } ?: 0
+        (0 until totalFloors).firstOrNull { i ->
+          Floor.entries[i].name == projection.currentFloor().name
+        } ?: 0
 
     // Progress is a simple fraction of floors completed
     val progressPercentage = ((currentFloorIndex + 1).toFloat() / totalFloors * 100).toInt()
@@ -224,18 +222,18 @@ class TerminalDriver {
 
     // FunString!!
     val bar =
-      FunString("[")
-        .add(FunString(completed).green())
-        .add(FunString(remaining).terminalColor(240)) // Light Gray
-        .add(FunString("]"))
+        FunString("[")
+            .add(FunString(completed).green())
+            .add(FunString(remaining).terminalColor(240)) // Light Gray
+            .add(FunString("]"))
 
     val progressText =
-      String.format(
-        "Floor %d of %d (%d%%)",
-        currentFloorIndex + 1,
-        totalFloors,
-        progressPercentage,
-      )
+        String.format(
+            "Floor %d of %d (%d%%)",
+            currentFloorIndex + 1,
+            totalFloors,
+            progressPercentage,
+        )
 
     return progressText + "\n" + bar
   }
@@ -259,34 +257,34 @@ class TerminalDriver {
     val totalHintsUsed: Int = hintsUsedMap.values.sum()
 
     val hintsListDisplay =
-      if (totalHintsUsed > 0)
-        hintsUsedMap.entries.joinToString(
-          "\n",
-          transform = { entry -> entry.key + ": " + entry.value },
-        )
-      else "None"
+        if (totalHintsUsed > 0)
+            hintsUsedMap.entries.joinToString(
+                "\n",
+                transform = { entry -> entry.key + ": " + entry.value },
+            )
+        else "None"
 
     var contributors =
-      (0 until 4)
-        .map { i -> projection.state.language.string("credits", "contributor_$i") }
-        .map { it: String ->
-          val j = it.split(Regex("<")).dropLastWhile { it.isEmpty() }.toTypedArray()
-          j[0] + FunString("<" + j[1]).italic().terminalColor(50)
-        }
-        .shuffled()
+        (0 until 4)
+            .map { i -> projection.state.language.string("credits", "contributor_$i") }
+            .map { it: String ->
+              val j = it.split(Regex("<")).dropLastWhile { it.isEmpty() }.toTypedArray()
+              j[0] + FunString("<" + j[1]).italic().terminalColor(50)
+            }
+            .shuffled()
 
     val formattedTime = String.format("%02d:%02d", projection.time(), projection.time())
     val scoremsg =
-      String.format(
-        projection.state.language.string("credits", "score"),
-        formattedTime,
-        projection.state.difficulty,
-        projection.state.score,
-      )
+        String.format(
+            projection.state.language.string("credits", "score"),
+            formattedTime,
+            projection.state.difficulty,
+            projection.state.score,
+        )
 
     // num hints
     val hintmsg =
-      String.format(projection.state.language.string("credits", "hints"), totalHintsUsed)
+        String.format(projection.state.language.string("credits", "hints"), totalHintsUsed)
 
     // Each of the hints used
     val specificHintsMsg = "Specific hints used: $hintsListDisplay"
@@ -300,9 +298,9 @@ class TerminalDriver {
 
     // main credits
     msg.addAll(
-      projection.state.language.string("credits", "message").split(Regex("\n")).dropLastWhile {
-        it.isEmpty()
-      }
+        projection.state.language.string("credits", "message").split(Regex("\n")).dropLastWhile {
+          it.isEmpty()
+        }
     )
     msg.add("Credits:")
 
@@ -332,16 +330,16 @@ class TerminalDriver {
   fun menu_summary(projection: GameProjection) {
     val resumeAction = makeTuiActionMap(FunString("Resume Game") to {})
     createActionInterface(
-      resumeAction,
-      String.format(
-        projection.state.language.string("welcome", "welcome_back"),
-        projection.account.username,
-        getProgressBar(projection),
-        projection.state.completedPuzzles.joinToString(", "),
-        projection.state.hintsUsed.entries.joinToString("\n") { entry ->
-          entry.key + ": " + entry.value
-        },
-      ),
+        resumeAction,
+        String.format(
+            projection.state.language.string("welcome", "welcome_back"),
+            projection.account.username,
+            getProgressBar(projection),
+            projection.state.completedPuzzles.joinToString(", "),
+            projection.state.hintsUsed.entries.joinToString("\n") { entry ->
+              entry.key + ": " + entry.value
+            },
+        ),
     )
   }
 
@@ -354,10 +352,10 @@ class TerminalDriver {
     val actions = makeTuiActionMap()
     for (room in projection.currentFloor().rooms) {
       actions.add(
-        FunString(projection.language.string(room.id, "name")).bold() to
-                {
-                  projection.pickRoom(room)
-                }
+          FunString(projection.language.string(room.id, "name")).bold() to
+              {
+                projection.pickRoom(room)
+              }
       )
     }
     actions.add(FunString("Nevermind") to {})
@@ -377,15 +375,15 @@ class TerminalDriver {
     }
     for (e in projection.currentRoom().entities) {
       actions.add(
-        FunString(e.string(projection.language, "name")).italic() to { projection.pickEntity(e) }
+          FunString(e.string(projection.language, "name")).italic() to { projection.pickEntity(e) }
       )
     }
     actions.add(FunString("Exit game") to { exit(projection) })
     actions.add(FunString("Options") to { menu_options(projection) })
     val prompt =
-      projection.time().toMicrowaveTime() +
-              "\n" +
-              projection.language["introduce", projection.currentRoom().id]
+        projection.time().toMicrowaveTime() +
+            "\n" +
+            projection.language["introduce", projection.currentRoom().id]
     createActionInterface(actions, prompt)
   }
 
@@ -396,24 +394,24 @@ class TerminalDriver {
    */
   fun menu_entityAction(projection: GameProjection) {
     val prompt =
-      projection.currentEntity()!!::string
-        .let { { j: String -> it(projection.language, j) } }
-        .let { FunString(it("name")).italic() + "\n" + it("introduce") }
+        projection.currentEntity()!!::string
+            .let { { j: String -> it(projection.language, j) } }
+            .let { FunString(it("name")).italic() + "\n" + it("introduce") }
     val actions = makeTuiActionMap()
     val capabilities = projection.capabilities()
     if (capabilities.interact)
-      actions.add(FunString("Interact").blue() to { projection.interact() })
+        actions.add(FunString("Interact").blue() to { projection.interact() })
     if (capabilities.inspect) actions.add(FunString("Inspect").green() to { projection.inspect() })
     if (capabilities.attack) actions.add(FunString("Attack").red() to { projection.attack() })
     if (capabilities.input)
-      actions.add(
-        FunString("Speak").purple() to
+        actions.add(
+            FunString("Speak").purple() to
                 {
                   projection.input(validateInput("What would you like to say? ") { true })
                 }
-      )
+        )
     if (projection.currentItems().isNotEmpty())
-      actions.add(FunString("Items") to { this.displayItems(projection) })
+        actions.add(FunString("Items") to { this.displayItems(projection) })
 
     actions.add(FunString("Leave") to { projection.leaveEntity() })
 
@@ -438,10 +436,10 @@ class TerminalDriver {
 
     for (diff in Difficulty.entries) {
       actions.add(
-        FunString(diff.name).terminalColor(diff.ordinal + 196) to
-                {
-                  projection.setDifficulty(diff)
-                }
+          FunString(diff.name).terminalColor(diff.ordinal + 196) to
+              {
+                projection.setDifficulty(diff)
+              }
       )
     }
     actions.add(FunString("Nevermind") to {})
@@ -469,7 +467,7 @@ class TerminalDriver {
    */
   fun menu_debug(projection: GameProjection) {
     val actions =
-      makeTuiActionMap(FunString("Switch floor") to { menu_debugSwitchFloor(projection) })
+        makeTuiActionMap(FunString("Switch floor") to { menu_debugSwitchFloor(projection) })
     actions.forEach { k -> k.first.green() }
     actions.add(FunString("Nevermind") to {})
     createActionInterface(actions, "")
@@ -482,10 +480,10 @@ class TerminalDriver {
    */
   fun menu_options(projection: GameProjection) {
     val actions =
-      makeTuiActionMap(
-        FunString("Set difficulty") to { menu_difficulty(projection) },
-        FunString("Nevermind") to {},
-      )
+        makeTuiActionMap(
+            FunString("Set difficulty") to { menu_difficulty(projection) },
+            FunString("Nevermind") to {},
+        )
     if (DEBUG) {
       actions.add(0, FunString("DEBUG").green() to { menu_debug(projection) })
     }
@@ -528,26 +526,28 @@ class TerminalDriver {
   /** Program entrance. */
   fun main() {
     val projection =
-      GameProjection(
-        { path: String -> Path(path).readText() },
-        { path: String, data: String -> Path(path).writeText(data) },
-      )
+        GameProjection(
+            { path: String -> Path(path).readText() },
+            { path: String, data: String -> Path(path).writeText(data) },
+        )
     // Ensure these are initialized
     var flag = false
     while (!flag) {
       val actions =
-        makeTuiActionMap(
-          FunString("Login") to
+          makeTuiActionMap(
+              FunString("Login") to
                   {
                     flag = tryLogin { username, password -> projection.login(username, password) }
                     if (flag) menu_summary(projection)
                   },
-          FunString("Create Account") to
+              FunString("Create Account") to
                   {
-                    flag = tryLogin { username, password -> projection.createAccount(username, password) }
+                    flag = tryLogin { username, password ->
+                      projection.createAccount(username, password)
+                    }
                     if (flag) menu_prelude(projection)
                   },
-        )
+          )
       createActionInterface(actions, "Login")
     }
     gameLoop(projection)

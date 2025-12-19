@@ -31,16 +31,15 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
    * @return `true` if the username-password combination was valid, otherwise `false`.
    */
   fun login(username: String, password: String): Boolean {
-    val currentAccount =
-      this.accountManager.login(username, password).let { acc ->
-        account = acc
-        state = accountManager.gameStates[account.id]!!
-        state.language = language
-        state.floor.rooms
+    Account.login(username, password, accountManager.accounts).let { acc ->
+      account = acc
+      state = accountManager.gameStates[account.id]!!
+      state.language = language
+      state.floor.rooms
           .flatMap { it.entities }
           .map { state.currentEntityStates[it.id]?.let(it::swapState) }
-      }
-    return currentAccount != null
+    }
+    return true
   }
 
   /**
@@ -52,13 +51,12 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
    *   `false`.
    */
   fun createAccount(username: String, password: String): Boolean {
-    this.accountManager.newAccount(username, password)?.let {
+    Account.newAccount(username, password, this.accountManager.accounts).let {
       account = it
       this.state = GameState()
       state.language = language
       return true
     }
-    return false
   }
 
   /** Log the current user out and write data. */
@@ -89,7 +87,7 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
   /**
    * The currently focused entity.
    *
-   * @return The [<] if the current entity is non-null, otherwise null.
+   * @return The currently selected [Entity] or null.
    */
   fun currentEntity(): Entity? {
     return this.state.entity
@@ -107,7 +105,7 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
   /**
    * Consume the current message.
    *
-   * @return [<] if the message is non-null, otherwise null.
+   * @return the message or null.
    */
   fun currentMessage(): String? {
     return this.state.message
@@ -167,38 +165,38 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
   /**
    * Interact with the currently focused entity.
    *
-   * @throws java.util.NoSuchElementException if no entity is focused.
+   * @throws [NullPointerException] if no entity is focused.
    */
   fun interact() {
-    currentEntity()!!.state()!!.interact(state)
+    currentEntity()!!.state().interact(state)
   }
 
   /**
    * Attack the currently focused entity.
    *
-   * @throws java.util.NoSuchElementException if no entity is focused.
+   * @throws [NullPointerException] if no entity is focused.
    */
   fun attack() {
-    currentEntity()!!.state()!!.attack(state)
+    currentEntity()!!.state().attack(state)
   }
 
   /**
    * Inspect the currently focused entity.
    *
-   * @throws java.util.NoSuchElementException if no entity is focused.
+   * @throws [NullPointerException] if no entity is focused.
    */
   fun inspect() {
-    currentEntity()!!.state()!!.inspect(state)
+    currentEntity()!!.state().inspect(state)
   }
 
   /**
    * Speak to the current entity.
    *
    * @param input The input to give to the entity.
-   * @throws java.util.NoSuchElementException if no entity is focused.
+   * @throws [NullPointerException] if no entity is focused.
    */
   fun input(input: String) {
-    currentEntity()!!.state()!!.takeInput(input, state)
+    currentEntity()!!.state().takeInput(input, state)
   }
 
   /**
@@ -207,7 +205,7 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
    * @return The capabilities of the entity.
    */
   fun capabilities(): EntityState.Capabilities {
-    return currentEntity()!!.state()!!.capabilities
+    return currentEntity()!!.state().capabilities
   }
 
   val isEnded: Boolean

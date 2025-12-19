@@ -63,21 +63,21 @@ class EntityState(
    */
   private fun getText(language: Language, key: String): String = language.string(this.id, key)
 
-  /** Run the interact [Action]. */
+  /** Run the interact [ActionType]. */
   fun interact(state: GameState) {
     check(this.capabilities.interact)
     state.message = getText(state.language, "interact")
     interactAction?.invoke(state)
   }
 
-  /** Run the attack [Action]. */
+  /** Run the attack [ActionType]. */
   fun attack(state: GameState) {
     check(this.capabilities.attack)
     state.message = getText(state.language, "attack")
     attackAction?.invoke(state)
   }
 
-  /** Run the inspect [Action]. */
+  /** Run the inspect [ActionType]. */
   fun inspect(state: GameState) {
     check(this.capabilities!!.inspect)
     state.message = getText(state.language, "inspect")

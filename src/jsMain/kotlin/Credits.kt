@@ -3,6 +3,7 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.time.ExperimentalTime
+import kotlin.uuid.ExperimentalUuidApi
 import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.html.div
@@ -75,12 +76,12 @@ object Credits {
     window.requestAnimationFrame { imageAnimation() }
   }
 
+  @OptIn(ExperimentalUuidApi::class)
   fun populateLeaderboard() {
     (document.getElementById("leaderboard") as HTMLElement).append(
         document.createElement("tr").apply {
           Leaderboard.getLeaderboard(
-                  projection.accountManager,
-                  projection.state,
+                  projection.accountManager.accounts,
                   projection.account,
               )
               .chunked(4)

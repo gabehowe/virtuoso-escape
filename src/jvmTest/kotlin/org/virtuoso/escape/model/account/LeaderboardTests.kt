@@ -61,7 +61,7 @@ class LeaderboardTests {
 
     val testManager = AccountManager(accounts, mapOf())
 
-    val list = Leaderboard.getLeaderboard(testManager, proj.state, mockAccount)
+    val list = Leaderboard.getLeaderboard(testManager.accounts, mockAccount)
 
     val highIdx = list.indexOf("high")
     val midIdx = list.indexOf("mid")
@@ -79,7 +79,7 @@ class LeaderboardTests {
     }
     val testManager = AccountManager(accounts, mapOf())
 
-    val list = Leaderboard.getLeaderboard(testManager, proj.state, mockAccount)
+    val list = Leaderboard.getLeaderboard(testManager.accounts, mockAccount)
 
     assertTrue(list.isNotEmpty())
   }
