@@ -14,7 +14,6 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import org.virtuoso.escape.model.account.Score
-import org.virtuoso.escape.model.data.SerializableDuration
 
 /**
  * The current state of the game. Holds most mutable data.

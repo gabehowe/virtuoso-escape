@@ -2,10 +2,10 @@
 
 package org.virtuoso.escape.model.account
 
-import kotlin.test.*
-import kotlin.uuid.ExperimentalUuidApi
 import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.GameProjection
+import kotlin.test.*
+import kotlin.uuid.ExperimentalUuidApi
 
 class AccountManagerTests {
   private lateinit var proj: GameProjection
@@ -29,8 +29,7 @@ class AccountManagerTests {
 
   @Test
   fun testBadLogin() {
-    val account = manager.login("fake", "fake")
-    assertNull(account)
+    assertFailsWith<AccountManager.AccountError> { manager.login("fake", "fake") }
   }
 
   @Test
@@ -53,39 +52,37 @@ class AccountManagerTests {
 
   @Test
   fun testTryCreateCollidingAccount() {
-    val account = manager.newAccount("dummy", "novel")
-    assertNull(account)
+    assertFailsWith<AccountManager.AccountError> { manager.newAccount("dummy", "novel") }
   }
 
   @Test
   fun testTryCreateLargeUsernameAccount() {
-    val account = manager.newAccount("a".repeat(33), "novel")
-    assertNull(account)
+    assertFailsWith<AccountManager.AccountError> { manager.newAccount("a".repeat(33), "novel") }
   }
 
   @Test
   fun testTryCreateLargePasswordAccount() {
-    val account = manager.newAccount("novel", "a".repeat(33))
-    assertNull(account)
+    assertFailsWith<AccountManager.AccountError> { manager.newAccount("novel", "a".repeat(33)) }
   }
 
   @Test
   fun testInvalidLoginInfo() {
     val cases =
-        listOf(
-            Triple("dummy", "wrong", "Password input is invalid."),
-            Triple("wrong", "wrong", "Both username and password input is invalid."),
-            Triple("wrong", "dummy", "Username input is invalid."),
-        )
+      listOf(
+        Triple("dummy", "wrong", "Username or password is invalid."),
+        Triple("wrong", "wrong", "Username or password is invalid."),
+        Triple("wrong", "dummy", "Username or password is invalid."),
+      )
 
-    for ((u, p, expected) in cases) {
-      assertEquals(expected, manager.invalidLoginInfo(u, p))
-    }
+    for ((u, p, expected) in cases)
+      assertEquals(assertFailsWith<AccountManager.AccountError> {
+        manager.login(u, p)
+      }.message, expected)
   }
 
   @Test
   fun testInvalidAccountData() {
-    assertNull(manager.accountExists("a", "a"))
+    assertFailsWith<AccountManager.AccountError>{ manager.login("a", "a") }
   }
 
   @Test

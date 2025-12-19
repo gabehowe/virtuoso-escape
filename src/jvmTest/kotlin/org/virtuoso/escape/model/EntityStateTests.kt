@@ -2,8 +2,6 @@ package org.virtuoso.escape.model
 
 import kotlin.test.*
 import org.virtuoso.escape.TestHelper
-import org.virtuoso.escape.model.action.Actions
-import org.virtuoso.escape.model.action.Severity
 
 /** @author Andrew */
 class EntityStateTests {

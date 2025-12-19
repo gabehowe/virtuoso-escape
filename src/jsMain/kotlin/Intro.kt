@@ -29,7 +29,6 @@ object Intro {
                 span { +"ress anywhere to continue]" }
               }
             }
-            "Press anywhere to continue..."
             document.addEventListener("click", { switchTo(View.GameView, projection) })
           }
         }

@@ -7,8 +7,6 @@ import kotlin.time.Duration.Companion.seconds
 import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.account.Account
 import org.virtuoso.escape.model.account.AccountManager
-import org.virtuoso.escape.model.action.Actions
-import org.virtuoso.escape.model.data.DataLoader
 
 /** @author Andrew Heuer */
 class EntityTests {
@@ -17,7 +15,7 @@ class EntityTests {
   @BeforeTest
   fun pre() {
     // Setup mock DataLoader
-    DataLoader.FILE_READER = { path ->
+    Data.FILE_READER = { path ->
       when {
         path.endsWith("accounts.json") -> "{}"
         path.endsWith("gamestates.json") -> "{}"

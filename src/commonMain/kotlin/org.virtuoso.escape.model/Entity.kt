@@ -1,8 +1,5 @@
 package org.virtuoso.escape.model
 
-import org.virtuoso.escape.model.action.ActionType
-import org.virtuoso.escape.model.action.InputActionType
-
 /**
  * A finite state machine that holds all possible states for an entity to be in and which state it
  * is currently in.
@@ -71,7 +68,6 @@ class Entity(val id: String, val states: Map<String, EntityState>, var currentSt
    * @param newState The name of the state to swap to.
    */
   fun swapState(newState: String) {
-    println("$id swapped to $newState")
     require(states.containsKey(newState)) {
       "Entity '${this.id}' cannot be swapped to non-existent state: '${newState}'"
     }
@@ -85,7 +81,5 @@ class Entity(val id: String, val states: Map<String, EntityState>, var currentSt
    * @param resource The id of the resource to attempt to get.
    * @return The string resource from the Entity, current state, or placeholder.
    */
-  fun string(language: Language, resource: String): String {
-    return language.searchString(resource, this.id, this.state()!!.id)!!
-  }
+  fun string(language: Language, resource: String): String = language[resource, this.id, this.state().id]!!
 }

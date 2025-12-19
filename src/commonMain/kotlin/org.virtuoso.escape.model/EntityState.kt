@@ -1,8 +1,5 @@
 package org.virtuoso.escape.model
 
-import org.virtuoso.escape.model.action.ActionType
-import org.virtuoso.escape.model.action.InputActionType
-
 /**
  * An entity state that holds the state's behavior.
  *

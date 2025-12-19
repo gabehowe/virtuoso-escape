@@ -2,12 +2,12 @@
 
 package org.virtuoso.escape.model
 
+import org.junit.jupiter.api.Assertions.assertThrows
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.account.Account
 import org.virtuoso.escape.model.account.AccountManager
-import org.virtuoso.escape.model.action.Actions
 
 class GameProjectionTests {
   private lateinit var proj: GameProjection
@@ -53,8 +53,8 @@ class GameProjectionTests {
 
   @Test
   fun testLoginFailure() {
-    assertFalse(proj.login("nonExistent", "password"))
-    assertFalse(proj.login(testUser, "wrongPassword"))
+    assertFailsWith<AccountManager.AccountError>{ proj.login("nonExistent", "password") }
+    assertFailsWith<AccountManager.AccountError>{ proj.login(testUser, "wrongPassword") }
   }
 
   @Test

@@ -17,6 +17,7 @@
   },
   "portal_squirrel": {
     "name": "Gottfried",
+    "eckard": "Have you spoken to Eckard yet?",
     "introduce": "You see the unruly Gottfried.",
     "attack": "You try to throw a punch, but Gottfried sidesteps you and slams your head into the ground.",
     "interact": "\"We're going to send a group to find the *Demetamorphinator*. Oh, shoot, are you alright?\"\nYou feel a little woozy and stumble\n\"No, wait!\"\nYou trip over a root and fall down a rabbit hole, seeing the sun grow darker as a spot as you again drift into unconsciousness...",
@@ -336,15 +337,12 @@
     "certificate": "**Escape: A Storey**\nYou finished the game and escaped M. Bert Storey Research and Innovation Center!\n%s\n%s\nThanks for playing!"
   },
   "narrator_start": {
-    "name": "Narrator",
     "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old)."
   },
   "narrator_hint_1": {
-    "name": "Narrator",
     "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old). He seems to be almost out of things to say."
   },
   "narrator_hint_2": {
-    "name": "Narrator",
     "introduce": "You see a spiffy and seemingly superposed triducentenarian (he's two hundred and thirty years old). He seems out of things to say."
   },
   "narrator": {
@@ -355,14 +353,14 @@
     "hints_exhausted": "I have shared all my wisdom for this floor. You must proceed on your own now.",
     "acorn_grove_hint_1": "You need to escape this grove to reach the building. Perhaps one of your squirrel friends knows how to use the machinery.",
     "acorn_grove_hint_2": "The friendly squirrel wants to help you.",
-    "storey_i_hint_1": "You need THE sandwich. The ingredients are scattered across the floor, disguised as other objects or rewards for solving puzzles, try your best stoic mammal.",
+    "storey_i_hint_1": "You need a sandwich. The ingredients are scattered across the floor, disguised as other objects or rewards for solving puzzles, try your best stoic mammal.",
     "storey_i_hint_2": "The bread is the crux of all this. One piece is a reward for a numbers game in the closet, and the other is a reward for a tricky word puzzle with the guard.",
-    "storey_ii_hint_1": "The door puzzle requires you to choose the door that 'rings with the most life.' Think about what the pitcher plant values.",
-    "storey_ii_hint_2": "The doors must be opened in a specific sequence, which is shuffled after every failure. The hint lies in the doors' numerical property.",
-    "storey_iii_hint_1": "The sparrow says the box's trick lies in finding the one true cycle. The wise know where to begin their journey. The patient know they must follow the path laid before them. The intelligent know when to *open* the door.",
+    "storey_ii_hint_1": "The door puzzle requires you to choose the door that *rings with the most life.*",
+    "storey_ii_hint_2": "The doors must be opened in a specific sequence, which is shuffled after every failure.",
+    "storey_iii_hint_1": "The box is composed of multiple pieces, each of which requires a single whispered word. The wise know where to begin their journey. The patient know they must follow the path laid before them. The intelligent know when to *open* the door.",
     "storey_iii_hint_2": "The exit door requires a key, which you receive upon successfully opening the box. The box must be opened in the sequence: START, FOLLOW, OPEN.",
     "storey_iv_hint_1": "You need to unlock the Demetamorphinator. The blocked terminal (CompuTTY) needs to be unblocked by the squirrel with one sock.",
-    "storey_iv_hint_2": "The terminal puzzle involves common posix commands: cd, tar, and others. The final solution is the password in the good_rotx message. Look around for something that could be a ceaser cipher rotation number."
+    "storey_iv_hint_2": "The terminal puzzle involves common posix commands: cd, tar, and others. The final solution is the password from the password message. Look around for something that could be a ceaser cipher rotation number."
   },
   "ui": {
     "switch_login": "Have an account?",

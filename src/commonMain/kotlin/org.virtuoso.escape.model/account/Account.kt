@@ -51,6 +51,7 @@ class Account(
         this.highScore = Score(state.time, state.difficulty, currentScore.totalScore)
   }
 
+
   companion object {
     /**
      * Hashes the indicated password.
@@ -60,8 +61,6 @@ class Account(
      *
      * TODO: Make this actually hash.
      */
-    fun hashPassword(password: String): String {
-      return password
-    }
+    fun hashPassword(password: String): String = password
   }
 }

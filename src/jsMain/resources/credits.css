@@ -56,7 +56,7 @@ hr {
     height: var(--stroke_width);
     background-color: var(--Stroke);
     border: none;
-    padding: none;
+    padding: 0;
     margin: var(--padding) 0;
 }
 
@@ -99,7 +99,7 @@ div:has(.leaderboard) {
 }
 
 .leaderboard label {
-    padding: 0.75;
+    padding: 0.75rem;
     justify-self: start;
 }
 

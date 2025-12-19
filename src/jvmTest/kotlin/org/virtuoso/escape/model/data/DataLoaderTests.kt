@@ -5,19 +5,20 @@ package org.virtuoso.escape.model.data
 import kotlin.test.*
 import kotlin.uuid.ExperimentalUuidApi
 import org.virtuoso.escape.TestHelper
+import org.virtuoso.escape.model.Data
 
 class DataLoaderTests {
 
   @BeforeTest
   fun pre() {
     // We set FILE_READER in each test or here
-    DataLoader.FILE_READER = TestHelper.FILE_READER(this::class)
+    Data.FILE_READER = TestHelper.FILE_READER(this::class)
   }
 
   @Test
   fun testLoadAccounts() {
 
-    val accounts = DataLoader.loadAccounts()
+    val accounts = Data.loadAccounts()
     assertNotNull(accounts)
     // Check if dummy exists
     // Uuid string: "7766f361-af7a-4da5-b741-6867d1768d45"
@@ -31,7 +32,7 @@ class DataLoaderTests {
   @Test
   fun testLoadGameStates() {
 
-    val states = DataLoader.loadGameStates()
+    val states = Data.loadGameStates()
     assertNotNull(states)
     val key = states.keys.firstOrNull { it.toString() == "7766f361-af7a-4da5-b741-6867d1768d45" }
     assertNotNull(key)

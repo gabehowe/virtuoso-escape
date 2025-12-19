@@ -1,6 +1,4 @@
-package org.virtuoso.escape.model.action
-
-import org.virtuoso.escape.model.*
+package org.virtuoso.escape.model
 
 /**
  * A basic functional action interface.
@@ -43,9 +41,7 @@ object Actions {
    *
    * @author Andrew
    */
-  fun completePuzzle(puzzle: String): ActionType {
-    return { it.completedPuzzles.add(puzzle) }
-  }
+  fun completePuzzle(puzzle: String): ActionType = { it.completedPuzzles.add(puzzle) }
 
   /**
    * Gives an item to the user.
@@ -53,9 +49,7 @@ object Actions {
    * @param item The item to give to the user.
    * @author gabri
    */
-  fun giveItem(item: Item): ActionType {
-    return { it.items.add(item) }
-  }
+  fun giveItem(item: Item): ActionType = { it.items.add(item) }
 
   /**
    * Move to a floor and clear items.
@@ -63,26 +57,19 @@ object Actions {
    * @param floor The number of the floor to move to.
    * @author Andrew
    */
-  fun setFloor(floor: Floor): ActionType {
-    return {
-      it.floor = floor
-      it.items.clear()
-    }
+  fun setFloor(floor: Floor): ActionType = {
+    it.floor = floor
+    it.items.clear()
   }
 
   /**
    * @param message The message to give
    * @author gabri
    */
-  fun setMessage(message: String): ActionType {
-    return { it.message = message }
-  }
+  fun setMessage(message: String): ActionType = { it.message = message }
 
-  fun setMessage(language: Language, id: String, stringId: String): ActionType =
-      setMessage(language.string(id, stringId))
-
-  fun setMessage(namespace: String, resource: String): ActionType = {
-    setMessage(it.language, namespace, resource)(it)
+  fun setMessage(resource:String, vararg namespaces: String): ActionType={
+    setMessage(it.language.get(resource, *namespaces) ?: "<${namespaces[0]}/$resource>")(it)
   }
 
   /**
@@ -118,9 +105,7 @@ object Actions {
     }
   }
 
-  fun chain(vararg actions: ActionType): ActionType {
-    return { state -> actions.forEach { it(state) } }
-  }
+  fun chain(vararg actions: ActionType): ActionType = { state -> actions.forEach { it(state) } }
 
   fun conditional(
       supplier: (GameState) -> Boolean,

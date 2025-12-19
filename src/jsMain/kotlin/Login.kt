@@ -6,6 +6,7 @@ import kotlinx.html.dom.append
 import kotlinx.html.js.b
 import kotlinx.html.js.span
 import org.virtuoso.escape.model.GameProjection
+import org.virtuoso.escape.model.account.AccountManager
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSpanElement
@@ -32,12 +33,11 @@ object Login {
   }
 
   fun run(projection: GameProjection?) =
-      MainScope().promise {
-        println("Login")
-        updateKeyHandler("c")
-        setupListeners()
-        toggleAuthMode()
-      }
+    MainScope().promise {
+      updateKeyHandler("c")
+      setupListeners()
+      toggleAuthMode()
+    }
 
   fun updateKeyHandler(key: String) {
     document.onkeydown = keydown@{ ev ->
@@ -51,31 +51,31 @@ object Login {
     println(this.authMode)
     (document.getElementById("auth-prompt") as? HTMLSpanElement)?.apply {
       innerText =
-          projection.language.string(
-              "ui",
-              if (authMode == AuthMode.Login) "switch_login" else "switch_create",
-          )
+        projection.language.string(
+          "ui",
+          if (authMode == AuthMode.Login) "switch_login" else "switch_create",
+        )
     }
 
     (document.getElementById("welcome-text") as? HTMLSpanElement)?.apply {
       innerText =
-          projection.language.string(
-              "ui",
-              if (authMode == AuthMode.Create) "prompt_login" else "prompt_create",
-          )
+        projection.language.string(
+          "ui",
+          if (authMode == AuthMode.Create) "prompt_login" else "prompt_create",
+        )
     }
 
     (document.getElementById("auth-change") as? HTMLSpanElement)?.apply {
       innerHTML = ""
       projection.language
-          .string("ui", if (authMode == AuthMode.Create) "prompt_create" else "prompt_login")
-          .let {
-            append {
-              span { +"[" }
-              b { +it[0].toString() }.apply { this.style.textDecoration = "underline" }
-              span { +(it.substring(1) + "]") }
-            }
+        .string("ui", if (authMode == AuthMode.Create) "prompt_create" else "prompt_login")
+        .let {
+          append {
+            span { +"[" }
+            b { +it[0].toString() }.apply { this.style.textDecoration = "underline" }
+            span { +(it.substring(1) + "]") }
           }
+        }
       updateKeyHandler(innerText[1].lowercase())
     }
     authMode = if (authMode == AuthMode.Create) AuthMode.Login else AuthMode.Create
@@ -84,21 +84,20 @@ object Login {
   fun tryAuth() {
     val user = (document.getElementById("username") as? HTMLInputElement)!!.value
     val pass = (document.getElementById("password") as? HTMLInputElement)!!.value
-    val flag =
-        when (authMode) {
-          AuthMode.Login -> projection.login(user, pass)
-          AuthMode.Create -> projection.createAccount(user, pass)
-        }
-    if (flag) {
-      println(authMode)
+    try {
       window.asDynamic().projection = projection
       when (authMode) {
-        AuthMode.Login -> switchTo(View.GameView, projection)
-        AuthMode.Create -> switchTo(View.IntroView, projection)
+        AuthMode.Login -> {
+          projection.login(user, pass)
+          switchTo(View.GameView, projection)
+        }
+        AuthMode.Create -> {
+          projection.createAccount(user, pass)
+          switchTo(View.IntroView, projection)
+        }
       }
-    } else {
-      (document.getElementById("auth-error") as? HTMLSpanElement)!!.innerText =
-          projection.accountManager.invalidLoginInfo(user, pass)
+    } catch (e: AccountManager.AccountError) {
+      (document.getElementById("auth-error") as? HTMLSpanElement)!!.innerText = e.message
     }
   }
 }

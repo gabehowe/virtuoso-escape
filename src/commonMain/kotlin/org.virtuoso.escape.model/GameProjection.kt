@@ -6,8 +6,6 @@ import kotlin.time.Duration
 import kotlin.uuid.ExperimentalUuidApi
 import org.virtuoso.escape.model.account.Account
 import org.virtuoso.escape.model.account.AccountManager
-import org.virtuoso.escape.model.data.DataLoader
-import org.virtuoso.escape.model.data.DataWriter
 
 /**
  * The game facade.
@@ -16,14 +14,14 @@ import org.virtuoso.escape.model.data.DataWriter
  */
 class GameProjection(fileReader: ((String) -> String), fileWriter: (String, String) -> Unit) {
   init {
-    DataLoader.FILE_READER = fileReader
-    DataWriter.FILE_WRITER = fileWriter
+    Data.FILE_READER = fileReader
+    Data.FILE_WRITER = fileWriter
   }
 
   val accountManager: AccountManager = AccountManager()
   lateinit var state: GameState
   lateinit var account: Account
-  val language = DataLoader.loadGameLanguage()!!
+  val language = Data.loadGameLanguage()!!
 
   /**
    * Initialize and attempt login.
@@ -34,14 +32,14 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
    */
   fun login(username: String, password: String): Boolean {
     val currentAccount =
-        this.accountManager.login(username, password)?.let { acc ->
-          account = acc
-          state = accountManager.gameStates[account.id]!!
-          state.language = language
-          state.floor.rooms
-              .flatMap { it.entities }
-              .map { state.currentEntityStates[it.id]?.let(it::swapState) }
-        }
+      this.accountManager.login(username, password).let { acc ->
+        account = acc
+        state = accountManager.gameStates[account.id]!!
+        state.language = language
+        state.floor.rooms
+          .flatMap { it.entities }
+          .map { state.currentEntityStates[it.id]?.let(it::swapState) }
+      }
     return currentAccount != null
   }
 
@@ -66,8 +64,8 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
   /** Log the current user out and write data. */
   @OptIn(ExperimentalUuidApi::class)
   fun logout() {
-    DataWriter.writeAccount(account, accountManager)
-    DataWriter.writeGameState(state, account, accountManager)
+    Data.writeAccount(account, accountManager.accounts)
+    Data.writeGameState(state, account, accountManager.gameStates)
   }
 
   /**

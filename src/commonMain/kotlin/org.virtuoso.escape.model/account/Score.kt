@@ -3,7 +3,7 @@ package org.virtuoso.escape.model.account
 import kotlin.time.Duration
 import kotlinx.serialization.Serializable
 import org.virtuoso.escape.model.Difficulty
-import org.virtuoso.escape.model.data.SerializableDuration
+import org.virtuoso.escape.model.SerializableDuration
 import org.virtuoso.escape.model.toMicrowaveTime
 
 /**

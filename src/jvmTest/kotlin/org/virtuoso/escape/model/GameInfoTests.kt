@@ -179,15 +179,15 @@ class GameInfoTests {
       val msg = proj.currentMessage() ?: ""
       println(msg)
 
-      if (msg.contains("later")) {
+      if (almanac.string(proj.language, "too_low") in msg) {
         low = guess
         continue
       }
-      if (msg.contains("earlier")) {
+      if (almanac.string(proj.language, "too_high") in msg) {
         high = guess
         continue
       }
-      if (msg.contains("the right page")) {
+      if (almanac.string(proj.language, "correct_page") in msg) {
         correct = guess
         break
       }

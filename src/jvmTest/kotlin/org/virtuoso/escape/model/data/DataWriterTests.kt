@@ -5,6 +5,7 @@ package org.virtuoso.escape.model.data
 import kotlin.test.*
 import kotlin.uuid.ExperimentalUuidApi
 import org.virtuoso.escape.TestHelper
+import org.virtuoso.escape.model.Data
 import org.virtuoso.escape.model.GameProjection
 
 class DataWriterTests {
@@ -20,18 +21,18 @@ class DataWriterTests {
     var writtenPath: String? = null
     var writtenData: String? = null
 
-    DataWriter.FILE_WRITER = { path, data ->
+    Data.FILE_WRITER = { path, data ->
       writtenPath = path
       writtenData = data
     }
 
     proj.createAccount("dummy", "dummy")
 
-    DataWriter.writeAccount(proj.account, proj.accountManager)
+    Data.writeAccount(proj.account, proj.accountManager.accounts)
 
-    assertEquals(DataWriter.ACCOUNTS_PATH, writtenPath)
+    assertEquals(Data.ACCOUNTS_PATH, writtenPath)
     assertNotNull(writtenData)
-    assertTrue(writtenData!!.contains("dummy"))
+    assertTrue(writtenData.contains("dummy"))
   }
 
   @Test
@@ -39,15 +40,15 @@ class DataWriterTests {
     var writtenPath: String? = null
     var writtenData: String? = null
 
-    DataWriter.FILE_WRITER = { path, data ->
+    Data.FILE_WRITER = { path, data ->
       writtenPath = path
       writtenData = data
     }
 
     proj.createAccount("dummy", "dummy")
-    DataWriter.writeGameState(proj.state, proj.account, proj.accountManager)
+    Data.writeGameState(proj.state, proj.account, proj.accountManager.gameStates)
 
-    assertEquals(DataWriter.GAMESTATES_PATH, writtenPath)
+    assertEquals(Data.GAMESTATES_PATH, writtenPath)
     assertNotNull(writtenData)
     assertTrue(writtenData!!.contains("difficulty"))
   }
