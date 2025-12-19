@@ -70,4 +70,6 @@ body {
     left: 0;
     z-index: 1;
     background: var(--Background);
+    cursor:pointer;
+    font-style: normal;
 }
