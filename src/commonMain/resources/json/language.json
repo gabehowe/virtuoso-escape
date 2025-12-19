@@ -296,18 +296,10 @@
     "interact": "The terminal awaits input.",
     "inspect": "You see a terminal fit for use by a squirrel.",
     "attack": "You scratch at the glass, but you realize that keratin has a Mohs hardness of 2.5 and glass has a Mohs hardness of 5.5.",
-    "ls_default": "code/",
-    "ls_cd": "code.tar",
-    "ls_tar": "code.tar  code",
     "cat_code/code.tar": "code0000664000175000017500000000006615075030073010651 0ustar  squirrelsquirrelfqiimeht: fhqyiu_igkyhhub_xuwuced7",
     "cat_code/code": "fqiimeht: fhqyiu_igkyhhub_xuwuced7",
     "no_file": "No such file or directory",
     "failed_cd": "No such directory",
-    "failed_rotx": "Failed to decrypt: ",
-    "good_rotx": "Password: praise_squirrel_hegemon7\nDemetamorphinator Unlocked!",
-    "man_cat": "see man cat",
-    "man_tar": "see man tar",
-    "man_rotx": "see man rotx",
     "man_x": "see man ",
     "input_cd": ""
   },
@@ -317,15 +309,17 @@
   "computty_tar": {
     "introduce": "CompuTTY 0.0.0\n~/code$"
   },
+  "microwave": {
+    "name": "Demetamorphinator"
+  },
   "microwave_blocked": {
-    "name": "Demetamorphinator",
     "introduce": "You behold the Demetamorphinator, the machine the Squirrels wish to destroy.",
     "attack": "You try to attack the Demetamorphinator open, but you damage a claw.",
     "inspect": "The Demetamorhphinator has a popcorn button, a pizza button, and an option to reheat frozen meat.",
-    "interact": "The Demetamorphinator is locked. Despite all your wishing, it won't open."
+    "interact": "The Demetamorphinator is locked. Despite all your wishing, it won't open.",
+    "open": "You press in the passcode and the Demetamorphinator unlocks."
   },
   "microwave_unblocked": {
-    "name": "Demetamorphinator",
     "introduce": "As you step towards the demetamorphinator, you feel your claws begin to tremble as a stampede of squirrels rushes towards you, screaming like a horde of demons.\nYou jump farther and just barely reach it, suddenly  realizing that if you use the Demetamorphinator, you won't have time to use the candy cane after and the squirrel hegemony will reign.\nYou can: \nAttack and destroy it now, and remain a squirrel.\nInteract with it, and ignore the well-being of countless squirrels.",
     "inspect": "In your minute moment of thought, you examine the Demetamorphinator and reflect on your past decisions: Intro to Kantian Ethics in sophomore year; Every squirrel you've ever seen with a family, a life; The Russell House 70th anniversary (featuring squirrels). Is it worth creating a squirrel hegemony just to keep your own selfish humanity?",
     "attack": "You grab the candy cane and, taking a deep breath, break it. The smell of peppermint is overpowering for a second, and then the demetamorphinator seems to contort into itself, disappearing. You've saved humanity by sacrificing your own to prevent a squirrel takeover. As your squirrel body is ripped to shreds by the now further enraged mass of oppressive squirrels, you stare off into the setting sun and think \"Was I ever human, until now?\"",

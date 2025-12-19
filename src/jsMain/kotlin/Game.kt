@@ -164,8 +164,7 @@ object Game {
           "entity-box",
           currentRoom().entities,
           { ent: Entity ->
-            ent.state().id to
-                (language["name", ent.id, ent.state().id] ?: "${ent.state().id}/name")
+            ent.state().id to (language["name", ent.id, ent.state().id] ?: "${ent.state().id}/name")
           },
           { i: Entity ->
             pickEntity(i)
