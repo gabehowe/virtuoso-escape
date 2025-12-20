@@ -1,0 +1,12 @@
+{
+  "7766f361-af7a-4da5-b741-6867d1768d45": {
+    "username": "dummy",
+    "id": "7766f361-af7a-4da5-b741-6867d1768d45",
+    "highScore": {
+      "timeRemaining": 2700,
+      "difficulty": "TRIVIAL",
+      "totalScore": 0
+    },
+    "hashedPassword": "dummy"
+  }
+}

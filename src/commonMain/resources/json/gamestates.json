@@ -1,0 +1,26 @@
+{
+  "7766f361-af7a-4da5-b741-6867d1768d45": {
+    "currentItems": [
+      "LeftBread",
+      "SealedCleanFoodSafeHummus"
+    ],
+    "difficulty": "SUBSTANTIAL",
+    "currentRoom": "storey_i_0",
+    "currentFloor": "StoreyI",
+    "completedPuzzles": [
+    ],
+    "time": 2697,
+    "currentEntityStates": {
+      "joe_hardy": "intro_joe",
+      "trash_can": "trash_can",
+      "elephant_in_the_room": "elephant_in_the_room",
+      "first_door": "first_door",
+      "narrator": "narrator_start",
+      "almanac": "found_almanac",
+      "security": "security"
+    },
+    "hintsUsed": {},
+    "penalty": 0,
+    "currentEntity": null
+  }
+}
