@@ -20,7 +20,7 @@ class LeaderboardTests {
     proj = GameProjection(TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER)
 
     proj.createAccount("dummy", "dummy")
-    proj.state = proj.accountManager.gameStates[proj.account.id]!!
+    proj.state = proj.gamestates[proj.account.id]!!
     proj.state.language = proj.language
     mockAccount = proj.account
     mockAccount.highScore = Score(100.seconds, Difficulty.TRIVIAL, 100L)
@@ -59,9 +59,7 @@ class LeaderboardTests {
     addAcct("mid", Difficulty.SUBSTANTIAL, 200L)
     addAcct("high", Difficulty.VIRTUOSIC, 1000L)
 
-    val testManager = AccountManager(accounts, mapOf())
-
-    val list = Leaderboard.getLeaderboard(testManager.accounts, mockAccount)
+    val list = Leaderboard.getLeaderboard(accounts, mockAccount)
 
     val highIdx = list.indexOf("high")
     val midIdx = list.indexOf("mid")
@@ -77,9 +75,8 @@ class LeaderboardTests {
       a.highScore = Score(100.seconds, Difficulty.TRIVIAL, i.toLong())
       accounts[a.id] = a
     }
-    val testManager = AccountManager(accounts, mapOf())
 
-    val list = Leaderboard.getLeaderboard(testManager.accounts, mockAccount)
+    val list = Leaderboard.getLeaderboard(accounts, mockAccount)
 
     assertTrue(list.isNotEmpty())
   }

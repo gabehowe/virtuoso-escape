@@ -6,7 +6,6 @@ import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.account.Account
-import org.virtuoso.escape.model.account.AccountManager
 
 class GameProjectionTests {
   private lateinit var proj: GameProjection
@@ -32,12 +31,6 @@ class GameProjectionTests {
             penalty = 0,
         )
 
-    val accounts = mapOf(account.id to account)
-    val gameStates = mapOf(account.id to gameState)
-    // GameState requires language to be set usually by GameProjection or manual injection
-    // But GameProjection sets it on login.
-
-    val am = AccountManager(accounts, gameStates)
     proj = GameProjection(TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER)
   }
 

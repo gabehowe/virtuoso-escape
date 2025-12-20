@@ -206,11 +206,11 @@
     "introduce": "The room is bare except for a pedestal in the center holding an intricately designed wooden box. A small, but well-dressed, sparrow sits atop it, looking expectantly at you."
   },
   "sparrow_ambassador": {
-    "name": "Apine Ambassador",
+    "name": "Avian Ambassador",
     "inspect": "The sparrow's well-dressed attire glints in the dim light of the bare room. It is muttering something about a closed system.",
     "introduce": "You behold a sparrow atop a pedestal.",
     "attack": "You can't get up to the sparrow, so you sit and think angry thoughts.",
-    "interact": "*chirp chirp*. I am the strategic apine ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in whispering to it the one path. The puzzle is solved by correctly ordering three words: FOLLOW, OPEN, and START."
+    "interact": "*chirp chirp*. I am the strategic avian ambassador. Due to the amount of birdseed squirrels have been consuming, we have decided to intervene. That box? It holds what you seek, but only the wise can open it. The trick lies not in force, but in whispering to it the one path. The puzzle is solved by correctly ordering three words: FOLLOW, OPEN, and START."
   },
   "box_start": {
     "name": "Starting box",

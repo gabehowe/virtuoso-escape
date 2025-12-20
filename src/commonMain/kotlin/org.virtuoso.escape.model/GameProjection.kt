@@ -2,10 +2,9 @@
 
 package org.virtuoso.escape.model
 
+import org.virtuoso.escape.model.account.Account
 import kotlin.time.Duration
 import kotlin.uuid.ExperimentalUuidApi
-import org.virtuoso.escape.model.account.Account
-import org.virtuoso.escape.model.account.AccountManager
 
 /**
  * The game facade.
@@ -18,7 +17,8 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
     Data.FILE_WRITER = fileWriter
   }
 
-  val accountManager: AccountManager = AccountManager()
+  val accounts = Data.loadAccounts()
+  val gamestates = Data.loadGameStates()
   lateinit var state: GameState
   lateinit var account: Account
   val language = Data.loadGameLanguage()!!
@@ -31,9 +31,9 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
    * @return `true` if the username-password combination was valid, otherwise `false`.
    */
   fun login(username: String, password: String): Boolean {
-    Account.login(username, password, accountManager.accounts).let { acc ->
+    Account.login(username, password, accounts).let { acc ->
       account = acc
-      state = accountManager.gameStates[account.id]!!
+      state = gamestates[account.id]!!
       state.language = language
       state.floor.rooms
           .flatMap { it.entities }
@@ -51,7 +51,7 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
    *   `false`.
    */
   fun createAccount(username: String, password: String): Boolean {
-    Account.newAccount(username, password, this.accountManager.accounts).let {
+    Account.newAccount(username, password, this.accounts).let {
       account = it
       this.state = GameState()
       state.language = language
@@ -62,8 +62,8 @@ class GameProjection(fileReader: ((String) -> String), fileWriter: (String, Stri
   /** Log the current user out and write data. */
   @OptIn(ExperimentalUuidApi::class)
   fun logout() {
-    Data.writeAccount(account, accountManager.accounts)
-    Data.writeGameState(state, account, accountManager.gameStates)
+    Data.writeAccount(account, accounts)
+    Data.writeGameState(state, account, gamestates)
   }
 
   /**

@@ -28,7 +28,7 @@ class DataWriterTests {
 
     proj.createAccount("dummy", "dummy")
 
-    Data.writeAccount(proj.account, proj.accountManager.accounts)
+    Data.writeAccount(proj.account, proj.accounts)
 
     assertEquals(Data.ACCOUNTS_PATH, writtenPath)
     assertNotNull(writtenData)
@@ -46,7 +46,7 @@ class DataWriterTests {
     }
 
     proj.createAccount("dummy", "dummy")
-    Data.writeGameState(proj.state, proj.account, proj.accountManager.gameStates)
+    Data.writeGameState(proj.state, proj.account, proj.gamestates)
 
     assertEquals(Data.GAMESTATES_PATH, writtenPath)
     assertNotNull(writtenData)

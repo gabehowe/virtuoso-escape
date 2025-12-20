@@ -6,7 +6,6 @@ import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 import org.virtuoso.escape.TestHelper
 import org.virtuoso.escape.model.account.Account
-import org.virtuoso.escape.model.account.AccountManager
 
 /** @author Andrew Heuer */
 class EntityTests {
@@ -47,7 +46,6 @@ class EntityTests {
 
     val accounts = mapOf(account.id to account)
     val gameStates = mapOf(account.id to gameState)
-    val am = AccountManager(accounts, gameStates)
 
     proj = GameProjection(TestHelper.FILE_READER(this::class), TestHelper.DUMMY_WRITER)
     // Login to set state
