@@ -27,9 +27,7 @@ class AccountManagerTests {
 
   @Test
   fun testBadLogin() {
-    assertFailsWith<Account.AccountError> {
-      Account.login("fake", "fake", proj.accounts)
-    }
+    assertFailsWith<Account.AccountError> { Account.login("fake", "fake", proj.accounts) }
   }
 
   @Test
@@ -52,9 +50,7 @@ class AccountManagerTests {
 
   @Test
   fun testTryCreateCollidingAccount() {
-    assertFailsWith<Account.AccountError> {
-      Account.newAccount("dummy", "novel", proj.accounts)
-    }
+    assertFailsWith<Account.AccountError> { Account.newAccount("dummy", "novel", proj.accounts) }
   }
 
   @Test
@@ -81,8 +77,7 @@ class AccountManagerTests {
         )
 
     for ((u, p, expected) in cases) assertEquals(
-        assertFailsWith<Account.AccountError> { Account.login(u, p, proj.accounts) }
-            .message,
+        assertFailsWith<Account.AccountError> { Account.login(u, p, proj.accounts) }.message,
         expected,
     )
   }

@@ -23,21 +23,20 @@ object Login {
   }
 
   fun run(projection: GameProjection?) =
-    MainScope().promise {
-      setupListeners()
-      toggleAuthMode()
-    }
+      MainScope().promise {
+        setupListeners()
+        toggleAuthMode()
+      }
 
   fun toggleAuthMode() {
-    (document.getElementById("auth-prompt") as? HTMLSpanElement)
-      ?.innerText = projection.language.string("ui", "switch_create")
+    (document.getElementById("auth-prompt") as? HTMLSpanElement)?.innerText =
+        projection.language.string("ui", "switch_create")
 
-    (document.getElementById("welcome-text") as? HTMLSpanElement)
-      ?.innerText =
-      projection.language.string(
-        "ui", "prompt_create",
-      )
-
+    (document.getElementById("welcome-text") as? HTMLSpanElement)?.innerText =
+        projection.language.string(
+            "ui",
+            "prompt_create",
+        )
   }
 
   fun tryAuth() {

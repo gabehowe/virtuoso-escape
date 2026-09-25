@@ -339,6 +339,14 @@ object Game {
     }
   }
 
+  fun switchFloor() {
+    if (projection.isEnded) end()
+    lastFloor = projection.currentFloor()
+    lastEntity = null
+    updateAll()
+    switchedFloor = false
+  }
+
   fun setupListeners() {
     (document.getElementById("settings") as? HTMLElement)!!.onclick = {
       displaySettings(Menu.Settings)
@@ -362,16 +370,13 @@ object Game {
       }
     }
     document.addEventListener("submit", { it.preventDefault() })
+    document.addEventListener("pointerup", { if (switchedFloor) switchFloor() })
     document.addEventListener(
         "keydown",
         {
           it as KeyboardEvent
           if (switchedFloor) {
-            if (projection.isEnded) end()
-            lastFloor = projection.currentFloor()
-            lastEntity = null
-            updateAll()
-            switchedFloor = false
+            switchFloor()
             return@addEventListener
           }
           if (it.key == "Escape") clearSettings()

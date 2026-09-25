@@ -2,9 +2,9 @@
 
 package org.virtuoso.escape.model
 
-import org.virtuoso.escape.model.account.Account
 import kotlin.time.Duration
 import kotlin.uuid.ExperimentalUuidApi
+import org.virtuoso.escape.model.account.Account
 
 /**
  * The game facade.
